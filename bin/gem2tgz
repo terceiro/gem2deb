@@ -1,0 +1,139 @@
+#!/usr/bin/ruby
+#
+# Copyright © 2010, Antonio Terceiro <terceiro@softwarelivre.org>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# = Synopsis
+#
+# gem2tgz - converts a Ruby gem file into a source tarball proper for being used
+# as upstream source tarball on Debian packages.
+#
+# = Usage
+#
+# gem2tgz [OPTIONS] GEM [TARBALL]
+#
+# -h, --help:
+#   show help
+#
+# GEM: a valid Rubygem's .gem file
+#
+# TARBALL: destination tarball to be created. If omitted, gem2tgz will try to
+# guess based on GEM argument.
+
+require 'gem2tgz'
+require 'getoptlong'
+require 'rdoc/usage'
+
+opts = GetoptLong.new(
+  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--help', '-h', GetoptLong::NO_ARGUMENT ]
+)
+
+opts.each do |opt,arg|
+  case opt
+    when '--help'
+      RDoc::usage(0, 'usage')
+    when '--version'
+      puts "gem2tgz version #{Gem2Tgz::VERSION}"
+      exit(0)
+  end
+end
+
+if ARGV.length != 1 && ARGV.length != 2
+  puts "usage: gem2tgz [OPTIONS] GEM [TARBALL]"
+  exit(1)
+end
+
+gem = ARGV[0]
+if gem !~ /\.gem$/
+  puts "#{gem} does not look like a valid .gem file."
+  exit(1)
+end
+
+tarball = ARGV[1] || gem.gsub(/\.gem$/, '.tar.gz')
+
+Gem2Tgz.convert!(gem, tarball)
+
+__END__
+=head1 NAME
+
+gem2tgz - converts Rubygems' .gem file into tarballs
+
+=head1 USAGE
+
+gem2tgz [OPTIONS] GEM [TARBALL]
+
+=head1 DESCRIPTION
+
+B<gem2tgz> will convert the .gem file I<GEM> into a tarball named I<TARBALL>.
+If I<TARBALL> is omitted, B<gem2tgz> will try to guess the filename for the
+tarball by taking I<GEM> and replacing '.gem' with '.tar.gz'.
+
+=head1 OPTIONS
+
+=over
+
+=item --help
+
+Displays B<gem2tgz> usage information.
+
+=back
+
+=head1 HOW THE CONVERSION WORKS
+
+A gem named I<mygem-0.1.0.gem> is converted in a tarball with
+(approximately) the following steps:
+
+  mkdir mygem-0.1.0
+  cd mygem-0.1.0
+  tar xfm /absolute/path/to/mygem-0.1.0.gem
+  tar xzfm data.tar.gz
+  zcat metadata.gz > metadata.yml
+  rm -f data.tar.gz metadata.gz
+  cd ..
+  tar czf mygem-0.1.0.tar.gz mygem-0.1.0
+  rm -rf mygem-0.1.0
+
+The generated tarball has the following properties:
+
+=over
+
+=item Files
+
+It contains all the files the gem contains.
+
+=item Metadata
+
+It contains the gem metadata ends up in a file named ``metadata.yml`` inside the I<mygem-0.1.0> directory.
+
+=back
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2010, Antonio Terceiro <terceiro@softwarelivre.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
