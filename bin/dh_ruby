@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -w
 #
 # Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 # 
@@ -17,67 +17,91 @@
 # 
 # = Synopsis
 #
-# dh-make-ruby - Create debian source packages from Ruby libraries
+# dh_ruby - Build system for Ruby software
 #
 # = Usage
 #
-# dh-make-ruby [OPTIONS] tarball
+# dh_ruby [OPTIONS]
 #
 # -h, --help:
 #   show help
-#
-# TARBALL: tarball to use as a basis. It should have been created by gem2tgz.
 
 require 'gem2deb'
-require 'gem2deb/dh-make-ruby'
+#require 'gem2deb/dhruby'
 require 'getoptlong'
 require 'rdoc/usage'
 
 opts = GetoptLong.new(
   [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--help', '-h', GetoptLong::NO_ARGUMENT ]
+  [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--clean', GetoptLong::NO_ARGUMENT],
+  [ '--configure', GetoptLong::NO_ARGUMENT],
+  [ '--build', GetoptLong::NO_ARGUMENT],
+  [ '--test', GetoptLong::NO_ARGUMENT],
+  [ '--install', GetoptLong::NO_ARGUMENT]
 )
 
+mode = nil
 opts.each do |opt,arg|
   case opt
     when '--help'
       RDoc::usage(0, 'usage')
     when '--version'
-      puts "dh-make-ruby version #{Gem2Deb::VERSION}"
+      puts "dh_ruby version #{Gem2Deb::VERSION}"
       exit(0)
+    when '--clean'
+      if mode != nil
+         puts "Duplicate action ; #{mode} was already specified!"
+         exit(1)
+      end
+      mode = '--clean'
+    when '--configure'
+      if mode != nil
+         puts "Duplicate action ; #{mode} was already specified!"
+         exit(1)
+      end
+      mode = '--configure'
+    when '--build'
+      if mode != nil
+         puts "Duplicate action ; #{mode} was already specified!"
+         exit(1)
+      end
+      mode = '--build'
+    when '--test'
+      if mode != nil
+         puts "Duplicate action ; #{mode} was already specified!"
+         exit(1)
+      end
+      mode = '--test'
+    when '--install'
+      if mode != nil
+         puts "Duplicate action ; #{mode} was already specified!"
+         exit(1)
+      end
+      mode = '--install'
   end
 end
-if ARGV.length == 0
+
+if mode.nil?
   RDoc::usage(0, 'usage')
   exit(1)
 end
 
-tarball = ARGV[0]
-
-dmr = Gem2Deb::DhMakeRuby::new(tarball)
-dmr.build
 
 __END__
 =head1 NAME
 
-dh-make-ruby - build Debian source package from Ruby library
+dh_ruby - build system for Ruby software
 
 =head1 USAGE
 
-dh-make-ruby [OPTIONS] TARBALL
+dh_ruby [OPTIONS]
 
 =head1 DESCRIPTION
 
-B<dh-make-ruby> will create a basic Debian source package from a tarball named
-I<TARBALL> generated with gem2tgz.
+B<dh_ruby> is a Debhelper 7 build system for Ruby software.
 
-=head1 OPTIONS
-
-=over
-
-=item --help
-
-Displays B<dh-make-ruby> usage information.
+See dh_ruby --help for details.
 
 =back
 
@@ -98,3 +122,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'pp'
+p ARGV
+pp ENV

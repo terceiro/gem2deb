@@ -79,7 +79,7 @@ module Gem2Deb
 #!/usr/bin/make -f
 #export DH_VERBOSE=1
 %:
-\tdh $@
+\tdh $@ --buildsystem=ruby
           EOF
         end
         run("chmod a+rx rules")

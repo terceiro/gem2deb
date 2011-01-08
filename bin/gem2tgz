@@ -52,8 +52,8 @@ opts.each do |opt,arg|
   end
 end
 
-if ARGV.length != 1 && ARGV.length != 2
-  puts "usage: gem2tgz [OPTIONS] GEM [TARBALL]"
+if ARGV.length == 0
+  RDoc::usage(0, 'usage')
   exit(1)
 end
 
