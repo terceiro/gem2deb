@@ -34,6 +34,7 @@
 #   
 # dh_ruby must be able to detect and run test suites. alternatively, the maintainer
 # can provide a ruby script in debian/ that will start the test suite.
+# Test suites should run with each ruby interpreter.
 #
 # dh_ruby must update the shebang after installation of binaries, to point to
 # the default ruby version
