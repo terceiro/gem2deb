@@ -32,7 +32,8 @@
 # TARBALL: destination tarball to be created. If omitted, gem2tgz will try to
 # guess based on GEM argument.
 
-require 'gem2tgz'
+require 'gem2deb'
+require 'gem2deb/gem2tgz'
 require 'getoptlong'
 require 'rdoc/usage'
 
@@ -46,7 +47,7 @@ opts.each do |opt,arg|
     when '--help'
       RDoc::usage(0, 'usage')
     when '--version'
-      puts "gem2tgz version #{Gem2Tgz::VERSION}"
+      puts "gem2tgz version #{Gem2Deb::VERSION}"
       exit(0)
   end
 end
@@ -64,7 +65,7 @@ end
 
 tarball = ARGV[1] || gem.gsub(/\.gem$/, '.tar.gz')
 
-Gem2Tgz.convert!(gem, tarball)
+Gem2Deb::Gem2Tgz.convert!(gem, tarball)
 
 __END__
 =head1 NAME
