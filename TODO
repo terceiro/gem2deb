@@ -1,0 +1,2 @@
+When building the Debian package, use pod2man bin/gem2tgz > man/gem2tgz to
+create the manpage
