@@ -121,8 +121,8 @@ EOF
       end
       f.puts
       f.puts "Package: ruby-#{@gem_name}"
-      f.puts "# FIXME check architecture"
-      f.puts "Architecture: all"
+      f.puts "# FIXME check architecture. Most ruby software can be 'all'."
+      f.puts "Architecture: any"
       f.puts "Depends: ${shlibs:Depends}, ${misc:Depends}"
       if spec.dependencies
         f.print "# "
@@ -138,7 +138,13 @@ EOF
         f.puts "FIXME"
       end
       if spec.description
-        f.puts " #{spec.description}"
+        spec.description.each_line do |l|
+          if l == "\n"
+            f.puts ' .'
+          else
+            f.puts " #{l}"
+          end
+        end
       else
         f.puts " <insert long description, indented with spaces>"
       end
