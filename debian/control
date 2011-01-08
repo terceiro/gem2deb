@@ -4,12 +4,12 @@ Priority: optional
 Maintainer: Lucas Nussbaum <lucas@lucas-nussbaum.net>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~)
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
 
 Package: gem2deb
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.8
 Description: FIXME
  FIXME
