@@ -1,0 +1,5 @@
+gem2deb (0.1) UNRELEASED; urgency=low
+
+  * Initial release (Closes: #nnnn)
+
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 08 Jan 2011 21:25:40 +0100
