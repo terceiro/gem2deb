@@ -124,7 +124,7 @@ EOF
       f.puts "# FIXME check architecture. Most ruby software can be 'all'."
       f.puts "Architecture: any"
       f.puts "Depends: ${shlibs:Depends}, ${misc:Depends}"
-      if spec.dependencies
+      if spec.dependencies.length > 0
         f.print "# "
         spec.dependencies.each do |dep|
           f.print "#{dep.name} (#{dep.requirement})"
