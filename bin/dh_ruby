@@ -27,7 +27,9 @@
 #   show help
 
 require 'gem2deb'
-#require 'gem2deb/dhruby'
+require 'gem2deb/dhruby'
+include Gem2Deb
+
 require 'getoptlong'
 require 'rdoc/usage'
 
@@ -50,35 +52,20 @@ opts.each do |opt,arg|
       puts "dh_ruby version #{Gem2Deb::VERSION}"
       exit(0)
     when '--clean'
-      if mode != nil
-         puts "Duplicate action ; #{mode} was already specified!"
-         exit(1)
-      end
-      mode = '--clean'
+      DhRuby::new.clean
+      exit(0)
     when '--configure'
-      if mode != nil
-         puts "Duplicate action ; #{mode} was already specified!"
-         exit(1)
-      end
-      mode = '--configure'
+      DhRuby::new.configure
+      exit(0)
     when '--build'
-      if mode != nil
-         puts "Duplicate action ; #{mode} was already specified!"
-         exit(1)
-      end
-      mode = '--build'
+      DhRuby::new.build
+      exit(0)
     when '--test'
-      if mode != nil
-         puts "Duplicate action ; #{mode} was already specified!"
-         exit(1)
-      end
-      mode = '--test'
+      DhRuby::new.test
+      exit(0)
     when '--install'
-      if mode != nil
-         puts "Duplicate action ; #{mode} was already specified!"
-         exit(1)
-      end
-      mode = '--install'
+      DhRuby::new.install
+      exit(0)
   end
 end
 
