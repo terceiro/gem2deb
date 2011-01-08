@@ -1,0 +1,101 @@
+#!/usr/bin/ruby
+#
+# Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# = Synopsis
+#
+# dh-make-ruby - Create debian source packages from Ruby libraries
+#
+# = Usage
+#
+# dh-make-ruby [OPTIONS] tarball
+#
+# -h, --help:
+#   show help
+#
+# TARBALL: tarball to use as a basis. It should have been created by gem2tgz.
+
+require 'gem2deb'
+require 'gem2deb/dh-make-ruby'
+require 'getoptlong'
+require 'rdoc/usage'
+
+opts = GetoptLong.new(
+  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--help', '-h', GetoptLong::NO_ARGUMENT ]
+)
+
+opts.each do |opt,arg|
+  case opt
+    when '--help'
+      RDoc::usage(0, 'usage')
+    when '--version'
+      puts "dh-make-ruby version #{Gem2Deb::VERSION}"
+      exit(0)
+  end
+end
+
+if ARGV.length != 1 && ARGV.length != 2
+  puts "usage: dh-make-ruby [OPTIONS] TARBALL"
+  exit(1)
+end
+
+tarball = ARGV[0]
+
+dmr = Gem2Deb::DhMakeRuby::new(tarball)
+dmr.build
+
+__END__
+=head1 NAME
+
+dh-make-ruby - build Debian source package from Ruby library
+
+=head1 USAGE
+
+dh-make-ruby [OPTIONS] TARBALL
+
+=head1 DESCRIPTION
+
+B<dh-make-ruby> will create a basic Debian source package from a tarball named
+I<TARBALL> generated with gem2tgz.
+
+=head1 OPTIONS
+
+=over
+
+=item --help
+
+Displays B<dh-make-ruby> usage information.
+
+=back
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2011, Lucas Nussbaum <lucas@lucas-nussbaum.net>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
