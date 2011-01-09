@@ -57,7 +57,8 @@ module Gem2Deb
       @libdir = '/usr/lib/ruby/vendor_ruby'
       @prefix = nil
       # FIXME datadir
-      # FIXME mandir
+      @mandir = '/usr/share/man'
+      @gemmandirs = ['man/man1', 'man/man7']
       # FIXME handle multi-version rubies (libs that require patches for some versions)
       if File::exists?('debian/dh_ruby.overrides')
          # FIXME
@@ -92,13 +93,18 @@ module Gem2Deb
         # FIXME need to run extconf and make.
         exit(1)
       end
-      if File::directory?('data') or File::directory?('man') or File::directory?('conf')
+      if File::directory?('data') or File::directory?('conf')
         # FIXME
-        puts "We don't know how to deal with conf, data or man dirs yet."
+        puts "We don't know how to deal with conf and data dirs yet."
         exit(1)
       end
       install_files('bin', find_files('bin'), @bindir, 755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir, 644) if File::directory?('lib')
+
+      # manpages
+      if File::directory?('man') && @gemmandirs.any? {|m| File::directory?(m)}
+        install_files('man', find_files('man'), @mandir, 644)
+      end
       # FIXME after install, update shebang of binaries to default ruby version
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
