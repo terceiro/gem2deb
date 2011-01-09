@@ -43,7 +43,6 @@ opts = GetoptLong.new(
   [ '--install', GetoptLong::NO_ARGUMENT]
 )
 
-mode = nil
 opts.each do |opt,arg|
   case opt
     when '--help'
@@ -69,11 +68,8 @@ opts.each do |opt,arg|
   end
 end
 
-if mode.nil?
-  RDoc::usage(0, 'usage')
-  exit(1)
-end
-
+RDoc::usage(0, 'usage')
+exit(1)
 
 __END__
 =head1 NAME
