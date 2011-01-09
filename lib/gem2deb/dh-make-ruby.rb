@@ -46,7 +46,7 @@ module Gem2Deb
         @orig_tarball = "#{@gem_name}_#{@gem_version}.orig.tar.gz"
         run("ln -sf #{@tarball} #{@orig_tarball}")
       else
-        raise "Could not determine gem name and version: #{@tarall}"
+        raise "Could not determine gem name and version: #{@tarball}"
       end
     end
 
