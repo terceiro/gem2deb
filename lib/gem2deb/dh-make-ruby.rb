@@ -121,7 +121,6 @@ EOF
       end
       f.puts
       f.puts "Package: ruby-#{@gem_name}"
-      f.puts "# FIXME check architecture. Most ruby software can be 'all'."
       if spec.require_paths && spec.require_paths.include?('ext')
         f.puts "Architecture: any"
       else
