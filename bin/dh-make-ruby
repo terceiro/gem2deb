@@ -47,7 +47,7 @@ opts.each do |opt,arg|
       exit(0)
   end
 end
-if ARGV.length == 0
+if ARGV.length != 1
   RDoc::usage(0, 'usage')
   exit(1)
 end
