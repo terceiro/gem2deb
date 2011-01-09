@@ -122,7 +122,11 @@ EOF
       f.puts
       f.puts "Package: ruby-#{@gem_name}"
       f.puts "# FIXME check architecture. Most ruby software can be 'all'."
-      f.puts "Architecture: any"
+      if spec.require_paths && spec.require_paths.include?('ext')
+        f.puts "Architecture: any"
+      else
+        f.puts "Architecture: all"
+      end
       f.puts "Depends: ${shlibs:Depends}, ${misc:Depends}"
       if spec.dependencies.length > 0
         f.print "# "
