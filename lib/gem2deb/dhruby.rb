@@ -58,7 +58,7 @@ module Gem2Deb
       @prefix = nil
       # FIXME datadir
       @mandir = '/usr/share/man'
-      @gemmandirs = ['man/man1', 'man/man7']
+      @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
       # FIXME handle multi-version rubies (libs that require patches for some versions)
       if File::exists?('debian/dh_ruby.overrides')
          # FIXME
@@ -102,8 +102,19 @@ module Gem2Deb
       install_files('lib', find_files('lib'), @libdir, 644) if File::directory?('lib')
 
       # manpages
-      if File::directory?('man') && @gemmandirs.any? {|m| File::directory?(m)}
-        install_files('man', find_files('man'), @mandir, 644)
+      if File::directory?('man')
+        # man/man1/apps.1 scheme
+        if @gemmandirs.any? {|m| File::directory?(m) }
+          install_files('man', find_files('man'), @mandir, 644)
+        else
+          # man/apps.1 scheme
+          Dir.glob("man/*.[1-8]").each do |man_file|
+            match = man_file.match(/.*\.(\d)$/)
+            if match && (section = match.captures.first)
+              install_files('man', [File.basename(man_file)], "#{@mandir}/man#{section}", 644)
+            end
+          end
+        end
       end
       # FIXME after install, update shebang of binaries to default ruby version
       # FIXME after install, check for require 'rubygems' and other stupid things, and
