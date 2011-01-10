@@ -50,6 +50,11 @@ module Gem2Deb
       "<#{version}>"
     end
 
+    def build_extensions(destdir)
+      extension_builder = File.join(File.dirname(__FILE__),'extension_builder.rb')
+      run("#{ruby_binary} #{extension_builder} #{destdir}")
+    end
+
     private
 
     def initialize(version)

@@ -80,9 +80,10 @@ module Gem2Deb
       puts "Entering dh_ruby --install (for #{package})" if @verbose
 
       if File::directory?('ext')
-        puts "This library has an 'ext' dir. We don't know how to deal with it yet."
-        # FIXME need to run extconf and make.
-        exit(1)
+        ruby = Gem2Deb::RubyVersion.by_package(package)
+        if ruby
+          ruby.build_extensions(@prefix)
+        end
       end
       if File::directory?('data') or File::directory?('man') or File::directory?('conf')
         # FIXME
