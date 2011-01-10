@@ -49,7 +49,9 @@ module Gem2Deb
       @bindir = '/usr/bin'
       @prefix = nil
       # FIXME datadir
-      # FIXME mandir
+      @mandir = '/usr/share/man'
+      @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
+      @man_accept_pattern = /\.([1-8])$/
       # FIXME handle multi-version rubies (libs that require patches for some versions)
       if File::exists?('debian/dh_ruby.overrides')
          # FIXME
@@ -85,13 +87,29 @@ module Gem2Deb
           ruby.build_extensions(@prefix)
         end
       end
-      if File::directory?('data') or File::directory?('man') or File::directory?('conf')
+      if File::directory?('data') or File::directory?('conf')
         # FIXME
-        puts "We don't know how to deal with conf, data or man dirs yet."
+        puts "We don't know how to deal with conf and data dirs yet."
         exit(1)
       end
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), libdir(package),  644) if File::directory?('lib')
+
+      # manpages
+      if File::directory?('man')
+        # man/man1/apps.1 scheme
+        if @gemmandirs.any? {|m| File::directory?(m) }
+          install_files('man', find_files('man', @man_accept_pattern), @mandir, 644)
+        else
+          # man/apps.1 scheme
+          Dir.glob("man/*.[1-8]").each do |man_file|
+            match = man_file.match(@man_accept_pattern)
+            if match && (section = match.captures.first)
+              install_files('man', [File.basename(man_file)], "#{@mandir}/man#{section}", 644)
+            end
+          end
+        end
+      end
       # FIXME after install, update shebang of binaries to default ruby version
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
@@ -106,7 +124,7 @@ module Gem2Deb
     JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
         /~$/, /.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
-    def find_files(dir)
+    def find_files(dir, accept_pattern=nil)
       files = []
       Dir::chdir(dir) do
         Find::find('.') do |f|
@@ -119,6 +137,11 @@ module Gem2Deb
         fb = File::basename(f)
         next if (JUNK_FILES + HOOK_FILES).include?(fb)
         next if JUNK_PATTERNS.select { |pat| fb =~ pat } != []
+        # accept_pattern on this directory
+        if File.file?(File.join(dir, f)) &&
+          accept_pattern.is_a?(Regexp) && f.match(accept_pattern).nil?
+          next
+        end
         files2 << f
       end
       (files - files2). each do |f|
