@@ -19,16 +19,6 @@
 # see FIXME in the file.
 #
 # There's a number of things that this class needs to be able to do.
-# Different installation schemes:
-# - the most common one is "pure ruby, with common code for all interpreters". In
-#   that case, we just install libs to /usr/lib/ruby/vendor_ruby.
-#   Only one binary package, named (for libs): ruby-foo
-# - the other case is "different code for different interpreters" (because the code
-#   needs changes for some interpreters, or because it includes native libs). In that
-#   case, we need one binary package per interpreter, and we install to
-#   /usr/lib/ruby/vendor_ruby/<VERSION>/
-#   One binary package per interpreter, named <interpreter>-foo 
-#   (interpreter=ruby1.8,ruby1.9.1,jruby,...)
 #
 # dh_ruby should be configurable with a special file in debian/
 #   
@@ -45,16 +35,18 @@
 # dh_ruby could generate rdoc (not sure if we want this)
 
 require 'gem2deb'
+require 'gem2deb/ruby_version'
 require 'find'
 
 module Gem2Deb
 
   class DhRuby
 
+    COMMON_LIBDIR = '/usr/lib/ruby/vendor_ruby'
+
     def initialize
       @verbose = true
       @bindir = '/usr/bin'
-      @libdir = '/usr/lib/ruby/vendor_ruby'
       @prefix = nil
       # FIXME datadir
       # FIXME mandir
@@ -97,8 +89,8 @@ module Gem2Deb
         puts "We don't know how to deal with conf, data or man dirs yet."
         exit(1)
       end
-      install_files('bin', find_files('bin'), @bindir, 755) if File::directory?('bin')
-      install_files('lib', find_files('lib'), @libdir, 644) if File::directory?('lib')
+      install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
+      install_files('lib', find_files('lib'), libdir(package),  644) if File::directory?('lib')
       # FIXME after install, update shebang of binaries to default ruby version
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
@@ -144,5 +136,11 @@ module Gem2Deb
         end
       end
     end
+
+    def libdir(package)
+      ruby = Gem2Deb::RubyVersion.by_package(package)
+      ruby ? ruby.libdir : COMMON_LIBDIR
+    end
+
   end
 end
