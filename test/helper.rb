@@ -32,9 +32,8 @@ class Gem2DebTestCase < Test::Unit::TestCase
     self.class.instance
   end
 
-  def initialize(arg)
+  def setup
     self.class.one_time_setup!
-    super(arg)
   end
 
   def run(runner)
