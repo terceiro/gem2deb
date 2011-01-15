@@ -1,0 +1,3 @@
+#!/usr/bin/ruby1.8
+
+puts "I am a simple program"

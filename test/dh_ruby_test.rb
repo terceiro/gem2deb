@@ -8,7 +8,7 @@ class DhRubyTest < Gem2DebTestCase
     instance.verbose = false
 
     build(SIMPLE_GEM, SIMPLE_GEM_DIRNAME)
-    #FIXME build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
+    build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
     #FIXME build(SIMPLE_NATIVE_EXTENSION, SIMPLE_NATIVE_EXTENSION_DIRNAME)
   end
 
@@ -18,9 +18,13 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context 'installing Ruby program' do
-    should 'install programs at /usr/bin' # FIXME
-    should 'install manpages at /usr/share/man' # FIXME
+  context 'installing a Ruby program' do
+    should 'install programs at /usr/bin' do
+      assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
+    end
+    should 'install manpages at /usr/share/man' do
+      assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/share/man/man1/simpleprogram.1'
+    end
   end
 
   context 'installing native extension' do
