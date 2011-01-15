@@ -6,9 +6,6 @@ require 'gem2deb/gem2tgz'
 
 class Gem2TgzTest < Gem2DebTestCase
 
-  SIMPLE_GEM            = File.join(SAMPLE_DIR, 'simplegem/pkg/simplegem-0.0.1.gem')
-  SIMPLE_GEM_TARBALL    = File.join(TMP_DIR,    'simplegem-0.0.1.tar.gz')
-
   should 'convert using a new instance when converting through the class' do
     gem2tgz = mock
     gem2tgz.expects(:convert!)

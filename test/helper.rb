@@ -6,8 +6,9 @@ require 'tmpdir'
 
 class Gem2DebTestCase < Test::Unit::TestCase
 
-  SAMPLE_DIR = File.join(File.dirname(__FILE__), 'sample')
-  TMP_DIR = Dir.mktmpdir
+  require 'test/helper/samples'
+  include Gem2DebTestCase::Samples
+
   FileUtils.mkdir_p(TMP_DIR)
 
   class << self
