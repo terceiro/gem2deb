@@ -12,6 +12,9 @@ class Gem2DebTestCase < Test::Unit::TestCase
   FileUtils.mkdir_p(TMP_DIR)
 
   class << self
+    def tmpdir
+      @tmpdir ||= File.join(Gem2DebTestCase::Samples::TMP_DIR, name)
+    end
     def one_time_setup_blocks
       @one_time_setup_blocks ||= []
     end
@@ -23,6 +26,7 @@ class Gem2DebTestCase < Test::Unit::TestCase
     end
     def one_time_setup!
       unless one_time_setup?
+        FileUtils.mkdir_p(tmpdir)
         one_time_setup_blocks.each(&:call)
         @one_time_setup = true
       end

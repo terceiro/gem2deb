@@ -3,11 +3,9 @@ require 'gem2deb/dh-make-ruby'
 
 class DhMakeRubyTest < Gem2DebTestCase
 
-  DH_MAKE_RUBY_TMP_DIR        = File.join(TMP_DIR, 'dh-make-ruby')
-  DEBIANIZED_SIMPLE_GEM       = File.join(DH_MAKE_RUBY_TMP_DIR, SIMPLE_GEM_DIRNAME)
+  DEBIANIZED_SIMPLE_GEM       = File.join(tmpdir, SIMPLE_GEM_DIRNAME)
   SIMPLE_GEM_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_GEM + '.tar.gz'
   one_time_setup do
-    FileUtils.mkdir_p(DH_MAKE_RUBY_TMP_DIR)
     # generate tarball
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_UPSTREAM_TARBALL)
 
