@@ -10,8 +10,7 @@ class DhMakeRubyTest < Gem2DebTestCase
     # generate tarball
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_UPSTREAM_TARBALL)
 
-    self.instance = Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL)
-    self.instance.build
+    Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL).build
   end
 
   context 'simple gem' do
@@ -32,7 +31,26 @@ class DhMakeRubyTest < Gem2DebTestCase
         assert !File.zero?(filename), "#{filename} expected NOT to be empty"
       end
     end
+  end
 
+  DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, SIMPLE_EXTENSION_DIRNAME)
+  SIMPLE_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_EXTENSION + '.tar.gz'
+  one_time_setup do
+   Gem2Deb::Gem2Tgz.convert!(SIMPLE_EXTENSION, SIMPLE_EXTENSION_UPSTREAM_TARBALL)
+   Gem2Deb::DhMakeRuby.new(SIMPLE_EXTENSION_UPSTREAM_TARBALL).build
+  end
+
+  context 'native extension' do
+    should 'generate one package for ruby1.8' do
+      Dir.chdir(DEBIANIZED_SIMPLE_EXTENSION) do
+        assert(read_debian_control.any? { |stanza| stanza['Package'] == 'ruby1.8-simpleextension' }, "Package ruby1.8-simpleextension not created")
+      end
+    end
+    should 'generate one package for ruby1.9.1' do
+      Dir.chdir(DEBIANIZED_SIMPLE_EXTENSION) do
+        assert(read_debian_control.any? { |stanza| stanza['Package'] == 'ruby1.9.1-simpleextension' }, "Package ruby1.9.1-simpleextension not created")
+      end
+    end
   end
 
 end

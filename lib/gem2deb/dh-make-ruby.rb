@@ -121,14 +121,8 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
 
     def create_control
       spec = YAML::load(IO::read("#{@gem_name}-#{@gem_version}/metadata.yml"))
-      File::open("#{@gem_name}-#{@gem_version}/debian/control", 'w') do |f|
-        write_control_data(f, spec)
-      end
-    end
+      f = File::open("#{@gem_name}-#{@gem_version}/debian/control", 'w')
 
-    protected
-
-    def write_control_data(f, spec)
       f.puts <<-EOF
 Source: #{@gem_name}
 Section: ruby
