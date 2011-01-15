@@ -3,7 +3,7 @@ class Gem2DebTestCase
     SAMPLE_DIR            = File.join(File.dirname(__FILE__), '..', 'sample')
     TMP_DIR               = Dir.mktmpdir
 
-    SIMPLE_GEM            = File.join(SAMPLE_DIR, 'simplegem/pkg/simplegem-0.0.1.gem')
-    SIMPLE_GEM_TARBALL    = File.join(TMP_DIR,    'simplegem-0.0.1.tar.gz')
+    SIMPLE_GEM_DIRNAME    = 'simplegem-0.0.1'
+    SIMPLE_GEM            = File.join(SAMPLE_DIR, "simplegem/pkg/#{SIMPLE_GEM_DIRNAME}.gem")
   end
 end
