@@ -47,6 +47,11 @@ module Gem2Deb
       'ruby1.8'   => '/usr/bin/ruby1.8',  
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
+    include Gem2Deb
+
+    COMMON_LIBDIR = '/usr/lib/ruby/vendor_ruby'
+
+    attr_accessor :verbose
 
     def initialize
       @verbose = true
@@ -88,8 +93,8 @@ module Gem2Deb
       # FIXME detect and run test suite
     end
 
-    def install
-      @prefix = ARGV[0]
+    def install(argv)
+      @prefix = argv.first
       puts "Entering dh_ruby --install" if @verbose
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
