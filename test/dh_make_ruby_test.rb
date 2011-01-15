@@ -1,4 +1,5 @@
 require 'test/helper'
+require 'gem2deb/gem2tgz'
 require 'gem2deb/dh-make-ruby'
 
 class DhMakeRubyTest < Gem2DebTestCase
@@ -23,10 +24,15 @@ class DhMakeRubyTest < Gem2DebTestCase
       debian/watch
       debian/source/format
     ].each do |file|
+      filename = File.join(DEBIANIZED_SIMPLE_GEM, file)
       should "create #{file}" do
-        assert_file_exists File.join(DEBIANIZED_SIMPLE_GEM, file)
+        assert_file_exists filename
+      end
+      should "create non-empty #{file} file" do
+        assert !File.zero?(filename), "#{filename} expected NOT to be empty"
       end
     end
+
   end
 
 end
