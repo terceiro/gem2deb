@@ -22,6 +22,9 @@ class DhRubyTest < Gem2DebTestCase
     should 'install programs at /usr/bin' do
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
     end
+    should 'rewrite shebang of installed programs' do
+      assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first.strip
+    end
     should 'install manpages at /usr/share/man' do
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/share/man/man1/simpleprogram.1'
     end
@@ -35,7 +38,15 @@ class DhRubyTest < Gem2DebTestCase
   protected
 
   def assert_installed(gem_dirname, package, path)
-    assert_file_exists File.join(self.class.tmpdir, gem_dirname, 'debian', package, path)
+    assert_file_exists installed_file_path(gem_dirname, package, path)
+  end
+
+  def read_installed_file(gem_dirname, package, path)
+    File.read(installed_file_path(gem_dirname, package, path))
+  end
+
+  def installed_file_path(gem_dirname, package, path)
+    File.join(self.class.tmpdir, gem_dirname, 'debian', package, path)
   end
 
   def self.build(gem, source_package)
@@ -48,7 +59,7 @@ class DhRubyTest < Gem2DebTestCase
       instance.clean
       instance.configure
       instance.build
-      binary_packages = read_debian_control.map { |stanza| stanza['Package'] }.compact
+      binary_packages = `dh_listpackages`.split
       binary_packages.each do |pkg|
         instance.install File.join(package_path, 'debian', pkg)
       end

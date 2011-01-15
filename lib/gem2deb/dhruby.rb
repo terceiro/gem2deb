@@ -26,9 +26,6 @@
 # can provide a ruby script in debian/ that will start the test suite.
 # Test suites should run with each ruby interpreter.
 #
-# dh_ruby must update the shebang after installation of binaries, to point to
-# the default ruby version
-#
 # dh_ruby should do some checking (lintian-like) of ruby-specific stuff. For example,
 # it could search for "require 'rubygems'" in libraries, and display warnings
 #
@@ -47,6 +44,9 @@ module Gem2Deb
       'ruby1.8'   => '/usr/bin/ruby1.8',  
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
+
+    DEFAULT_RUBY_VERSION = 'ruby1.8'
+
     include Gem2Deb
 
     COMMON_LIBDIR = '/usr/lib/ruby/vendor_ruby'
@@ -100,11 +100,13 @@ module Gem2Deb
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
 
+      packages = `dh_listpackages`.split.map(&:strip)
+
       # handle extensions
       if File::directory?('ext')
-        `dh_listpackages`.each_line do |pkg|
+        packages do |pkg|
           pkg.chomp!
-          rubyver = pkg.split('-')[0]
+          rubyver = ruby_version_for(pkg)
           next if rubyver == 'ruby' # common package, nothing to do
           if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
             puts "Unknown Ruby version: #{rubyver}"
@@ -114,6 +116,11 @@ module Gem2Deb
           puts "Building extension for #{rubyver} ..."
           run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{extension_builder} #{pkg}")
         end
+      end
+
+      # Update shebang lines of installed programs
+      packages.each do |pkg|
+        update_shebangs(pkg)
       end
 
       # manpages
@@ -132,7 +139,7 @@ module Gem2Deb
           end
         end
       end
-      # FIXME after install, update shebang of binaries to default ruby version
+
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
     end
@@ -180,6 +187,40 @@ module Gem2Deb
         else
           run "install -m#{mode} #{src + '/' + fname} #{@prefix + '/' + dest + '/' + fname}"
         end
+      end
+    end
+
+    def ruby_version_for(package)
+      package.split('-')[0]
+    end
+
+    def update_shebangs(package)
+      rubyver = ruby_version_for(package)
+      ruby_binary = SUPPORTED_RUBY_VERSIONS[rubyver] || SUPPORTED_RUBY_VERSIONS[DEFAULT_RUBY_VERSION]
+      Dir.glob(File.join(@prefix, @bindir, '*')).each do |path|
+        puts "Rewriting shebang line of #{path}" if @verbose
+        atomic_rewrite(path) do |input, output|
+          old = input.gets # discard
+          output.puts "#!#{ruby_binary}"
+          unless old =~ /#!/
+            output.puts old
+          end
+          output.print input.read
+        end
+      end
+    end
+
+    def atomic_rewrite(path, &block)
+      tmpfile = path + '.tmp'
+      begin
+        File.open(tmpfile, 'wb') do |output|
+          File.open(path, 'rb') do |input|
+            yield(input, output)
+          end
+        end
+        File.rename tmpfile, path
+      ensure
+        File.unlink tmpfile if File.exist?(tmpfile)
       end
     end
 
