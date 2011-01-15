@@ -4,17 +4,24 @@ require 'rubygems'
 
 require 'gem2deb/gem2tgz'
 
-class Gem2TgzTest < Gem2TgzTestCase
+class Gem2TgzTest < Gem2DebTestCase
 
-  SIMPLE_GEM            = File.join(File.dirname(__FILE__), 'sample/simplegem/pkg/simplegem-0.0.1.gem')
-  SIMPLE_GEM_TARBALL    = File.join(File.dirname(__FILE__), 'tmp/simplegem-0.0.1.tar.gz')
-  SIMPLE_GEM_TARGET_DIR = File.join(File.dirname(__FILE__), 'tmp/simplegem-0.0.1')
+  SIMPLE_GEM            = File.join(SAMPLE_DIR, 'simplegem/pkg/simplegem-0.0.1.gem')
+  SIMPLE_GEM_TARBALL    = File.join(TMP_DIR,    'simplegem-0.0.1.tar.gz')
+
+  should 'convert using a new instance when converting through the class' do
+    gem2tgz = mock
+    gem2tgz.expects(:convert!)
+    Gem2Deb::Gem2Tgz.expects(:new).with(SIMPLE_GEM, SIMPLE_GEM_TARBALL).returns(gem2tgz)
+    Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_TARBALL)
+  end
+
+  one_time_setup do
+    self.instance = Gem2Deb::Gem2Tgz.new(SIMPLE_GEM, SIMPLE_GEM_TARBALL)
+    self.instance.convert!
+  end
 
   context 'converting a simple gem' do
-    setup do
-      Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_TARBALL)
-    end
-
     should 'create tarball' do
       assert_file_exists SIMPLE_GEM_TARBALL
     end
@@ -28,7 +35,7 @@ class Gem2TgzTest < Gem2TgzTestCase
       assert_not_contained_in_tarball SIMPLE_GEM_TARBALL, 'simplegem-0.0.1/metadata.gz'
     end
     should 'not leave temporary directory after creating tarball' do
-      assert_no_file_exists SIMPLE_GEM_TARGET_DIR
+      assert_no_file_exists instance.target_dir
     end
     should 'create metadata.yml' do
       unpack(SIMPLE_GEM_TARBALL) do

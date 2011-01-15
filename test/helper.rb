@@ -1,17 +1,40 @@
 require 'test/unit'
 require 'shoulda'
+require 'mocha'
 require 'fileutils'
+require 'tmpdir'
 
-class Gem2TgzTestCase < Test::Unit::TestCase
+class Gem2DebTestCase < Test::Unit::TestCase
 
-  TMP_DIR = File.join(File.dirname(__FILE__), 'tmp')
+  SAMPLE_DIR = File.join(File.dirname(__FILE__), 'sample')
+  TMP_DIR = Dir.mktmpdir
+  FileUtils.mkdir_p(TMP_DIR)
 
-  def setup
-    FileUtils.mkdir_p(TMP_DIR)
+  class << self
+    def one_time_setup_blocks
+      @one_time_setup_blocks ||= []
+    end
+    def one_time_setup(&block)
+      one_time_setup_blocks << block
+    end
+    def one_time_setup?
+      @one_time_setup
+    end
+    def one_time_setup!
+      unless one_time_setup?
+        one_time_setup_blocks.each(&:call)
+        @one_time_setup = true
+      end
+    end
+    attr_accessor :instance
+  end
+  def instance
+    self.class.instance
   end
 
-  def teardown
-    FileUtils.rm_rf(TMP_DIR)
+  def initialize(arg)
+    self.class.one_time_setup!
+    super(arg)
   end
 
   def run(runner)
@@ -24,7 +47,11 @@ class Gem2TgzTestCase < Test::Unit::TestCase
   def unpack(tarball)
     Dir.chdir(File.dirname(tarball)) do
       system 'tar', 'xzf', File.basename(tarball)
-      yield
+      ret = yield
+      contents(tarball).each do |f|
+        FileUtils.rm_rf(f)
+      end
+      ret
     end
   end
 
@@ -50,4 +77,23 @@ class Gem2TgzTestCase < Test::Unit::TestCase
     assert !File.exist?(path), "#{path} should NOT exist"
   end
 
+end
+
+class Test::Unit::AutoRunner
+  alias :orig_run :run
+  def run
+    ret = nil
+    if ENV['GEM2DEB_TEST_DEBUG']
+      puts "Running tests in debug mode ..."
+      ret = orig_run
+      puts
+      puts "======================================================================="
+      puts "Temporary test files left in #{Gem2TgzTest::TMP_DIR} for inspection!"
+      puts
+    else
+      ret = orig_run
+      FileUtils.rm_rf(Gem2DebTestCase::TMP_DIR)
+    end
+    ret
+  end
 end
