@@ -49,8 +49,6 @@ module Gem2Deb
 
     include Gem2Deb
 
-    COMMON_LIBDIR = '/usr/lib/ruby/vendor_ruby'
-
     attr_accessor :verbose
 
     def initialize
