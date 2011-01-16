@@ -130,9 +130,38 @@ module Gem2Deb
       # FIXME after install, update shebang of binaries to default ruby version
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
+
+      check_rubygems
     end
 
     protected
+
+    def check_rubygems
+      return if ENV['DEB_BUILD_OPTIONS'] and ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
+      found = false
+      if File::exists?('debian/require-rubygems.overrides')
+        overrides = YAML::load_file('debian/require-rubygems.overrides')
+      else
+        overrides = []
+      end
+      `dh_listpackages`.each_line do |pkg|
+        pkg.chomp!
+        Dir["debian/#{pkg}/usr/lib/ruby/vendor_ruby/**/*.rb"].each do |f|
+          lines = IO::readlines(f)
+          rglines = lines.select { |l| l =~ /require.*rubygems/ }
+          rglines.each do |l|
+            if not overrides.include?(f)
+              puts "#{f}: #{l}"
+              found = true
+            end
+          end
+        end
+      end
+      if found
+        puts "Found some 'require rubygems' without overrides, exiting."
+        exit(1)
+      end
+    end
 
     def run_tests(rubyver)
       if ENV['DEB_BUILD_OPTIONS'] and ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
