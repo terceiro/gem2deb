@@ -49,6 +49,19 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'determining ruby version for package' do
+    {
+      'foo' => 'ruby',
+      'ruby-foo' => 'ruby',
+      'ruby1.8-foo' => 'ruby1.8',
+      'ruby1.9.1-foo' => 'ruby1.9.1',
+    }.each do |package,version|
+      should "detect #{version} for package '#{package}'" do
+        assert_equal version, instance.send(:ruby_version_for, package)
+      end
+    end
+  end
+
   protected
 
   def assert_installed(gem_dirname, package, path)

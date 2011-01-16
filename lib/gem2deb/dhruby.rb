@@ -226,7 +226,11 @@ module Gem2Deb
     end
 
     def ruby_version_for(package)
-      package.split('-')[0]
+      if package =~ /^(ruby[^-]*)/
+        $1
+      else
+        'ruby'
+      end
     end
 
     def update_shebangs(package)
