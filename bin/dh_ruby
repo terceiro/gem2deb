@@ -90,7 +90,7 @@ See dh_ruby --help for details.
 
 =head1 COPYRIGHT AND AUTHORS
 
-Copyright (c) 2011, Lucas Nussbaum <lucas@lucas-nussbaum.net>
+Copyright (c) 2011, Lucas Nussbaum <lucas@debian.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
