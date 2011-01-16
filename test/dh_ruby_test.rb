@@ -47,6 +47,9 @@ class DhRubyTest < Gem2DebTestCase
         assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
       end
     end
+    should "update the shebang to use the default ruby version" do
+      assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', '/usr/bin/simpleextension').lines.first.strip
+    end
   end
 
   context 'determining ruby version for package' do

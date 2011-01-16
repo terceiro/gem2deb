@@ -10,7 +10,7 @@ spec = Gem::Specification.new do |s|
   s.require_path = 'ext'
   s.extensions << 'ext/simpleextension/extconf.rb'
   #s.autorequire = 'rake'
-  s.files = Dir.glob('{ext}/**/*')
+  s.files = Dir.glob('{bin,ext}/**/*')
   s.description = <<EOF
 simpleextension is a simple native extension that is used to test dh_ruby.
 EOF

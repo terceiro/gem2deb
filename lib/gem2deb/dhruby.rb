@@ -96,7 +96,7 @@ module Gem2Deb
 
       # assume all Ruby files will be installed in the first package listed in
       # debian/control, which should be ruby-foo OR foo
-      @prefix = File.join(File.dirname(argv.first), packages.first)
+      @prefix = destdir_for(packages.first)
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
@@ -248,10 +248,14 @@ module Gem2Deb
       end
     end
 
+    def destdir_for(package)
+      File.expand_path(File.join('debian', package))
+    end
+
     def update_shebangs(package)
       rubyver = ruby_version_for(package)
       ruby_binary = SUPPORTED_RUBY_VERSIONS[rubyver] || SUPPORTED_RUBY_VERSIONS[DEFAULT_RUBY_VERSION]
-      Dir.glob(File.join(@prefix, @bindir, '*')).each do |path|
+      Dir.glob(File.join(destdir_for(package), @bindir, '*')).each do |path|
         puts "Rewriting shebang line of #{path}" if @verbose
         atomic_rewrite(path) do |input, output|
           old = input.gets # discard
