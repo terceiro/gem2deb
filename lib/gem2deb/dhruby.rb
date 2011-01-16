@@ -76,15 +76,15 @@ module Gem2Deb
     end
 
     def configure
-      puts "Entering dh_ruby --configure" if @verbose
+      # puts "Entering dh_ruby --configure" if @verbose
     end
 
     def build
-      puts "Entering dh_ruby --build" if @verbose
+      # puts "Entering dh_ruby --build" if @verbose
     end
 
     def test
-      puts "Entering dh_ruby --test" if @verbose
+      # puts "Entering dh_ruby --test" if @verbose
       # FIXME detect and run test suite
     end
 
@@ -108,6 +108,11 @@ module Gem2Deb
           extension_builder = File.join(File.dirname(__FILE__),'extension_builder.rb')
           puts "Building extension for #{rubyver} ..."
           run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{extension_builder} #{pkg}")
+          run_tests(rubyver)
+        end
+      else
+        ['ruby1.8', 'ruby1.9.1'].each do |rubyver|
+          run_tests(rubyver)
         end
       end
 
@@ -134,7 +139,24 @@ module Gem2Deb
 
     protected
 
-    JUNK_FILES = %w( core RCSLOG tags TAGS .make.state .nse_depinfo )
+    def run_tests(rubyver)
+      if ENV['DEB_BUILD_OPTIONS'] and ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
+        puts "DEB_BUILD_OPTIONS include nocheck, skipping test suite."
+        return
+      end
+      if File::exists?('debian/ruby-test-files.yaml')
+        puts "Running tests for #{rubyver} using gem2deb test runner and debian/ruby-test-files.yaml..."
+        testrunner = File.join(File.dirname(__FILE__),'testrunner.rb')
+        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{testrunner}")
+      elsif File::exists?('debian/ruby-tests.rb')
+        puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
+        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb")
+      else
+        puts "Running tests for #{rubyver}: found no way to run a test suite!"
+      end
+    end
+
+    JUNK_FILES = %w( RCSLOG tags TAGS .make.state .nse_depinfo )
     HOOK_FILES = %w( pre-%s post-%s pre-%s.rb post-%s.rb ).map {|fmt|
       %w( config setup install clean ).map {|t| sprintf(fmt, t) }
       }.flatten

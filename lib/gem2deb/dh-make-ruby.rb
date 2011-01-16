@@ -31,9 +31,15 @@ module Gem2Deb
     def build
       create_orig_tarball
       extract
+      read_spec
       create_debian_boilerplates
       create_control
       other_files
+      test_suite
+    end
+    
+    def read_spec
+      @spec = YAML::load(IO::read("#{@gem_name}-#{@gem_version}/metadata.yml"))
     end
 
     def build_dir
@@ -116,7 +122,6 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
     end
 
     def create_control
-      spec = YAML::load(IO::read("#{@gem_name}-#{@gem_version}/metadata.yml"))
       f = File::new("#{@gem_name}-#{@gem_version}/debian/control", 'w')
       f.puts <<-EOF
 Source: #{@gem_name}
@@ -130,8 +135,8 @@ Standards-Version: 3.8.4
 #Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
 EOF
-      if spec.homepage 
-        f.puts "Homepage: #{spec.homepage}"
+      if @spec.homepage 
+        f.puts "Homepage: #{@spec.homepage}"
       else
         f.puts "Homepage: FIXME"
       end
@@ -140,21 +145,21 @@ EOF
       pkg << "Package: RUBYVER-#{@gem_name}\n"
       pkg << "Architecture: RUBYARCH\n"
       pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
-      if spec.dependencies.length > 0
+      if @spec.dependencies.length > 0
         pkg << "# "
-        spec.dependencies.each do |dep|
+        @spec.dependencies.each do |dep|
           pkg << "#{dep.name} (#{dep.requirement})"
         end
         pkg << "\n"
       end
        pkg << "Description: "
-      if spec.summary
-        pkg << spec.summary + "\n"
+      if @spec.summary
+        pkg << @spec.summary + "\n"
       else
         pkg << "FIXME\n"
       end
-      if spec.description
-        spec.description.each_line do |l|
+      if @spec.description
+        @spec.description.each_line do |l|
           l = l.strip
           if l == ""
             pkg << ' .\n'
@@ -175,6 +180,28 @@ EOF
         end
       end
       f.close
+    end
+
+    def test_suite
+      if not @spec.test_files.empty?
+        File::open("#{@gem_name}-#{@gem_version}/debian/ruby-test-files.yaml", 'w') do |f|
+          YAML::dump(@spec.test_files, f)
+        end
+      else
+        if File::directory?('test') or File::directory?('spec')
+          File::open("#{@gem_name}-#{@gem_version}/debian/ruby-tests.rb", 'w') do |f|
+            f.puts <<-EOF
+# FIXME
+# there's a spec/ or a test/ directory in the upstream source, but
+# no test suite was defined in the Gem specification. It would be
+# a good idea to define it here so the package gets tested at build time.
+# Example:
+# $: << 'lib'
+# Dir['{spec,test}/**/*.rb'].each { |f| require f }
+            EOF
+          end
+        end
+      end
     end
 
     def other_files
