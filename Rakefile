@@ -17,7 +17,6 @@ end
 
 desc "Builds the Debian package and installs it on your system"
 task :install do
-  require './lib/gem2deb'
   sh 'dpkg-buildpackage -us -uc'
   sh "sudo debi"
 end
