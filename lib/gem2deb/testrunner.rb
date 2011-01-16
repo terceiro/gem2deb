@@ -15,8 +15,6 @@
 
 require 'gem2deb'
 require 'yaml'
-require 'test/unit'
-require 'spec'
 
 module Gem2Deb
   class TestRunner
