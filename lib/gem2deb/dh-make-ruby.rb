@@ -153,7 +153,8 @@ EOF
       end
       if spec.description
         spec.description.each_line do |l|
-          if l == "\n"
+          l = l.strip
+          if l == ""
             f.puts ' .'
           else
             f.puts " #{l}"
