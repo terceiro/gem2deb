@@ -81,7 +81,7 @@ module Gem2Deb
 
         # copyright
         File::open('copyright', 'w') do |f|
-          f.puts "FIXME. probably with machine parseable copyright file."
+          f.puts "FIXME. fill-in with DEP5 copyright file. http://dep.debian.net/deps/dep5/"
         end
 
         # rules
@@ -119,8 +119,7 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: #{ENV['DEBFULLNAME']} <#{ENV['DEBEMAIL']}>
 DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.0.50~)
-# FIXME gem2deb
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= #{Gem2Deb::VERSION})
 Standards-Version: 3.8.4
 #Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
