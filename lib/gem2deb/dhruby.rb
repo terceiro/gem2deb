@@ -42,9 +42,9 @@ module Gem2Deb
   class DhRuby
 
     SUPPORTED_RUBY_VERSIONS = {
-      #name             Ruby binary          
+      #name             Ruby binary
       #---------------  -------------------
-      'ruby1.8'   => '/usr/bin/ruby1.8',  
+      'ruby1.8'   => '/usr/bin/ruby1.8',
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
 
@@ -56,10 +56,6 @@ module Gem2Deb
       @libdir = '/usr/lib/ruby/vendor_ruby'
       @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
       @man_accept_pattern = /\.([1-8])$/
-      # FIXME handle multi-version rubies (libs that require patches for some versions)
-      if File::exists?('debian/dh_ruby.overrides')
-         # FIXME
-      end
     end
     
     def clean
@@ -85,7 +81,6 @@ module Gem2Deb
 
     def test
       # puts "Entering dh_ruby --test" if @verbose
-      # FIXME detect and run test suite
     end
 
     def install
