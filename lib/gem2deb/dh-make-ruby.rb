@@ -201,6 +201,28 @@ EOF
             EOF
           end
         end
+
+        # data & conf
+        installs = ""
+        if File::directory?('data')
+          installs += <<-EOF
+# FIXME: data/ dir found in source. Consider installing it somewhere.
+# Examples:
+# data/* /usr/share/ruby-#{@gem_name}/
+          EOF
+        end
+        if File::directory?('conf')
+          installs += <<-EOF
+# FIXME: conf/ dir found in source. Consider installing it somewhere.
+# Examples:
+# conf/* /etc/
+          EOF
+        end
+        if installs != ""
+          File::open("debian/ruby-#{@gem_name}.install", 'w') do |f|
+            f.put installs
+          end
+        end
       end
     end
   end

@@ -48,7 +48,6 @@ module Gem2Deb
       @verbose = true
       @bindir = '/usr/bin'
       @prefix = nil
-      # FIXME datadir
       @mandir = '/usr/share/man'
       @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
       @man_accept_pattern = /\.([1-8])$/
@@ -87,11 +86,7 @@ module Gem2Deb
           ruby.build_extensions(@prefix)
         end
       end
-      if File::directory?('data') or File::directory?('conf')
-        # FIXME
-        puts "We don't know how to deal with conf and data dirs yet."
-        exit(1)
-      end
+
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), libdir(package),  644) if File::directory?('lib')
 
