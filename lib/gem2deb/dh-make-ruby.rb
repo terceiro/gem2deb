@@ -188,7 +188,7 @@ EOF
           YAML::dump(@spec.test_files, f)
         end
       else
-        if File::directory?('test') or File::directory?('spec')
+        if File::directory?("#{@gem_name}-#{@gem_version}/test") or File::directory?("#{@gem_name}-#{@gem_version}/spec")
           File::open("#{@gem_name}-#{@gem_version}/debian/ruby-tests.rb", 'w') do |f|
             f.puts <<-EOF
 # FIXME
