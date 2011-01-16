@@ -1,4 +1,4 @@
-gem2deb (0.1) UNRELEASED; urgency=low
+gem2deb (0.1.0) UNRELEASED; urgency=low
 
   * Initial release (Closes: #nnnn)
 

@@ -14,3 +14,10 @@ task 'test:debug' do
   ENV['GEM2DEB_TEST_DEBUG'] = 'yes'
   Rake::Task['test'].invoke
 end
+
+desc "Builds the Debian package and installs it on your system"
+task :install do
+  require './lib/gem2deb'
+  sh 'dpkg-buildpackage -us -uc'
+  sh "sudo dpkg -i ../gem2deb_#{Gem2Deb::VERSION}_all.deb"
+end
