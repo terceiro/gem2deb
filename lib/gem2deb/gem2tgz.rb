@@ -23,7 +23,7 @@ module Gem2Deb
 
   class Gem2Tgz
 
-    def self.convert!(gem, tarball)
+    def self.convert!(gem, tarball = nil)
       self.new(gem, tarball).convert!
     end
 
@@ -31,12 +31,20 @@ module Gem2Deb
     attr_reader :tarball, :tarball_full_path
     attr_reader :target_dir
 
-    def initialize(gem, tarball)
+    def initialize(gem, tarball = nil)
+      if gem !~ /\.gem$/
+        puts "#{gem} does not look like a valid .gem file."
+        exit(1)
+      end
+
       @gem                = gem
       @gem_full_path      = File.expand_path(gem)
       @tarball            = tarball
-      @tarball_full_path  = File.expand_path(tarball)
-      @target_dirname     = File::basename(tarball).gsub('.tar.gz', '')
+      if @tarball.nil?
+        @tarball = @gem.gsub(/\.gem$/, '.tar.gz')
+      end
+      @tarball_full_path  = File.expand_path(@tarball)
+      @target_dirname     = File::basename(@tarball).gsub('.tar.gz', '')
     end
 
     def convert!
@@ -44,6 +52,7 @@ module Gem2Deb
       extract_gem_contents
       create_resulting_tarball
       cleanup
+      @tarball
     end
 
     protected

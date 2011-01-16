@@ -57,15 +57,7 @@ if ARGV.length != 1 && ARGV.length != 2
   exit(1)
 end
 
-gem = ARGV[0]
-if gem !~ /\.gem$/
-  puts "#{gem} does not look like a valid .gem file."
-  exit(1)
-end
-
-tarball = ARGV[1] || gem.gsub(/\.gem$/, '.tar.gz')
-
-Gem2Deb::Gem2Tgz.convert!(gem, tarball)
+Gem2Deb::Gem2Tgz.convert!(ARGV[0], ARGV[1] || nil)
 
 __END__
 =head1 NAME
