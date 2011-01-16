@@ -84,13 +84,12 @@ class DhRubyTest < Gem2DebTestCase
 
     silence_stream(STDOUT) do
       Dir.chdir(package_path) do
+        # This sequence tries to imitate what debhelper7 will actually do
         instance.clean
         instance.configure
         instance.build
         binary_packages = `dh_listpackages`.split
-        binary_packages.each do |pkg|
-          instance.install File.join(package_path, 'debian', pkg)
-        end
+        instance.install File.join(package_path, 'debian', 'tmp')
       end
     end
   end

@@ -90,33 +90,42 @@ module Gem2Deb
     LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
     def install(argv)
-      @prefix = argv.first
-      package = File::basename(@prefix)
-      puts "Entering dh_ruby --install (for #{package})" if @verbose
+      puts "Entering dh_ruby --install" if @verbose
+
+      packages = `dh_listpackages`.split
+
+      # assume all Ruby files will be installed in the first package listed in
+      # debian/control, which should be ruby-foo OR foo
+      @prefix = File.join(File.dirname(argv.first), packages.first)
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
 
-      # handle extensions
-      rubyver = ruby_version_for(package)
-      if rubyver != 'ruby'
-        if File::directory?('ext')
-          if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
-            puts "Unknown Ruby version: #{rubyver}"
-            exit(1)
+      packages.each do |package|
+        # handle extensions
+        rubyver = ruby_version_for(package)
+        if rubyver == 'ruby'
+          if packages.size == 1 # pure-Ruby lib
+            SUPPORTED_RUBY_VERSIONS.keys.each do |ver|
+              run_tests(ver)
+            end
           end
-          puts "Building extension for #{rubyver} ..." if @verbose
-          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+        else
+          if File::directory?('ext')
+            if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
+              puts "Unknown Ruby version: #{rubyver}"
+              exit(1)
+            end
+            puts "Building extension for #{rubyver} ..." if @verbose
+            run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+          end
+          run_tests(rubyver)
         end
-        run_tests(rubyver)
-      else
-        SUPPORTED_RUBY_VERSIONS.keys.each do |ver|
-          run_tests(ver)
-        end
+
+        # Update shebang lines of installed programs
+        update_shebangs(package)
       end
 
-      # Update shebang lines of installed programs
-      update_shebangs(package)
 
       # manpages
       # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?
