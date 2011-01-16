@@ -35,6 +35,19 @@ module Gem2Deb
       create_control
     end
 
+    def build_dir
+      "#{@gem_name}-#{@gem_version}"
+    end
+
+    def buildpackage(binary = true)
+      Dir::chdir("#{@gem_name}-#{@gem_version}") do
+        bin = binary ? '' : '-S'
+        run("pwd")
+        run("ls")
+        run("dpkg-buildpackage -us -uc #{bin}")
+      end
+    end
+
     def create_orig_tarball
       if @tarball =~ /^(.*)_(.*).orig.tar.gz$/
         @gem_name = $1
