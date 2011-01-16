@@ -136,37 +136,43 @@ EOF
         f.puts "Homepage: FIXME"
       end
       f.puts
-      f.puts "Package: ruby-#{@gem_name}"
-      if spec.require_paths && spec.require_paths.include?('ext')
-        f.puts "Architecture: any"
-      else
-        f.puts "Architecture: all"
-      end
-      f.puts "Depends: ${shlibs:Depends}, ${misc:Depends}"
+      pkg = ""
+      pkg << "Package: RUBYVER-#{@gem_name}\n"
+      pkg << "Architecture: RUBYARCH\n"
+      pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
       if spec.dependencies.length > 0
-        f.print "# "
+        pkg << "# "
         spec.dependencies.each do |dep|
-          f.print "#{dep.name} (#{dep.requirement})"
+          pkg << "#{dep.name} (#{dep.requirement})"
         end
-        f.puts
+        pkg << "\n"
       end
-      f.print "Description: "
+       pkg << "Description: "
       if spec.summary
-        f.puts spec.summary
+        pkg << spec.summary + "\n"
       else
-        f.puts "FIXME"
+        pkg << "FIXME\n"
       end
       if spec.description
         spec.description.each_line do |l|
           l = l.strip
           if l == ""
-            f.puts ' .'
+            pkg << ' .\n'
           else
-            f.puts " #{l}"
+            pkg << " #{l}\n"
           end
         end
       else
-        f.puts " <insert long description, indented with spaces>"
+        pkg << " <insert long description, indented with spaces>"
+      end
+
+      f.puts pkg.gsub('RUBYVER', 'ruby').gsub('RUBYARCH', 'all')
+      f.puts
+      if File::directory?("#{@gem_name}-#{@gem_version}/ext")
+        [ 'ruby1.8', 'ruby1.9.1'].each do |rver|
+          f.puts pkg.gsub('RUBYVER', rver).gsub('RUBYARCH', 'any')
+          f.puts
+        end
       end
       f.close
     end
