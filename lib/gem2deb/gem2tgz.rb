@@ -43,7 +43,8 @@ module Gem2Deb
       if @tarball.nil?
         # the _ -> - substitution is required because '_' is invalid
         # in Debian packages names
-        @tarball = @gem.gsub(/\.gem$/, '.tar.gz').gsub(/_/,'-')
+        # same for downcase
+        @tarball = @gem.gsub(/\.gem$/, '.tar.gz').gsub(/_/,'-').downcase
       end
       @tarball_full_path  = File.expand_path(@tarball)
       @target_dirname     = File::basename(@tarball).gsub('.tar.gz', '')
