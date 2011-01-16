@@ -10,6 +10,6 @@ Standards-Version: 3.9.1
 
 Package: gem2deb
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.8
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.8, rubygems1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, build-essential, devscripts, debhelper (>= 7.0.50~)
 Description: FIXME
  FIXME
