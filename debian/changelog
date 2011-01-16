@@ -1,5 +1,5 @@
 gem2deb (0.1.0) UNRELEASED; urgency=low
 
-  * Initial release (Closes: #nnnn)
+  * Initial release.
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 08 Jan 2011 21:25:40 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 16 Jan 2011 22:09:17 +0100
