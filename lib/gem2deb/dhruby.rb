@@ -91,35 +91,30 @@ module Gem2Deb
       # FIXME detect and run test suite
     end
 
+    EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
+    LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
     def install(argv)
       @prefix = argv.first
-      puts "Entering dh_ruby --install" if @verbose
+      package = File::basename(@prefix)
+      puts "Entering dh_ruby --install (for #{package})" if @verbose
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
 
-      packages = `dh_listpackages`.split.map(&:strip)
-
       # handle extensions
-      if File::directory?('ext')
-        packages do |pkg|
-          pkg.chomp!
-          rubyver = ruby_version_for(pkg)
-          next if rubyver == 'ruby' # common package, nothing to do
-          if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
-            puts "Unknown Ruby version: #{rubyver}"
-            exit(1)
-          end
-          extension_builder = File.join(File.dirname(__FILE__),'extension_builder.rb')
-          puts "Building extension for #{rubyver} ..."
-          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{extension_builder} #{pkg}")
+      rubyver = ruby_version_for(package)
+      if File::directory?('ext') && rubyver != 'ruby'
+        if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
+          puts "Unknown Ruby version: #{rubyver}"
+          exit(1)
         end
+        puts "Building extension for #{rubyver} ..." if @verbose
+        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
       end
 
       # Update shebang lines of installed programs
-      packages.each do |pkg|
-        update_shebangs(pkg)
-      end
+      update_shebangs(package)
 
       # manpages
       # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?

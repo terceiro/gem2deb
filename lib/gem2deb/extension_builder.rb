@@ -16,6 +16,7 @@
 require 'gem2deb'
 require 'yaml'
 require 'rubygems/ext'
+require 'yaml'
 
 module Gem2Deb
   class ExtensionBuilder

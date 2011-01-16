@@ -1,5 +1,7 @@
 require 'test/helper'
 require 'gem2deb/dhruby'
+require 'rbconfig'
+require 'tempfile'
 
 class DhRubyTest < Gem2DebTestCase
 
@@ -9,7 +11,7 @@ class DhRubyTest < Gem2DebTestCase
 
     build(SIMPLE_GEM, SIMPLE_GEM_DIRNAME)
     build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
-    #FIXME build(SIMPLE_NATIVE_EXTENSION, SIMPLE_NATIVE_EXTENSION_DIRNAME)
+    build(SIMPLE_EXTENSION, SIMPLE_EXTENSION_DIRNAME)
   end
 
   context 'installing simplegem' do
@@ -31,8 +33,20 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   context 'installing native extension' do
-    should 'install native extension for ruby1.8' # FIXME
-    should 'install native extension for ruby1.9.1' # FIXME
+    arch = RbConfig::CONFIG['arch']
+    {
+      '1.8'   => 'ruby1.8',
+      '1.9.1' => 'ruby1.9.1',
+    }.each do |version_number, version_name|
+      target_so = "/usr/lib/ruby/vendor_ruby/#{version_number}/#{arch}/simpleextension.so"
+      should "install native extension for #{version_name}" do
+        assert_installed SIMPLE_EXTENSION_DIRNAME, "#{version_name}-simpleextension", target_so
+      end
+      should "link #{target_so} against lib#{version_name}" do
+        installed_so = installed_file_path(SIMPLE_EXTENSION_DIRNAME, "#{version_name}-simpleextension", target_so)
+        assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
+      end
+    end
   end
 
   protected
@@ -55,14 +69,28 @@ class DhRubyTest < Gem2DebTestCase
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
     Gem2Deb::DhMakeRuby.new(tarball).build
 
-    Dir.chdir(package_path) do
-      instance.clean
-      instance.configure
-      instance.build
-      binary_packages = `dh_listpackages`.split
-      binary_packages.each do |pkg|
-        instance.install File.join(package_path, 'debian', pkg)
+    silence_stream(STDOUT) do
+      Dir.chdir(package_path) do
+        instance.clean
+        instance.configure
+        instance.build
+        binary_packages = `dh_listpackages`.split
+        binary_packages.each do |pkg|
+          instance.install File.join(package_path, 'debian', pkg)
+        end
       end
+    end
+  end
+
+  def self.silence_stream(stream)
+    orig_stream = stream.clone
+    begin
+      Tempfile.open('gem2deb-tests-stdoud') do |f|
+        stream.reopen(f)
+        yield
+      end
+    ensure
+      stream.reopen(orig_stream)
     end
   end
 
