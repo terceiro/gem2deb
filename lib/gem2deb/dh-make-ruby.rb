@@ -70,10 +70,15 @@ module Gem2Deb
     end
 
     def create_debian_boilerplates
-      Dir::mkdir("#{@gem_name}-#{@gem_version}/debian")
+      if not File::directory?("#{@gem_name}-#{@gem_version}/debian")
+        Dir::mkdir("#{@gem_name}-#{@gem_version}/debian")
+      end
       Dir::chdir("#{@gem_name}-#{@gem_version}/debian") do
         # changelog
         Dir::chdir('..') do
+          if File::exists?('debian/changelog')
+            FileUtils::rm('debian/changelog')
+          end
           run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
         end
 
@@ -105,7 +110,7 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
         end
 
         # source/format
-        Dir::mkdir('source')
+        Dir::mkdir('source') if not File::directory?('source')
         File::open('source/format','w') { |f| f.puts "3.0 (quilt)" }
       end
     end
@@ -220,7 +225,7 @@ EOF
         end
         if installs != ""
           File::open("debian/ruby-#{@gem_name}.install", 'w') do |f|
-            f.put installs
+            f.puts installs
           end
         end
       end
