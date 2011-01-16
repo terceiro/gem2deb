@@ -42,8 +42,6 @@ module Gem2Deb
     def buildpackage(binary = true)
       Dir::chdir("#{@gem_name}-#{@gem_version}") do
         bin = binary ? '' : '-S'
-        run("pwd")
-        run("ls")
         run("dpkg-buildpackage -us -uc #{bin}")
       end
     end
@@ -164,6 +162,7 @@ EOF
       else
         f.puts " <insert long description, indented with spaces>"
       end
+      f.close
     end
   end
 end
