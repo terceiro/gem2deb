@@ -1,0 +1,131 @@
+#!/usr/bin/ruby -w
+#
+# Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# = Synopsis
+#
+# gem2deb - converts a Ruby gem file into a Debian source package, then build it
+#
+# = Usage
+#
+# gem2deb [OPTIONS] GEM
+#
+# -h, --help:
+#   show help
+#
+# -s, --only-source:
+#   only create source package (do not attempt to build it)
+#
+# GEM: a valid Rubygem's .gem file
+
+require 'gem2deb'
+require 'gem2deb/gem2tgz'
+require 'gem2deb/dh-make-ruby'
+require 'getoptlong'
+require 'rdoc/usage'
+
+opts = GetoptLong.new(
+  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--only-tarball', '-t', GetoptLong::NO_ARGUMENT ],
+  [ '--only-source-dir', '-s', GetoptLong::NO_ARGUMENT ],
+  [ '--only-debian-source', '-S', GetoptLong::NO_ARGUMENT ]
+)
+
+$only_tarball = false
+$only_source_dir = false
+$only_debian_source = false
+opts.each do |opt,arg|
+  case opt
+    when '--help'
+      RDoc::usage(0, 'usage')
+    when '--version'
+      puts "gem2deb version #{Gem2Deb::VERSION}"
+      exit(0)
+    when '--only-tarball'
+      $only_tarball = true
+    when '--only-source-dir'
+      $only_source_dir = true
+    when '--only-debian-source'
+      $only_debian_source = true
+  end
+end
+
+if ARGV.length != 1
+  RDoc::usage(0, 'usage')
+  exit(1)
+end
+
+puts "-- Creating source tarball from #{ARGV[0]} ..."
+tarball = Gem2Deb::Gem2Tgz.convert!(ARGV[0])
+puts "-- Successfully created #{tarball}"
+
+exit(0) if $only_tarball
+
+puts
+puts "-- Creating Debian source package from #{tarball} ..."
+dmr = Gem2Deb::DhMakeRuby::new(tarball)
+dmr.build
+puts "-- Generated Debian source tree in #{dmr.build_dir}"
+
+exit(0) if  $only_source_dir
+
+puts
+puts "-- Building Debian package ..."
+dmr.buildpackage(!$only_debian_source)
+puts "-- Debian package successfully built!"
+
+__END__
+=head1 NAME
+
+gem2deb - converts Rubygems' .gem file into Debian package
+
+=head1 USAGE
+
+gem2deb [OPTIONS] GEM
+
+=head1 DESCRIPTION
+
+B<gem2deb> will convert the .gem file I<GEM> into a Debian source package, and
+then will attempt to build it.
+
+=head1 OPTIONS
+
+=over
+
+=item --help
+
+Displays B<gem2deb> usage information.
+
+=back
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2011, Lucas Nussbaum <lucas@debian.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
