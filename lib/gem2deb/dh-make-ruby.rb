@@ -197,13 +197,19 @@ EOF
         end
 
         # examples
-        if File::directory?('examples')
-          File::open("debian/ruby-#{@gem_name}.examples", 'w') do |f|
-            f.puts <<-EOF
-# FIXME: examples/ dir found in source. Consider installing the examples.
+        examples = ""
+        ['examples', 'sample'].each do |d|
+          if File::directory?(d)
+            examples += <<-EOF
+# FIXME: #{d}/ dir found in source. Consider installing the examples.
 # Examples:
-# examples/*
+# #{d}/*
             EOF
+          end
+        end
+        if examples != ""
+          File::open("debian/ruby-#{@gem_name}.examples", 'w') do |f|
+            f.puts examples
           end
         end
 
