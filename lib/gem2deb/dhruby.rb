@@ -99,14 +99,20 @@ module Gem2Deb
 
       # handle extensions
       rubyver = ruby_version_for(package)
-      if File::directory?('ext') && rubyver != 'ruby'
-        if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
-          puts "Unknown Ruby version: #{rubyver}"
-          exit(1)
+      if rubyver != 'ruby'
+        if File::directory?('ext')
+          if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
+            puts "Unknown Ruby version: #{rubyver}"
+            exit(1)
+          end
+          puts "Building extension for #{rubyver} ..." if @verbose
+          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
         end
-        puts "Building extension for #{rubyver} ..." if @verbose
-        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
         run_tests(rubyver)
+      else
+        SUPPORTED_RUBY_VERSIONS.keys.each do |ver|
+          run_tests(ver)
+        end
       end
 
       # Update shebang lines of installed programs
