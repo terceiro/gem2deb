@@ -43,14 +43,20 @@ class DhMakeRubyTest < Gem2DebTestCase
   context 'native extension' do
     should 'generate one package for ruby1.8' do
       Dir.chdir(DEBIANIZED_SIMPLE_EXTENSION) do
-        assert(read_debian_control.any? { |stanza| stanza['Package'] == 'ruby1.8-simpleextension' }, "Package ruby1.8-simpleextension not created")
+        assert(packages.include?('ruby1.8-simpleextension'), "Package ruby1.8-simpleextension not created")
       end
     end
     should 'generate one package for ruby1.9.1' do
       Dir.chdir(DEBIANIZED_SIMPLE_EXTENSION) do
-        assert(read_debian_control.any? { |stanza| stanza['Package'] == 'ruby1.9.1-simpleextension' }, "Package ruby1.9.1-simpleextension not created")
+        assert(packages.include?('ruby1.9.1-simpleextension'), "Package ruby1.9.1-simpleextension not created")
       end
     end
+  end
+
+  protected
+
+  def packages
+    `dh_listpackages`.split
   end
 
 end

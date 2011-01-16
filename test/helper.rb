@@ -81,13 +81,6 @@ class Gem2DebTestCase < Test::Unit::TestCase
     assert !File.exist?(path), "#{path} should NOT exist"
   end
 
-  def self.read_debian_control
-    YAML.load_stream(File.read('debian/control').gsub("\n\n", "\n---\n")).documents
-  end
-  def read_debian_control
-    self.class.read_debian_control
-  end
-
 end
 
 class Test::Unit::AutoRunner
