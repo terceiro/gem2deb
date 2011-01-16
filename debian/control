@@ -2,6 +2,7 @@ Source: gem2deb
 Section: ruby
 Priority: optional
 Maintainer: Lucas Nussbaum <lucas@lucas-nussbaum.net>
+Uploaders: Antonio Terceiro <terceiro@softwarelivre.org>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
@@ -11,5 +12,9 @@ Standards-Version: 3.9.1
 Package: gem2deb
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.8, rubygems1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, build-essential, devscripts, debhelper (>= 7.0.50~)
-Description: FIXME
- FIXME
+Description: Debian Ruby packaging suite
+ gem2deb is a set of tools to create Debian package from ruby software
+ distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
+ then dh-make-ruby creates a Debian source package from that archive. That
+ Debian package uses the included Debhelper7 helper, dh_ruby, to generate
+ a proper Debian package. Both pure-ruby and native packages are supported.
