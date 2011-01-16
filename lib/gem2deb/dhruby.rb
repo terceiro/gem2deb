@@ -35,20 +35,25 @@
 # dh_ruby could generate rdoc (not sure if we want this)
 
 require 'gem2deb'
-require 'gem2deb/ruby_version'
 require 'find'
 
 module Gem2Deb
 
   class DhRuby
 
-    COMMON_LIBDIR = '/usr/lib/ruby/vendor_ruby'
+    SUPPORTED_RUBY_VERSIONS = {
+      #name             Ruby binary          
+      #---------------  -------------------
+      'ruby1.8'   => '/usr/bin/ruby1.8',  
+      'ruby1.9.1' => '/usr/bin/ruby1.9.1',
+    }
 
     def initialize
       @verbose = true
       @bindir = '/usr/bin'
       @prefix = nil
       @mandir = '/usr/share/man'
+      @libdir = '/usr/lib/ruby/vendor_ruby'
       @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
       @man_accept_pattern = /\.([1-8])$/
       # FIXME handle multi-version rubies (libs that require patches for some versions)
@@ -59,7 +64,15 @@ module Gem2Deb
     
     def clean
       puts "Entering dh_ruby --clean" if @verbose
-      # FIXME run make clean in ext/
+      if File::directory?('ext')
+        Find::find('ext') do |f|
+          if File::basename(f) == 'Makefile'
+          puts "Running 'make clean' in #{File::dirname(f)}..."
+          Dir::chdir(File::dirname(f))
+            system("make clean")
+          end
+        end
+      end
     end
 
     def configure
@@ -77,18 +90,26 @@ module Gem2Deb
 
     def install
       @prefix = ARGV[0]
-      package = File::basename(@prefix)
-      puts "Entering dh_ruby --install (for #{package})" if @verbose
-
-      if File::directory?('ext')
-        ruby = Gem2Deb::RubyVersion.by_package(package)
-        if ruby
-          ruby.build_extensions(@prefix)
-        end
-      end
+      puts "Entering dh_ruby --install" if @verbose
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
-      install_files('lib', find_files('lib'), libdir(package),  644) if File::directory?('lib')
+      install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
+
+      # handle extensions
+      if File::directory?('ext')
+        `dh_listpackages`.each_line do |pkg|
+          pkg.chomp!
+          rubyver = pkg.split('-')[0]
+          next if rubyver == 'ruby' # common package, nothing to do
+          if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
+            puts "Unknown Ruby version: #{rubyver}"
+            exit(1)
+          end
+          extension_builder = File.join(File.dirname(__FILE__),'extension_builder.rb')
+          puts "Building extension for #{rubyver} ..."
+          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{extension_builder} #{pkg}")
+        end
+      end
 
       # manpages
       # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?
@@ -155,11 +176,6 @@ module Gem2Deb
           run "install -m#{mode} #{src + '/' + fname} #{@prefix + '/' + dest + '/' + fname}"
         end
       end
-    end
-
-    def libdir(package)
-      ruby = Gem2Deb::RubyVersion.by_package(package)
-      ruby ? ruby.libdir : COMMON_LIBDIR
     end
 
   end

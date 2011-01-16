@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
+require 'yaml'
 require 'rubygems/ext'
 
 module Gem2Deb
@@ -24,9 +25,9 @@ module Gem2Deb
     attr_reader :extension, :destdir
     attr_reader :directory
 
-    def initialize(extension, destdir)
+    def initialize(extension, pkg)
       @extension = extension
-      @destdir = destdir
+      @package = pkg
       @directory = File.dirname(extension)
     end
 
@@ -54,8 +55,10 @@ module Gem2Deb
           exit(1)
         end
       begin
+        target = File.expand_path(File.join('debian', @package, RbConfig::CONFIG['vendorarchdir']))
         Dir.chdir(directory) do
-          rubygems_builder.build(extension, '.', File.join(destdir, RbConfig::CONFIG['vendorarchdir']), results)
+          rubygems_builder.build(extension, '.', target, results)
+          puts results
         end
       rescue Exception => e
         puts results
@@ -65,7 +68,9 @@ module Gem2Deb
 
     def self.build_all_extensions(destdir)
       all_extensions.each do |extension|
-        new(extension, destdir).build_and_install
+        ext = new(extension, destdir)
+        ext.clean
+        ext.build_and_install
       end
     end
 
@@ -83,7 +88,7 @@ if $PROGRAM_NAME == __FILE__
   if ARGV.length == 1
     Gem2Deb::ExtensionBuilder.build_all_extensions(ARGV.first)
   else
-    puts "usage: #{File.basename($PROGRAM_NAME)} DESTDIR"
+    puts "usage: #{File.basename($PROGRAM_NAME)} PKGNAME"
     exit(1)
   end
 end
