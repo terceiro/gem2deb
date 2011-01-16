@@ -96,6 +96,7 @@ module Gem2Deb
       install_files('lib', find_files('lib'), libdir(package),  644) if File::directory?('lib')
 
       # manpages
+      # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?
       if File::directory?('man')
         # man/man1/apps.1 scheme
         if @gemmandirs.any? {|m| File::directory?(m) }
