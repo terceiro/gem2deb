@@ -118,7 +118,7 @@ module Gem2Deb
       %w( config setup install clean ).map {|t| sprintf(fmt, t) }
       }.flatten
     JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
-        /~$/, /.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
+        /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
     def find_files(dir, accept_pattern=nil)
       files = []
