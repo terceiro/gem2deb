@@ -26,9 +26,6 @@
 # can provide a ruby script in debian/ that will start the test suite.
 # Test suites should run with each ruby interpreter.
 #
-# dh_ruby must update the shebang after installation of binaries, to point to
-# the default ruby version
-#
 # dh_ruby should do some checking (lintian-like) of ruby-specific stuff. For example,
 # it could search for "require 'rubygems'" in libraries, and display warnings
 #
@@ -47,6 +44,12 @@ module Gem2Deb
       'ruby1.8'   => '/usr/bin/ruby1.8',
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
+
+    DEFAULT_RUBY_VERSION = 'ruby1.8'
+
+    include Gem2Deb
+
+    attr_accessor :verbose
 
     def initialize
       @verbose = true
@@ -83,33 +86,31 @@ module Gem2Deb
       # puts "Entering dh_ruby --test" if @verbose
     end
 
-    def install
-      @prefix = ARGV[0]
-      puts "Entering dh_ruby --install" if @verbose
+    EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
+    LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+    def install(argv)
+      @prefix = argv.first
+      package = File::basename(@prefix)
+      puts "Entering dh_ruby --install (for #{package})" if @verbose
 
       install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
 
       # handle extensions
-      if File::directory?('ext')
-        `dh_listpackages`.each_line do |pkg|
-          pkg.chomp!
-          rubyver = pkg.split('-')[0]
-          next if rubyver == 'ruby' # common package, nothing to do
-          if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
-            puts "Unknown Ruby version: #{rubyver}"
-            exit(1)
-          end
-          extension_builder = File.join(File.dirname(__FILE__),'extension_builder.rb')
-          puts "Building extension for #{rubyver} ..."
-          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{extension_builder} #{pkg}")
-          run_tests(rubyver)
+      rubyver = ruby_version_for(package)
+      if File::directory?('ext') && rubyver != 'ruby'
+        if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
+          puts "Unknown Ruby version: #{rubyver}"
+          exit(1)
         end
-      else
-        ['ruby1.8', 'ruby1.9.1'].each do |rubyver|
-          run_tests(rubyver)
-        end
+        puts "Building extension for #{rubyver} ..." if @verbose
+        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+        run_tests(rubyver)
       end
+
+      # Update shebang lines of installed programs
+      update_shebangs(package)
 
       # manpages
       # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?
@@ -127,7 +128,7 @@ module Gem2Deb
           end
         end
       end
-      # FIXME after install, update shebang of binaries to default ruby version
+
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
 
@@ -221,6 +222,40 @@ module Gem2Deb
         else
           run "install -m#{mode} #{src + '/' + fname} #{@prefix + '/' + dest + '/' + fname}"
         end
+      end
+    end
+
+    def ruby_version_for(package)
+      package.split('-')[0]
+    end
+
+    def update_shebangs(package)
+      rubyver = ruby_version_for(package)
+      ruby_binary = SUPPORTED_RUBY_VERSIONS[rubyver] || SUPPORTED_RUBY_VERSIONS[DEFAULT_RUBY_VERSION]
+      Dir.glob(File.join(@prefix, @bindir, '*')).each do |path|
+        puts "Rewriting shebang line of #{path}" if @verbose
+        atomic_rewrite(path) do |input, output|
+          old = input.gets # discard
+          output.puts "#!#{ruby_binary}"
+          unless old =~ /#!/
+            output.puts old
+          end
+          output.print input.read
+        end
+      end
+    end
+
+    def atomic_rewrite(path, &block)
+      tmpfile = path + '.tmp'
+      begin
+        File.open(tmpfile, 'wb') do |output|
+          File.open(path, 'rb') do |input|
+            yield(input, output)
+          end
+        end
+        File.rename tmpfile, path
+      ensure
+        File.unlink tmpfile if File.exist?(tmpfile)
       end
     end
 

@@ -63,7 +63,7 @@ opts.each do |opt,arg|
       DhRuby::new.test
       exit(0)
     when '--install'
-      DhRuby::new.install
+      DhRuby::new.install(ARGV)
       exit(0)
   end
 end

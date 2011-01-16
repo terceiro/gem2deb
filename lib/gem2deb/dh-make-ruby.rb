@@ -26,16 +26,20 @@ module Gem2Deb
 
     def initialize(tarball)
       @tarball = tarball
+      @tarball_name = File.basename(@tarball)
+      @tarball_dir = File.dirname(@tarball)
     end
 
     def build
-      create_orig_tarball
-      extract
-      read_spec
-      create_debian_boilerplates
-      create_control
-      other_files
-      test_suite
+      Dir.chdir(@tarball_dir) do
+        create_orig_tarball
+        extract
+        read_spec
+        create_debian_boilerplates
+        create_control
+        other_files
+        test_suite
+      end
     end
     
     def read_spec
@@ -54,15 +58,15 @@ module Gem2Deb
     end
 
     def create_orig_tarball
-      if @tarball =~ /^(.*)_(.*).orig.tar.gz$/
+      if @tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
         @gem_name = $1
         @gem_version = $2
-        @orig_tarball = @tarball
-      elsif @tarball =~ /^(.*)-(.*).tar.gz$/
+        @orig_tarball = @tarball_name
+      elsif @tarball_name =~ /^(.*)-(.*).tar.gz$/
         @gem_name = $1
         @gem_version = $2
         @orig_tarball = "#{@gem_name}_#{@gem_version}.orig.tar.gz"
-        run("ln -sf #{@tarball} #{@orig_tarball}")
+        run("ln -sf #{@tarball_name} #{@orig_tarball}")
       else
         raise "Could not determine gem name and version: #{@tarball}"
       end
