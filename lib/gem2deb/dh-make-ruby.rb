@@ -33,6 +33,7 @@ module Gem2Deb
       extract
       create_debian_boilerplates
       create_control
+      other_files
     end
 
     def build_dir
@@ -162,6 +163,44 @@ EOF
         f.puts " <insert long description, indented with spaces>"
       end
       f.close
+    end
+
+    def other_files
+      Dir::chdir("#{@gem_name}-#{@gem_version}") do
+        # docs
+        docs = ""
+        if File::directory?('doc')
+          docs += <<-EOF
+# FIXME: doc/ dir found in source. Consider installing the docs.
+# Examples:
+# doc/manual.html
+# doc/site/*
+            EOF
+        end
+        readmes = Dir::glob('README*')
+        docs += <<-EOF
+# FIXME: READMEs found
+        EOF
+        readmes.each do |r|
+          docs << "# #{r}\n"
+        end
+        if docs != ""
+          File::open("debian/ruby-#{@gem_name}.docs", 'w') do |f|
+            f.puts docs
+          end
+        end
+
+        # examples
+        if File::directory?('examples')
+          File::open("debian/ruby-#{@gem_name}.examples", 'w') do |f|
+            f.puts <<-EOF
+# FIXME: examples/ dir found in source. Consider installing the examples.
+# Examples:
+# examples/*
+            EOF
+          end
+        end
+      end
     end
   end
 end
