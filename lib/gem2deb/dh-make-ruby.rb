@@ -135,7 +135,7 @@ Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.al
 Uploaders: #{ENV['DEBFULLNAME']} <#{ENV['DEBEMAIL']}>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= #{Gem2Deb::VERSION})
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
 EOF
