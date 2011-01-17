@@ -105,6 +105,13 @@ module Gem2Deb
           f.puts <<-EOF
 #!/usr/bin/make -f
 #export DH_VERBOSE=1
+#
+# Uncomment to ignore all test failures
+#export DH_RUBY_IGNORE_TESTS=all
+#
+# Uncomment to ignore some test failures. Valid values:
+#export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
+
 %:
 \tdh $@ --buildsystem=ruby
           EOF

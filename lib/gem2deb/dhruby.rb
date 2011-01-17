@@ -174,8 +174,35 @@ module Gem2Deb
         end
       end
       if found
-        puts "Found some 'require rubygems' without overrides, exiting."
-        exit(1)
+        puts "Found some 'require rubygems' without overrides (see above)."
+        handle_test_failure('require-rubygems')
+      end
+    end
+
+    def handle_test_failure(test)
+      if ENV['DH_RUBY_IGNORE_TESTS']
+        if ENV['DH_RUBY_IGNORE_TESTS'].split.include?('all')
+          puts "WARNING: Test \"#{test}\" failed, but ignoring all test results."
+          return
+        elsif ENV['DH_RUBY_IGNORE_TESTS'].split.include?(test)
+          puts "WARNING: Test \"#{test}\" failed, but ignoring this test result."
+          return
+        end
+      end
+      if STDIN.isatty and STDOUT.isatty and STDERR.isatty
+        # running interactively
+        continue = nil
+        begin
+          puts
+          print "Test \"#{test}\" failed. Continue building the package? (Y/N) "
+          STDOUT.flush
+          c = STDIN.getc
+          continue = true if c.chr.downcase == 'y'
+          continue = false if c.chr.downcase == 'n'
+        end while continue.nil?
+      else
+          puts "ERROR: Test \"#{test}\" failed. Exiting."
+          exit(1)
       end
     end
 
@@ -187,12 +214,19 @@ module Gem2Deb
       if File::exists?('debian/ruby-test-files.yaml')
         puts "Running tests for #{rubyver} using gem2deb test runner and debian/ruby-test-files.yaml..."
         testrunner = File.join(File.dirname(__FILE__),'testrunner.rb')
-        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{testrunner}")
+        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{testrunner}"
+        puts(cmd) if $VERBOSE
+        system(cmd)
       elsif File::exists?('debian/ruby-tests.rb')
         puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
-        run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb")
+        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb"
+        puts(cmd) if $VERBOSE
+        system(cmd)
       else
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
+      end
+      if $? && ($? >> 8) > 0
+        handle_test_failure(rubyver)
       end
     end
 
