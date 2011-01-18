@@ -2,3 +2,9 @@
 #export DH_VERBOSE=1
 %:
 	dh $@
+
+override_dh_auto_build:
+	for i in bin/*; do pod2man -c "" -r "" $$i > man/$$(basename $$i).1; done
+
+override_dh_auto_clean:
+	rm -f man/*.1
