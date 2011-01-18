@@ -14,41 +14,26 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# 
-# = Synopsis
-#
-# dh-make-ruby - Create debian source packages from Ruby libraries
-#
-# = Usage
-#
-# dh-make-ruby [OPTIONS] tarball
-#
-# -h, --help:
-#   show help
-#
-# TARBALL: tarball to use as a basis. It should have been created by gem2tgz.
 
 require 'gem2deb'
 require 'gem2deb/dh-make-ruby'
-require 'getoptlong'
-require 'rdoc/usage'
+require 'optparse'
 
-opts = GetoptLong.new(
-  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--help', '-h', GetoptLong::NO_ARGUMENT ]
-)
+optparse = OptionParser.new do |opts|
+  opts.on('-h', '--help', 'show help') do
+    puts opts
+    exit
+  end
 
-opts.each do |opt,arg|
-  case opt
-    when '--help'
-      RDoc::usage(0, 'usage')
-    when '--version'
-      puts "dh-make-ruby version #{Gem2Deb::VERSION}"
-      exit(0)
+  opts.on('-v', '--version', 'show version') do
+    puts "dh-make-ruby version #{Gem2Deb::VERSION}"
+    exit
   end
 end
+optparse.parse!
+
 if ARGV.length != 1
-  RDoc::usage(0, 'usage')
+  puts optparse
   exit(1)
 end
 
@@ -64,22 +49,16 @@ dh-make-ruby - build Debian source package from Ruby library
 
 =head1 USAGE
 
-dh-make-ruby [OPTIONS] TARBALL
+B<dh-make-ruby> [I<OPTIONS>] I<TARBALL>
 
 =head1 DESCRIPTION
 
 B<dh-make-ruby> will create a basic Debian source package from a tarball named
-I<TARBALL> generated with gem2tgz.
+I<TARBALL> generated with B<gem2tgz>.
 
-=head1 OPTIONS
+=head1 SEE ALSO
 
-=over
-
-=item --help
-
-Displays B<dh-make-ruby> usage information.
-
-=back
+L<B<gem2deb>>(1), L<B<dh_ruby>>(1)
 
 =head1 COPYRIGHT AND AUTHORS
 

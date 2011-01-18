@@ -94,8 +94,9 @@ B<gem2tgz> does.
 Then, B<gem2deb> unpacks the tar.gz archive and prepares a Debian source
 package, guess many of the defaults from the files included in the archive, or
 the Gem specification. This is equivalent to what B<dh-make-ruby> does.
-B<gem2deb> cannot determine all parameters for obvious reasons. It is recommend
+B<gem2deb> cannot determine all parameters for obvious reasons. It is recommended
 to search for the "FIXME" string in the I<debian/> directory.
+The generated Debian source package uses B<dh_ruby> to build the package.
 
 Finally, B<gem2deb> tries to build the source and binary packages using
 B<dpkg-buildpackage>.
@@ -126,6 +127,40 @@ Displays B<gem2deb> usage information.
 Displays B<gem2deb> version information.
 
 =back
+
+=head1 HOW THE .GEM -> .TGZ CONVERSION WORKS
+
+A gem named I<mygem-0.1.0.gem> is converted in a tarball with
+(approximately) the following steps:
+
+  mkdir mygem-0.1.0
+  cd mygem-0.1.0
+  tar xfm /absolute/path/to/mygem-0.1.0.gem
+  tar xzfm data.tar.gz
+  zcat metadata.gz > metadata.yml
+  rm -f data.tar.gz metadata.gz
+  cd ..
+  tar czf mygem-0.1.0.tar.gz mygem-0.1.0
+  rm -rf mygem-0.1.0
+
+The generated tarball has the following properties:
+
+=over
+
+=item Files
+
+It contains all the files the gem contains.
+
+=item Metadata
+
+It contains the gem metadata ends up in a file named ``metadata.yml`` inside
+the I<mygem-0.1.0> directory.
+
+=back
+
+=head1 SEE ALSO
+
+L<B<dh_ruby>>(1)
 
 =head1 COPYRIGHT AND AUTHORS
 

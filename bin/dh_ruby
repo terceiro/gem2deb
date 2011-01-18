@@ -14,71 +14,61 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# 
-# = Synopsis
-#
-# dh_ruby - Build system for Ruby software
-#
-# = Usage
-#
-# dh_ruby [OPTIONS]
-#
-# -h, --help:
-#   show help
 
 require 'gem2deb'
 require 'gem2deb/dhruby'
+require 'optparse'
 include Gem2Deb
 
-require 'getoptlong'
-require 'rdoc/usage'
+optparse = OptionParser.new do |opts|
+  opts.on('-h', '--help', 'show help') do
+    puts opts
+    exit
+  end
 
-opts = GetoptLong.new(
-  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-  [ '--clean', GetoptLong::NO_ARGUMENT],
-  [ '--configure', GetoptLong::NO_ARGUMENT],
-  [ '--build', GetoptLong::NO_ARGUMENT],
-  [ '--test', GetoptLong::NO_ARGUMENT],
-  [ '--install', GetoptLong::NO_ARGUMENT]
-)
+  opts.on('-v', '--version', 'show dh_ruby version') do
+    puts "dh_ruby version #{Gem2Deb::VERSION}"
+    exit
+  end
 
-opts.each do |opt,arg|
-  case opt
-    when '--help'
-      RDoc::usage(0, 'usage')
-    when '--version'
-      puts "dh_ruby version #{Gem2Deb::VERSION}"
-      exit(0)
-    when '--clean'
-      DhRuby::new.clean
-      exit(0)
-    when '--configure'
-      DhRuby::new.configure
-      exit(0)
-    when '--build'
-      DhRuby::new.build
-      exit(0)
-    when '--test'
-      DhRuby::new.test
-      exit(0)
-    when '--install'
-      DhRuby::new.install(ARGV)
-      exit(0)
+  opts.on('', '--clean', 'debhelper clean helper') do
+    DhRuby::new.clean
+    exit(0)
+  end
+
+  opts.on('', '--configure', 'debhelper configure helper') do
+    DhRuby::new.configure
+    exit(0)
+  end
+
+  opts.on('', '--build', 'debhelper build helper') do
+    DhRuby::new.build
+    exit(0)
+  end
+
+  opts.on('', '--test', 'debhelper test helper') do
+    DhRuby::new.test
+    exit(0)
+  end
+
+  opts.on('', '--install', 'debhelper install helper') do
+    DhRuby::new.install(ARGV)
+    exit(0)
   end
 end
+optparse.parse!
 
-RDoc::usage(0, 'usage')
+puts optparse
 exit(1)
 
 __END__
 =head1 NAME
 
-dh_ruby - build system for Ruby software
+dh_ruby - debhelper7 build system for Ruby software
 
-=head1 USAGE
+=head1 SYNOPSIS
 
-dh_ruby [OPTIONS]
+B<dh_ruby> [I<OPTIONS>]
 
 =head1 DESCRIPTION
 
@@ -86,7 +76,27 @@ B<dh_ruby> is a Debhelper 7 build system for Ruby software.
 
 See dh_ruby --help for details.
 
+=head1 OPTIONS
+
+=over
+
+=item B<--clean>, B<--configure>, B<--build>, B<--test>, B<--install>
+
+Commands called by debhelper at various steps of the build process.
+
+=item B<-h>, B<--help>
+
+Displays B<dh_ruby> usage information.
+
+=item B<-v>, B<--version>
+
+Displays B<dh_ruby> version information.
+
 =back
+
+=head1 SEE ALSO
+
+L<B<gem2deb>>(1)
 
 =head1 COPYRIGHT AND AUTHORS
 
@@ -104,7 +114,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-require 'pp'
-p ARGV
-pp ENV

@@ -14,46 +14,26 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# 
-# = Synopsis
-#
-# gem2tgz - converts a Ruby gem file into a source tarball proper for being used
-# as upstream source tarball on Debian packages.
-#
-# = Usage
-#
-# gem2tgz [OPTIONS] GEM [TARBALL]
-#
-# -h, --help:
-#   show help
-#
-# GEM: a valid Rubygem's .gem file
-#
-# TARBALL: destination tarball to be created. If omitted, gem2tgz will try to
-# guess based on GEM argument.
 
 require 'gem2deb'
 require 'gem2deb/gem2tgz'
-require 'getoptlong'
-require 'rdoc/usage'
+require 'optparse'
 
-opts = GetoptLong.new(
-  [ '--version', '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--help', '-h', GetoptLong::NO_ARGUMENT ]
-)
+optparse = OptionParser.new do |opts|
+  opts.on('-h', '--help', 'show help') do
+    puts opts
+    exit
+  end
 
-opts.each do |opt,arg|
-  case opt
-    when '--help'
-      RDoc::usage(0, 'usage')
-    when '--version'
-      puts "gem2tgz version #{Gem2Deb::VERSION}"
-      exit(0)
+  opts.on('-v', '--version', 'show version') do
+    puts "gem2tgz version #{Gem2Deb::VERSION}"
+    exit
   end
 end
+optparse.parse!
 
 if ARGV.length != 1 && ARGV.length != 2
-  RDoc::usage(0, 'usage')
+  puts optparse
   exit(1)
 end
 
@@ -64,9 +44,9 @@ __END__
 
 gem2tgz - converts Rubygems' .gem file into tarballs
 
-=head1 USAGE
+=head1 SYNOPSIS
 
-gem2tgz [OPTIONS] GEM [TARBALL]
+B<gem2tgz> [I<OPTIONS>] I<GEM> [I<TARBALL>]
 
 =head1 DESCRIPTION
 
@@ -74,44 +54,9 @@ B<gem2tgz> will convert the .gem file I<GEM> into a tarball named I<TARBALL>.
 If I<TARBALL> is omitted, B<gem2tgz> will try to guess the filename for the
 tarball by taking I<GEM> and replacing '.gem' with '.tar.gz'.
 
-=head1 OPTIONS
+=head1 SEE ALSO
 
-=over
-
-=item --help
-
-Displays B<gem2tgz> usage information.
-
-=back
-
-=head1 HOW THE CONVERSION WORKS
-
-A gem named I<mygem-0.1.0.gem> is converted in a tarball with
-(approximately) the following steps:
-
-  mkdir mygem-0.1.0
-  cd mygem-0.1.0
-  tar xfm /absolute/path/to/mygem-0.1.0.gem
-  tar xzfm data.tar.gz
-  zcat metadata.gz > metadata.yml
-  rm -f data.tar.gz metadata.gz
-  cd ..
-  tar czf mygem-0.1.0.tar.gz mygem-0.1.0
-  rm -rf mygem-0.1.0
-
-The generated tarball has the following properties:
-
-=over
-
-=item Files
-
-It contains all the files the gem contains.
-
-=item Metadata
-
-It contains the gem metadata ends up in a file named ``metadata.yml`` inside the I<mygem-0.1.0> directory.
-
-=back
+L<B<gem2deb>>(1)
 
 =head1 COPYRIGHT AND AUTHORS
 
@@ -129,4 +74,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
