@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'gem2deb/gem2tgz'
+require 'gem2deb/dh-make-ruby'
 require 'gem2deb/dhruby'
 require 'rbconfig'
 
@@ -16,6 +18,19 @@ class DhRubyTest < Gem2DebTestCase
   context 'installing simplegem' do
     should 'install pure-Ruby code' do
       assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/lib/ruby/vendor_ruby/simplegem.rb'
+    end
+    should 'install gemspec file at /usr/lib/gems/1.8/specifications' do
+      assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/lib/gems/1.8/specifications/' + SIMPLE_GEM_DIRNAME + '.gemspec'
+    end
+    should 'install gemspec file at /usr/lib/gems/1.9.1/specifications' do
+      assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/lib/gems/1.9.1/specifications/' + SIMPLE_GEM_DIRNAME + '.gemspec'
+    end
+    should 'be a valid gemspec' do
+      installed_gemspec_path = installed_file_path(SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/lib/gems/1.8/specifications/' + SIMPLE_GEM_DIRNAME + '.gemspec')
+      installed_gemspec = eval(File.read(installed_gemspec_path))
+
+      assert_equal 'simplegem', installed_gemspec.name
+      assert_equal '0.0.1', installed_gemspec.version.version
     end
   end
 
@@ -46,6 +61,10 @@ class DhRubyTest < Gem2DebTestCase
     should "update the shebang to use the default ruby version" do
       assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', '/usr/bin/simpleextension').lines.first.strip
     end
+    should 'install 1.8 gemspec in 1.8 package'
+    should 'install 1.9.1 gemspec in 1.9.1 package'
+    should 'not install 1.8 gemspec in 1.9.1 package'
+    should 'not install 1.9.1 gemspec in 1.8 package'
   end
 
   context 'determining ruby version for package' do

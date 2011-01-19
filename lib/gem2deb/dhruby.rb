@@ -33,6 +33,9 @@
 
 require 'gem2deb'
 require 'find'
+require 'yaml'
+require 'fileutils'
+require 'rubygems'
 
 module Gem2Deb
 
@@ -46,6 +49,8 @@ module Gem2Deb
     }
 
     DEFAULT_RUBY_VERSION = 'ruby1.8'
+
+    DEBIAN_GEMS_DIR = '/usr/lib/gems'
 
     include Gem2Deb
 
@@ -63,9 +68,9 @@ module Gem2Deb
       if File::directory?('ext')
         Find::find('ext') do |f|
           if File::basename(f) == 'Makefile'
-          puts "Running 'make clean' in #{File::dirname(f)}..."
-          Dir::chdir(File::dirname(f))
-            system("make clean")
+            puts "Running 'make clean' in #{File::dirname(f)}..."
+            dir = File::dirname(f)
+            run("make clean -C #{dir}")
           end
         end
       end
@@ -99,15 +104,16 @@ module Gem2Deb
       install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
 
       packages.each do |package|
-        # handle extensions
         rubyver = ruby_version_for(package)
         if rubyver == 'ruby'
           if packages.size == 1 # pure-Ruby lib
             SUPPORTED_RUBY_VERSIONS.keys.each do |ver|
               run_tests(ver)
+              install_spec(package, ver)
             end
           end
         else
+          # handle extensions
           if File::directory?('ext')
             if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
               puts "Unknown Ruby version: #{rubyver}"
@@ -117,6 +123,7 @@ module Gem2Deb
             run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
           end
           run_tests(rubyver)
+          install_spec(package, rubyver)
         end
 
         # Update shebang lines of installed programs
@@ -292,6 +299,18 @@ module Gem2Deb
         File.rename tmpfile, path
       ensure
         File.unlink tmpfile if File.exist?(tmpfile)
+      end
+    end
+
+    def install_spec(package, rubyver)
+      if File.exist?('metadata.yml')
+        version_number = rubyver.sub(/^ruby/, '')
+        spec = YAML.load_file('metadata.yml')
+        target_dir = File.join(destdir_for(package), DEBIAN_GEMS_DIR, version_number, 'specifications')
+        FileUtils.mkdir_p(target_dir)
+        File.open(File.join(target_dir, spec.spec_name), 'w') do |f|
+          f.puts(spec.to_ruby)
+        end
       end
     end
 

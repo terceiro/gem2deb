@@ -36,6 +36,9 @@ class Gem2DebTestCase < Test::Unit::TestCase
     end
     attr_accessor :instance
   end
+  def tmpdir
+    self.class.tmpdir
+  end
   def instance
     self.class.instance
   end
