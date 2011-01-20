@@ -24,6 +24,8 @@ module Gem2Deb
 
   class DhMakeRuby
 
+    attr_reader :gem_name
+
     def initialize(tarball)
       @tarball = tarball
       @tarball_name = File.basename(@tarball)
@@ -276,6 +278,19 @@ EOF
         if installs != ""
           File::open("debian/ruby-#{@gem_name}.install", 'w') do |f|
             f.puts installs
+          end
+        end
+
+        # manpages
+        if File::directory?('man')
+          manpages = Dir.glob("man/**/*.[1-8]")
+          manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
+
+          File::open("debian/ruby-#{@gem_name}.manpages", 'w') do |f|
+            f.puts manpages_header
+            manpages.each do |m|
+              f.puts "# " + m
+            end
           end
         end
       end

@@ -55,10 +55,7 @@ module Gem2Deb
       @verbose = true
       @bindir = '/usr/bin'
       @prefix = nil
-      @mandir = '/usr/share/man'
       @libdir = '/usr/lib/ruby/vendor_ruby'
-      @gemmandirs = (1..8).collect {|section | "man/man#{section}" }
-      @man_accept_pattern = /\.([1-8])$/
     end
     
     def clean
@@ -124,24 +121,6 @@ module Gem2Deb
 
         # Update shebang lines of installed programs
         update_shebangs(package)
-      end
-
-
-      # manpages
-      # FIXME use dh_installman. Maybe to be moved to dh-make-ruby?
-      if File::directory?('man')
-        # man/man1/apps.1 scheme
-        if @gemmandirs.any? {|m| File::directory?(m) }
-          install_files('man', find_files('man', @man_accept_pattern), @mandir, 644)
-        else
-          # man/apps.1 scheme
-          Dir.glob("man/*.[1-8]").each do |man_file|
-            match = man_file.match(@man_accept_pattern)
-            if match && (section = match.captures.first)
-              install_files('man', [File.basename(man_file)], "#{@mandir}/man#{section}", 644)
-            end
-          end
-        end
       end
 
       # FIXME after install, check for require 'rubygems' and other stupid things, and

@@ -27,9 +27,6 @@ class DhRubyTest < Gem2DebTestCase
     should 'rewrite shebang of installed programs' do
       assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first.strip
     end
-    should 'install manpages at /usr/share/man' do
-      assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/share/man/man1/simpleprogram.1'
-    end
   end
 
   context 'installing native extension' do

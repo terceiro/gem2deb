@@ -53,6 +53,23 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  DEBIANIZED_SIMPLE_PROGRAM       = File.join(tmpdir, SIMPLE_PROGRAM_DIRNAME)
+  SIMPLE_PROGRAM_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_PROGRAM + '.tar.gz'
+  one_time_setup do
+    # generate tarball
+    Gem2Deb::Gem2Tgz.convert!(SIMPLE_PROGRAM, SIMPLE_PROGRAM_UPSTREAM_TARBALL)
+
+    pkg = Gem2Deb::DhMakeRuby.new(SIMPLE_PROGRAM_UPSTREAM_TARBALL)
+    pkg.build
+    GEM_NAME = pkg.gem_name
+  end
+  context 'simple program' do
+    should "create manpages file for dh_installman" do
+      filename = File.join(DEBIANIZED_SIMPLE_PROGRAM, "debian/ruby-#{GEM_NAME}.manpages")
+      assert_file_exists filename
+    end
+  end
+
   protected
 
   def packages
