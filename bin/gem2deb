@@ -23,6 +23,7 @@ require 'optparse'
 $only_tarball = false
 $only_source_dir = false
 $only_debian_source = false
+$check_build_deps = true
 
 optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show gem2deb help') do
@@ -44,8 +45,13 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-S', '--only-debian-source', 'only build source package ; no binary packages') do
-      $only_debian_source = true
+    $only_debian_source = true
   end
+
+  opts.on('-d', '--dont-check-builddeps', 'do not check build dependencies; used for testing') do
+    $check_build_deps = false
+  end
+
 end
 optparse.parse!
 
@@ -70,7 +76,7 @@ exit(0) if  $only_source_dir
 
 puts
 puts "-- Building Debian package ..."
-dmr.buildpackage(!$only_debian_source)
+dmr.buildpackage($only_debian_source, $check_build_deps)
 puts "-- Debian package successfully built!"
 
 __END__

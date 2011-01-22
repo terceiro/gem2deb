@@ -1,4 +1,4 @@
-require 'test/helper'
+require 'test_helper'
 require 'gem2deb/gem2tgz'
 require 'gem2deb/dh-make-ruby'
 

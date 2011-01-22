@@ -3,17 +3,20 @@ require 'shoulda'
 require 'mocha'
 require 'fileutils'
 require 'tmpdir'
+require 'tempfile'
 
 class Gem2DebTestCase < Test::Unit::TestCase
 
   require 'test/helper/samples'
   include Gem2DebTestCase::Samples
 
+  GEM2DEB_ROOT_SOURCE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
   FileUtils.mkdir_p(TMP_DIR)
 
   class << self
     def tmpdir
-      @tmpdir ||= File.join(Gem2DebTestCase::Samples::TMP_DIR, name)
+      @tmpdir ||= File.join(Gem2DebTestCase::TMP_DIR, name)
     end
     def one_time_setup_blocks
       @one_time_setup_blocks ||= []
@@ -35,6 +38,9 @@ class Gem2DebTestCase < Test::Unit::TestCase
   end
   def instance
     self.class.instance
+  end
+  def tmpdir
+    self.class.tmpdir
   end
 
   def setup
@@ -72,13 +78,33 @@ class Gem2DebTestCase < Test::Unit::TestCase
     list = contents(tarball)
     assert !list.include?(file), "#{tarball} should NOT contain #{file} (contents: #{list.inspect})"
   end
-  
+
   def assert_file_exists(path)
     assert File.exist?(path), "#{path} should exist"
   end
 
   def assert_no_file_exists(path)
     assert !File.exist?(path), "#{path} should NOT exist"
+  end
+
+  def self.silence_stream(stream)
+    orig_stream = stream.clone
+    begin
+      Tempfile.open('gem2deb-tests-stdoud') do |f|
+        stream.reopen(f)
+        yield
+      end
+    ensure
+      stream.reopen(orig_stream)
+    end
+  end
+
+  def self.silence_all_output
+    silence_stream(STDOUT) do
+      silence_stream(STDERR) do
+        yield
+      end
+    end
   end
 
 end
@@ -92,7 +118,7 @@ class Test::Unit::AutoRunner
       ret = orig_run
       puts
       puts "======================================================================="
-      puts "Temporary test files left in #{Gem2TgzTest::TMP_DIR} for inspection!"
+      puts "Temporary test files left in #{Gem2DebTestCase::TMP_DIR} for inspection!"
       puts
     else
       ret = orig_run

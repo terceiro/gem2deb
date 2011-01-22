@@ -2,10 +2,23 @@ require 'rake/testtask'
 
 task :default => :test
 
-Rake::TestTask.new do |t|
+task :test do
+  puts '=> Unit tests'
+  Rake::Task['test:unit'].invoke
+  puts '=> Integration tests'
+  Rake::Task['test:integration'].invoke
+end
+
+Rake::TestTask.new('test:unit') do |t|
   t.libs << "lib"
   t.libs << "test"
-  t.test_files = FileList['test/*_test.rb']
+  t.test_files = FileList['test/unit/*_test.rb']
+  t.verbose = true
+end
+
+Rake::TestTask.new('test:integration') do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/integration/*_test.rb']
   t.verbose = true
 end
 

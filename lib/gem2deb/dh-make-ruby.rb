@@ -52,10 +52,13 @@ module Gem2Deb
       "#{@gem_name}-#{@gem_version}"
     end
 
-    def buildpackage(binary = true)
+    def buildpackage(source_only = false, check_build_deps = true)
+      dpkg_buildpackage_opts = []
+      dpkg_buildpackage_opts << '-S' if source_only
+      dpkg_buildpackage_opts << '-d' unless check_build_deps
+
       Dir::chdir("#{@gem_name}-#{@gem_version}") do
-        bin = binary ? '' : '-S'
-        run("dpkg-buildpackage -us -uc #{bin}")
+        run("dpkg-buildpackage -us -uc #{dpkg_buildpackage_opts.join(' ')}")
       end
     end
 

@@ -1,7 +1,6 @@
-require 'test/helper'
+require 'test_helper'
 require 'gem2deb/dhruby'
 require 'rbconfig'
-require 'tempfile'
 
 class DhRubyTest < Gem2DebTestCase
 
@@ -91,18 +90,6 @@ class DhRubyTest < Gem2DebTestCase
         binary_packages = `dh_listpackages`.split
         instance.install File.join(package_path, 'debian', 'tmp')
       end
-    end
-  end
-
-  def self.silence_stream(stream)
-    orig_stream = stream.clone
-    begin
-      Tempfile.open('gem2deb-tests-stdoud') do |f|
-        stream.reopen(f)
-        yield
-      end
-    ensure
-      stream.reopen(orig_stream)
     end
   end
 
