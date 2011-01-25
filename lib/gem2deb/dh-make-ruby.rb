@@ -144,11 +144,19 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
     #
     def maintainer
       debenv = {}
+      # defaults
+      debenv['DEBFULLNAME'] = ENV['DEBFULLNAME']
+      debenv['DEBEMAIL'] = ENV['DEBEMAIL'] || ENV['EMAIL']
+
+      # DEBEMAIL is like "Full Name <email@host>"
+      # extract DEBFULLNAME from it
       if ENV['DEBEMAIL'] && ENV['DEBEMAIL'] =~ EMAIL_REGEXP
         debenv['DEBFULLNAME'] = $1 if ENV['DEBFULLNAME'].nil?
         debenv['DEBEMAIL'] = $2
       end
-      if ENV['DEBEMAIL'].nil? || ENV['DEBFULLNAME']
+      # dont have DEBEMAIL nor DEBFULLNAME from ENV
+      # try with EMAIL
+      if ENV['DEBEMAIL'].nil? || ENV['DEBFULLNAME'].nil?
         if ENV['EMAIL'] && ENV['EMAIL'] =~ EMAIL_REGEXP
           debenv['DEBFULLNAME'] = $1 if ENV['DEBFULLNAME'].nil?
           debenv['DEBEMAIL'] = $2
