@@ -183,9 +183,7 @@ EOF
       pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
       if @spec.dependencies.length > 0
         pkg << "# "
-        @spec.dependencies.each do |dep|
-          pkg << "#{dep.name} (#{dep.requirement})"
-        end
+        pkg << @spec.dependencies.map { |dep| "#{dep.name} (#{dep.requirement})" }.join(', ')
         pkg << "\n"
       end
        pkg << "Description: "
