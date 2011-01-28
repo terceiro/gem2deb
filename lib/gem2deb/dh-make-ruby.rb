@@ -37,7 +37,7 @@ module Gem2Deb
       Dir.chdir(@tarball_dir) do
         create_orig_tarball
         extract
-        read_spec
+        @spec = read_spec
         create_debian_boilerplates
         create_control
         other_files
@@ -46,7 +46,10 @@ module Gem2Deb
     end
     
     def read_spec
-      @spec = YAML::load(IO::read("#{@gem_name}-#{@gem_version}/metadata.yml"))
+      metadata_file = "#{@gem_name}-#{@gem_version}/metadata.yml"
+      if File.exists?(metadata_file)
+        YAML::load_file(metadata_file)
+      end
     end
 
     def build_dir
@@ -179,7 +182,7 @@ Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
 EOF
-      if @spec.homepage 
+      if @spec && @spec.homepage
         f.puts "Homepage: #{@spec.homepage}"
       else
         f.puts "Homepage: FIXME"
@@ -189,18 +192,18 @@ EOF
       pkg << "Package: RUBYVER-#{@gem_name}\n"
       pkg << "Architecture: RUBYARCH\n"
       pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
-      if @spec.dependencies.length > 0
+      if @spec && @spec.dependencies.length > 0
         pkg << "# "
         pkg << @spec.dependencies.map { |dep| "#{dep.name} (#{dep.requirement})" }.join(', ')
         pkg << "\n"
       end
        pkg << "Description: "
-      if @spec.summary
+      if @spec && @spec.summary
         pkg << @spec.summary + "\n"
       else
         pkg << "FIXME\n"
       end
-      if @spec.description
+      if @spec && @spec.description
         @spec.description.each_line do |l|
           l = l.strip
           if l == ""
@@ -225,7 +228,7 @@ EOF
     end
 
     def test_suite
-      if not @spec.test_files.empty?
+      if @spec && !@spec.test_files.empty?
         File::open("#{@gem_name}-#{@gem_version}/debian/ruby-test-files.yaml", 'w') do |f|
           YAML::dump(@spec.test_files, f)
         end

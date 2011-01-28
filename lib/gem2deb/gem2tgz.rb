@@ -23,6 +23,9 @@ module Gem2Deb
 
   class Gem2Tgz
 
+    GEMEXT = /(\.gem)$/
+    TGZEXT = /(\.tgz|\.tar\.gz)$/
+
     def self.convert!(gem, tarball = nil)
       self.new(gem, tarball).convert!
     end
@@ -32,27 +35,29 @@ module Gem2Deb
     attr_reader :target_dir
 
     def initialize(gem, tarball = nil)
-      if gem !~ /\.gem$/
+      if gem =~ GEMEXT || gem =~ TGZEXT
+        @ext                = $1
+        @gem                = gem
+        @gem_full_path      = File.expand_path(gem)
+        @tarball            = tarball
+        if @tarball.nil?
+          # the _ -> - substitution is required because '_' is invalid
+          # in Debian packages names
+          # same for downcase
+          @tarball = @gem.gsub(@ext, '.tar.gz').gsub(/_/,'-').downcase
+        end
+        @tarball_full_path  = File.expand_path(@tarball)
+        @target_dirname     = File::basename(@tarball).gsub('.tar.gz', '')
+      else
         puts "#{gem} does not look like a valid .gem file."
         exit(1)
       end
-
-      @gem                = gem
-      @gem_full_path      = File.expand_path(gem)
-      @tarball            = tarball
-      if @tarball.nil?
-        # the _ -> - substitution is required because '_' is invalid
-        # in Debian packages names
-        # same for downcase
-        @tarball = @gem.gsub(/\.gem$/, '.tar.gz').gsub(/_/,'-').downcase
-      end
-      @tarball_full_path  = File.expand_path(@tarball)
-      @target_dirname     = File::basename(@tarball).gsub('.tar.gz', '')
     end
 
     def convert!
       create_target_dir
-      extract_gem_contents
+      extract_gem_contents if @ext =~ GEMEXT
+      extract_tgz_contents if @ext =~ TGZEXT
       create_resulting_tarball
       cleanup
       @tarball
@@ -73,6 +78,12 @@ module Gem2Deb
         FileUtils.rm_f('data.tar.gz')
         run "zcat metadata.gz > metadata.yml"
         FileUtils.rm_f('metadata.gz')
+      end
+    end
+
+    def extract_tgz_contents
+      Dir.chdir(@target_dir) do
+        run "tar xfm #{gem_full_path} --strip 1"
       end
     end
 
