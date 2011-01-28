@@ -7,6 +7,7 @@ require 'gem2deb/gem2tgz'
 class Gem2TgzTest < Gem2DebTestCase
 
   SIMPLE_GEM_TARBALL    = File.join(tmpdir,    "#{SIMPLE_GEM_DIRNAME}.tar.gz")
+  SIMPLE_TGZ_TARBALL    = File.join(tmpdir,    "#{SIMPLE_TGZ_DIRNAME}.tar.gz")
 
   should 'convert using a new instance when converting through the class' do
     gem2tgz = mock
@@ -53,6 +54,19 @@ class Gem2TgzTest < Gem2DebTestCase
       should "be simplegem's spec" do
         assert_equal 'simplegem', @gemspec.name
       end
+    end
+  end
+
+  context('tgz package') do
+    setup do
+      @tgz = Gem2Deb::Gem2Tgz.new(SIMPLE_TGZ, SIMPLE_TGZ_TARBALL)
+      @tgz.convert!
+    end
+    should 'create tarball' do
+      assert_file_exists SIMPLE_TGZ_TARBALL
+    end
+    should 'include the contents of the tgz in the tarball' do
+      assert_contained_in_tarball SIMPLE_TGZ_TARBALL, 'simpletgz-0.0.1/lib/simpletgz.rb'
     end
   end
 
