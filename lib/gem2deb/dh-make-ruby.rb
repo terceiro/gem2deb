@@ -24,6 +24,7 @@ module Gem2Deb
 
   class DhMakeRuby
 
+    EMAIL_REGEXP = /^(.*)\s+<(.*)>$/
     attr_reader :gem_name
 
     def initialize(tarball)
@@ -137,6 +138,33 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
       end
     end
 
+    ##
+    # Try to find the maintainer from ENV
+    # logic translated from perl in package « devscripts: /usr/bin/dch »
+    #
+    def maintainer
+      debenv = {}
+      # defaults
+      debenv['DEBFULLNAME'] = ENV['DEBFULLNAME']
+      debenv['DEBEMAIL'] = ENV['DEBEMAIL'] || ENV['EMAIL']
+
+      # DEBEMAIL is like "Full Name <email@host>"
+      # extract DEBFULLNAME from it
+      if ENV['DEBEMAIL'] && ENV['DEBEMAIL'] =~ EMAIL_REGEXP
+        debenv['DEBFULLNAME'] = $1 if ENV['DEBFULLNAME'].nil?
+        debenv['DEBEMAIL'] = $2
+      end
+      # dont have DEBEMAIL nor DEBFULLNAME from ENV
+      # try with EMAIL
+      if ENV['DEBEMAIL'].nil? || ENV['DEBFULLNAME'].nil?
+        if ENV['EMAIL'] && ENV['EMAIL'] =~ EMAIL_REGEXP
+          debenv['DEBFULLNAME'] = $1 if ENV['DEBFULLNAME'].nil?
+          debenv['DEBEMAIL'] = $2
+        end
+      end
+      debenv
+    end
+
     def create_control
       f = File::new("#{@gem_name}-#{@gem_version}/debian/control", 'w')
       f.puts <<-EOF
@@ -144,7 +172,7 @@ Source: #{@gem_name}
 Section: ruby
 Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
-Uploaders: #{ENV['DEBFULLNAME']} <#{ENV['DEBEMAIL']}>
+Uploaders: #{maintainer['DEBFULLNAME']} <#{maintainer['DEBEMAIL']}>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= #{Gem2Deb::VERSION})
 Standards-Version: 3.9.1
@@ -163,9 +191,7 @@ EOF
       pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
       if @spec.dependencies.length > 0
         pkg << "# "
-        @spec.dependencies.each do |dep|
-          pkg << "#{dep.name} (#{dep.requirement})"
-        end
+        pkg << @spec.dependencies.map { |dep| "#{dep.name} (#{dep.requirement})" }.join(', ')
         pkg << "\n"
       end
        pkg << "Description: "
