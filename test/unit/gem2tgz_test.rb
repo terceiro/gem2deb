@@ -16,6 +16,14 @@ class Gem2TgzTest < Gem2DebTestCase
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_TARBALL)
   end
 
+  class << self
+    attr_accessor :instance
+  end
+  def instance
+    self.class.instance
+  end
+
+
   one_time_setup do
     self.instance = Gem2Deb::Gem2Tgz.new(SIMPLE_GEM, SIMPLE_GEM_TARBALL)
     self.instance.convert!

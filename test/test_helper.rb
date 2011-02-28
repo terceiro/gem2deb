@@ -34,10 +34,6 @@ class Gem2DebTestCase < Test::Unit::TestCase
         @one_time_setup = true
       end
     end
-    attr_accessor :instance
-  end
-  def instance
-    self.class.instance
   end
   def tmpdir
     self.class.tmpdir

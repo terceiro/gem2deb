@@ -5,9 +5,6 @@ require 'rbconfig'
 class DhRubyTest < Gem2DebTestCase
 
   one_time_setup do
-    self.instance = Gem2Deb::DhRuby.new
-    instance.verbose = false
-
     build(SIMPLE_GEM, SIMPLE_GEM_DIRNAME)
     build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
     build(SIMPLE_EXTENSION, SIMPLE_EXTENSION_DIRNAME)
@@ -56,7 +53,7 @@ class DhRubyTest < Gem2DebTestCase
       'ruby1.9.1-foo' => 'ruby1.9.1',
     }.each do |package,version|
       should "detect #{version} for package '#{package}'" do
-        assert_equal version, instance.send(:ruby_version_for, package)
+        assert_equal version, Gem2Deb::DhRuby.new.send(:ruby_version_for, package)
       end
     end
   end
@@ -76,6 +73,9 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   def self.build(gem, source_package)
+    instance = Gem2Deb::DhRuby.new
+    instance.verbose = false
+
     package_path = File.join(tmpdir, source_package)
     tarball =  package_path + '.tar.gz'
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
