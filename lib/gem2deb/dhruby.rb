@@ -89,7 +89,6 @@ module Gem2Deb
     def install(argv)
       puts "Entering dh_ruby --install" if @verbose
 
-      packages = `dh_listpackages`.split
 
       # assume all Ruby files will be installed in the first package listed in
       # debian/control, which should be ruby-foo OR foo
@@ -139,7 +138,7 @@ module Gem2Deb
       else
         overrides = []
       end
-      `dh_listpackages`.each_line do |pkg|
+      packages.each do |pkg|
         pkg.chomp!
         Dir["debian/#{pkg}/usr/lib/ruby/vendor_ruby/**/*.rb"].each do |f|
           lines = IO::readlines(f)
@@ -295,5 +294,8 @@ module Gem2Deb
       end
     end
 
+    def packages
+      @packages ||= `dh_listpackages`.split
+    end
   end
 end
