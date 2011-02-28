@@ -54,8 +54,6 @@ module Gem2Deb
     def initialize
       @verbose = true
       @bindir = '/usr/bin'
-      @prefix = nil
-      @libdir = '/usr/lib/ruby/vendor_ruby'
     end
     
     def clean
@@ -89,13 +87,13 @@ module Gem2Deb
     def install(argv)
       puts "Entering dh_ruby --install" if @verbose
 
+      packages_to_install_programs_in.each do |package|
+        install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
+      end
 
-      # assume all Ruby files will be installed in the first package listed in
-      # debian/control, which should be ruby-foo OR foo
-      @prefix = destdir_for(packages.first)
-
-      install_files('bin', find_files('bin'), @bindir,          755) if File::directory?('bin')
-      install_files('lib', find_files('lib'), @libdir,  644) if File::directory?('lib')
+      packages_to_install_libraries_in.each do |package|
+        install_files('lib', find_files('lib'), File.join(destdir_for(package), libdir_for(package)), 644) if File::directory?('lib')
+      end
 
       packages.each do |package|
         # handle extensions
@@ -242,12 +240,12 @@ module Gem2Deb
     end
 
     def install_files(src, list, dest, mode)
-      run "install -d #{@prefix + '/' + dest}"
+      run "install -d #{dest}"
       list.each do |fname|
         if File::directory?(src + '/' + fname)
-          run "install -d #{@prefix + '/' + dest + '/' + fname}"
+          run "install -d #{dest + '/' + fname}"
         else
-          run "install -m#{mode} #{src + '/' + fname} #{@prefix + '/' + dest + '/' + fname}"
+          run "install -m#{mode} #{src + '/' + fname} #{dest + '/' + fname}"
         end
       end
     end
@@ -297,5 +295,57 @@ module Gem2Deb
     def packages
       @packages ||= `dh_listpackages`.split
     end
+
+    def packages_to_install_libraries_in
+      if single_package?
+        packages
+      else
+        if has_common_package?
+          common_packages
+        else
+          native_packages
+        end
+      end
+    end
+
+    def packages_to_install_programs_in
+      if single_package?
+        packages
+      else
+        if has_common_package?
+          common_packages
+        else
+          packages.first
+        end
+      end
+    end
+
+    def single_package?
+      packages.size == 1
+    end
+
+    def has_common_package?
+      common_packages.size > 0
+    end
+
+    def common_packages
+      @common_packages ||= packages.grep /ruby-.*-common/
+    end
+
+    def native_packages
+      @native_packages ||= packages.select { |pkg| ruby_version_for(pkg) != 'ruby' }
+    end
+
+    def libdir_for(package)
+      case ruby_version_for(package)
+      when 'ruby1.8'
+        '/usr/lib/ruby/vendor_ruby/1.8'
+      when 'ruby1.9.1'
+        '/usr/lib/ruby/vendor_ruby/1.9.1'
+      else
+        '/usr/lib/ruby/vendor_ruby'
+      end
+    end
+
   end
 end

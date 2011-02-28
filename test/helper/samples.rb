@@ -18,5 +18,9 @@ class Gem2DebTestCase
     SIMPLE_TGZ_NAME       = 'simpletgz'
     SIMPLE_TGZ_DIRNAME    = SIMPLE_TGZ_NAME + '-0.0.1'
     SIMPLE_TGZ            = File.join(SAMPLE_DIR, "#{SIMPLE_TGZ_NAME}/pkg/#{SIMPLE_TGZ_DIRNAME}.tgz")
+
+    SIMPLE_MIXED_NAME     = 'simplemixed'
+    SIMPLE_MIXED_DIRNAME  = SIMPLE_MIXED_NAME + '-1.2.3'
+    SIMPLE_MIXED          = File.join(SAMPLE_DIR, "#{SIMPLE_MIXED_NAME}/pkg/#{SIMPLE_MIXED_DIRNAME}.gem")
   end
 end

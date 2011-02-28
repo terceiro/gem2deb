@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'gem2deb/gem2tgz'
+require 'gem2deb/dh-make-ruby'
 require 'gem2deb/dhruby'
 require 'rbconfig'
 
@@ -8,6 +10,7 @@ class DhRubyTest < Gem2DebTestCase
     build(SIMPLE_GEM, SIMPLE_GEM_DIRNAME)
     build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
     build(SIMPLE_EXTENSION, SIMPLE_EXTENSION_DIRNAME)
+    build(SIMPLE_MIXED, SIMPLE_MIXED_DIRNAME)
   end
 
   context 'installing simplegem' do
@@ -54,6 +57,56 @@ class DhRubyTest < Gem2DebTestCase
     }.each do |package,version|
       should "detect #{version} for package '#{package}'" do
         assert_equal version, Gem2Deb::DhRuby.new.send(:ruby_version_for, package)
+      end
+    end
+  end
+
+  context 'mixed packages (both pure-Ruby and native library code)' do
+    should 'install Ruby libraries into single package' do
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.stubs(:packages).returns(['ruby-foo'])
+      assert_equal ['ruby-foo'], dh_ruby.send(:packages_to_install_libraries_in)
+    end
+
+    should 'install Ruby libraries in native packages' do
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo'])
+      assert_equal ['ruby1.8-foo', 'ruby1.9.1-foo'], dh_ruby.send(:packages_to_install_libraries_in)
+    end
+
+    should 'install Ruby code in ruby-foo-common package if it is present' do
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo', 'ruby-foo-common'])
+      assert_equal ['ruby-foo-common'], dh_ruby.send(:packages_to_install_libraries_in)
+    end
+
+    should 'install programs in single package' do
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.stubs(:packages).returns(['ruby-foo'])
+      assert_equal ['ruby-foo'], dh_ruby.send(:packages_to_install_programs_in)
+    end
+
+    should 'install programs in common package if present' do
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo', 'ruby-foo-common'])
+      assert_equal ['ruby-foo-common'], dh_ruby.send(:packages_to_install_programs_in)
+    end
+
+    should 'duplicate pure-Ruby code in native packages' do
+      assert_installed SIMPLE_MIXED_DIRNAME, 'ruby1.8-simplemixed', '/usr/lib/ruby/vendor_ruby/1.8/simplemixed.rb' 
+      assert_installed SIMPLE_MIXED_DIRNAME, 'ruby1.9.1-simplemixed', '/usr/lib/ruby/vendor_ruby/1.9.1/simplemixed.rb'
+    end
+
+  end
+
+  context 'calculating libdir for each package' do
+    {
+      'ruby-foo' => '/usr/lib/ruby/vendor_ruby',
+      'ruby1.8-foo' => '/usr/lib/ruby/vendor_ruby/1.8',
+      'ruby1.9.1-foo' => '/usr/lib/ruby/vendor_ruby/1.9.1',
+    }.each do |package,path|
+      should "install Ruby code for #{package} at #{path}" do
+        assert_equal path, Gem2Deb::DhRuby.new.send(:libdir_for, package)
       end
     end
   end

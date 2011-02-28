@@ -1,0 +1,22 @@
+require 'rubygems'
+require 'rake/gempackagetask'
+
+spec = Gem::Specification.new do |s|
+  s.platform = Gem::Platform::RUBY
+  s.summary = "Simple native extension used to test dh_ruby"
+  s.name = 'simplemixed'
+  s.version = '1.2.3'
+  s.requirements << 'none'
+  s.require_path = 'ext'
+  s.extensions << 'ext/simplemixed/extconf.rb'
+  #s.autorequire = 'rake'
+  s.files = Dir.glob('{bin,ext,lib}/**/*')
+  s.description = <<EOF
+simplemixed is a simple mixed library (both pure-Ruby and native extension) that is used to test dh_ruby.
+EOF
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_zip = false
+  pkg.need_tar = false
+end
