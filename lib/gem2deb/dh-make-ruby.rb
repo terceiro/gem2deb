@@ -70,12 +70,12 @@ module Gem2Deb
       if @tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
         @gem_name = $1
         @gem_version = $2
-        @pkg_name = @gem_name.gsub(/^ruby-/, '')
+        @pkg_name = @gem_name.gsub(/^ruby-|-ruby$/, '')
         @orig_tarball = @tarball_name
       elsif @tarball_name =~ /^(.*)-(.*).tar.gz$/
         @gem_name = $1
         @gem_version = $2
-        @pkg_name = @gem_name.gsub(/^ruby-/, '')
+        @pkg_name = @gem_name.gsub(/^ruby-|-ruby$/, '')
         @orig_tarball = "#{@gem_name}_#{@gem_version}.orig.tar.gz"
         run("ln -sf #{@tarball_name} #{@orig_tarball}")
       else
