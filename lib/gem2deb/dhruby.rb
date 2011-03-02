@@ -329,7 +329,7 @@ module Gem2Deb
     end
 
     def common_packages
-      @common_packages ||= packages.grep /ruby-.*-common/
+      @common_packages ||= packages.grep(/ruby-.*-common/)
     end
 
     def native_packages
