@@ -70,10 +70,12 @@ module Gem2Deb
       if @tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
         @gem_name = $1
         @gem_version = $2
+        @pkg_name = @gem_name.gsub(/^ruby-/, '')
         @orig_tarball = @tarball_name
       elsif @tarball_name =~ /^(.*)-(.*).tar.gz$/
         @gem_name = $1
         @gem_version = $2
+        @pkg_name = @gem_name.gsub(/^ruby-/, '')
         @orig_tarball = "#{@gem_name}_#{@gem_version}.orig.tar.gz"
         run("ln -sf #{@tarball_name} #{@orig_tarball}")
       else
@@ -189,7 +191,7 @@ EOF
       end
       f.puts
       pkg = ""
-      pkg << "Package: RUBYVER-#{@gem_name}\n"
+      pkg << "Package: RUBYVER-#{@pkg_name}\n"
       pkg << "Architecture: RUBYARCH\n"
       pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
       if @spec && @spec.dependencies.length > 0
@@ -269,7 +271,7 @@ EOF
           docs << "# #{r}\n"
         end
         if docs != ""
-          File::open("debian/ruby-#{@gem_name}.docs", 'w') do |f|
+          File::open("debian/ruby-#{@pkg_name}.docs", 'w') do |f|
             f.puts docs
           end
         end
@@ -286,7 +288,7 @@ EOF
           end
         end
         if examples != ""
-          File::open("debian/ruby-#{@gem_name}.examples", 'w') do |f|
+          File::open("debian/ruby-#{@pkg_name}.examples", 'w') do |f|
             f.puts examples
           end
         end
@@ -297,7 +299,7 @@ EOF
           installs += <<-EOF
 # FIXME: data/ dir found in source. Consider installing it somewhere.
 # Examples:
-# data/* /usr/share/ruby-#{@gem_name}/
+# data/* /usr/share/ruby-#{@pkg_name}/
           EOF
         end
         if File::directory?('conf')
@@ -308,7 +310,7 @@ EOF
           EOF
         end
         if installs != ""
-          File::open("debian/ruby-#{@gem_name}.install", 'w') do |f|
+          File::open("debian/ruby-#{@pkg_name}.install", 'w') do |f|
             f.puts installs
           end
         end
@@ -318,7 +320,7 @@ EOF
           manpages = Dir.glob("man/**/*.[1-8]")
           manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
 
-          File::open("debian/ruby-#{@gem_name}.manpages", 'w') do |f|
+          File::open("debian/ruby-#{@pkg_name}.manpages", 'w') do |f|
             f.puts manpages_header
             manpages.each do |m|
               f.puts "# " + m
