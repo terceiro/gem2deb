@@ -19,9 +19,24 @@ The workflow looks like:
     Build the package:
     dpkg-buildpackage -us -uc
 
+Alternatively, you can use the gem2deb command, that tries to do
+everything automatically.
+
 The generated Debian source package uses Debhelper 7 with a specific
 build system called "ruby". That buildsystem uses the dh_ruby tool for
 the various steps (clean, build, test, install).
+
+
+Building from source and testing this package:
+==============================================
+# install build-dependencies
+sudo apt-get install build-essential debhelper rake libshoulda-ruby1.8 \
+ libmocha-ruby1.8 rubygems1.8 ruby-pkg-tools ruby1.8-dev ruby1.9.1-dev
+# build the package
+dpkg-buildpackage -us -uc
+# install
+sudo debi
+
 
 Developers:
 Lucas Nussbaum <lucas@debian.org>
