@@ -1,3 +1,9 @@
+gem2deb (0.1.1) experimental; urgency=low
+
+  * 
+
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 04 Mar 2011 10:36:38 +0100
+
 gem2deb (0.1.0) experimental; urgency=low
 
   * Initial release.
