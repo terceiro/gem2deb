@@ -29,14 +29,14 @@ the various steps (clean, build, test, install).
 
 Building from source and testing this package:
 ==============================================
-# install build-dependencies
-sudo apt-get install build-essential debhelper rake libshoulda-ruby1.8 \
- libmocha-ruby1.8 rubygems1.8 ruby-pkg-tools ruby1.8-dev ruby1.9.1-dev
+# install build-dependencies, look at the Build-Depends line
+# in debian/control
+
 # build the package
 dpkg-buildpackage -us -uc
 # install
 sudo debi
-
+# or simply: "rake install"
 
 Developers:
 Lucas Nussbaum <lucas@debian.org>
