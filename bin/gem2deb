@@ -60,8 +60,16 @@ if ARGV.length != 1
   exit(1)
 end
 
-puts "-- Creating source tarball from #{ARGV[0]} ..."
-tarball = Gem2Deb::Gem2Tgz.convert!(ARGV[0])
+gemfile = ARGV[0]
+# Download gem if not available locally
+if not File::exists?(gemfile) and gemfile !~ /.gem$/
+  puts "#{gemfile} doesn't seem to exist. Let's try to download it with 'gem fetch #{ARGV[0]}'"
+  run("gem fetch #{gemfile}")
+  gemfile = Dir::glob("#{gemfile}-*.gem")[0]
+end
+
+puts "-- Creating source tarball from #{gemfile} ..."
+tarball = Gem2Deb::Gem2Tgz.convert!(gemfile)
 puts "-- Successfully created #{tarball}"
 
 exit(0) if $only_tarball
