@@ -61,9 +61,10 @@ module Gem2Deb
       if File::directory?('ext')
         Find::find('ext') do |f|
           if File::basename(f) == 'Makefile'
-          puts "Running 'make clean' in #{File::dirname(f)}..."
-          Dir::chdir(File::dirname(f))
-            system("make clean")
+            puts "Running 'make clean' in #{File::dirname(f)}..."
+            Dir::chdir(File::dirname(f)) do
+              system("make clean")
+            end
           end
         end
       end
