@@ -177,6 +177,9 @@ module Gem2Deb
           continue = true if c.chr.downcase == 'y'
           continue = false if c.chr.downcase == 'n'
         end while continue.nil?
+        if not continue
+          exit(1)
+        end
       else
           puts "ERROR: Test \"#{test}\" failed. Exiting."
           exit(1)
