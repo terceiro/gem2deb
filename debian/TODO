@@ -1,0 +1,5 @@
+gem2deb currently fails to build when built in a chroot using sbuild
+
+it should be possible to rewrite shebangs to something else than ruby1.8
+
+handle the cases of termios and ncurses (extconf.rb in root dir)
