@@ -1,8 +1,11 @@
 gem2deb (0.1.1) experimental; urgency=low
 
-  * 
+  * Rename library files to match the Ruby convention
+  * Reorganize the DhMakeRuby class
+  * Add --package option to gem2deb and dh-make-ruby, to specify the
+    name of the package to generate
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 04 Mar 2011 10:36:38 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 05 Mar 2011 20:16:09 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 
