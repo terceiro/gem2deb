@@ -4,6 +4,7 @@ gem2deb (0.1.1) experimental; urgency=low
   * Reorganize the DhMakeRuby class
   * Add --package option to gem2deb and dh-make-ruby, to specify the
     name of the package to generate
+  * Generate packages that depend on ruby1.8 | ruby-interpreter.
 
  -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 05 Mar 2011 20:16:09 +0100
 

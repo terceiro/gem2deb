@@ -235,7 +235,7 @@ module Gem2Deb
         self.name = name
       end
       def dependencies
-        ['${shlibs:Depends}', '${misc:Depends}']
+        ['${shlibs:Depends}', '${misc:Depends}', 'ruby1.8 | ruby-interpreter' ]
       end
       def gem_dependencies
 	@gem_dependencies ||= []
