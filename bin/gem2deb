@@ -24,6 +24,7 @@ $only_tarball = false
 $only_source_dir = false
 $only_debian_source = false
 $check_build_deps = true
+dh_make_ruby_options = {}
 
 optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show gem2deb help') do
@@ -52,6 +53,10 @@ optparse = OptionParser.new do |opts|
     $check_build_deps = false
   end
 
+  opts.on('-p', '--package PACKAGE', 'specify package name (default: ruby-*)') do |package_name|
+    dh_make_ruby_options[:source_package_name] = package_name
+  end
+
 end
 optparse.parse!
 
@@ -76,7 +81,7 @@ exit(0) if $only_tarball
 
 puts
 puts "-- Creating Debian source package from #{tarball} ..."
-dmr = Gem2Deb::DhMakeRuby::new(tarball)
+dmr = Gem2Deb::DhMakeRuby::new(tarball, dh_make_ruby_options)
 dmr.build
 puts "-- Generated Debian source tree in #{dmr.source_dirname}"
 
@@ -131,6 +136,10 @@ build the package).
 =item B<-S>, B<--only-debian-source>
 
 Only build a Debian source package (do not build binary packages).
+
+=item B<-p PACKAGE>, B<--package PACKAGE>
+
+Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
 
 =item B<-h>, B<--help>
 

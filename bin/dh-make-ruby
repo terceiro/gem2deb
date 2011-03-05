@@ -19,6 +19,8 @@ require 'gem2deb'
 require 'gem2deb/dh_make_ruby'
 require 'optparse'
 
+options = {}
+
 optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show help') do
     puts opts
@@ -29,6 +31,11 @@ optparse = OptionParser.new do |opts|
     puts "dh-make-ruby version #{Gem2Deb::VERSION}"
     exit
   end
+
+  opts.on('-p', '--package PACKAGE', 'specify package name (default: ruby-*)') do |package_name|
+    options[:source_package_name] = package_name
+  end
+
 end
 optparse.parse!
 
@@ -39,7 +46,7 @@ end
 
 tarball = ARGV[0]
 
-dmr = Gem2Deb::DhMakeRuby::new(tarball)
+dmr = Gem2Deb::DhMakeRuby::new(tarball, options)
 dmr.build
 
 __END__
@@ -55,6 +62,28 @@ B<dh-make-ruby> [I<OPTIONS>] I<TARBALL>
 
 B<dh-make-ruby> will create a basic Debian source package from a tarball named
 I<TARBALL> generated with B<gem2tgz>.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-p PACKAGE>, B<--package PACKAGE>
+
+Uses PACKAGE as package name. By default, new packages will be named as
+ruby-$gem, where $gem is the upstream name. If the package is mainly used as a
+library, then it should use the default. On the other hand, if the packages is
+mainly used as an application, then you should drop the ruby- prefix by using
+this option an explicit package u.
+
+=item B<-h>, B<--help>
+
+Displays the help
+
+=item B<-v>, B<--version>
+
+Displays version information and exits.
+
+=back
 
 =head1 SEE ALSO
 
