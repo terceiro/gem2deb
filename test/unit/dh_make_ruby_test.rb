@@ -4,13 +4,21 @@ require 'gem2deb/dh_make_ruby'
 
 class DhMakeRubyTest < Gem2DebTestCase
 
-  DEBIANIZED_SIMPLE_GEM       = File.join(tmpdir, SIMPLE_GEM_DIRNAME)
+  DEBIANIZED_SIMPLE_GEM       = File.join(tmpdir, 'ruby-' + SIMPLE_GEM_DIRNAME)
   SIMPLE_GEM_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_GEM + '.tar.gz'
   one_time_setup do
     # generate tarball
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_UPSTREAM_TARBALL)
 
     Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL).build
+  end
+
+  should 'use ruby-* package name by default' do
+    assert_equal 'ruby-simplegem', Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL).source_package_name
+  end
+
+  should 'be able to specify a package name' do
+    assert_equal 'xyz', Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL, :source_package_name => 'xyz').source_package_name
   end
 
   context 'simple gem' do
@@ -33,7 +41,7 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
-  DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, SIMPLE_EXTENSION_DIRNAME)
+  DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, 'ruby-' + SIMPLE_EXTENSION_DIRNAME)
   SIMPLE_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_EXTENSION + '.tar.gz'
   one_time_setup do
    Gem2Deb::Gem2Tgz.convert!(SIMPLE_EXTENSION, SIMPLE_EXTENSION_UPSTREAM_TARBALL)
@@ -59,13 +67,12 @@ class DhMakeRubyTest < Gem2DebTestCase
     # generate tarball
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_PROGRAM, SIMPLE_PROGRAM_UPSTREAM_TARBALL)
 
-    pkg = Gem2Deb::DhMakeRuby.new(SIMPLE_PROGRAM_UPSTREAM_TARBALL)
+    pkg = Gem2Deb::DhMakeRuby.new(SIMPLE_PROGRAM_UPSTREAM_TARBALL, :source_package_name => 'simpleprogram')
     pkg.build
-    GEM_NAME = pkg.gem_name
   end
   context 'simple program' do
     should "create manpages file for dh_installman" do
-      filename = File.join(DEBIANIZED_SIMPLE_PROGRAM, "debian/ruby-#{GEM_NAME}.manpages")
+      filename = File.join(DEBIANIZED_SIMPLE_PROGRAM, "debian/simpleprogram.manpages")
       assert_file_exists filename
     end
   end

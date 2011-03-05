@@ -16,44 +16,119 @@
 require 'gem2deb'
 require 'rubygems'
 require 'yaml'
-require 'pp'
-
-include Gem2Deb
+require 'fileutils'
+require 'erb'
 
 module Gem2Deb
 
   class DhMakeRuby
 
-    EMAIL_REGEXP = /^(.*)\s+<(.*)>$/
-    attr_reader :gem_name
+    include Gem2Deb
 
-    def initialize(tarball)
-      @tarball = tarball
-      @tarball_name = File.basename(@tarball)
-      @tarball_dir = File.dirname(@tarball)
+    EMAIL_REGEXP = /^(.*)\s+<(.*)>$/
+
+    attr_accessor :gem_name
+
+    attr_accessor :gem_version
+
+    attr_accessor :gemspec
+
+    attr_accessor :source_package_name
+
+    attr_accessor :source_tarball_name
+
+    attr_accessor :orig_tarball_name
+
+    attr_accessor :orig_tarball_dir
+
+    def initialize(tarball, options = {})
+      self.source_tarball_name = File.basename(tarball)
+      self.orig_tarball_dir = File.dirname(tarball)
+
+      options.each do |attr,value|
+        self.send("#{attr}=", value)
+      end
+
+      if source_tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
+        self.gem_name = $1
+        self.gem_version = $2
+        self.source_package_name ||= gem_name # assume orig.tar.gz was previously prepared and is already correct
+        self.orig_tarball_name = source_tarball_name
+      elsif source_tarball_name =~ /^(.*)-(.*).tar.gz$/
+        self.gem_name = $1
+        self.gem_version = $2
+        self.source_package_name ||= 'ruby-' + gem_name.gsub(/^ruby-|-ruby$/, '')
+        self.orig_tarball_name = "#{source_package_name}_#{gem_version}.orig.tar.gz"
+      else
+        raise "Could not determine gem name and version from tarball #{source_tarball_name}"
+      end
+    end
+
+    def gem_dirname
+      [gem_name, gem_version].join('-')
+    end
+
+    def source_dirname
+      [source_package_name, gem_version].join('-')
+    end
+
+    def binary_packages
+      @binary_packages ||= []
+    end
+
+    def homepage
+      gemspec && gemspec.homepage
+    end
+
+    def short_description
+      gemspec && gemspec.summary
+    end
+
+    def long_description
+      gemspec && gemspec.description
     end
 
     def build
-      Dir.chdir(@tarball_dir) do
+      Dir.chdir(orig_tarball_dir) do
         create_orig_tarball
         extract
-        @spec = read_spec
-        create_debian_boilerplates
-        create_control
-        other_files
-        test_suite
+        Dir.chdir(source_dirname) do
+          read_upstream_source_info
+          create_debian_boilerplates
+          other_files
+          test_suite
+        end
       end
     end
     
-    def read_spec
-      metadata_file = "#{@gem_name}-#{@gem_version}/metadata.yml"
+    def read_upstream_source_info
+      read_gemspec
+      detect_needed_binary_packages
+    end
+
+    def read_gemspec
+      metadata_file = 'metadata.yml'
       if File.exists?(metadata_file)
-        YAML::load_file(metadata_file)
+        self.gemspec = YAML::load_file(metadata_file)
       end
     end
 
-    def build_dir
-      "#{@gem_name}-#{@gem_version}"
+    def detect_needed_binary_packages
+      binary_packages << Package.new(source_package_name)
+      if File.directory?('ext')
+        binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.8-'))
+        binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.9.1-'))
+      end
+
+      if gemspec
+	binary_packages.each do |package|
+	  gemspec.dependencies.each do |dependency|
+	    package.gem_dependencies << dependency
+	  end
+	end
+      end
+
+      binary_packages
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
@@ -61,85 +136,69 @@ module Gem2Deb
       dpkg_buildpackage_opts << '-S' if source_only
       dpkg_buildpackage_opts << '-d' unless check_build_deps
 
-      Dir::chdir("#{@gem_name}-#{@gem_version}") do
+      Dir.chdir(source_dirname) do
         run("dpkg-buildpackage -us -uc #{dpkg_buildpackage_opts.join(' ')}")
       end
     end
 
     def create_orig_tarball
-      if @tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
-        @gem_name = $1
-        @gem_version = $2
-        @pkg_name = @gem_name.gsub(/^ruby-|-ruby$/, '')
-        @orig_tarball = @tarball_name
-      elsif @tarball_name =~ /^(.*)-(.*).tar.gz$/
-        @gem_name = $1
-        @gem_version = $2
-        @pkg_name = @gem_name.gsub(/^ruby-|-ruby$/, '')
-        @orig_tarball = "#{@gem_name}_#{@gem_version}.orig.tar.gz"
-        run("ln -sf #{@tarball_name} #{@orig_tarball}")
-      else
-        raise "Could not determine gem name and version: #{@tarball}"
+      if source_package_name != orig_tarball_name && !File.exists?(orig_tarball_name)
+        run "ln -s #{source_tarball_name} #{orig_tarball_name}"
       end
     end
 
     def extract
-      run("tar xzf #{@orig_tarball}")
-      if not File::directory?("#{@gem_name}-#{@gem_version}")
-        raise "Extracting did not create #{@gem_name}-#{@gem_version} directory."
+      run("tar xzf #{orig_tarball_name}")
+      if !File.directory?(gem_dirname)
+        raise "Extracting did not create #{gem_dirname} directory."
+      end
+      if gem_dirname != source_dirname
+        FileUtils.mv gem_dirname, source_dirname
       end
     end
 
     def create_debian_boilerplates
-      if not File::directory?("#{@gem_name}-#{@gem_version}/debian")
-        Dir::mkdir("#{@gem_name}-#{@gem_version}/debian")
+      FileUtils.mkdir_p('debian')
+      run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+      templates.each do |template|
+        FileUtils.mkdir_p(template.directory)
+        File.open(template.filename, 'w') do |f|
+          f.puts ERB.new(template.data, nil, '<>').result(binding)
+        end
       end
-      Dir::chdir("#{@gem_name}-#{@gem_version}/debian") do
-        # changelog
-        Dir::chdir('..') do
-          if File::exists?('debian/changelog')
-            FileUtils::rm('debian/changelog')
+      FileUtils.chmod 0755, 'debian/rules'
+    end
+
+    def templates
+      @templates ||= Template.load
+    end
+
+    class Template
+      attr_accessor :filename
+      attr_accessor :data
+
+      TEMPLATES_FILE = File.expand_path(__FILE__)
+
+      def self.load
+        result = []
+        File.read(TEMPLATES_FILE).gsub(/.*__END__\n/m, '').lines.each do |line|
+          if line =~ /^>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> (.*)/
+            filename = $1
+            result << Template.new(filename)
+          else
+            result.last.data << line
           end
-          run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
         end
+        result
+      end
 
-        # compat
-        File::open('compat','w') { |f| f.puts "7" }
+      def initialize(filename)
+        self.filename = filename
+        self.data = ''
+      end
 
-        # copyright
-        File::open('copyright', 'w') do |f|
-          f.puts "FIXME. fill-in with DEP5 copyright file. http://dep.debian.net/deps/dep5/"
-        end
-
-        # rules
-        File::open('rules', 'w') do |f|
-          f.puts <<-EOF
-#!/usr/bin/make -f
-#export DH_VERBOSE=1
-#
-# Uncomment to ignore all test failures
-#export DH_RUBY_IGNORE_TESTS=all
-#
-# Uncomment to ignore some test failures. Valid values:
-#export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
-
-%:
-\tdh $@ --buildsystem=ruby
-          EOF
-        end
-        run("chmod a+rx rules")
-
-        # watch
-        File::open('watch','w') do |f|
-          f.puts <<-EOF
-version=3
-http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem_name}-(.*).tar.gz
-          EOF
-        end
-
-        # source/format
-        Dir::mkdir('source') if not File::directory?('source')
-        File::open('source/format','w') { |f| f.puts "3.0 (quilt)" }
+      def directory
+        File.dirname(filename)
       end
     end
 
@@ -170,73 +229,34 @@ http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/#{@gem_name} .*/#{@gem
       debenv
     end
 
-    def create_control
-      f = File::new("#{@gem_name}-#{@gem_version}/debian/control", 'w')
-      f.puts <<-EOF
-Source: #{@gem_name}
-Section: ruby
-Priority: optional
-Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
-Uploaders: #{maintainer['DEBFULLNAME']} <#{maintainer['DEBEMAIL']}>
-DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= #{Gem2Deb::VERSION})
-Standards-Version: 3.9.1
-#Vcs-Git: git://git.debian.org/collab-maint/libnet-jabber-loudmouth-perl.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/libnet-jabber-loudmouth-perl.git;a=summary
-EOF
-      if @spec && @spec.homepage
-        f.puts "Homepage: #{@spec.homepage}"
-      else
-        f.puts "Homepage: FIXME"
+    class Package
+      attr_accessor :name
+      def initialize(name)
+        self.name = name
       end
-      f.puts
-      pkg = ""
-      pkg << "Package: RUBYVER-#{@pkg_name}\n"
-      pkg << "Architecture: RUBYARCH\n"
-      pkg << "Depends: ${shlibs:Depends}, ${misc:Depends}\n"
-      if @spec && @spec.dependencies.length > 0
-        pkg << "# "
-        pkg << @spec.dependencies.map { |dep| "#{dep.name} (#{dep.requirement})" }.join(', ')
-        pkg << "\n"
+      def dependencies
+        ['${shlibs:Depends}', '${misc:Depends}']
       end
-       pkg << "Description: "
-      if @spec && @spec.summary
-        pkg << @spec.summary + "\n"
-      else
-        pkg << "FIXME\n"
+      def gem_dependencies
+	@gem_dependencies ||= []
       end
-      if @spec && @spec.description
-        @spec.description.each_line do |l|
-          l = l.strip
-          if l == ""
-            pkg << ' .\n'
-          else
-            pkg << " #{l}\n"
-          end
-        end
-      else
-        pkg << " <insert long description, indented with spaces>"
-      end
-
-      f.puts pkg.gsub('RUBYVER', 'ruby').gsub('RUBYARCH', 'all')
-      f.puts
-      if File::directory?("#{@gem_name}-#{@gem_version}/ext")
-        [ 'ruby1.8', 'ruby1.9.1'].each do |rver|
-          f.puts pkg.gsub('RUBYVER', rver).gsub('RUBYARCH', 'any')
-          f.puts
+      def architecture
+        if name =~ /^ruby-/ || name !~ /ruby/
+          'all'
+        else
+          'any'
         end
       end
-      f.close
     end
 
     def test_suite
-      if @spec && !@spec.test_files.empty?
-        File::open("#{@gem_name}-#{@gem_version}/debian/ruby-test-files.yaml", 'w') do |f|
-          YAML::dump(@spec.test_files, f)
+      if gemspec && !gemspec.test_files.empty?
+        File::open("debian/ruby-test-files.yaml", 'w') do |f|
+          YAML::dump(gemspec.test_files, f)
         end
       else
-        if File::directory?("#{@gem_name}-#{@gem_version}/test") or File::directory?("#{@gem_name}-#{@gem_version}/spec")
-          File::open("#{@gem_name}-#{@gem_version}/debian/ruby-tests.rb", 'w') do |f|
+        if File::directory?("test") or File::directory?("spec")
+          File::open("debian/ruby-tests.rb", 'w') do |f|
             f.puts <<-EOF
 # FIXME
 # there's a spec/ or a test/ directory in the upstream source, but
@@ -252,82 +272,126 @@ EOF
     end
 
     def other_files
-      Dir::chdir("#{@gem_name}-#{@gem_version}") do
-        # docs
-        docs = ""
-        if File::directory?('doc')
-          docs += <<-EOF
+      # docs
+      docs = ""
+      if File::directory?('doc')
+        docs += <<-EOF
 # FIXME: doc/ dir found in source. Consider installing the docs.
 # Examples:
 # doc/manual.html
 # doc/site/*
             EOF
-        end
-        readmes = Dir::glob('README*')
-        docs += <<-EOF
+      end
+      readmes = Dir::glob('README*')
+      docs += <<-EOF
 # FIXME: READMEs found
-        EOF
-        readmes.each do |r|
-          docs << "# #{r}\n"
+      EOF
+      readmes.each do |r|
+        docs << "# #{r}\n"
+      end
+      if docs != ""
+        File::open("debian/#{source_package_name}.docs", 'w') do |f|
+          f.puts docs
         end
-        if docs != ""
-          File::open("debian/ruby-#{@pkg_name}.docs", 'w') do |f|
-            f.puts docs
-          end
-        end
+      end
 
-        # examples
-        examples = ""
-        ['examples', 'sample'].each do |d|
-          if File::directory?(d)
-            examples += <<-EOF
+      # examples
+      examples = ""
+      ['examples', 'sample'].each do |d|
+        if File::directory?(d)
+          examples += <<-EOF
 # FIXME: #{d}/ dir found in source. Consider installing the examples.
 # Examples:
 # #{d}/*
-            EOF
-          end
-        end
-        if examples != ""
-          File::open("debian/ruby-#{@pkg_name}.examples", 'w') do |f|
-            f.puts examples
-          end
-        end
-
-        # data & conf
-        installs = ""
-        if File::directory?('data')
-          installs += <<-EOF
-# FIXME: data/ dir found in source. Consider installing it somewhere.
-# Examples:
-# data/* /usr/share/ruby-#{@pkg_name}/
           EOF
         end
-        if File::directory?('conf')
-          installs += <<-EOF
+      end
+      if examples != ""
+        File::open("debian/#{source_package_name}.examples", 'w') do |f|
+          f.puts examples
+        end
+      end
+
+      # data & conf
+      installs = ""
+      if File::directory?('data')
+        installs += <<-EOF
+# FIXME: data/ dir found in source. Consider installing it somewhere.
+# Examples:
+# data/* /usr/share/#{source_package_name}/
+        EOF
+      end
+      if File::directory?('conf')
+        installs += <<-EOF
 # FIXME: conf/ dir found in source. Consider installing it somewhere.
 # Examples:
 # conf/* /etc/
-          EOF
+        EOF
+      end
+      if installs != ""
+        File::open("debian/#{source_package_name}.install", 'w') do |f|
+          f.puts installs
         end
-        if installs != ""
-          File::open("debian/ruby-#{@pkg_name}.install", 'w') do |f|
-            f.puts installs
-          end
-        end
+      end
 
-        # manpages
-        if File::directory?('man')
-          manpages = Dir.glob("man/**/*.[1-8]")
-          manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
+      # manpages
+      if File::directory?('man')
+        manpages = Dir.glob("man/**/*.[1-8]")
+        manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
 
-          File::open("debian/ruby-#{@pkg_name}.manpages", 'w') do |f|
-            f.puts manpages_header
-            manpages.each do |m|
-              f.puts "# " + m
-            end
+        File::open("debian/#{source_package_name}.manpages", 'w') do |f|
+          f.puts manpages_header
+          manpages.each do |m|
+            f.puts "# " + m
           end
         end
       end
     end
   end
 end
+
+__END__
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/control
+Source: <%= source_package_name %>
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
+DM-Upload-Allowed: yes
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>)
+Standards-Version: 3.9.1
+#Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
+#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>;a=summary
+Homepage: <%= homepage ? homepage : 'FIXME'%>
+<% binary_packages.each do |package| %>
+
+Package: <%= package.name %>
+Architecture: <%= package.architecture %>
+Depends: <%= package.dependencies.join(', ') %>
+<% if package.gem_dependencies.length > 0 %>
+# <%= package.gem_dependencies.join(', ') %>
+<% end %>
+Description: <%= short_description ? short_description : 'FIXME' %>
+<%= long_description ? long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" : ' <insert long description, indented with spaces>' %>
+<% end %>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/rules
+#!/usr/bin/make -f
+#export DH_VERBOSE=1
+#
+# Uncomment to ignore all test failures
+#export DH_RUBY_IGNORE_TESTS=all
+#
+# Uncomment to ignore some test failures. Valid values:
+#export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
+
+%:
+	dh $@ --buildsystem=ruby
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/compat
+7
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/copyright
+FIXME. fill-in with DEP5 copyright file. http://dep.debian.net/deps/dep5/
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/watch
+version=3
+http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/<%= gem_name %> .*/<%= gem_name %>-(.*).tar.gz
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/source/format
+3.0 (quilt)

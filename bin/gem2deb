@@ -78,7 +78,7 @@ puts
 puts "-- Creating Debian source package from #{tarball} ..."
 dmr = Gem2Deb::DhMakeRuby::new(tarball)
 dmr.build
-puts "-- Generated Debian source tree in #{dmr.build_dir}"
+puts "-- Generated Debian source tree in #{dmr.source_dirname}"
 
 exit(0) if  $only_source_dir
 

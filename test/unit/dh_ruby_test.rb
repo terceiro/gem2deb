@@ -122,21 +122,21 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   def installed_file_path(gem_dirname, package, path)
-    File.join(self.class.tmpdir, gem_dirname, 'debian', package, path)
+    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
   end
 
   def self.build(gem, source_package)
     instance = Gem2Deb::DhRuby.new
     instance.verbose = false
 
-    package_path = File.join(tmpdir, source_package)
-    tarball =  package_path + '.tar.gz'
+    package_path = File.join(tmpdir, 'ruby-' + source_package)
+    tarball =  File.join(tmpdir, source_package + '.tar.gz')
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
     Gem2Deb::DhMakeRuby.new(tarball).build
 
     silence_stream(STDOUT) do
       Dir.chdir(package_path) do
-        # This sequence tries to imitate what debhelper7 will actually do
+        # This sequence tries to imitate what dh will actually do
         instance.clean
         instance.configure
         instance.build
