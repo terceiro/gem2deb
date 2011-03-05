@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
-require 'gem2deb/dhruby'
+require 'gem2deb/dh_ruby'
 require 'optparse'
 include Gem2Deb
 

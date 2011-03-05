@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'gem2deb/gem2tgz'
-require 'gem2deb/dh-make-ruby'
-require 'gem2deb/dhruby'
+require 'gem2deb/dh_make_ruby'
+require 'gem2deb/dh_ruby'
 require 'rbconfig'
 
 class DhRubyTest < Gem2DebTestCase
