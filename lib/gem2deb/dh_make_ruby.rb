@@ -263,8 +263,9 @@ module Gem2Deb
 # no test suite was defined in the Gem specification. It would be
 # a good idea to define it here so the package gets tested at build time.
 # Example:
-# $: << 'lib'
+# $: << 'lib' << '.'
 # Dir['{spec,test}/**/*.rb'].each { |f| require f }
+# require 'test/ts_foo.rb'
             EOF
           end
         end
