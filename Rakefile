@@ -33,3 +33,14 @@ task :install do
   sh 'dpkg-buildpackage -us -uc'
   sh "sudo debi"
 end
+
+desc "Builds a git snapshot package"
+task :snapshot do
+  sh 'cp debian/changelog debian/changelog.git'
+  date = `date --iso=seconds |sed 's/+.*//' |sed 's/[-T:]//g'`.chomp
+  sh "sed -i '1 s/)/~git#{date})/' debian/changelog"
+  sh 'ls debian/changelog.git'
+  sh 'dpkg-buildpackage -us -uc'
+  sh 'ls debian/changelog.git'
+  sh 'mv debian/changelog.git debian/changelog'
+end
