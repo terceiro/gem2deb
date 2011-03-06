@@ -126,22 +126,21 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   def self.build(gem, source_package)
-    instance = Gem2Deb::DhRuby.new
-    instance.verbose = false
-
     package_path = File.join(tmpdir, 'ruby-' + source_package)
     tarball =  File.join(tmpdir, source_package + '.tar.gz')
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
     Gem2Deb::DhMakeRuby.new(tarball).build
 
+    dh_ruby = Gem2Deb::DhRuby.new
+    dh_ruby.verbose = false
+
     silence_stream(STDOUT) do
       Dir.chdir(package_path) do
         # This sequence tries to imitate what dh will actually do
-        instance.clean
-        instance.configure
-        instance.build
-        binary_packages = `dh_listpackages`.split
-        instance.install File.join(package_path, 'debian', 'tmp')
+        dh_ruby.clean
+        dh_ruby.configure
+        dh_ruby.build
+        dh_ruby.install File.join(package_path, 'debian', 'tmp')
       end
     end
   end
