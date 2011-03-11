@@ -3,3 +3,8 @@ it should be possible to rewrite shebangs to something else than ruby1.8
 handle the cases of termios and ncurses (extconf.rb in root dir)
 
 Generate a basic debian/copyright using DEP5
+
+21:38 < Mithrandir> lucas: gem fetch yajl-ruby; gem2deb yajl-ruby-0.8.1.gem errors out with a duplicate Package field
+21:49 < Mithrandir> after building yajl (which is a compiled extension) and doing require 'yajl', I get LoadError: no such file to load -- yajl/yajl
+21:49 < Mithrandir> I think that's because the .so is in /usr/lib/ruby/vendor_ruby/1.8/x86_64-linux/yajl.so
+21:50 < Mithrandir> yup, doing ln -s .  /usr/lib/ruby/vendor_ruby/1.8/x86_64-linux/yajl works around it.
