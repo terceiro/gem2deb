@@ -99,12 +99,14 @@ gem2deb - converts Rubygems' .gem file into Debian package
 
 =head1 SYNOPSIS
 
-B<gem2deb> [I<OPTIONS>] I<GEM>
+B<gem2deb> [I<OPTIONS>] I<GEMNAME> (to download the gem with I<gem fetch>)
+
+B<gem2deb> [I<OPTIONS>] I<GEMFILE> (to use a local .gem file)
 
 =head1 DESCRIPTION
 
-B<gem2deb> will convert the .gem file I<GEM> into a Debian source package, and
-then will attempt to build it. The process is made of several steps.
+B<gem2deb> converts the gem into a Debian source package, and then will attempt
+to build it. The process is made of several steps.
 
 First, B<gem2deb> converts the gem file to a tar.gz archive containing a
 metadata.yml file with the Gem specification. This is equivalent to what
@@ -139,6 +141,7 @@ Only build a Debian source package (do not build binary packages).
 
 =item B<-p PACKAGE>, B<--package PACKAGE>
 
+Specify package name (default: ruby-*).
 Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
 
 =item B<-h>, B<--help>
