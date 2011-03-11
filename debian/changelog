@@ -6,8 +6,9 @@ gem2deb (0.1.1) experimental; urgency=low
     name of the package to generate
   * Generate packages that depend on ruby1.8 | ruby-interpreter.
   * When tests fail, and user says No, do not continue.
+  * Add Vcs-* fields after moving to PRE repo
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 05 Mar 2011 20:16:09 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 11 Mar 2011 21:52:51 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 
