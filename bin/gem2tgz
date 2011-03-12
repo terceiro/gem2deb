@@ -37,7 +37,15 @@ if ARGV.length != 1 && ARGV.length != 2
   exit(1)
 end
 
-Gem2Deb::Gem2Tgz.convert!(ARGV[0], ARGV[1] || nil)
+gemfile = ARGV[0]
+# Download gem if not available locally
+if not File::exists?(gemfile) and gemfile !~ /.gem$/
+  puts "#{gemfile} doesn't seem to exist. Let's try to download it with 'gem fetch #{ARGV[0]}'"
+  run("gem fetch #{gemfile}")
+  gemfile = Dir::glob("#{gemfile}-*.gem")[0]
+end
+
+Gem2Deb::Gem2Tgz.convert!(gemfile, ARGV[1] || nil)
 
 __END__
 =head1 NAME
@@ -46,7 +54,9 @@ gem2tgz - converts Rubygems' .gem file into tarballs
 
 =head1 SYNOPSIS
 
-B<gem2tgz> [I<OPTIONS>] I<GEM> [I<TARBALL>]
+B<gem2tgz> [I<OPTIONS>] I<GEMNAME> [I<TARBALL>] (to download the gem with I<gem fetch>)
+
+B<gem2tgz> [I<OPTIONS>] I<GEMFILE> [I<TARBALL>] (to use a local .gem file)
 
 =head1 DESCRIPTION
 

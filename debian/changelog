@@ -8,8 +8,9 @@ gem2deb (0.1.1) experimental; urgency=low
   * When tests fail, and user says No, do not continue.
   * Add Vcs-* fields after moving to PRE repo
   * Document that gem2deb can download the gem using gem fetch
+  * gem2tgz gemname now downloads the gem if needed.
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 11 Mar 2011 22:02:29 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 12 Mar 2011 09:01:21 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 
