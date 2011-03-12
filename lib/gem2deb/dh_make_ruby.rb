@@ -152,7 +152,7 @@ module Gem2Deb
       if !File.directory?(gem_dirname)
         raise "Extracting did not create #{gem_dirname} directory."
       end
-      if gem_dirname != source_dirname
+      if gem_dirname != source_dirname && !File.exists?(source_dirname)
         FileUtils.mv gem_dirname, source_dirname
       end
     end
