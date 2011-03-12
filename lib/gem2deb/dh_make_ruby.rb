@@ -159,7 +159,9 @@ module Gem2Deb
 
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
-      run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+      unless File.exists?('debian/changelog')
+        run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+      end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
         File.open(template.filename, 'w') do |f|
