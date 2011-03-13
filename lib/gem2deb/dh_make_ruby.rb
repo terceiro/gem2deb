@@ -380,7 +380,11 @@ Depends: <%= package.dependencies.join(', ') %>
 # <%= package.gem_dependencies.join(', ') %>
 <% end %>
 Description: <%= short_description ? short_description : 'FIXME' %>
-<%= long_description ? long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" : ' <insert long description, indented with spaces>' %>
+<% if long_description %>
+<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
+<% else %>
+<%= " <insert long description, indented with spaces>\n" %>
+<% end %>
 <% end %>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/rules
 #!/usr/bin/make -f
