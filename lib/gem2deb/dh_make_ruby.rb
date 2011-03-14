@@ -152,14 +152,16 @@ module Gem2Deb
       if !File.directory?(gem_dirname)
         raise "Extracting did not create #{gem_dirname} directory."
       end
-      if gem_dirname != source_dirname
+      if gem_dirname != source_dirname && !File.exists?(source_dirname)
         FileUtils.mv gem_dirname, source_dirname
       end
     end
 
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
-      run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+      unless File.exists?('debian/changelog')
+        run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+      end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
         File.open(template.filename, 'w') do |f|
@@ -378,7 +380,11 @@ Depends: <%= package.dependencies.join(', ') %>
 # <%= package.gem_dependencies.join(', ') %>
 <% end %>
 Description: <%= short_description ? short_description : 'FIXME' %>
-<%= long_description ? long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" : ' <insert long description, indented with spaces>' %>
+<% if long_description %>
+<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
+<% else %>
+<%= " <insert long description, indented with spaces>\n" %>
+<% end %>
 <% end %>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/rules
 #!/usr/bin/make -f
