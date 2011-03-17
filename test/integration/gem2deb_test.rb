@@ -12,9 +12,23 @@ class Gem2DebTest < Gem2DebTestCase
     ENV['PERL5LIB'] = perl5lib
     ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
     ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
+  end
 
-    FileUtils.cp SIMPLE_GEM, tmpdir
-    gem = File.basename(SIMPLE_GEM)
+  Dir.glob('test/sample/*/pkg/*.gem').each do |gem|
+    should "build #{gem} correcly" do
+      self.class.build(gem)
+      package_name = 'ruby-' + File.basename(File.dirname(File.dirname(gem))).gsub('_', '-')
+      binary_packages = File.join(self.class.tmpdir, "#{package_name}*.deb")
+      packages = Dir.glob(binary_packages)
+      assert !packages.empty?, "building #{gem} produced no binary packages! (expected to find #{binary_packages})"
+    end
+  end
+
+  protected
+
+  def self.build(gem)
+    FileUtils.cp gem, tmpdir
+    gem = File.basename(gem)
     Dir.chdir(tmpdir) do
       cmd = "gem2deb -d #{gem}"
       silence_all_output do
@@ -24,10 +38,6 @@ class Gem2DebTest < Gem2DebTestCase
         raise "Command [#{cmd}] failed!"
       end
     end
-  end
-
-  should 'build package successfully' do
-    assert_file_exists File.join(self.class.tmpdir, 'ruby-simplegem_0.0.1-1_all.deb')
   end
 
 end
