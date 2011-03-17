@@ -21,6 +21,15 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal 'xyz', Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL, :source_package_name => 'xyz').source_package_name
   end
 
+  should 'replace underscores with dashes in source package name' do
+    assert_equal 'ruby-foo-bar', Gem2Deb::DhMakeRuby.new('foo_bar-0.0.1.tar.gz').source_package_name
+  end
+
+  should 'not duplicate "ruby" in the name of a package' do
+    assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz').source_package_name
+    assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('foo_ruby-1.2.3.tar.gz').source_package_name
+  end
+
   context 'simple gem' do
     %w[
       debian/control

@@ -33,7 +33,11 @@ module Gem2Deb
 
     attr_accessor :gemspec
 
-    attr_accessor :source_package_name
+    attr_reader :source_package_name
+
+    def source_package_name=(value)
+      @source_package_name = value.gsub('_', '-')
+    end
 
     attr_accessor :source_tarball_name
 
@@ -57,7 +61,7 @@ module Gem2Deb
       elsif source_tarball_name =~ /^(.*)-(.*).tar.gz$/
         self.gem_name = $1
         self.gem_version = $2
-        self.source_package_name ||= 'ruby-' + gem_name.gsub(/^ruby-|-ruby$/, '')
+        self.source_package_name ||= 'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
         self.orig_tarball_name = "#{source_package_name}_#{gem_version}.orig.tar.gz"
       else
         raise "Could not determine gem name and version from tarball #{source_tarball_name}"
