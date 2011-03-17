@@ -32,6 +32,7 @@
 # dh_ruby could generate rdoc (not sure if we want this)
 
 require 'gem2deb'
+require 'gem2deb/metadata'
 require 'find'
 
 module Gem2Deb
@@ -51,23 +52,17 @@ module Gem2Deb
 
     attr_accessor :verbose
 
+    attr_reader :metadata
+
     def initialize
       @verbose = true
       @bindir = '/usr/bin'
+      @metadata = Gem2Deb::Metadata.new('.')
     end
     
     def clean
       puts "Entering dh_ruby --clean" if @verbose
-      if File::directory?('ext')
-        Find::find('ext') do |f|
-          if File::basename(f) == 'Makefile'
-            puts "Running 'make clean' in #{File::dirname(f)}..."
-            Dir::chdir(File::dirname(f)) do
-              system("make clean")
-            end
-          end
-        end
-      end
+      run_make_clean_on_extensions
     end
 
     def configure
@@ -106,7 +101,7 @@ module Gem2Deb
             end
           end
         else
-          if File::directory?('ext')
+          if metadata.has_native_extensions?
             if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
               puts "Unknown Ruby version: #{rubyver}"
               exit(1)
@@ -348,6 +343,20 @@ module Gem2Deb
         '/usr/lib/ruby/vendor_ruby/1.9.1'
       else
         '/usr/lib/ruby/vendor_ruby'
+      end
+    end
+
+    def run_make_clean_on_extensions
+      if metadata.has_native_extensions?
+        metadata.native_extensions.each do |extension|
+          extension_dir = File.dirname(extension)
+          if File.exists?(File.join(extension_dir, 'Makefile'))
+            puts "Running 'make clean' in #{extension_dir}..."
+            Dir.chdir(extension_dir) do
+              run 'make clean'
+            end
+          end
+        end
       end
     end
 

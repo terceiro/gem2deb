@@ -17,6 +17,7 @@ require 'gem2deb'
 require 'yaml'
 require 'rubygems/ext'
 require 'yaml'
+require 'gem2deb/metadata'
 
 module Gem2Deb
   class ExtensionBuilder
@@ -76,11 +77,8 @@ module Gem2Deb
     end
 
     def self.all_extensions
-      if File.exists?('metadata.yml')
-        YAML.load_file('metadata.yml').extensions
-      else
-        Dir.glob('ext/**/{extconf.rb,configure,Rakefile}')
-      end
+      @metadata ||= Gem2Deb::Metadata.new('.')
+      @metadata.native_extensions
     end
   end
 end

@@ -70,6 +70,26 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  DEBIANIZED_SIMPLE_ROOT_EXTENSION = File.join(tmpdir, 'ruby-' + SIMPLE_ROOT_EXTENSION_DIRNAME.gsub('_', '-'))
+  SIMPLE_ROOT_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_ROOT_EXTENSION + '.tar.gz'
+  one_time_setup do
+   Gem2Deb::Gem2Tgz.convert!(SIMPLE_ROOT_EXTENSION, SIMPLE_ROOT_EXTENSION_UPSTREAM_TARBALL)
+   Gem2Deb::DhMakeRuby.new(SIMPLE_ROOT_EXTENSION_UPSTREAM_TARBALL).build
+  end
+
+  context 'native extension with extconf.rb in the sources root' do
+    should 'generate one package for ruby1.8' do
+      Dir.chdir(DEBIANIZED_SIMPLE_ROOT_EXTENSION) do
+        assert(packages.include?('ruby1.8-simpleextension-in-root'), "Package ruby1.8-simpleextension-in-root not created")
+      end
+    end
+    should 'generate one package for ruby1.9.1' do
+      Dir.chdir(DEBIANIZED_SIMPLE_ROOT_EXTENSION) do
+        assert(packages.include?('ruby1.9.1-simpleextension-in-root'), "Package ruby1.9.1-simpleextension-in-root not created")
+      end
+    end
+  end
+
   DEBIANIZED_SIMPLE_PROGRAM       = File.join(tmpdir, SIMPLE_PROGRAM_DIRNAME)
   SIMPLE_PROGRAM_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_PROGRAM + '.tar.gz'
   one_time_setup do

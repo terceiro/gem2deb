@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
+require 'gem2deb/metadata'
 require 'rubygems'
 require 'yaml'
 require 'fileutils'
@@ -31,7 +32,7 @@ module Gem2Deb
 
     attr_accessor :gem_version
 
-    attr_accessor :gemspec
+    attr_accessor :metadata
 
     attr_reader :source_package_name
 
@@ -81,15 +82,15 @@ module Gem2Deb
     end
 
     def homepage
-      gemspec && gemspec.homepage
+      metadata.homepage
     end
 
     def short_description
-      gemspec && gemspec.summary
+      metadata.short_description
     end
 
     def long_description
-      gemspec && gemspec.description
+      metadata.long_description
     end
 
     def build
@@ -106,29 +107,24 @@ module Gem2Deb
     end
     
     def read_upstream_source_info
-      read_gemspec
+      read_metadata
       detect_needed_binary_packages
     end
 
-    def read_gemspec
-      metadata_file = 'metadata.yml'
-      if File.exists?(metadata_file)
-        self.gemspec = YAML::load_file(metadata_file)
-      end
+    def read_metadata
+      self.metadata = Gem2Deb::Metadata.new('.')
     end
 
     def detect_needed_binary_packages
       binary_packages << Package.new(source_package_name)
-      if File.directory?('ext')
+      if metadata.has_native_extensions?
         binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.8-'))
         binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.9.1-'))
       end
 
-      if gemspec
-	binary_packages.each do |package|
-	  gemspec.dependencies.each do |dependency|
-	    package.gem_dependencies << dependency
-	  end
+      binary_packages.each do |package|
+	metadata.dependencies.each do |dependency|
+	  package.gem_dependencies << dependency
 	end
       end
 
@@ -256,9 +252,9 @@ module Gem2Deb
     end
 
     def test_suite
-      if gemspec && !gemspec.test_files.empty?
+      if !metadata.test_files.empty?
         File::open("debian/ruby-test-files.yaml", 'w') do |f|
-          YAML::dump(gemspec.test_files, f)
+          YAML::dump(metadata.test_files, f)
         end
       else
         if File::directory?("test") or File::directory?("spec")

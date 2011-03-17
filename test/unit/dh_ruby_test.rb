@@ -11,6 +11,7 @@ class DhRubyTest < Gem2DebTestCase
     build(SIMPLE_PROGRAM, SIMPLE_PROGRAM_DIRNAME)
     build(SIMPLE_EXTENSION, SIMPLE_EXTENSION_DIRNAME)
     build(SIMPLE_MIXED, SIMPLE_MIXED_DIRNAME)
+    build(SIMPLE_ROOT_EXTENSION, SIMPLE_ROOT_EXTENSION_DIRNAME)
   end
 
   context 'installing simplegem' do
@@ -46,6 +47,20 @@ class DhRubyTest < Gem2DebTestCase
     should "update the shebang to use the default ruby version" do
       assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', '/usr/bin/simpleextension').lines.first.strip
     end
+  end
+
+  context 'installing native extension with extconf.rb in the sources root' do
+    arch = RbConfig::CONFIG['arch']
+    {
+      '1.8'   => 'ruby1.8',
+      '1.9.1' => 'ruby1.9.1',
+    }.each do |version_number, version_name|
+      target_so = "/usr/lib/ruby/vendor_ruby/#{version_number}/#{arch}/simpleextension_in_root.so"
+      should "install native extension for #{version_name}" do
+        assert_installed SIMPLE_ROOT_EXTENSION_DIRNAME, "#{version_name}-simpleextension-in-root", target_so
+      end
+    end
+
   end
 
   context 'determining ruby version for package' do
