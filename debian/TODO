@@ -1,8 +1,17 @@
 it should be possible to rewrite shebangs to something else than ruby1.8
 
-handle the cases of termios and ncurses (extconf.rb in root dir)
 
-21:38 < Mithrandir> lucas: gem fetch yajl-ruby; gem2deb yajl-ruby-0.8.1.gem errors out with a duplicate Package field
-21:49 < Mithrandir> after building yajl (which is a compiled extension) and doing require 'yajl', I get LoadError: no such file to load -- yajl/yajl
-21:49 < Mithrandir> I think that's because the .so is in /usr/lib/ruby/vendor_ruby/1.8/x86_64-linux/yajl.so
-21:50 < Mithrandir> yup, doing ln -s .  /usr/lib/ruby/vendor_ruby/1.8/x86_64-linux/yajl works around it.
+native packages should ship everything in the same binary package, not in 3 different packages.
+then, dependencies (shlibs) should be hacked accordingly.
+mail from Raphael Hertzog:
+On Thu, 10 Mar 2011, Lucas Nussbaum wrote:
+> What is the correct way to override what dpkg-shlibdeps detects?
+
+Either you replace the dependency associated to the interpreters' libraries
+by providing debian/shlibs.local (or any other file that you indicate with
+-L) or you tell dpkg-shlibdeps to put the dependencies for the .so files
+of interest in another variable like ${shlibs:Suggest} (mixing -d and -e
+options as appropriate on the command line).
+
+
+there should be a way to opt out ruby1.9.1 build (example of package failing: termios)
