@@ -10,8 +10,9 @@ gem2deb (0.1.1) experimental; urgency=low
   * Document that gem2deb can download the gem using gem fetch
   * gem2tgz gemname now downloads the gem if needed.
   * Generate a better debian/copyright template.
+  * Support DEB_BUILD_OPTIONS=nocheck.
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 13 Mar 2011 11:07:20 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Tue, 22 Mar 2011 19:01:47 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 
