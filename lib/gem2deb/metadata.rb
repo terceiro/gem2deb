@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'rubygems/specification'
+require 'yaml'
 
 module Gem2Deb
   class Metadata
