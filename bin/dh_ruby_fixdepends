@@ -20,6 +20,7 @@ require 'gem2deb/dh_ruby'
 include Gem2Deb
 
 `dh_listpackages`.split.each do |package|
+  next if not File::exists?("debian/#{package}.substvars")
   s = IO::read("debian/#{package}.substvars")
   fd = File::new("debian/#{package}.substvars", "w")
   s.each_line do |l|
