@@ -13,8 +13,9 @@ gem2deb (0.1.1) experimental; urgency=low
   * Support DEB_BUILD_OPTIONS=nocheck.
   * Put everything in the same binary package.
   * Add a dh7 sequence.
+  * Better detection of test failures. 
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Wed, 23 Mar 2011 16:09:53 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Wed, 23 Mar 2011 16:47:30 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 

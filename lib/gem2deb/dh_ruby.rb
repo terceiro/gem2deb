@@ -214,7 +214,7 @@ module Gem2Deb
       else
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
       end
-      if $? && ($? >> 8) > 0
+      if $?.exitstatus != 0
         handle_test_failure(rubyver)
       end
     end
