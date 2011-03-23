@@ -115,19 +115,27 @@ module Gem2Deb
       self.metadata = Gem2Deb::Metadata.new('.')
     end
 
+    MULTI_PACKAGES = false # kept in case we want to reintroduce that, as an option for example
     def detect_needed_binary_packages
-      binary_packages << Package.new(source_package_name)
-      if metadata.has_native_extensions?
-        binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.8-'))
-        binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.9.1-'))
-      end
+      if MULTI_PACKAGES
+        binary_packages << Package.new(source_package_name)
+        if metadata.has_native_extensions?
+          binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.8-'), 'any')
+          binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.9.1-'), 'any')
+        end
 
-      binary_packages.each do |package|
-	metadata.dependencies.each do |dependency|
-	  package.gem_dependencies << dependency
-	end
+        binary_packages.each do |package|
+          metadata.dependencies.each do |dependency|
+            package.gem_dependencies << dependency
+          end
+        end
+      else
+        pkg = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
+        metadata.dependencies.each do |dependency|
+          pkg.gem_dependencies << dependency
+        end
+        binary_packages << pkg
       end
-
       binary_packages
     end
 
@@ -233,21 +241,16 @@ module Gem2Deb
 
     class Package
       attr_accessor :name
-      def initialize(name)
+      attr_accessor :architecture
+      def initialize(name, architecture = 'all')
         self.name = name
+        self.architecture = architecture
       end
       def dependencies
         ['${shlibs:Depends}', '${misc:Depends}', 'ruby1.8 | ruby-interpreter' ]
       end
       def gem_dependencies
 	@gem_dependencies ||= []
-      end
-      def architecture
-        if name =~ /^ruby-/ || name !~ /ruby/
-          'all'
-        else
-          'any'
-        end
       end
     end
 
@@ -372,7 +375,7 @@ Standards-Version: 3.9.1
 #Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
 <% binary_packages.each do |package| %>
-
+ 
 Package: <%= package.name %>
 Architecture: <%= package.architecture %>
 Depends: <%= package.dependencies.join(', ') %>

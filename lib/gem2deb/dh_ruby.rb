@@ -91,6 +91,19 @@ module Gem2Deb
         install_files('lib', find_files('lib'), File.join(destdir_for(package), libdir_for(package)), 644) if File::directory?('lib')
       end
 
+      package = packages.first
+      if metadata.has_native_extensions?
+        SUPPORTED_RUBY_VERSIONS.each_key do |rubyver|
+         puts "Building extension for #{rubyver} ..." if @verbose
+         run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+        end
+      end
+      # run tests
+      SUPPORTED_RUBY_VERSIONS.each_key do |rubyver|
+        run_tests(rubyver)
+      end
+
+=begin This only works in the multi-binary packages case, which is not supported anymore
       packages.each do |package|
         # handle extensions
         rubyver = ruby_version_for(package)
@@ -115,6 +128,7 @@ module Gem2Deb
         # Update shebang lines of installed programs
         update_shebangs(package)
       end
+=end
 
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings
