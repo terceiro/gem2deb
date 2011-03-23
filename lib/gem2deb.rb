@@ -23,7 +23,7 @@ module Gem2Deb
   def run(cmd)
     puts(cmd) if $VERBOSE
     system(cmd)
-    if $? && ($? >> 8) > 0
+    if $?.exitstatus != 0
       raise Gem2Deb::CommandFailed, "[#{cmd} failed!]"
     end
   end
