@@ -400,7 +400,7 @@ Description: <%= short_description ? short_description : 'FIXME' %>
 #export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
 
 %:
-	dh $@ --buildsystem=ruby
+	dh $@ --buildsystem=ruby --with ruby
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/compat
 7
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/copyright

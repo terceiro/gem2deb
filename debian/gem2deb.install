@@ -1,3 +1,4 @@
 bin/* /usr/bin/
 lib/* /usr/lib/ruby/vendor_ruby/
-debhelper7/ruby.pm /usr/share/perl5/Debian/Debhelper/Buildsystem/
+debhelper7/buildsystem/ruby.pm /usr/share/perl5/Debian/Debhelper/Buildsystem/
+debhelper7/sequence/ruby.pm /usr/share/perl5/Debian/Debhelper/Sequence/
