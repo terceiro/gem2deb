@@ -7,7 +7,10 @@ class Gem2DebTest < Gem2DebTestCase
     perl5lib = File.join(tmpdir, 'perl5')
     debhelper_buildsystems = File.join(perl5lib, 'Debian/Debhelper/Buildsystem')
     FileUtils.mkdir_p debhelper_buildsystems
-    FileUtils.cp 'debhelper7/ruby.pm', debhelper_buildsystems
+    FileUtils.cp 'debhelper7/buildsystem/ruby.pm', debhelper_buildsystems
+    debhelper_sequences = File.join(perl5lib, 'Debian/Debhelper/Sequence')
+    FileUtils.mkdir_p debhelper_sequences
+    FileUtils.cp 'debhelper7/sequence/ruby.pm', debhelper_sequences
 
     ENV['PERL5LIB'] = perl5lib
     ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
@@ -34,7 +37,7 @@ class Gem2DebTest < Gem2DebTestCase
       silence_all_output do
         system(cmd)
       end
-      if $? && ($? >> 8) > 0
+      if $?.exitstatus != 0
         raise "Command [#{cmd}] failed!"
       end
     end
