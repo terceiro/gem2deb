@@ -1,0 +1,80 @@
+#!/usr/bin/ruby1.8 -w
+#
+# Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+require 'gem2deb'
+require 'gem2deb/dh_ruby'
+include Gem2Deb
+
+`dh_listpackages`.split.each do |package|
+  s = IO::read("debian/#{package}.substvars")
+  fd = File::new("debian/#{package}.substvars", "w")
+  s.each_line do |l|
+    if l =~ /^shlibs:Depends=/
+      deps = l.chomp.split('=', 2)[1].split(', ')
+      std_deps = []
+      ruby_deps = []
+      deps.each do |dep|
+        if ['libruby1.8', 'libruby1.9.1'].include?(dep.split(' ')[0])
+          ruby_deps << dep
+        else
+          std_deps << dep
+        end
+      end
+      # p ruby_deps
+      # p std_deps
+      newdeps = (std_deps + [(ruby_deps.join(' | '))]).join(', ')
+      fd.puts "shlibs:Depends=#{newdeps}"
+    else
+      fd.puts l
+    end
+  end
+  fd.close
+end
+__END__
+=head1 NAME
+
+dh_ruby_fixdepends - fix dependencies in shlibs file after dh_shlibdeps
+
+=head1 SYNOPSIS
+
+B<dh_ruby_fixdepends>
+
+=head1 DESCRIPTION
+
+B<dh_ruby_fixdepends> is called by the I<ruby> dh sequence. You should
+not call it directly.
+
+=head1 SEE ALSO
+
+L<B<gem2deb>>(1), L<B<dh_ruby>>(1)
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2011, Lucas Nussbaum <lucas@debian.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
