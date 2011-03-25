@@ -1,25 +1,23 @@
-gem2deb (0.1.1) experimental; urgency=low
+gem2deb (0.2.0) unstable; urgency=low
 
-  * Rename library files to match the Ruby convention
-  * Reorganize the DhMakeRuby class
-  * Add --package option to gem2deb and dh-make-ruby, to specify the
-    name of the package to generate
-  * Generate packages that depend on ruby1.8 | ruby-interpreter.
-  * When tests fail, and user says No, do not continue.
+  * Many, many changes to how gem2deb generates Debian packages:
+    + Put everything in the same binary package.
+    + Rewrite depends after dh_shlibdeps to create ORed deps.
+    + Support building only for specific ruby versions.
+    + Rename library files to match the Ruby convention
+    + Add --package option to gem2deb and dh-make-ruby, to specify the
+      name of the package to generate
+    + Generate packages that depend on ruby1.8 | ruby-interpreter.
+    + gem2tgz gemname now downloads the gem if needed.
+    + Generate a better debian/copyright template.
+    + Add a dh7 sequence.
   * Add Vcs-* fields after moving to PRE repo
-  * Document that gem2deb can download the gem using gem fetch
-  * gem2tgz gemname now downloads the gem if needed.
-  * Generate a better debian/copyright template.
   * Support DEB_BUILD_OPTIONS=nocheck.
-  * Put everything in the same binary package.
-  * Add a dh7 sequence.
-  * Better detection of test failures. 
-  * Rewrite depends after dh_shlibdeps to create ORed deps.
   * Add perl:Depends, reorganize Depends:
   * Switch to 3.0 (native)
-  * Support building only for specific ruby versions.
+  * Other bugfixes and code cleanup
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 25 Mar 2011 09:22:49 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 25 Mar 2011 09:29:56 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 
