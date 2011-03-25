@@ -57,6 +57,11 @@ optparse = OptionParser.new do |opts|
     dh_make_ruby_options[:source_package_name] = package_name
   end
 
+  opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
+    dh_make_ruby_options[:ruby_versions] = versions
+  end
+
+
 end
 optparse.parse!
 
@@ -142,6 +147,11 @@ Only build a Debian source package (do not build binary packages).
 =item B<-p PACKAGE>, B<--package PACKAGE>
 
 Specify package name (default: ruby-*).
+Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
+
+=item B<--ruby-versions VERSIONS>
+
+Ruby versions to build the package for (default: all).
 Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
 
 =item B<-h>, B<--help>

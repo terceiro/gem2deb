@@ -48,10 +48,13 @@ module Gem2Deb
 
     attr_accessor :orig_tarball_dir
 
+    attr_accessor :ruby_versions
+
     def initialize(tarball, options = {})
       self.source_tarball_name = File.basename(tarball)
       self.orig_tarball_dir = File.dirname(tarball)
 
+      self.ruby_versions = 'all'
       options.each do |attr,value|
         self.send("#{attr}=", value)
       end
@@ -356,9 +359,11 @@ Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
 #Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
+XS-Ruby-Versions: <%= ruby_versions %>
 
 Package: <%= binary_package.name %>
 Architecture: <%= binary_package.architecture %>
+XB-Ruby-Versions: ${ruby:Versions}
 Depends: <%= binary_package.dependencies.join(', ') %>
 <% if binary_package.gem_dependencies.length > 0 %>
 # <%= binary_package.gem_dependencies.join(', ') %>
@@ -373,10 +378,11 @@ Description: <%= short_description ? short_description : 'FIXME' %>
 #!/usr/bin/make -f
 #export DH_VERBOSE=1
 #
-# Uncomment to ignore all test failures
+# Uncomment to ignore all test failures (but the tests will run anyway)
 #export DH_RUBY_IGNORE_TESTS=all
 #
-# Uncomment to ignore some test failures. Valid values:
+# Uncomment to ignore some test failures (but the tests will run anyway).
+# Valid values:
 #export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
 
 %:

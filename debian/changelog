@@ -17,8 +17,9 @@ gem2deb (0.1.1) experimental; urgency=low
   * Rewrite depends after dh_shlibdeps to create ORed deps.
   * Add perl:Depends, reorganize Depends:
   * Switch to 3.0 (native)
+  * Support building only for specific ruby versions.
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 25 Mar 2011 07:16:00 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 25 Mar 2011 09:22:49 +0100
 
 gem2deb (0.1.0) experimental; urgency=low
 

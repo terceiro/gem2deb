@@ -15,3 +15,5 @@ options as appropriate on the command line).
 
 
 there should be a way to opt out ruby1.9.1 build (example of package failing: termios)
+
+write test suite for Ruby-Versions settings

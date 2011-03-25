@@ -91,15 +91,33 @@ module Gem2Deb
 
       install_files('lib', find_files('lib'), File.join(destdir_for(package), RUBY_CODE_DIR), 644) if File::directory?('lib')
 
+      # find ruby versions to build the package for.
+      l = IO::readlines('debian/control').grep(/^XS-Ruby-Versions: /)
+      if l.empty?
+        puts "No XS-Ruby-Versions: field found in source!"
+        exit(1)
+      end
+      supported_versions = l[0].split[1..-1]
+      if supported_versions.include?('all')
+        supported_versions = SUPPORTED_RUBY_VERSIONS.keys
+      end
+
       if metadata.has_native_extensions?
-        SUPPORTED_RUBY_VERSIONS.each_key do |rubyver|
+        supported_versions.each do |rubyver|
          puts "Building extension for #{rubyver} ..." if @verbose
          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
         end
       end
       # run tests
-      SUPPORTED_RUBY_VERSIONS.each_key do |rubyver|
-        run_tests(rubyver)
+      tested_versions = supported_versions
+      tested_versions.each do |rubyver|
+        if not run_tests(rubyver)
+          supported_versions.delete(rubyver)
+        end
+      end
+
+      File::open("debian/#{package}.substvars", "a") do |fd|
+        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
       end
 
       update_shebangs(package)
@@ -190,6 +208,9 @@ module Gem2Deb
       end
       if $?.exitstatus != 0
         handle_test_failure(rubyver)
+        return false
+      else
+        return true
       end
     end
 

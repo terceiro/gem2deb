@@ -36,6 +36,9 @@ optparse = OptionParser.new do |opts|
     options[:source_package_name] = package_name
   end
 
+  opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
+    options[:ruby_versions] = versions
+  end
 end
 optparse.parse!
 
@@ -74,6 +77,14 @@ ruby-$gem, where $gem is the upstream name. If the package is mainly used as a
 library, then it should use the default. On the other hand, if the packages is
 mainly used as an application, then you should drop the ruby- prefix by using
 this option an explicit package u.
+
+=item B<--ruby-versions VERSIONS>
+
+Ruby versions to build the package for. This is used to generate the
+X-Ruby-Versions: field in the source package, that can later be used to tune
+this value.  By default, gem2deb generates a package that works on all known
+Ruby versions, but it might be necessary to only build the package for Ruby
+1.8, for example (using B<--ruby-versions "ruby1.8">).
 
 =item B<-h>, B<--help>
 
