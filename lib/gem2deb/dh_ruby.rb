@@ -103,32 +103,7 @@ module Gem2Deb
         run_tests(rubyver)
       end
 
-=begin This only works in the multi-binary packages case, which is not supported anymore
-      packages.each do |package|
-        # handle extensions
-        rubyver = ruby_version_for(package)
-        if rubyver == 'ruby'
-          if packages.size == 1 # pure-Ruby lib
-            SUPPORTED_RUBY_VERSIONS.keys.each do |ver|
-              run_tests(ver)
-            end
-          end
-        else
-          if metadata.has_native_extensions?
-            if not SUPPORTED_RUBY_VERSIONS.has_key?(rubyver)
-              puts "Unknown Ruby version: #{rubyver}"
-              exit(1)
-            end
-            puts "Building extension for #{rubyver} ..." if @verbose
-            run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
-          end
-          run_tests(rubyver)
-        end
-
-        # Update shebang lines of installed programs
-        update_shebangs(package)
-      end
-=end
+      update_shebangs(package)
 
       # FIXME after install, check for require 'rubygems' and other stupid things, and
       #       issue warnings

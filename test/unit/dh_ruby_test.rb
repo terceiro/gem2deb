@@ -20,7 +20,6 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-=begin FIXME
   context 'installing a Ruby program' do
     should 'install programs at /usr/bin' do
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
@@ -29,21 +28,19 @@ class DhRubyTest < Gem2DebTestCase
       assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first.strip
     end
   end
-=end
 
-=begin FIXME
   context 'installing native extension' do
     arch = RbConfig::CONFIG['arch']
-    {
-      '1.8'   => 'ruby1.8',
-      '1.9.1' => 'ruby1.9.1',
-    }.each do |version_number, version_name|
+    [
+      '1.8',
+      '1.9.1',
+    ].each do |version_number|
       target_so = "/usr/lib/ruby/vendor_ruby/#{version_number}/#{arch}/simpleextension.so"
-      should "install native extension for #{version_name}" do
-        assert_installed SIMPLE_EXTENSION_DIRNAME, "#{version_name}-simpleextension", target_so
+      should "install native extension for Ruby #{version_number}" do
+        assert_installed SIMPLE_EXTENSION_DIRNAME, "ruby-simpleextension", target_so
       end
-      should "link #{target_so} against lib#{version_name}" do
-        installed_so = installed_file_path(SIMPLE_EXTENSION_DIRNAME, "#{version_name}-simpleextension", target_so)
+      should "link #{target_so} against libruby#{version_number}" do
+        installed_so = installed_file_path(SIMPLE_EXTENSION_DIRNAME, "ruby-simpleextension", target_so)
         assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
       end
     end
@@ -51,22 +48,19 @@ class DhRubyTest < Gem2DebTestCase
       assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', '/usr/bin/simpleextension').lines.first.strip
     end
   end
-=end
 
-=begin FIXME
   context 'installing native extension with extconf.rb in the sources root' do
     arch = RbConfig::CONFIG['arch']
-    {
-      '1.8'   => 'ruby1.8',
-      '1.9.1' => 'ruby1.9.1',
-    }.each do |version_number, version_name|
+    [
+      '1.8',
+      '1.9.1',
+    ].each do |version_number|
       target_so = "/usr/lib/ruby/vendor_ruby/#{version_number}/#{arch}/simpleextension_in_root.so"
-      should "install native extension for #{version_name}" do
-        assert_installed SIMPLE_ROOT_EXTENSION_DIRNAME, "#{version_name}-simpleextension-in-root", target_so
+      should "install native extension for Ruby #{version_number}" do
+        assert_installed SIMPLE_ROOT_EXTENSION_DIRNAME, "ruby-simpleextension-in-root", target_so
       end
     end
   end
-=end
 
   context 'determining ruby version for package' do
     {
@@ -111,13 +105,6 @@ class DhRubyTest < Gem2DebTestCase
       dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo', 'ruby-foo-common'])
       assert_equal ['ruby-foo-common'], dh_ruby.send(:packages_to_install_programs_in)
     end
-
-=begin FIXME
-    should 'duplicate pure-Ruby code in native packages' do
-      assert_installed SIMPLE_MIXED_DIRNAME, 'ruby1.8-simplemixed', '/usr/lib/ruby/vendor_ruby/1.8/simplemixed.rb' 
-      assert_installed SIMPLE_MIXED_DIRNAME, 'ruby1.9.1-simplemixed', '/usr/lib/ruby/vendor_ruby/1.9.1/simplemixed.rb'
-    end
-=end
 
   end
 
