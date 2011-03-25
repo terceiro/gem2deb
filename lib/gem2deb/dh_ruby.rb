@@ -48,6 +48,8 @@ module Gem2Deb
 
     DEFAULT_RUBY_VERSION = 'ruby1.8'
 
+    RUBY_CODE_DIR = '/usr/lib/ruby/vendor_ruby'
+
     include Gem2Deb
 
     attr_accessor :verbose
@@ -83,15 +85,12 @@ module Gem2Deb
     def install(argv)
       puts "Entering dh_ruby --install" if @verbose
 
-      packages_to_install_programs_in.each do |package|
-        install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
-      end
-
-      packages_to_install_libraries_in.each do |package|
-        install_files('lib', find_files('lib'), File.join(destdir_for(package), libdir_for(package)), 644) if File::directory?('lib')
-      end
-
       package = packages.first
+
+      install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
+
+      install_files('lib', find_files('lib'), File.join(destdir_for(package), RUBY_CODE_DIR), 644) if File::directory?('lib')
+
       if metadata.has_native_extensions?
         SUPPORTED_RUBY_VERSIONS.each_key do |rubyver|
          puts "Building extension for #{rubyver} ..." if @verbose
@@ -238,20 +237,12 @@ module Gem2Deb
       end
     end
 
-    def ruby_version_for(package)
-      if package =~ /^(ruby[^-]*)/
-        $1
-      else
-        'ruby'
-      end
-    end
-
     def destdir_for(package)
       File.expand_path(File.join('debian', package))
     end
 
     def update_shebangs(package)
-      rubyver = ruby_version_for(package)
+      rubyver = DEFAULT_RUBY_VERSION
       ruby_binary = SUPPORTED_RUBY_VERSIONS[rubyver] || SUPPORTED_RUBY_VERSIONS[DEFAULT_RUBY_VERSION]
       Dir.glob(File.join(destdir_for(package), @bindir, '*')).each do |path|
         puts "Rewriting shebang line of #{path}" if @verbose
@@ -282,57 +273,6 @@ module Gem2Deb
 
     def packages
       @packages ||= `dh_listpackages`.split
-    end
-
-    def packages_to_install_libraries_in
-      if single_package?
-        packages
-      else
-        if has_common_package?
-          common_packages
-        else
-          native_packages
-        end
-      end
-    end
-
-    def packages_to_install_programs_in
-      if single_package?
-        packages
-      else
-        if has_common_package?
-          common_packages
-        else
-          packages.first
-        end
-      end
-    end
-
-    def single_package?
-      packages.size == 1
-    end
-
-    def has_common_package?
-      common_packages.size > 0
-    end
-
-    def common_packages
-      @common_packages ||= packages.grep(/ruby-.*-common/)
-    end
-
-    def native_packages
-      @native_packages ||= packages.select { |pkg| ruby_version_for(pkg) != 'ruby' }
-    end
-
-    def libdir_for(package)
-      case ruby_version_for(package)
-      when 'ruby1.8'
-        '/usr/lib/ruby/vendor_ruby/1.8'
-      when 'ruby1.9.1'
-        '/usr/lib/ruby/vendor_ruby/1.9.1'
-      else
-        '/usr/lib/ruby/vendor_ruby'
-      end
     end
 
     def run_make_clean_on_extensions

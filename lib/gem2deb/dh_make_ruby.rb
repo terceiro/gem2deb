@@ -40,6 +40,8 @@ module Gem2Deb
       @source_package_name = value.gsub('_', '-')
     end
 
+    attr_accessor :binary_package
+
     attr_accessor :source_tarball_name
 
     attr_accessor :orig_tarball_name
@@ -77,10 +79,6 @@ module Gem2Deb
       [source_package_name, gem_version].join('-')
     end
 
-    def binary_packages
-      @binary_packages ||= []
-    end
-
     def homepage
       metadata.homepage
     end
@@ -108,35 +106,19 @@ module Gem2Deb
     
     def read_upstream_source_info
       read_metadata
-      detect_needed_binary_packages
+      initialize_binary_package
     end
 
     def read_metadata
       self.metadata = Gem2Deb::Metadata.new('.')
     end
 
-    MULTI_PACKAGES = false # kept in case we want to reintroduce that, as an option for example
-    def detect_needed_binary_packages
-      if MULTI_PACKAGES
-        binary_packages << Package.new(source_package_name)
-        if metadata.has_native_extensions?
-          binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.8-'), 'any')
-          binary_packages << Package.new(source_package_name.sub('ruby-', 'ruby1.9.1-'), 'any')
-        end
-
-        binary_packages.each do |package|
-          metadata.dependencies.each do |dependency|
-            package.gem_dependencies << dependency
-          end
-        end
-      else
-        pkg = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
-        metadata.dependencies.each do |dependency|
-          pkg.gem_dependencies << dependency
-        end
-        binary_packages << pkg
+    def initialize_binary_package
+      self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
+      metadata.dependencies.each do |dependency|
+        binary_package.gem_dependencies << dependency
       end
-      binary_packages
+      binary_package
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
@@ -374,20 +356,18 @@ Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
 #Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
-<% binary_packages.each do |package| %>
- 
-Package: <%= package.name %>
-Architecture: <%= package.architecture %>
-Depends: <%= package.dependencies.join(', ') %>
-<% if package.gem_dependencies.length > 0 %>
-# <%= package.gem_dependencies.join(', ') %>
+
+Package: <%= binary_package.name %>
+Architecture: <%= binary_package.architecture %>
+Depends: <%= binary_package.dependencies.join(', ') %>
+<% if binary_package.gem_dependencies.length > 0 %>
+# <%= binary_package.gem_dependencies.join(', ') %>
 <% end %>
 Description: <%= short_description ? short_description : 'FIXME' %>
 <% if long_description %>
 <%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
 <% else %>
 <%= " <insert long description, indented with spaces>\n" %>
-<% end %>
 <% end %>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/rules
 #!/usr/bin/make -f

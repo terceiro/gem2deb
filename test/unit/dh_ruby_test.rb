@@ -62,64 +62,6 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context 'determining ruby version for package' do
-    {
-      'foo' => 'ruby',
-      'ruby-foo' => 'ruby',
-      'ruby1.8-foo' => 'ruby1.8',
-      'ruby1.9.1-foo' => 'ruby1.9.1',
-    }.each do |package,version|
-      should "detect #{version} for package '#{package}'" do
-        assert_equal version, Gem2Deb::DhRuby.new.send(:ruby_version_for, package)
-      end
-    end
-  end
-
-  context 'mixed packages (both pure-Ruby and native library code)' do
-    should 'install Ruby libraries into single package' do
-      dh_ruby = Gem2Deb::DhRuby.new
-      dh_ruby.stubs(:packages).returns(['ruby-foo'])
-      assert_equal ['ruby-foo'], dh_ruby.send(:packages_to_install_libraries_in)
-    end
-
-    should 'install Ruby libraries in native packages' do
-      dh_ruby = Gem2Deb::DhRuby.new
-      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo'])
-      assert_equal ['ruby1.8-foo', 'ruby1.9.1-foo'], dh_ruby.send(:packages_to_install_libraries_in)
-    end
-
-    should 'install Ruby code in ruby-foo-common package if it is present' do
-      dh_ruby = Gem2Deb::DhRuby.new
-      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo', 'ruby-foo-common'])
-      assert_equal ['ruby-foo-common'], dh_ruby.send(:packages_to_install_libraries_in)
-    end
-
-    should 'install programs in single package' do
-      dh_ruby = Gem2Deb::DhRuby.new
-      dh_ruby.stubs(:packages).returns(['ruby-foo'])
-      assert_equal ['ruby-foo'], dh_ruby.send(:packages_to_install_programs_in)
-    end
-
-    should 'install programs in common package if present' do
-      dh_ruby = Gem2Deb::DhRuby.new
-      dh_ruby.stubs(:packages).returns(['ruby-foo', 'ruby1.8-foo', 'ruby1.9.1-foo', 'ruby-foo-common'])
-      assert_equal ['ruby-foo-common'], dh_ruby.send(:packages_to_install_programs_in)
-    end
-
-  end
-
-  context 'calculating libdir for each package' do
-    {
-      'ruby-foo' => '/usr/lib/ruby/vendor_ruby',
-      'ruby1.8-foo' => '/usr/lib/ruby/vendor_ruby/1.8',
-      'ruby1.9.1-foo' => '/usr/lib/ruby/vendor_ruby/1.9.1',
-    }.each do |package,path|
-      should "install Ruby code for #{package} at #{path}" do
-        assert_equal path, Gem2Deb::DhRuby.new.send(:libdir_for, package)
-      end
-    end
-  end
-
   protected
 
   def assert_installed(gem_dirname, package, path)
