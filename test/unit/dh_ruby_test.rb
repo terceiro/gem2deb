@@ -62,6 +62,29 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'skipping checks' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+    should 'not skip tests if DEB_BUILD_OPTIONS is not defined' do
+      ENV.expects(:[]).with('DEB_BUILD_OPTIONS').returns(nil)
+      assert_equal false, @dh_ruby.send(:skip_checks?)
+    end
+    should 'not skip tests if DEB_BUILD_OPTIONS does not include nocheck' do
+      ENV.expects(:[]).with('DEB_BUILD_OPTIONS').returns('nostrip').at_least_once
+      assert_equal false, @dh_ruby.send(:skip_checks?)
+    end
+    should 'skip tests if DEB_BUILD_OPTIONS contains exactly nocheck' do
+      ENV.expects(:[]).with('DEB_BUILD_OPTIONS').returns('nocheck').at_least_once
+      assert_equal true, @dh_ruby.send(:skip_checks?)
+    end
+    should 'skip tests if DEB_BUILD_OPTIONS contains nocheck among other options' do
+      ENV.expects(:[]).with('DEB_BUILD_OPTIONS').returns('nostrip nocheck noopt').at_least_once
+      assert_equal true, @dh_ruby.send(:skip_checks?)
+    end
+  end
+
   protected
 
   def assert_installed(gem_dirname, package, path)

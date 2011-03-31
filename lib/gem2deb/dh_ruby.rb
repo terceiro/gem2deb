@@ -131,7 +131,9 @@ module Gem2Deb
     protected
 
     def check_rubygems
-      return if ENV['DEB_BUILD_OPTIONS'] and ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
+      if skip_checks?
+        return
+      end
       found = false
       if File::exists?('debian/require-rubygems.overrides')
         overrides = YAML::load_file('debian/require-rubygems.overrides')
@@ -188,8 +190,7 @@ module Gem2Deb
     end
 
     def run_tests(rubyver)
-      if ENV['DEB_BUILD_OPTIONS'] and ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
-        puts "DEB_BUILD_OPTIONS include nocheck, skipping test suite."
+      if skip_checks?
         return
       end
       if File::exists?('debian/ruby-test-files.yaml')
@@ -212,6 +213,18 @@ module Gem2Deb
       else
         return true
       end
+    end
+
+    def skip_checks?
+      if @skip_checks.nil?
+        if ENV['DEB_BUILD_OPTIONS'] && ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
+          puts "DEB_BUILD_OPTIONS includes nocheck, skipping all checks (test suite, rubygems usage etc)." if @verbose
+          @skip_checks = true
+        else
+          @skip_checks = false
+        end
+      end
+      @skip_checks
     end
 
     JUNK_FILES = %w( RCSLOG tags TAGS .make.state .nse_depinfo )
