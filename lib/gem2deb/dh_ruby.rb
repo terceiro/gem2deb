@@ -202,7 +202,7 @@ module Gem2Deb
       end
       if File::exists?('debian/ruby-test-files.yaml')
         puts "Running tests for #{rubyver} using gem2deb test runner and debian/ruby-test-files.yaml..."
-        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{TEST_RUNNER}"
+        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{TEST_RUNNER}"
         puts(cmd) if $VERBOSE
         system(cmd)
       elsif File::exists?('debian/ruby-tests.rb')
