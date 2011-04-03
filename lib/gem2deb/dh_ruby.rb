@@ -59,6 +59,7 @@ module Gem2Deb
     def initialize
       @verbose = true
       @bindir = '/usr/bin'
+      @skip_checks = nil
       @metadata = Gem2Deb::Metadata.new('.')
     end
     
