@@ -1,8 +1,9 @@
 gem2deb (0.2.1) UNRELEASED; urgency=low
 
-  * 
+  * Export RUBY_TEST_VERSION and RUBY_TEST_BIN environment variables
+    when running tests.
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Fri, 25 Mar 2011 10:03:35 +0100
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 03 Apr 2011 11:22:08 +0200
 
 gem2deb (0.2.0) unstable; urgency=low
 

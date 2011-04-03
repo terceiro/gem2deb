@@ -201,6 +201,8 @@ module Gem2Deb
         system(cmd)
       elsif File::exists?('debian/ruby-tests.rb')
         puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
+        ENV['RUBY_TEST_VERSION'] = rubyver
+        ENV['RUBY_TEST_BIN'] = SUPPORTED_RUBY_VERSIONS[rubyver]
         cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb"
         puts(cmd) if $VERBOSE
         system(cmd)
