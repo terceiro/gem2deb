@@ -1,0 +1,39 @@
+#!/usr/bin/ruby -w
+
+# Generate debian/control snippets
+
+if ARGV.length != 1
+puts "generate-ruby-transitional-packages OLD_SOURCE_PACKAGE"
+exit(1)
+end
+
+version = `dpkg-parsechangelog`.split($/).grep(/^Version: /)[0].split[1]
+package = `dh_listpackages`.split[0]
+allpackages = `dh_listpackages`.split
+
+binaries = []
+`apt-cache showsrc #{ARGV[0]}`.split($/).grep(/^Binary/).each do |l|
+  binaries += l.split(/[, ]+/)[1..-1]
+end
+binaries.uniq!
+binaries -= allpackages
+
+rstring = binaries.map { |pkg| "#{pkg} (<< #{version}~)" }.join(', ')
+puts "# For the replacement package"
+puts "Replaces: #{rstring}"
+puts "Conflicts: #{rstring}"
+puts "Provides: #{binaries.join(', ')}"
+
+puts "# Transitional packages"
+binaries.each do |pkg|
+puts <<-EOF
+Package: #{pkg}
+Section: oldlibs
+Architecture: all
+Depends: #{package}
+Description: Transitional package for #{package}
+ This is a transitional package to ease upgrades to the #{package}
+ package. It can safely be removed.
+
+EOF
+end
