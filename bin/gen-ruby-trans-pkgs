@@ -29,7 +29,7 @@ puts <<-EOF
 Package: #{pkg}
 Section: oldlibs
 Architecture: all
-Depends: #{package}
+Depends: ${misc:Depends}, #{package}
 Description: Transitional package for #{package}
  This is a transitional package to ease upgrades to the #{package}
  package. It can safely be removed.
