@@ -1,4 +1,4 @@
-gem2deb (0.2.1) UNRELEASED; urgency=low
+gem2deb (0.2.1) unstable; urgency=low
 
   * Export RUBY_TEST_VERSION and RUBY_TEST_BIN environment variables
     when running tests.
@@ -10,7 +10,7 @@ gem2deb (0.2.1) UNRELEASED; urgency=low
   * Add bin/generate-ruby-transitional-packages: script to generate
     debian/control snippets for transitional packages
 
- -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 03 Apr 2011 11:23:54 +0200
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 03 Apr 2011 14:36:10 +0200
 
 gem2deb (0.2.0) unstable; urgency=low
 
