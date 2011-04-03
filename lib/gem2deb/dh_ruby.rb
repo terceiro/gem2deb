@@ -81,6 +81,7 @@ module Gem2Deb
     end
 
     EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
+    TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'testrunner.rb'))
     LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
     def install(argv)
@@ -196,8 +197,7 @@ module Gem2Deb
       end
       if File::exists?('debian/ruby-test-files.yaml')
         puts "Running tests for #{rubyver} using gem2deb test runner and debian/ruby-test-files.yaml..."
-        testrunner = File.join(File.dirname(__FILE__),'testrunner.rb')
-        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{testrunner}"
+        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} #{TEST_RUNNER}"
         puts(cmd) if $VERBOSE
         system(cmd)
       elsif File::exists?('debian/ruby-tests.rb')
