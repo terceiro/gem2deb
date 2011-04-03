@@ -106,15 +106,20 @@ module Gem2Deb
 
       if metadata.has_native_extensions?
         supported_versions.each do |rubyver|
-         puts "Building extension for #{rubyver} ..." if @verbose
-         run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+          puts "Building extension for #{rubyver} ..." if @verbose
+          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+          # run tests for this version of ruby
+          if not run_tests(rubyver)
+            supported_versions.delete(rubyver)
+          end
         end
-      end
-      # run tests
-      tested_versions = supported_versions
-      tested_versions.each do |rubyver|
-        if not run_tests(rubyver)
-          supported_versions.delete(rubyver)
+      else
+        # run tests for all versions
+        tested_versions = supported_versions
+        tested_versions.each do |rubyver|
+          if not run_tests(rubyver)
+            supported_versions.delete(rubyver)
+          end
         end
       end
 
