@@ -1,0 +1,76 @@
+#!/usr/bin/ruby1.8 -w
+# Generate debian/control snippets
+
+if ARGV.length != 1
+puts "generate-ruby-transitional-packages OLD_SOURCE_PACKAGE"
+exit(1)
+end
+
+version = `dpkg-parsechangelog`.split($/).grep(/^Version: /)[0].split[1]
+package = `dh_listpackages`.split[0]
+allpackages = `dh_listpackages`.split
+
+binaries = []
+`apt-cache showsrc #{ARGV[0]}`.split($/).grep(/^Binary/).each do |l|
+  binaries += l.split(/[, ]+/)[1..-1]
+end
+binaries.uniq!
+binaries -= allpackages
+
+rstring = binaries.map { |pkg| "#{pkg} (<< #{version}~)" }.join(', ')
+puts "# For the replacement package"
+puts "Replaces: #{rstring}"
+puts "Conflicts: #{rstring}"
+puts "Provides: #{binaries.join(', ')}"
+
+puts "# Transitional packages"
+binaries.each do |pkg|
+puts <<-EOF
+Package: #{pkg}
+Section: oldlibs
+Architecture: all
+Depends: #{package}
+Description: Transitional package for #{package}
+ This is a transitional package to ease upgrades to the #{package}
+ package. It can safely be removed.
+
+EOF
+end
+
+__END__
+=head1 NAME
+
+gen-ruby-trans-pkgs - generate ruby transitional packages
+
+=head1 SYNOPSIS
+
+B<gen-ruby-trans-pkgs> I<SOURCE_PKG_TO_REPLACE>
+
+=head1 DESCRIPTION
+
+B<gen-ruby-trans-pkgs> reads debian/control, debian/changelog, and the output
+of apt-cache showsrc I<SOURCE_PKG_TO_REPLACE>, and generates debian/control
+snippets to add transitional packages.
+
+=back
+
+=head1 SEE ALSO
+
+L<B<gem2deb>>(1)
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2011, Lucas Nussbaum <lucas@debian.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
