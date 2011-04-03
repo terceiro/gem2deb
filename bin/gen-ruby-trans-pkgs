@@ -52,8 +52,6 @@ B<gen-ruby-trans-pkgs> reads debian/control, debian/changelog, and the output
 of apt-cache showsrc I<SOURCE_PKG_TO_REPLACE>, and generates debian/control
 snippets to add transitional packages.
 
-=back
-
 =head1 SEE ALSO
 
 L<B<gem2deb>>(1)
