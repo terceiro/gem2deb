@@ -7,8 +7,8 @@ gem2deb (0.2.1) unstable; urgency=low
     after building the extension for this version. The previous behaviour
     resulted in testing each ruby implementation with the last extension to be
     built.
-  * Add bin/generate-ruby-transitional-packages: script to generate
-    debian/control snippets for transitional packages
+  * Add bin/gen-ruby-trans-pkgs: script to generate debian/control snippets
+    for transitional packages
 
  -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 03 Apr 2011 14:36:10 +0200
 
