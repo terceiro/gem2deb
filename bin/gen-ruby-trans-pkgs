@@ -23,6 +23,7 @@ puts "Replaces: #{rstring}"
 puts "Conflicts: #{rstring}"
 puts "Provides: #{binaries.join(', ')}"
 
+puts
 puts "# Transitional packages"
 binaries.each do |pkg|
 puts <<-EOF
