@@ -3,6 +3,10 @@ gem2deb (0.2.1) UNRELEASED; urgency=low
   * Export RUBY_TEST_VERSION and RUBY_TEST_BIN environment variables
     when running tests.
   * Run make distclean || make clean instead of just make clean
+  * When building extensions, run the test suite for a given version immediately
+    after building the extension for this version. The previous behaviour
+    resulted in testing each ruby implementation with the last extension to be
+    built.
 
  -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sun, 03 Apr 2011 11:23:54 +0200
 
