@@ -49,6 +49,8 @@ module Gem2Deb
     def load_gemspec
       if File.exists?('metadata.yml')
         @gemspec = YAML.load_file('metadata.yml')
+      elsif ENV['DH_RUBY_GEMSPEC']
+        @gemspec = Gem::Specification.load(ENV['DH_RUBY_GEMSPEC'])
       else
         gemspec_files = Dir.glob('*.gemspec')
         if gemspec_files.size == 1

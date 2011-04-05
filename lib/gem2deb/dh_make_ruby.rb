@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -384,6 +385,9 @@ Description: <%= short_description ? short_description : 'FIXME' %>
 # Uncomment to ignore some test failures (but the tests will run anyway).
 # Valid values:
 #export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
+#
+# If you need to specify the .gemspec (eg there is more than one)
+#export DH_RUBY_GEMSPEC=gem.gemspec
 
 %:
 	dh $@ --buildsystem=ruby --with ruby
