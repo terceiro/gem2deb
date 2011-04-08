@@ -47,9 +47,9 @@ if ARGV.length != 1
   exit(1)
 end
 
-tarball = ARGV[0]
+input = ARGV[0]
 
-dmr = Gem2Deb::DhMakeRuby::new(tarball, options)
+dmr = Gem2Deb::DhMakeRuby::new(input, options)
 dmr.build
 
 __END__
@@ -59,12 +59,13 @@ dh-make-ruby - build Debian source package from Ruby library
 
 =head1 USAGE
 
-B<dh-make-ruby> [I<OPTIONS>] I<TARBALL>
+B<dh-make-ruby> [I<OPTIONS>] I<TARBALL>|I<DIRECTORY>
 
 =head1 DESCRIPTION
 
 B<dh-make-ruby> will create a basic Debian source package from a tarball named
-I<TARBALL> generated with B<gem2tgz>.
+I<TARBALL> generated with B<gem2tgz>, or from a I<DIRECTORY> containing Ruby
+code and metadata in a .gemspec file.
 
 =head1 OPTIONS
 

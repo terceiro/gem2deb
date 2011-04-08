@@ -73,6 +73,27 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  TEST_SIMPLE_GIT = File.join(tmpdir, 'simplegit')
+  one_time_setup do
+    FileUtils.cp_r(SIMPLE_GIT, TEST_SIMPLE_GIT)
+    Gem2Deb::DhMakeRuby.new(TEST_SIMPLE_GIT).build
+  end
+
+  context 'running dh-make-ruby against a directory' do
+    should 'get the package name correctly' do
+      assert_equal ['ruby-simplegit'], Dir.chdir(TEST_SIMPLE_GIT) { packages }
+    end
+    should 'get the version name correctly' do
+      assert_equal 'Version: 0.0.1', Dir.chdir(TEST_SIMPLE_GIT) { `dpkg-parsechangelog | grep Version:`.strip }
+    end
+    should 'create debian/control' do
+      assert_file_exists File.join(TEST_SIMPLE_GIT, 'debian/control')
+    end
+    should 'create debian/rules' do
+      assert_file_exists File.join(TEST_SIMPLE_GIT, 'debian/rules')
+    end
+  end
+
   protected
 
   def packages

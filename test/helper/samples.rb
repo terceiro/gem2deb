@@ -26,5 +26,7 @@ class Gem2DebTestCase
     SIMPLE_MIXED_NAME     = 'simplemixed'
     SIMPLE_MIXED_DIRNAME  = SIMPLE_MIXED_NAME + '-1.2.3'
     SIMPLE_MIXED          = File.join(SAMPLE_DIR, "#{SIMPLE_MIXED_NAME}/pkg/#{SIMPLE_MIXED_DIRNAME}.gem")
+
+    SIMPLE_GIT            = File.join(SAMPLE_DIR, 'simplegit')
   end
 end

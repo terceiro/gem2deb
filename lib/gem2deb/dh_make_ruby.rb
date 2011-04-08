@@ -1,3 +1,4 @@
+# vim: ts=2 sw=2 expandtab
 # -*- coding: utf-8 -*-
 # Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 # 
@@ -51,14 +52,35 @@ module Gem2Deb
 
     attr_accessor :ruby_versions
 
-    def initialize(tarball, options = {})
-      self.source_tarball_name = File.basename(tarball)
-      self.orig_tarball_dir = File.dirname(tarball)
+    attr_accessor :input_directory
 
+    def initialize(input, options = {})
+      initialize_from_options(options)
+      if File.directory?(input)
+        initialize_from_directory(input)
+      else
+        initialize_from_tarball(input)
+      end
+    end
+
+    def initialize_from_options(options)
       self.ruby_versions = 'all'
       options.each do |attr,value|
         self.send("#{attr}=", value)
       end
+    end
+
+    def initialize_from_directory(directory)
+      self.input_directory = directory
+      read_metadata(directory)
+      self.gem_name = metadata.gemspec.name
+      self.gem_version = metadata.gemspec.version.to_s
+      self.source_package_name ||= gem_name_to_source_package_name(gem_name)
+    end
+
+    def initialize_from_tarball(tarball)
+      self.source_tarball_name = File.basename(tarball)
+      self.orig_tarball_dir = File.dirname(tarball)
 
       if source_tarball_name =~ /^(.*)_(.*).orig.tar.gz$/
         self.gem_name = $1
@@ -68,11 +90,15 @@ module Gem2Deb
       elsif source_tarball_name =~ /^(.*)-(.*).tar.gz$/
         self.gem_name = $1
         self.gem_version = $2
-        self.source_package_name ||= 'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
+        self.source_package_name ||= gem_name_to_source_package_name(gem_name)
         self.orig_tarball_name = "#{source_package_name}_#{gem_version}.orig.tar.gz"
       else
         raise "Could not determine gem name and version from tarball #{source_tarball_name}"
       end
+    end
+
+    def gem_name_to_source_package_name(gem_name)
+      'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
     end
 
     def gem_dirname
@@ -96,25 +122,33 @@ module Gem2Deb
     end
 
     def build
-      Dir.chdir(orig_tarball_dir) do
-        create_orig_tarball
-        extract
-        Dir.chdir(source_dirname) do
-          read_upstream_source_info
-          create_debian_boilerplates
-          other_files
-          test_suite
+      if input_directory
+        build_in_directory(input_directory)
+      else
+        Dir.chdir(orig_tarball_dir) do
+          create_orig_tarball
+          extract
+          build_in_directory(source_dirname)
         end
+      end
+    end
+
+    def build_in_directory(directory)
+      Dir.chdir(directory) do
+        read_upstream_source_info
+        create_debian_boilerplates
+        other_files
+        test_suite
       end
     end
     
     def read_upstream_source_info
-      read_metadata
+      read_metadata('.')
       initialize_binary_package
     end
 
-    def read_metadata
-      self.metadata = Gem2Deb::Metadata.new('.')
+    def read_metadata(directory)
+      @metadata ||= Gem2Deb::Metadata.new(directory)
     end
 
     def initialize_binary_package
@@ -154,7 +188,7 @@ module Gem2Deb
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
       unless File.exists?('debian/changelog')
-        run "dch --create --empty --fromdirname 'Initial release (Closes: #nnnn)'"
+        run "dch --create --empty --package #{source_package_name} --newversion #{gem_version} 'Initial release (Closes: #nnnn)'"
       end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
