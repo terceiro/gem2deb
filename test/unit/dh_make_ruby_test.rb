@@ -84,7 +84,7 @@ class DhMakeRubyTest < Gem2DebTestCase
       assert_equal ['ruby-simplegit'], Dir.chdir(TEST_SIMPLE_GIT) { packages }
     end
     should 'get the version name correctly' do
-      assert_equal 'Version: 0.0.1', Dir.chdir(TEST_SIMPLE_GIT) { `dpkg-parsechangelog | grep Version:`.strip }
+      assert_equal 'Version: 0.0.1-1', Dir.chdir(TEST_SIMPLE_GIT) { `dpkg-parsechangelog | grep Version:`.strip }
     end
     should 'create debian/control' do
       assert_file_exists File.join(TEST_SIMPLE_GIT, 'debian/control')
