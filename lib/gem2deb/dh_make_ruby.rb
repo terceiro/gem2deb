@@ -358,7 +358,7 @@ DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>)
 Standards-Version: 3.9.1
 #Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
-#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>;a=summary
+#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
 XS-Ruby-Versions: <%= ruby_versions %>
 
