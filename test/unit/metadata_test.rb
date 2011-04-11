@@ -42,12 +42,33 @@ class MetaDataTest < Gem2DebTestCase
     should 'have no test files' do
       assert_equal [], @metadata.test_files
     end
+    should 'provide a gem name from source dir' do
+      assert_equal 'tmp', @metadata.name
+    end
+    should 'provide a fallback version number' do
+      assert_not_nil @metadata.version
+    end
+    should 'read version number from source dir name when available' do
+      @metadata.stubs(:source_dir).returns('/tmp/package-1.2.3')
+      assert_equal 'package', @metadata.name
+      assert_equal '1.2.3', @metadata.version
+    end
   end
 
   context 'with gemspec' do
     setup do
       @gemspec = mock
       @metadata.stubs(:gemspec).returns(@gemspec)
+    end
+
+    should 'obtain gem name from gemspec' do
+      @gemspec.stubs(:name).returns('weird')
+      assert_equal 'weird', @metadata.name
+    end
+
+    should 'obtain gem version from gemspec' do
+      @gemspec.stubs(:version).returns(Gem::Version.new('0.0.1'))
+      assert_equal '0.0.1', @metadata.version
     end
 
     should 'obtain homepage from gemspec' do

@@ -25,6 +25,7 @@ module Gem2Deb
     attr_reader :native_extensions
 
     def initialize(directory)
+      @source_dir = File.expand_path(directory)
       Dir.chdir(directory) do
         load_gemspec
         if gemspec
@@ -37,6 +38,14 @@ module Gem2Deb
 
     def has_native_extensions?
       native_extensions.size > 0
+    end
+
+    def name
+      @name ||= gemspec && gemspec.name || read_name_from(source_dir)
+    end
+
+    def version
+      @version ||= gemspec && gemspec.version.to_s || read_version_from(source_dir) || '0.1.0~FIXME'
     end
 
     def homepage
@@ -61,6 +70,8 @@ module Gem2Deb
 
     protected
 
+    attr_reader :source_dir
+
     def load_gemspec
       if File.exists?('metadata.yml')
         @gemspec = YAML.load_file('metadata.yml')
@@ -84,6 +95,28 @@ module Gem2Deb
 
     def initialize_without_gemspec
       @native_extensions = Dir.glob('**/extconf.rb') + Dir.glob('ext/**/{configure,Rakefile}')
+    end
+
+    # FIXME duplicated logic (see below)
+    def read_name_from(directory)
+      return nil if directory.nil?
+      basename = File.basename(directory)
+      if basename =~ /^(.*)-([0-9.]+)$/
+        $1
+      else
+        basename
+      end
+    end
+
+    # FIXME duplicated logic (see above)
+    def read_version_from(directory)
+      return nil if directory.nil?
+      basename = File.basename(directory)
+      if basename =~ /^(.*)-([0-9.]+)$/
+        $2
+      else
+        nil
+      end
     end
 
   end

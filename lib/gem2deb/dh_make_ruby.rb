@@ -73,8 +73,8 @@ module Gem2Deb
     def initialize_from_directory(directory)
       self.input_directory = directory
       read_metadata(directory)
-      self.gem_name = metadata.gemspec.name
-      self.gem_version = metadata.gemspec.version.to_s
+      self.gem_name = metadata.name
+      self.gem_version = metadata.version
       self.source_package_name ||= gem_name_to_source_package_name(gem_name)
     end
 
