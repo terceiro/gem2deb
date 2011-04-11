@@ -95,12 +95,48 @@ class Gem2DebTestCase < Test::Unit::TestCase
     end
   end
 
-  def self.silence_all_output
-    silence_stream(STDOUT) do
-      silence_stream(STDERR) do
-        yield
-      end
+  # Runs a command with the current (in-development) gem2deb environment
+  # loaded. PATH, PERL5LIB and RUBYLIB environment variables are tweaked to
+  # make sure that everything that comes from gem2deb has precedence over
+  # system-wide installed versions.
+  def self.run_command(cmd)
+    # setup Perl lib for debhelper7
+    perl5lib = File.join(tmpdir, 'perl5')
+    debhelper_buildsystems = File.join(perl5lib, 'Debian/Debhelper/Buildsystem')
+    FileUtils.mkdir_p debhelper_buildsystems
+    FileUtils.cp "#{GEM2DEB_ROOT_SOURCE_DIR}/debhelper7/buildsystem/ruby.pm", debhelper_buildsystems
+    debhelper_sequences = File.join(perl5lib, 'Debian/Debhelper/Sequence')
+    FileUtils.mkdir_p debhelper_sequences
+    FileUtils.cp "#{GEM2DEB_ROOT_SOURCE_DIR}/debhelper7/sequence/ruby.pm", debhelper_sequences
+
+    # setup the environment
+    ENV['PERL5LIB'] = perl5lib
+    ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
+    ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
+
+    @run_command_id ||= -1
+    @run_command_id += 1
+
+    # run the command
+    stdout = File.join(tmpdir, 'stdout.' + self.name + '.' + @run_command_id.to_s)
+    stderr = File.join(tmpdir, 'stderr.' + self.name + '.' + @run_command_id.to_s)
+    error = nil
+    system("#{cmd} >#{stdout} 2>#{stderr}")
+    if $?.exitstatus != 0
+      error = "Command [#{cmd}] failed!\n"
+      error << "Standard output:\n" << File.read(stdout).lines.map { |line| "  #{line}"}.join
+      error << "Standard error:\n" << File.read(stderr).lines.map { |line| "  #{line}"}.join
     end
+    FileUtils.rm_f(stdout)
+    FileUtils.rm_f(stderr)
+    if error
+      raise error
+    end
+  end
+
+  # See above
+  def run_command(cmd)
+    self.class.run_command(cmd)
   end
 
 end
