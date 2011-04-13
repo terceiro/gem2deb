@@ -4,6 +4,8 @@ gem2deb (0.2.2) UNRELEASED; urgency=low
   * Add support for env-var DH_RUBY_GEMSPEC to specify the .gemspec.
   * Support running dh-make-ruby over a directory.
   * Fix: don't create native packages by default.
+  * Remove identical duplicate files installed by rubygems in the
+    arch-specific dir.
 
  -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Sat, 09 Apr 2011 12:29:17 +0200
 

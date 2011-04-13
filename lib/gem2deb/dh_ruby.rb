@@ -34,6 +34,7 @@
 require 'gem2deb'
 require 'gem2deb/metadata'
 require 'find'
+require 'fileutils'
 
 module Gem2Deb
 
@@ -108,6 +109,14 @@ module Gem2Deb
         supported_versions.each do |rubyver|
           puts "Building extension for #{rubyver} ..." if @verbose
           run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
+
+          # Remove duplicate files installed by rubygems in the arch dir
+          # This is a hack to workaround a problem in rubygems
+          vendor_dir = File.join(destdir_for(package), RUBY_CODE_DIR)
+          vendor_arch_dir = File.join(destdir_for(package), `#{SUPPORTED_RUBY_VERSIONS[rubyver]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.chomp)
+          if File::exists?(vendor_dir) and File::exists?(vendor_arch_dir)
+            remove_duplicate_files(vendor_dir, vendor_arch_dir)
+          end
           # run tests for this version of ruby
           if not run_tests(rubyver)
             supported_versions.delete(rubyver)
@@ -136,6 +145,28 @@ module Gem2Deb
     end
 
     protected
+
+    def remove_duplicate_files(src, dst)
+      candidates = (Dir::entries(src) & Dir::entries(dst)) - ['.', '..']
+      candidates.each do |cand|
+        if File::file?(File.join(src, cand)) and File::file?(File.join(dst, cand)) and IO::read(File.join(src, cand)) == IO::read(File.join(dst, cand))
+          FileUtils::Verbose.rm(File.join(dst, cand))
+        elsif File::directory?(File.join(src, cand)) and File::directory?(File.join(dst, cand))
+          files_src = files_dst = nil
+          Dir::chdir(File.join(src, cand)) do
+            files_src = Dir::glob('**/*', File::FNM_DOTMATCH).sort
+          end
+          Dir::chdir(File.join(dst, cand)) do
+            files_dst = Dir::glob('**/*', File::FNM_DOTMATCH).sort
+          end
+          if files_src == files_dst
+            if files_src.all? { |f| File.ftype(File.join(src, f)) == File.ftype(File.join(dst, f)) and (not File.file?(File.join(src, f)) or IO::read(File.join(src, cand)) == IO::read(File.join(dst, cand))) }
+              FileUtils::Verbose.rm_rf(File.join(dst, cand))
+            end
+          end
+        end
+      end
+    end
 
     def check_rubygems
       if skip_checks?
