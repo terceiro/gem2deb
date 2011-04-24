@@ -1,0 +1,149 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+	"/usr/share/sgml/docbook/dtd/4.1/docbook.dtd"
+[
+<!ENTITY must "<emphasis>must</emphasis>">
+<!ENTITY mustnot "<emphasis>must not</emphasis>">
+<!ENTITY may "<emphasis>may</emphasis>">
+<!ENTITY should "<emphasis>should</emphasis>">
+<!ENTITY debian-policy "http://www.debian.org/doc/debian-policy">
+<!ENTITY dr-ldo "<email>debian-ruby@lists.debian.org</email>">
+]>
+
+<!-- 
+  This is the Debian Ruby Policy
+
+  Copyright 2011 by Vincent Fourmond
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  This document is greatly inspired from the Debian Java Policy
+ -->
+<book>
+  <bookinfo>
+    <title>Debian Ruby policy</title>
+    <authorgroup>
+      <author>
+	<surname>Fourmond</surname>
+	<firstname>Vincent</firstname>
+	<authorblurb>
+	  <para>
+	    <email>fourmond@debian.org</email>
+	  </para>
+	</authorblurb>
+      </author>
+      <author>
+	<authorblurb>
+	  <para>
+	    Most issues of the java policy have been discussed on the
+	    &dr-ldo; mailinglist.
+	  </para>
+	</authorblurb>
+      </author>
+    </authorgroup>
+    <abstract>
+      <title>Abstract</title>
+      <para>
+	This is the ruby policy for Debian. 
+      </para>
+    </abstract>
+  </bookinfo>
+  
+  <chapter id="background">
+    <title>Background</title>
+    
+    <para>
+      There are several <quote>subpolicies</quote> in Debian.  Their
+      purpose is to provide guidelines and packaging requirements in
+      addition to the <ulink url="&debian-policy;">Debian
+      Policy</ulink> when specific topic are concerned, such as
+      packages providing Perl libraries, Emacs extensions...
+    </para>
+
+    <para>
+      Similarly to the other subpolicies, the aim of the Debian Ruby
+      Policy is to unify the packaging of Ruby libraries and programs
+      under a single well-defined structure that packagers and users
+      alike can rely on.
+    </para>
+      
+    
+    <para>
+      As packaging practices and Ruby-related technologies evolve over
+      time, this Policy is to some extent a permanent
+      <quote>work-in-progress</quote>. Please feel free to comment and
+      suggest improvements on the &dr-ldo; mailing list.
+    </para>
+
+  </chapter>
+  
+  <chapter id="policy">
+    <title>Policy</title>
+
+    <para>
+      Only the present chapter contains the actual policy,
+      i.e. normative statements about how Ruby-related packages should
+      be organized. The verbs &must;, &mustnot;, &may; and ;&should;
+      are used with the same meanings as in the <ulink
+      url="&debian-policy;">Debian Policy</ulink>.
+    </para>
+
+    <para>
+      Here a descroiption of the main points
+    </para>
+    
+    <sect1 id="interpreters">
+      <title>Ruby interpreters</title>
+      
+      <para>
+	Requirements for the interpreters (load path, virtual packages
+	provided...)
+      </para>
+    </sect1>
+    
+    <sect1 id="programs">
+      <title>Ruby programs</title>
+      
+      <para>
+	Requirements for programs. (shebang, dependencies)
+      </para>
+    </sect1>
+    
+    <sect1 id="libraries">
+      <title>Ruby libraries</title>
+      
+      <para>
+	package naming conventions, single package for all versions, 
+
+	Use of transition packages for old libraries
+
+	rdoc/ri and so on ?
+      </para>
+    </sect1>
+
+  </chapter>
+   
+  <chapter id="advices">
+    <title>Advices to Ruby packagers</title>
+    
+    <para>
+      The contents of this chapter are not part of the Policy per
+      se. However, they should prove useful for developers wishing to
+      package Ruby-related packages.
+    </para>
+    
+    
+  </chapter>
+  
+</book>
