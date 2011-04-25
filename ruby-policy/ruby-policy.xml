@@ -6,6 +6,7 @@
 <!ENTITY mustnot "<emphasis>must not</emphasis>">
 <!ENTITY may "<emphasis>may</emphasis>">
 <!ENTITY should "<emphasis>should</emphasis>">
+<!ENTITY pkg "<emphasis>pkg</emphasis>">
 <!ENTITY debian-policy "http://www.debian.org/doc/debian-policy">
 <!ENTITY dr-ldo "<email>debian-ruby@lists.debian.org</email>">
 ]>
@@ -77,6 +78,17 @@
       under a single well-defined structure that packagers and users
       alike can rely on.
     </para>
+
+    <para>
+      An important feature of Ruby is that there are quite a few
+      different implentations of the Ruby language, first of all the
+      different versions of the mainstream implementation (1.8 and
+      1.9.2), but also other implementations, such as JRuby and
+      Rubinius for instance. One of the aims of this policy is to make
+      it as painless as possible for different versions of the Ruby
+      language to coexist and to share code (in as far as it is
+      technically possible).
+    </para>
       
     
     <para>
@@ -94,7 +106,7 @@
     <para>
       Only the present chapter contains the actual policy,
       i.e. normative statements about how Ruby-related packages should
-      be organized. The verbs &must;, &mustnot;, &may; and ;&should;
+      be organized. The verbs &must;, &mustnot;, &may; and &should;
       are used with the same meanings as in the <ulink
       url="&debian-policy;">Debian Policy</ulink>.
     </para>
@@ -111,6 +123,107 @@
 	provided...)
       </para>
     </sect1>
+
+    <sect1 id="libraries">
+      <title>Ruby libraries</title>
+
+      <para>
+	By library, we mean <quote>every package that contains ruby
+	code and is not a Ruby interpreter</quote>. In particular,
+	this also includes programs not necessarily meant to be used
+	as libraries. For programs additional requirements and/or
+	relaxing of some requirements listed here apply, see next
+	section.
+      </para>
+
+      <para>
+	rdoc/ri and so on ?
+
+	
+      </para>
+
+      <sect2>
+	<title>Package names</title>
+	<para>
+	  All packages that contains Ruby code &must; have a package
+	  name in the form <literal>ruby-</literal>&pkg;, where &pkg;
+	  is left to the choice of the packager. However, packagers
+	  &may; ignore this rule in the following cases:
+	  <itemizedlist>
+	    <listitem>
+	      <para>
+		ruby interpreters;
+	      </para>
+	    </listitem>
+
+	    <listitem>
+	      <para>
+		programs;
+	      </para>
+	    </listitem>
+
+	    <listitem>
+	      <para>
+		packages providing ruby code to be use specifically as
+		plugins for a given program, and that have no use
+		outside of this program.
+	      </para>
+	    </listitem>
+	  </itemizedlist>
+	</para>
+	<para>
+	  In the case of software previoulsy relased with the old
+	  package name policy
+	  (<literal>lib-</literal>&pkg;<literal>-ruby</literal> and
+	  versioned variants thereof), packagers &should; provide
+	  transition packages with the old names depending on the new
+	  package.
+	</para>
+      </sect2>
+
+      <sect2>
+	<title>Supported ruby implementations</title>
+	<para>
+	  Packages &should; support as many different implementations
+	  of Ruby as is possible. Reasons why this is not done
+	  &should; be documented visibly, such as in the
+	  <filename>README.Debian</filename> file.
+	</para>
+	<para>
+	  Packages &must; list the versions of Ruby supported in the
+	  source package using the <literal>XS-Ruby-Versions</literal>
+	  statement in <filename>debian/control</filename>. This
+	  statement &must; be a space-separated list of one or more of
+	  <literal>ruby1.8</literal>, <literal>ruby1.9</literal> or
+	  <literal>all</literal> (the latter meaning all the supported
+	  Ruby versions).
+	</para>
+	<para>
+	  All files for the different implementations &must; be
+	  shipped inside a single binary package. This binary package
+	  &must; have a <literal>XB-Ruby-Versions</literal> statement
+	  containing the space-separated list of Ruby implementations
+	  supported by the binary package, with fields identical to
+	  those for the source package, excepted that
+	  <literal>all</literal> cannot be used: the full list &must;
+	  be listed explicitly.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Installation paths</title>
+	<para>
+	  ??
+	</para>
+      </sect2>
+
+      <sect2>
+	<title>Documentation</title>
+	<para>
+	  ??
+	</para>
+      </sect2>
+      
+    </sect1>
     
     <sect1 id="programs">
       <title>Ruby programs</title>
@@ -120,17 +233,6 @@
       </para>
     </sect1>
     
-    <sect1 id="libraries">
-      <title>Ruby libraries</title>
-      
-      <para>
-	package naming conventions, single package for all versions, 
-
-	Use of transition packages for old libraries
-
-	rdoc/ri and so on ?
-      </para>
-    </sect1>
 
   </chapter>
    
