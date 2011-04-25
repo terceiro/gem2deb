@@ -145,10 +145,10 @@
       <sect2>
 	<title>Package names</title>
 	<para>
-	  All packages that contains Ruby code &must; have a package
-	  name in the form <literal>ruby-</literal>&pkg;, where &pkg;
-	  is left to the choice of the packager. However, packagers
-	  &may; ignore this rule in the following cases:
+	  All binary packages that contains Ruby code &must; have a
+	  package name in the form <literal>ruby-</literal>&pkg;,
+	  where &pkg; is left to the choice of the packager. However,
+	  packagers &may; ignore this rule in the following cases:
 	  <itemizedlist>
 	    <listitem>
 	      <para>
@@ -170,6 +170,8 @@
 	      </para>
 	    </listitem>
 	  </itemizedlist>
+	  The source package name &should; match the name of package
+	  that holds the code.
 	</para>
 	<para>
 	  In the case of software previoulsy relased with the old
@@ -182,7 +184,7 @@
       </sect2>
 
       <sect2>
-	<title>Supported ruby implementations</title>
+	<title>Supported Ruby implementations</title>
 	<para>
 	  Packages &should; support as many different implementations
 	  of Ruby as is possible. Reasons why this is not done
@@ -212,14 +214,22 @@
       <sect2>
 	<title>Installation paths</title>
 	<para>
-	  ??
+	  Pure ruby code (ie ruby files) &must; be installed under
+	  <filename>/usr/lib/ruby/vendor_ruby</filename>.
+	</para>
+	<para>
+	  Compiled extensions &must; be installed in the
+	  <literal>'vendorarchdir'</literal> path.
 	</para>
       </sect2>
 
       <sect2>
 	<title>Documentation</title>
 	<para>
-	  ??
+	  Packages &may; build a <literal>rdoc</literal>
+	  documentation. Unless the documentation is really small, it
+	  &should; be packaged in a separated binary package named
+	  <literal>ruby-</literal>&pkg;<literal>-doc</literal>.
 	</para>
       </sect2>
       
