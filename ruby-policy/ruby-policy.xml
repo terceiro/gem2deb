@@ -33,7 +33,7 @@
  -->
 <book>
   <bookinfo>
-    <title>Debian Ruby policy</title>
+    <title>Debian Ruby policy draft</title>
     <authorgroup>
       <author>
 	<surname>Fourmond</surname>
@@ -45,10 +45,14 @@
 	</authorblurb>
       </author>
       <author>
+	<othername>the Debian Ruby mailing list</othername>
 	<authorblurb>
 	  <para>
-	    Most issues of the java policy have been discussed on the
-	    &dr-ldo; mailinglist.
+	    &dr-ldo;
+	  </para>
+	  <para>
+	    Most of the points of this document were discussed in the
+	    Debian Ruby mailing list.
 	  </para>
 	</authorblurb>
       </author>
@@ -136,12 +140,6 @@
 	section.
       </para>
 
-      <para>
-	rdoc/ri and so on ?
-
-	
-      </para>
-
       <sect2>
 	<title>Package names</title>
 	<para>
@@ -224,12 +222,30 @@
       </sect2>
 
       <sect2>
+	<title>Dependencies</title>
+	<para>
+	  All package &must; depend either on <literal>ruby1.8 |
+	  ruby-interpreter</literal> if the package supports all
+	  implementations of Ruby or on the specific implementations
+	  needed if that is not the case.
+	</para>
+      </sect2>
+
+      <sect2>
 	<title>Documentation</title>
 	<para>
 	  Packages &may; build a <literal>rdoc</literal>
 	  documentation. Unless the documentation is really small, it
-	  &should; be packaged in a separated binary package named
+	  &should; be packaged in a separate binary package named
 	  <literal>ruby-</literal>&pkg;<literal>-doc</literal>.
+	</para>
+      </sect2>
+
+      <sect2>
+	<title>Rubygems</title>
+	<para>
+	  Do we disallow the use of <literal>require
+	  'rubygems'</literal> by policy ?
 	</para>
       </sect2>
       
@@ -237,10 +253,23 @@
     
     <sect1 id="programs">
       <title>Ruby programs</title>
-      
+
       <para>
-	Requirements for programs. (shebang, dependencies)
+	Excepted for the package name, which does not have to comply
+	to any rules, Ruby programs &must; obey all rules that apply
+	to Ruby libraries (previous sections).  In addition, they must
+	obey the following rules.
       </para>
+
+      <sect2>
+	<title>Shebang</title>
+	<para>
+	  All the programs &must; have a <literal>#!
+	  /usr/bin/ruby1.8</literal> shebang, unless they rely on
+	  implementation specific libraries, in which case the shebang
+	  should reflect these requirements.
+	</para>
+      </sect2>
     </sect1>
     
 
@@ -253,6 +282,10 @@
       The contents of this chapter are not part of the Policy per
       se. However, they should prove useful for developers wishing to
       package Ruby-related packages.
+    </para>
+
+    <para>
+      Nothing here yet.
     </para>
     
     
