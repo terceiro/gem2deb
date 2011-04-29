@@ -64,20 +64,24 @@ module Gem2Deb
     end
     
     def clean
-      puts "Entering dh_ruby --clean" if @verbose
+      puts "  Entering dh_ruby --clean" if @verbose
       run_make_clean_on_extensions
+      puts "  Leaving dh_ruby --clean" if @verbose
     end
 
     def configure
-      # puts "Entering dh_ruby --configure" if @verbose
+      # puts "  Entering dh_ruby --configure" if @verbose
+      # puts "  Leaving dh_ruby --configure" if @verbose
     end
 
     def build
-      # puts "Entering dh_ruby --build" if @verbose
+      # puts "  Entering dh_ruby --build" if @verbose
+      # puts "  Leaving dh_ruby --build" if @verbose
     end
 
     def test
-      # puts "Entering dh_ruby --test" if @verbose
+      # puts "  Entering dh_ruby --test" if @verbose
+      # puts "  Leaving dh_ruby --test" if @verbose
     end
 
     EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
@@ -85,7 +89,7 @@ module Gem2Deb
     LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
     def install(argv)
-      puts "Entering dh_ruby --install" if @verbose
+      puts "  Entering dh_ruby --install" if @verbose
 
       package = packages.first
 
@@ -133,6 +137,7 @@ module Gem2Deb
       #       issue warnings
 
       check_rubygems
+      puts "  Leaving dh_ruby --install" if @verbose
     end
 
     protected
