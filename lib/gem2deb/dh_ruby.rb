@@ -247,6 +247,16 @@ module Gem2Deb
         cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb"
         puts(cmd) if $VERBOSE
         system(cmd)
+      elsif File::exists?('debian/ruby-tests.rake')
+        puts "Running tests for #{rubyver} using debian/ruby-tests.rake..."
+        cmd = [
+          SUPPORTED_RUBY_VERSIONS[rubyver],
+          '-rrake',
+          '-e',
+          'ARGV.unshift("-f", "debian/ruby-tests.rake"); Rake.application.run'
+        ]
+        puts(cmd.join(' ')) if $VERBOSE
+        system(*cmd)
       else
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
       end
