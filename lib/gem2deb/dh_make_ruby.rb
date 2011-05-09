@@ -267,7 +267,7 @@ module Gem2Deb
         self.architecture = architecture
       end
       def dependencies
-        ['${shlibs:Depends}', '${misc:Depends}', 'ruby1.8 | ruby-interpreter' ]
+        ['${shlibs:Depends}', '${misc:Depends}', 'ruby | ruby-interpreter' ]
       end
       def gem_dependencies
 	@gem_dependencies ||= []
