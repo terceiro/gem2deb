@@ -47,6 +47,8 @@ module Gem2Deb
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
 
+    RUBY_BINARY = '/usr/bin/ruby'
+
     DEFAULT_RUBY_VERSION = 'ruby1.8'
 
     RUBY_CODE_DIR = '/usr/lib/ruby/vendor_ruby'
@@ -317,8 +319,16 @@ module Gem2Deb
     end
 
     def update_shebangs(package)
-      rubyver = DEFAULT_RUBY_VERSION
-      ruby_binary = SUPPORTED_RUBY_VERSIONS[rubyver] || SUPPORTED_RUBY_VERSIONS[DEFAULT_RUBY_VERSION]
+      ruby_binary =
+        if all_ruby_versions_supported?
+          RUBY_BINARY
+        else
+          SUPPORTED_RUBY_VERSIONS[ruby_versions.first]
+        end
+      rewrite_shebangs(package, ruby_binary)
+    end
+
+    def rewrite_shebangs(package, ruby_binary)
       Dir.glob(File.join(destdir_for(package), @bindir, '*')).each do |path|
         puts "Rewriting shebang line of #{path}" if @verbose
         atomic_rewrite(path) do |input, output|

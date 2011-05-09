@@ -25,7 +25,7 @@ class DhRubyTest < Gem2DebTestCase
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
     end
     should 'rewrite shebang of installed programs' do
-      assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first.strip
+      assert_match %r(#!/usr/bin/ruby), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first
     end
   end
 
@@ -43,9 +43,6 @@ class DhRubyTest < Gem2DebTestCase
         installed_so = installed_file_path(SIMPLE_EXTENSION_DIRNAME, "ruby-simpleextension", target_so)
         assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
       end
-    end
-    should "update the shebang to use the default ruby version" do
-      assert_match %r(#!/usr/bin/ruby1.8), read_installed_file(SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', '/usr/bin/simpleextension').lines.first.strip
     end
   end
 
@@ -106,6 +103,16 @@ class DhRubyTest < Gem2DebTestCase
     should 'known when not all versions are supported' do
       @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
       assert_equal false, @dh_ruby.send(:all_ruby_versions_supported?)
+    end
+    should 'rewrite shebang to use /usr/bin/ruby if all versions are supported' do
+      @dh_ruby.stubs(:all_ruby_versions_supported?).returns(true)
+      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/ruby')
+      @dh_ruby.send(:update_shebangs, 'foo')
+    end
+    should 'rewrite shebang to usr /usr/bin/ruby1.8 if only 1.8 is supported' do
+      @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
+      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/ruby1.8')
+      @dh_ruby.send(:update_shebangs, 'foo')
     end
   end
 
