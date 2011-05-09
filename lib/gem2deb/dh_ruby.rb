@@ -92,22 +92,19 @@ module Gem2Deb
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
 
+      supported_versions =
+        if all_ruby_versions_supported?
+          SUPPORTED_RUBY_VERSIONS.keys.clone
+        else
+          ruby_versions.clone
+        end
+
       package = packages.first
 
       install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
 
       install_files('lib', find_files('lib'), File.join(destdir_for(package), RUBY_CODE_DIR), 644) if File::directory?('lib')
 
-      # find ruby versions to build the package for.
-      l = IO::readlines('debian/control').grep(/^XS-Ruby-Versions: /)
-      if l.empty?
-        puts "No XS-Ruby-Versions: field found in source!"
-        exit(1)
-      end
-      supported_versions = l[0].split[1..-1]
-      if supported_versions.include?('all')
-        supported_versions = SUPPORTED_RUBY_VERSIONS.keys
-      end
 
       if metadata.has_native_extensions?
         supported_versions.each do |rubyver|
@@ -351,6 +348,24 @@ module Gem2Deb
 
     def packages
       @packages ||= `dh_listpackages`.split
+    end
+
+    def ruby_versions
+      @ruby_versions ||=
+        begin
+          # find ruby versions to build the package for.
+          lines = File.readlines('debian/control').grep(/^XS-Ruby-Versions: /)
+          if lines.empty?
+            puts "No XS-Ruby-Versions: field found in source!" if @verbose
+            exit(1)
+          else
+            lines.first.split[1..-1]
+          end
+        end
+    end
+
+    def all_ruby_versions_supported?
+      ruby_versions.include?('all')
     end
 
     def run_make_clean_on_extensions

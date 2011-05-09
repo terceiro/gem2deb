@@ -85,6 +85,30 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'versions supported' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+    should 'bail out if XS-Ruby-Versions is not found' do
+      File.expects(:readlines).with('debian/control').returns([])
+      @dh_ruby.expects(:exit).with(1)
+      @dh_ruby.send(:ruby_versions)
+    end
+    should 'read supported versions from debian/control' do
+      File.expects(:readlines).with('debian/control').returns(["XS-Ruby-Versions: all\n"])
+      assert_equal ['all'], @dh_ruby.send(:ruby_versions)
+    end
+    should 'known when all versions are supported' do
+      @dh_ruby.stubs(:ruby_versions).returns(['all'])
+      assert_equal true, @dh_ruby.send(:all_ruby_versions_supported?)
+    end
+    should 'known when not all versions are supported' do
+      @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
+      assert_equal false, @dh_ruby.send(:all_ruby_versions_supported?)
+    end
+  end
+
   protected
 
   def assert_installed(gem_dirname, package, path)
