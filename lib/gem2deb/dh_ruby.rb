@@ -125,9 +125,7 @@ module Gem2Deb
 
       run_tests(supported_versions)
 
-      File::open("debian/#{package}.substvars", "a") do |fd|
-        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
-      end
+      install_substvars(package, supported_versions)
 
       update_shebangs(package)
 
@@ -263,6 +261,12 @@ module Gem2Deb
         return false
       else
         return true
+      end
+    end
+
+    def install_substvars(package, supported_versions)
+      File.open("debian/#{package}.substvars", "a") do |fd|
+        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
       end
     end
 
