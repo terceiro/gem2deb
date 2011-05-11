@@ -120,20 +120,10 @@ module Gem2Deb
           if File::exists?(vendor_dir) and File::exists?(vendor_arch_dir)
             remove_duplicate_files(vendor_dir, vendor_arch_dir)
           end
-          # run tests for this version of ruby
-          if not run_tests(rubyver)
-            supported_versions.delete(rubyver)
-          end
-        end
-      else
-        # run tests for all versions
-        tested_versions = supported_versions
-        tested_versions.each do |rubyver|
-          if not run_tests(rubyver)
-            supported_versions.delete(rubyver)
-          end
         end
       end
+
+      run_tests(supported_versions)
 
       File::open("debian/#{package}.substvars", "a") do |fd|
         fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
@@ -231,7 +221,15 @@ module Gem2Deb
       end
     end
 
-    def run_tests(rubyver)
+    def run_tests(supported_versions)
+      supported_versions.each do |rubyver|
+        if !run_tests_for_version(rubyver)
+          supported_versions.delete(rubyver)
+        end
+      end
+    end
+
+    def run_tests_for_version(rubyver)
       if skip_checks?
         return
       end
