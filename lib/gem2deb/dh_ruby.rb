@@ -103,10 +103,25 @@ module Gem2Deb
 
       package = packages.first
 
+      install_files_and_build_extensions(package, supported_versions)
+
+      run_tests(supported_versions)
+
+      install_substvars(package, supported_versions)
+
+      update_shebangs(package)
+
+      check_rubygems
+
+      puts "  Leaving dh_ruby --install" if @verbose
+    end
+
+    protected
+
+    def install_files_and_build_extensions(package, supported_versions)
       install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
 
       install_files('lib', find_files('lib'), File.join(destdir_for(package), RUBY_CODE_DIR), 644) if File::directory?('lib')
-
 
       if metadata.has_native_extensions?
         supported_versions.each do |rubyver|
@@ -122,21 +137,7 @@ module Gem2Deb
           end
         end
       end
-
-      run_tests(supported_versions)
-
-      install_substvars(package, supported_versions)
-
-      update_shebangs(package)
-
-      # FIXME after install, check for require 'rubygems' and other stupid things, and
-      #       issue warnings
-
-      check_rubygems
-      puts "  Leaving dh_ruby --install" if @verbose
     end
-
-    protected
 
     def remove_duplicate_files(src, dst)
       candidates = (Dir::entries(src) & Dir::entries(dst)) - ['.', '..']
