@@ -17,13 +17,21 @@
 
 require 'gem2deb'
 require 'gem2deb/dh_ruby'
+require 'gem2deb/dh_ruby_setuprb'
 require 'optparse'
 include Gem2Deb
+
+cls = DhRuby
+
 
 optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show help') do
     puts opts
     exit
+  end
+
+  opts.on('', '--setuprb', 'use setup.rb for installation') do
+    cls = DhRubySetupRb
   end
 
   opts.on('-v', '--version', 'show dh_ruby version') do
@@ -32,27 +40,27 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('', '--clean', 'debhelper clean helper') do
-    DhRuby::new.clean
+    cls.new.clean
     exit(0)
   end
 
   opts.on('', '--configure', 'debhelper configure helper') do
-    DhRuby::new.configure
+    cls.new.configure
     exit(0)
   end
 
   opts.on('', '--build', 'debhelper build helper') do
-    DhRuby::new.build
+    cls.new.build
     exit(0)
   end
 
   opts.on('', '--test', 'debhelper test helper') do
-    DhRuby::new.test
+    cls.new.test
     exit(0)
   end
 
   opts.on('', '--install', 'debhelper install helper') do
-    DhRuby::new.install(ARGV)
+    cls.new.install(ARGV)
     exit(0)
   end
 end
