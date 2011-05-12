@@ -100,6 +100,12 @@ Displays B<dh_ruby> usage information.
 
 Displays B<dh_ruby> version information.
 
+=item B<--setuprb>
+
+This option indicates that the build should use I<setup.rb> rather
+than the usual gem-based build. To take effect, this option must come
+first !
+
 =back
 
 =head1 SEE ALSO
