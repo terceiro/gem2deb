@@ -100,10 +100,32 @@ module Gem2Deb
 
     protected
 
-    def install_files_and_build_extensions(package, supported_versions)
-      install_files('bin', find_files('bin'), File.join(destdir_for(package), @bindir),             755) if File::directory?('bin')
+    # This function returns the installation path for the given
+    # package and the given "component", which is one of:
+    # * :bindir
+    # * :libdir
+    # * :archdir
+    # * :prefix
+    #
+    # _rubyver_ is the ruby version, needed only for :archdir for now.
+    def destdir(package, which, rubyver = nil)
+      case which
+      when :bindir
+        return File.join(destdir_for(package), @bindir)
+      when :libdir
+        return File.join(destdir_for(package), RUBY_CODE_DIR)
+      when :archdir
+        return File.join(destdir_for(package), `#{SUPPORTED_RUBY_VERSIONS[rubyver]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.chomp)
+      when :prefix
+        return File.join(destdir_for(package), "usr/")
+      end
+    end
 
-      install_files('lib', find_files('lib'), File.join(destdir_for(package), RUBY_CODE_DIR), 644) if File::directory?('lib')
+
+    def install_files_and_build_extensions(package, supported_versions)
+      install_files('bin', find_files('bin'), destdir(package, :bindir), 755) if File::directory?('bin')
+
+      install_files('lib', find_files('lib'), destdir(package, :libdir), 644) if File::directory?('lib')
 
       if metadata.has_native_extensions?
         supported_versions.each do |rubyver|
@@ -112,8 +134,8 @@ module Gem2Deb
 
           # Remove duplicate files installed by rubygems in the arch dir
           # This is a hack to workaround a problem in rubygems
-          vendor_dir = File.join(destdir_for(package), RUBY_CODE_DIR)
-          vendor_arch_dir = File.join(destdir_for(package), `#{SUPPORTED_RUBY_VERSIONS[rubyver]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.chomp)
+          vendor_dir = destdir(package, :libdir)
+          vendor_arch_dir = destdir(package, :archdir, rubyver)
           if File::exists?(vendor_dir) and File::exists?(vendor_arch_dir)
             remove_duplicate_files(vendor_dir, vendor_arch_dir)
           end
