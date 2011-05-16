@@ -44,7 +44,8 @@ module Gem2Deb
 
 
     def run_tests(supported_versions)
-      puts "Running tests is currently not supported for ruby_setuprb"
+      # Todo: we should first check for setup-rb specific tests.
+      super
     end
 
 
