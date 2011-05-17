@@ -1,3 +1,9 @@
+gem2deb (0.2.4) UNRELEASED; urgency=low
+
+  * Set the team as maintainer, move myself to Uploaders.
+
+ -- Lucas Nussbaum <lucas@lucas-nussbaum.net>  Tue, 17 May 2011 22:35:01 +0200
+
 gem2deb (0.2.3) unstable; urgency=low
 
   [ Daigo Moriwaki ]
