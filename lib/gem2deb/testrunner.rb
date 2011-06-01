@@ -16,24 +16,26 @@
 require 'gem2deb'
 require 'yaml'
 
+require 'rbconfig'
+
 module Gem2Deb
   class TestRunner
     def initialize
       @test_files = YAML.load_file('debian/ruby-test-files.yaml')
 
-      $: << File::expand_path('lib')
-      if File::directory?('ext')
-        $: << File::expand_path('ext')
-        # also add subdirs of ext/
-        (Dir::entries('ext') - ['.', '..']).each do |e|
-          if File::directory?(File.join('ext', e))
-            $: << File::expand_path(File.join('ext',e))
-          end
-        end
-      end
-      $: << File::expand_path('test') if File::directory?('test')
-      $: << File::expand_path('spec') if File::directory?('spec')
-      $: << File::expand_path('.')
+      # We should only use installation paths for the current Ruby
+      # version.
+      #
+      # We assume that installation has already proceeded into
+      # subdirectories of the debian/ directory.
+
+      dirs = Dir["debian/*/usr/lib/ruby/vendor_ruby"]
+      dirs += Dir["debian/*" + RbConfig::CONFIG['vendorarchdir']]
+
+      $:.concat(dirs)
+
+      # And we add the current directory:
+      $: << "."
 
       @test_files.each do |f|
         require f

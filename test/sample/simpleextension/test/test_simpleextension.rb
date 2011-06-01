@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'simpleextension/simpleextension'
+require 'simpleextension'
 
 class SimpleExtensionTest < Test::Unit::TestCase
   def test_answer
