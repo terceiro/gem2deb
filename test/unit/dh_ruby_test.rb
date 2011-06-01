@@ -116,6 +116,23 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'checking for require "rubygems"' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+    should 'detect require "rubygems"' do
+      @dh_ruby.stubs(:ruby_source_files_in_package).returns(['test/sample/check_rubygems/bad.rb'])
+      @dh_ruby.expects(:handle_test_failure).once
+      @dh_ruby.send(:check_rubygems)
+    end
+    should 'not complain about commented require "rubygems"' do
+      @dh_ruby.stubs(:ruby_source_files_in_package).returns(['test/sample/check_rubygems/good.rb'])
+      @dh_ruby.expects(:handle_test_failure).never
+      @dh_ruby.send(:check_rubygems)
+    end
+  end
+
   protected
 
   def assert_installed(gem_dirname, package, path)

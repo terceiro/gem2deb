@@ -173,21 +173,25 @@ module Gem2Deb
       end
       packages.each do |pkg|
         pkg.chomp!
-        Dir["debian/#{pkg}/usr/lib/ruby/vendor_ruby/**/*.rb"].each do |f|
+        ruby_source_files_in_package(pkg).each do |f|
           lines = IO::readlines(f)
-          rglines = lines.select { |l| l =~ /require.*rubygems/ }
+          rglines = lines.select { |l| l =~ /require.*rubygems/  && l !~ /^\s*#/ }
           rglines.each do |l|
             if not overrides.include?(f)
-              puts "#{f}: #{l}"
+              puts "#{f}: #{l}" if @verbose
               found = true
             end
           end
         end
       end
       if found
-        puts "Found some 'require rubygems' without overrides (see above)."
+        puts "Found some 'require rubygems' without overrides (see above)." if @verbose
         handle_test_failure('require-rubygems')
       end
+    end
+
+    def ruby_source_files_in_package(pkg)
+      Dir["debian/#{pkg}/usr/lib/ruby/vendor_ruby/**/*.rb"]
     end
 
     def handle_test_failure(test)
