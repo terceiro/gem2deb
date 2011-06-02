@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: Lucas Nussbaum <lucas@lucas-nussbaum.net>, Antonio Terceiro <terceiro@softwarelivre.org>
 DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.0.50~), rake, libshoulda-ruby1.8, ruby-mocha, rubygems1.8, ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, devscripts
+Build-Depends: debhelper (>= 7.0.50~), rake, libshoulda-ruby1.8, ruby-mocha, rubygems1.8, ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, devscripts, ruby-setup
 Standards-Version: 3.9.2
 Vcs-Git: git://git.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/gem2deb.git;a=summary
