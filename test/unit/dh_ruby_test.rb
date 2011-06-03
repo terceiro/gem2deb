@@ -159,16 +159,8 @@ class DhRubyTest < Gem2DebTestCase
 
   protected
 
-  def assert_installed(gem_dirname, package, path)
-    assert_file_exists installed_file_path(gem_dirname, package, path)
-  end
-
   def read_installed_file(gem_dirname, package, path)
     File.read(installed_file_path(gem_dirname, package, path))
-  end
-
-  def installed_file_path(gem_dirname, package, path)
-    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
   end
 
   def self.build(gem, source_package)

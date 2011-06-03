@@ -83,6 +83,16 @@ class Gem2DebTestCase < Test::Unit::TestCase
     assert !File.exist?(path), "#{path} should NOT exist"
   end
 
+  # Installation-related functions
+
+  def installed_file_path(gem_dirname, package, path)
+    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
+  end
+
+  def assert_installed(gem_dirname, package, path)
+    assert_file_exists installed_file_path(gem_dirname, package, path)
+  end
+
   def self.silence_stream(stream)
     orig_stream = stream.clone
     begin

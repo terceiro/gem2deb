@@ -40,18 +40,6 @@ class DhRubySetuprbTest < Gem2DebTestCase
 
   protected
 
-  def assert_installed(gem_dirname, package, path)
-    assert_file_exists installed_file_path(gem_dirname, package, path)
-  end
-
-  def read_installed_file(gem_dirname, package, path)
-    File.read(installed_file_path(gem_dirname, package, path))
-  end
-
-  def installed_file_path(gem_dirname, package, path)
-    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
-  end
-
   def self.build(pkgname, source_package)
     package_path = File.join(tmpdir, 'ruby-' + source_package)
     tarball =  File.join(tmpdir, source_package + '.tar.gz')
