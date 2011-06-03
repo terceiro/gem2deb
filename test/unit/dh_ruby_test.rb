@@ -116,6 +116,30 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'rewriting shebangs' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+
+      FileUtils.cp_r('test/sample/rewrite_shebangs', self.class.tmpdir)
+      @dh_ruby.expects(:destdir_for).returns(self.class.tmpdir + '/rewrite_shebangs')
+
+      # The fact that this call does not crash means we won't crash when
+      # /usr/bin has subdirectories
+      @dh_ruby.send(:rewrite_shebangs, 'ruby-foo', '/usr/bin/ruby')
+    end
+    teardown do
+      FileUtils.rm_f(self.class.tmpdir + '/rewrite_shebangs')
+    end
+
+    should 'rewrite shebangs of programs directly under bin/' do
+      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+    end
+    should 'rewrite shebangs in subdirs of bin/' do
+      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
+    end
+  end
+
   context 'checking for require "rubygems"' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
