@@ -12,24 +12,6 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# TODO
-# ====
-# dh_ruby doesn't handle all the cases that setup.rb could handle. More work is needed.
-# see FIXME in the file.
-#
-# There's a number of things that this class needs to be able to do.
-#
-# dh_ruby should be configurable with a special file in debian/
-#   
-# dh_ruby must be able to detect and run test suites. alternatively, the maintainer
-# can provide a ruby script in debian/ that will start the test suite.
-# Test suites should run with each ruby interpreter.
-#
-# dh_ruby should do some checking (lintian-like) of ruby-specific stuff. For example,
-# it could search for "require 'rubygems'" in libraries, and display warnings
-#
-# dh_ruby could generate rdoc (not sure if we want this)
 
 require 'gem2deb'
 require 'gem2deb/metadata'
