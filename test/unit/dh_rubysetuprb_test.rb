@@ -57,12 +57,14 @@ class DhRubySetuprbTest < Gem2DebTestCase
     dh_ruby.verbose = false
 
     silence_stream(STDOUT) do
-      Dir.chdir(package_path) do
-        # This sequence tries to imitate what dh will actually do
-        dh_ruby.clean
-        dh_ruby.configure
-        dh_ruby.build
-        dh_ruby.install File.join(package_path, 'debian', 'tmp')
+      silence_stream(STDERR) do
+        Dir.chdir(package_path) do
+          # This sequence tries to imitate what dh will actually do
+          dh_ruby.clean
+          dh_ruby.configure
+          dh_ruby.build
+          dh_ruby.install File.join(package_path, 'debian', 'tmp')
+        end
       end
     end
   end
