@@ -2,7 +2,7 @@ Source: gem2deb
 Section: ruby
 Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
-Uploaders: Lucas Nussbaum <lucas@lucas-nussbaum.net>, 
+Uploaders: Lucas Nussbaum <lucas@debian.org>, 
            Antonio Terceiro <terceiro@softwarelivre.org>,
            Vincent Fourmond <fourmond@debian.org>
 DM-Upload-Allowed: yes
