@@ -11,7 +11,11 @@ gem2deb (0.2.4) UNRELEASED; urgency=low
   [ Lucas Nussbaum ]
   * Merge Ubuntu-specific change which is harmless on Debian.
 
- -- Lucas Nussbaum <lucas@debian.org>  Mon, 06 Jun 2011 11:21:44 +0200
+  [ Antonio Terceiro ]
+  * Do not crash when package creates subdirectories in /usr/bin (Closes: #629036)
+  * Shut up on commented 'require "rubygems"' lines (Closes: #628704)
+
+ -- Antonio Terceiro <terceiro@softwarelivre.org>  Mon, 06 Jun 2011 10:33:11 -0700
 
 gem2deb (0.2.3) unstable; urgency=low
 
