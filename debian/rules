@@ -5,7 +5,8 @@
 
 override_dh_auto_build:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	rake test
+	# NO_PKG_MANGLE=1 is only useful on Ubuntu buildds, to disable pkgbinarymangler
+	NO_PKG_MANGLE=1 rake test
 endif
 	mkdir -p man
 	for i in bin/*; do pod2man -c "" -r "" $$i > man/$$(basename $$i).1; done

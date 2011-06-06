@@ -8,7 +8,10 @@ gem2deb (0.2.4) UNRELEASED; urgency=low
   * Add a rubysetuprb build system for debhelper to build packages with
     setup.rb
 
- -- Vincent Fourmond <fourmond@debian.org>  Mon, 06 Jun 2011 09:47:44 +0200
+  [ Lucas Nussbaum ]
+  * Merge Ubuntu-specific change which is harmless on Debian.
+
+ -- Lucas Nussbaum <lucas@debian.org>  Mon, 06 Jun 2011 11:21:44 +0200
 
 gem2deb (0.2.3) unstable; urgency=low
 
