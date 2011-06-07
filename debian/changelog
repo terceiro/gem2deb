@@ -1,3 +1,9 @@
+gem2deb (0.2.5) UNRELEASED; urgency=low
+
+  * Replace libshoulda-ruby1.8 for ruby-shoulda-context in Build-Depends
+
+ -- Antonio Terceiro <terceiro@softwarelivre.org>  Mon, 06 Jun 2011 21:27:23 -0700
+
 gem2deb (0.2.4) unstable; urgency=low
 
   [ Lucas Nussbaum ]
