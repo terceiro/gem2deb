@@ -59,6 +59,15 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'installing Ruby files' do
+    should 'not crash when directories to be installed have names in the exclusion list' do
+      Dir.chdir('test/sample/install_files/') do
+        dh_ruby = Gem2Deb::DhRuby.new
+        dh_ruby.send(:install_files, 'lib', File.join(tmpdir, 'install_files_destdir'), 644)
+      end
+    end
+  end
+
   context 'skipping checks' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new

@@ -305,15 +305,13 @@ module Gem2Deb
       files_to_install = Dir.chdir(src) do
         Dir.glob('**/*').reject do |file|
           filename = File.basename(file)
-          DO_NOT_INSTALL.any? { |pattern| filename =~ pattern }
+          File.directory?(file) || DO_NOT_INSTALL.any? { |pattern| filename =~ pattern }
         end
       end
-      files_to_install.each do |fname|
-        if File::directory?(src + '/' + fname)
-          run "install -d #{dest + '/' + fname}"
-        else
-          run "install -m#{mode} #{src + '/' + fname} #{dest + '/' + fname}"
-        end
+      files_to_install.each do |file|
+        from = File.join(src, file)
+        to = File.join(dest, file)
+        run "install -D -m#{mode} #{from} #{to}"
       end
     end
 
