@@ -298,7 +298,7 @@ module Gem2Deb
     JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
         /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
-    def find_files(dir, accept_pattern=nil)
+    def find_files(dir)
       files = []
       Dir::chdir(dir) do
         Find::find('.') do |f|
@@ -311,11 +311,6 @@ module Gem2Deb
         fb = File::basename(f)
         next if (JUNK_FILES + HOOK_FILES).include?(fb)
         next if JUNK_PATTERNS.select { |pat| fb =~ pat } != []
-        # accept_pattern on this directory
-        if File.file?(File.join(dir, f)) &&
-          accept_pattern.is_a?(Regexp) && f.match(accept_pattern).nil?
-          next
-        end
         files2 << f
       end
       (files - files2). each do |f|
