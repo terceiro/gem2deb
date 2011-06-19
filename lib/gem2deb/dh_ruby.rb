@@ -298,13 +298,14 @@ module Gem2Deb
     JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
         /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
+    DO_NOT_INSTALL = (JUNK_FILES + HOOK_FILES).map { |file| /^#{file}$/ } + JUNK_PATTERNS
 
     def install_files(src, dest, mode)
       run "install -d #{dest}"
       files_to_install = Dir.chdir(src) do
         Dir.glob('**/*').reject do |file|
           filename = File.basename(file)
-          JUNK_FILES.include?(filename) || HOOK_FILES.include?(filename) || (JUNK_PATTERNS.any? { |junk| filename =~ junk })
+          DO_NOT_INSTALL.any? { |pattern| filename =~ pattern }
         end
       end
       files_to_install.each do |fname|
