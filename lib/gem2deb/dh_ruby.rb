@@ -299,24 +299,12 @@ module Gem2Deb
         /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
     def find_files(dir)
-      files = []
-      Dir::chdir(dir) do
-        Find::find('.') do |f|
-          files << f.gsub(/^\.\//, '') # hack hack
+      Dir.chdir(dir) do
+        Dir.glob('**/*').reject do |file|
+          filename = File.basename(file)
+          JUNK_FILES.include?(filename) || HOOK_FILES.include?(filename) || (JUNK_PATTERNS.any? { |junk| filename =~ junk })
         end
       end
-      files = files - ['.'] # hack hack
-      files2 = []
-      files.each do |f|
-        fb = File::basename(f)
-        next if (JUNK_FILES + HOOK_FILES).include?(fb)
-        next if JUNK_PATTERNS.select { |pat| fb =~ pat } != []
-        files2 << f
-      end
-      (files - files2). each do |f|
-        puts "WARNING: excluded file: #{f}"
-      end
-      files2
     end
 
     def install_files(src, list, dest, mode)
