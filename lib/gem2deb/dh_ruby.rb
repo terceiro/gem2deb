@@ -123,9 +123,9 @@ module Gem2Deb
 
 
     def install_files_and_build_extensions(package, supported_versions)
-      install_files('bin', find_files('bin'), destdir(package, :bindir), 755) if File::directory?('bin')
+      install_files('bin', destdir(package, :bindir), 755) if File::directory?('bin')
 
-      install_files('lib', find_files('lib'), destdir(package, :libdir), 644) if File::directory?('lib')
+      install_files('lib', destdir(package, :libdir), 644) if File::directory?('lib')
 
       if metadata.has_native_extensions?
         supported_versions.each do |rubyver|
@@ -298,18 +298,16 @@ module Gem2Deb
     JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
         /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
 
-    def find_files(dir)
-      Dir.chdir(dir) do
+
+    def install_files(src, dest, mode)
+      run "install -d #{dest}"
+      files_to_install = Dir.chdir(src) do
         Dir.glob('**/*').reject do |file|
           filename = File.basename(file)
           JUNK_FILES.include?(filename) || HOOK_FILES.include?(filename) || (JUNK_PATTERNS.any? { |junk| filename =~ junk })
         end
       end
-    end
-
-    def install_files(src, list, dest, mode)
-      run "install -d #{dest}"
-      list.each do |fname|
+      files_to_install.each do |fname|
         if File::directory?(src + '/' + fname)
           run "install -d #{dest + '/' + fname}"
         else
