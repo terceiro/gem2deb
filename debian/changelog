@@ -1,4 +1,4 @@
-gem2deb (0.2.5) UNRELEASED; urgency=low
+gem2deb (0.2.5) unstable; urgency=low
 
   * Replace libshoulda-ruby1.8 for ruby-shoulda-context in Build-Depends
   * Always create installation dirs (Closes: #630738)
