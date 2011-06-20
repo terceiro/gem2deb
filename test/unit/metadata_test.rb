@@ -19,7 +19,6 @@ class MetaDataTest < Gem2DebTestCase
 
   def setup
     FileUtils.mkdir_p('test/tmp')
-    @metadata = Gem2Deb::Metadata.new('test/tmp')
   end
 
   def teardown
@@ -27,6 +26,9 @@ class MetaDataTest < Gem2DebTestCase
   end
 
   context 'without gemspec' do
+    setup do
+      @metadata = Gem2Deb::Metadata.new('test/tmp')
+    end
     should 'have no homepage' do
       assert_nil @metadata.homepage
     end
@@ -58,6 +60,7 @@ class MetaDataTest < Gem2DebTestCase
   context 'with gemspec' do
     setup do
       @gemspec = mock
+      @metadata = Gem2Deb::Metadata.new('test/tmp')
       @metadata.stubs(:gemspec).returns(@gemspec)
     end
 
