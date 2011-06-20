@@ -20,7 +20,7 @@ binaries -= allpackages
 rstring = binaries.map { |pkg| "#{pkg} (<< #{version}~)" }.join(', ')
 puts "# For the replacement package"
 puts "Replaces: #{rstring}"
-puts "Conflicts: #{rstring}"
+puts "Breaks: #{rstring}"
 puts "Provides: #{binaries.join(', ')}"
 
 puts
