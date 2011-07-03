@@ -29,9 +29,10 @@ class Gem2DebTestCase
 
     SIMPLE_GIT            = File.join(SAMPLE_DIR, 'simplegit')
 
-    # Setup.rb
-    
     SIMPLE_SETUPRB_NAME    = "simplesetuprb"
     SIMPLE_SETUPRB_DIRNAME = SIMPLE_SETUPRB_NAME + "-0.0.1"
+
+    SIMPLE_EXTENSION_WITH_NAME_CLASH_NAME = 'simpleextension_with_name_clash'
+    SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME = SIMPLE_EXTENSION_WITH_NAME_CLASH_NAME.gsub('_', '-') + '-1.2.3'
   end
 end
