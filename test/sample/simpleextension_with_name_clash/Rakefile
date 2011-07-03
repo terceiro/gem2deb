@@ -1,0 +1,23 @@
+require 'rubygems'
+require 'rake/gempackagetask'
+
+spec = Gem::Specification.new do |s|
+  s.platform = Gem::Platform::RUBY
+  s.summary = "Simple native extension with .rb/.so name clash used to test dh_ruby"
+  s.name = 'simpleextension_with_name_clash'
+  s.version = '1.2.3'
+  s.requirements << 'none'
+  s.require_path = 'ext'
+  s.extensions << 'ex'
+  #s.autorequire = 'rake'
+  s.files = Dir.glob('{bin,ext}/**/*')
+  s.description = <<EOF
+simpleextension is a simple native extension that is used to test dh_ruby.
+EOF
+  s.test_files = ['test/test_simpleextension.rb']
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_zip = false
+  pkg.need_tar = false
+end
