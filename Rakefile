@@ -10,7 +10,6 @@ task :test => :version_check do
 end
 
 Rake::TestTask.new('test:unit') do |t|
-  t.libs << "lib"
   t.libs << "test"
   t.test_files = FileList['test/unit/*_test.rb']
   t.verbose = true
