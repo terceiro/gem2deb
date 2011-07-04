@@ -141,6 +141,24 @@ module Gem2Deb
           end
         end
       end
+
+      install_symlinks(package, supported_versions)
+    end
+
+    def install_symlinks(package, supported_versions)
+      supported_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
+        archdir = destdir(package, :archdir, rubyver)
+        vendordir = destdir(packages, :libdir, rubyver)
+        vendorlibdir = File.dirname(archdir)
+        Dir.glob(File.join(archdir, '*.so')).each do |so|
+          rb = File.basename(so).gsub(/\.so$/, '.rb')
+          if File.exists?(File.join(vendordir, rb))
+            Dir.chdir(vendorlibdir) do
+              FileUtils.ln_s "../#{rb}", rb
+            end
+          end
+        end
+      end
     end
 
     def remove_duplicate_files(src, dst)

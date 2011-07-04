@@ -12,6 +12,7 @@ class DhRubyTest < Gem2DebTestCase
     build(SIMPLE_EXTENSION, SIMPLE_EXTENSION_DIRNAME)
     build(SIMPLE_MIXED, SIMPLE_MIXED_DIRNAME)
     build(SIMPLE_ROOT_EXTENSION, SIMPLE_ROOT_EXTENSION_DIRNAME)
+    build(SIMPLE_EXTENSION_WITH_NAME_CLASH, SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME)
   end
 
   context 'installing simplegem' do
@@ -163,6 +164,17 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby.stubs(:ruby_source_files_in_package).returns(['test/sample/check_rubygems/good.rb'])
       @dh_ruby.expects(:handle_test_failure).never
       @dh_ruby.send(:check_rubygems)
+    end
+  end
+
+  context 'libraries with name clash (between foo.rb and foo.so)' do
+    should "install symlinks for foo.rb in Ruby 1.8 vendorlibdir" do
+      symlink = installed_file_path(SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME, 'ruby-simpleextension-with-name-clash', "/usr/lib/ruby/vendor_ruby/1.8/simpleextension_with_name_clash.rb")
+      assert_file_exists symlink
+    end
+    should 'not install symlink for foo.rb in Ruby 1.9 vendorlibdir' do
+      symlink = installed_file_path(SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME, 'ruby-simpleextension-with-name-clash', "/usr/lib/ruby/vendor_ruby/1.9.1/simpleextension_with_name_clash.rb")
+      assert !File.exist?(symlink), 'should not install symlink for Ruby 1.9 (it\'s not needed'
     end
   end
 
