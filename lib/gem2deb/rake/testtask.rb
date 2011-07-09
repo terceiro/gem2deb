@@ -5,7 +5,10 @@ module Gem2Deb
     class TestTask < ::Rake::TestTask
       def initialize
         super(:default)
-        self.libs = []
+      end
+      def define
+        self.libs.reject! { |path| ['lib','ext'].include?(path) }
+        super
       end
     end
   end

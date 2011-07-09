@@ -258,31 +258,11 @@ module Gem2Deb
       if skip_checks?
         return
       end
-      if File::exists?('debian/ruby-test-files.yaml')
-        puts "Running tests for #{rubyver} using gem2deb test runner and debian/ruby-test-files.yaml..."
-        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{TEST_RUNNER}"
-        puts(cmd) if $VERBOSE
-        system(cmd)
-      elsif File::exists?('debian/ruby-tests.rb')
-        puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
-        ENV['RUBY_TEST_VERSION'] = rubyver
-        ENV['RUBY_TEST_BIN'] = SUPPORTED_RUBY_VERSIONS[rubyver]
-        cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -Ilib debian/ruby-tests.rb"
-        puts(cmd) if $VERBOSE
-        system(cmd)
-      elsif File::exists?('debian/ruby-tests.rake')
-        puts "Running tests for #{rubyver} using debian/ruby-tests.rake..."
-        cmd = [
-          SUPPORTED_RUBY_VERSIONS[rubyver],
-          '-rrake',
-          '-e',
-          'ARGV.unshift("-f", "debian/ruby-tests.rake"); Rake.application.run'
-        ]
-        puts(cmd.join(' ')) if $VERBOSE
-        system(*cmd)
-      else
-        puts "Running tests for #{rubyver}: found no way to run a test suite!"
-      end
+
+      cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{TEST_RUNNER}"
+      puts(cmd) if $VERBOSE
+      system(cmd)
+
       if $?.exitstatus != 0
         handle_test_failure(rubyver)
         return false
