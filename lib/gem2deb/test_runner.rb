@@ -39,14 +39,12 @@ module Gem2Deb
       dirs
     end
 
+    # Override in subclasses
     def run_tests
-      if activate?
-        execute_tests
-      end
     end
 
     # override in subclasses
-    def execute_tests
+    def run_tests
     end
 
     # override in subclasses
@@ -77,8 +75,11 @@ module Gem2Deb
       @subclasses
     end
     def self.detect_and_run
-      subclasses.each do |klass|
-        klass.new.run_tests
+      detect.run_tests
+    end
+    def self.detect
+      subclasses.map(&:new).find do |runner|
+        runner.activate?
       end
     end
     def rubyver
@@ -92,7 +93,7 @@ module Gem2Deb
       def required_file
         'debian/ruby-test-files.yaml'
       end
-      def execute_tests
+      def run_tests
         puts "Running tests for #{rubyver} with test file list from debian/ruby-test-files.yaml ..."
         run_ruby(
           '-ryaml', 
@@ -106,7 +107,7 @@ module Gem2Deb
       def required_file
         'debian/ruby-tests.rake'
       end
-      def execute_tests
+      def run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rake ..."
         run_ruby(
           '-rrake',
@@ -120,7 +121,7 @@ module Gem2Deb
       def required_file
         'debian/ruby-tests.rb'
       end
-      def execute_tests
+      def run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
         ENV['RUBY_TEST_VERSION'] = rubyver
         ENV['RUBY_TEST_BIN'] = ruby_binary
@@ -132,7 +133,7 @@ module Gem2Deb
       def required_file
         'debian/rules'
       end
-      def execute_tests
+      def run_tests
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
       end
     end
