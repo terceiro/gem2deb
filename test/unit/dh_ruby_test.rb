@@ -178,6 +178,24 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'using DESTDIR supplied by dh_auto_install' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.dh_auto_install_destdir = '/path/to/source-package/debian/tmp'
+    end
+    should 'normally install to debian/${package}' do
+      assert_match /\/debian\/foo$/, @dh_ruby.send(:destdir_for, 'foo')
+    end
+    should 'install to debian/tmp when DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is set' do
+      saved_env = ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
+      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = 'yes'
+
+      assert_equal '/path/to/source-package/debian/tmp', @dh_ruby.send(:destdir_for, 'foo')
+
+      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = saved_env
+    end
+  end
+
   protected
 
   def read_installed_file(gem_dirname, package, path)
