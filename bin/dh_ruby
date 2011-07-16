@@ -80,7 +80,13 @@ B<dh_ruby> [I<OPTIONS>]
 
 =head1 DESCRIPTION
 
-B<dh_ruby> is a Debhelper 7 build system for Ruby software.
+B<dh_ruby> is a Debhelper 7 build system for Ruby software. It will
+automatically build and install files contained in Ruby packages, trying to
+work as close to Rubygems as possible but respecting Debian standards for Ruby
+packages.
+
+dh_ruby can automatically run your tests against all supported Ruby versions,
+see the "FILES" section below.
 
 See dh_ruby --help for details.
 
@@ -105,6 +111,103 @@ Displays B<dh_ruby> version information.
 This option indicates that the build should use I<setup.rb> rather
 than the usual gem-based build. To take effect, this option must come
 first !
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+=over
+
+=item I<DH_RUBY_IGNORE_TESTS>
+
+This is a space-separated list of tests that dh_ruby will ignore during package
+build. The available test names are "require-rubygems" plus the names os all
+supported Ruby versions. At the time of writing, only "ruby1.8" and "ruby1.9.1"
+are supported.
+
+If set to "all", all tests will be ignored during the package build.
+
+=item I<DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR>
+
+If this variable is defined (to anything), dh_ruby will respect the directory
+informed by dh_auto_install(1), usually I<debian/tmp>. By default, gem2deb will
+install files to debian/I<package>, where I<package> is the first binary
+package listed in debian/control.
+
+This is useful for multi-binary source packages, where you will have all files
+installed to I<debian/tmp>, and can them split the files into separate packages
+by using debian/I<package>.install.
+
+=item I<DH_RUBY_GEMSPEC>
+
+Determines which file contain the gem specification with package metadata.  By
+default, dh_ruby will read metadata from a .gemspec file in the root of source
+package directory. You can use this variable to override that if want to
+provide custom metadata for the Debian package.
+
+In the case there are more than one .gemspec in the source package root, you
+will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
+
+=back
+
+=head1 FILES
+
+=over
+
+=item debian/I<ruby-test-files.yaml>, debian/I<ruby-tests.rake>, debian/I<ruby-tests.rb>
+
+Theses files can be used to explictly tell dh_ruby how to run the tests in your
+package. When running the tests, dh_ruby will automatically set RUBYLIB to
+include the appropriate directories where the package files were installed in
+your package to make sure the tests use them instead of the files in the source
+directory.
+
+B<Your package can only contain at most one of these files.>
+
+debian/I<ruby-test-files.yaml> must contain a YAML document with a list of test
+files to be run. If the package metadata contains an explicit list of test
+files, gem2deb(1) will automatically generate this file for you. Example from
+ruby-mime-types:
+
+  --- 
+  - test/test_mime_type.rb
+  - test/test_mime_types.rb
+
+debian/I<ruby-tests.rake> can be used to run the tests with rake(1). If you use
+this file, your package must Build-Depend on the I<rake> package. You can use
+anything you would use in a regular Rakefile, but you must define a default
+task. gem2deb includes utility test task that makes it easier for you by
+creating a default task automatically. Example:
+
+  require 'gem2deb/rake/testtask'
+  Gem2Deb:Rake::TestTask.new do |t|
+    t.test_files = FileList['test/*_test.rb']
+  end
+
+If debian/I<ruby-tests.rb> exists, it will be run with each supported Ruby
+version, and must finish with a exit status of I<0>, otherwise dh_ruby assumes
+the tests failed. A simple example:
+
+  require 'test/unit'
+  require 'mypackage' # if 'mypackage.rb' or 'mypackage.so' was not installed properly, this will fail
+  class MyPackageTest < Test::Unit::TestCase
+    def test_features
+      assert_equal 4, MyPackage.sum(2,2)
+    end
+  end
+
+=item debian/I<require-rubygems.overrides>
+
+Fine-tune the "require-rubygems" test. If the package has a very good reason to
+actually `require "rubygems"`, you can use this file as a whitelist of files
+allowed to have `require "rubygems"`.
+
+This file is expect to contain a YAML document with a list of files that must
+be ignored when checking for `require "rubygems"` lines. Example:
+
+  --- 
+  - lib/foo.rb
+  - lib/foo/rubygems.rg
 
 =back
 
