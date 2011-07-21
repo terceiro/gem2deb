@@ -3,7 +3,6 @@ gem2deb (0.2.6) unstable; urgency=low
   * Added Gem2Deb::Rake::TestTask for helping running tests using rake. See
     dh_ruby(1)
   * Install symlinks for .rb files masked by .so files
-  * Remove Build-Depends: on rake, since it is not really necessary to build.
   * Support multi-binary packages by allowing maintainers to tell dh_ruby to
     install files at the place designated by dh_auto_install, usually
     debian/tmp. See dh_ruby(1) for details. (Closes: #632553)
