@@ -15,7 +15,7 @@
 
 module Gem2Deb
 
-  VERSION = '0.2.5'
+  VERSION = '0.2.6'
 
   class CommandFailed < Exception
   end
