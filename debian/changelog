@@ -1,3 +1,10 @@
+gem2deb (0.2.7) unstable; urgency=low
+
+  * Fix .so/.rb name clash resolution for the case of multiple binary
+    packages.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 11 Aug 2011 12:05:47 -0700
+
 gem2deb (0.2.6) unstable; urgency=low
 
   * Added Gem2Deb::Rake::TestTask for helping running tests using rake. See
