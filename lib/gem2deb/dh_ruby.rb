@@ -152,7 +152,7 @@ module Gem2Deb
     def install_symlinks(package, supported_versions)
       supported_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
         archdir = destdir(package, :archdir, rubyver)
-        vendordir = destdir(packages, :libdir, rubyver)
+        vendordir = destdir(package, :libdir, rubyver)
         vendorlibdir = File.dirname(archdir)
         Dir.glob(File.join(archdir, '*.so')).each do |so|
           rb = File.basename(so).gsub(/\.so$/, '.rb')

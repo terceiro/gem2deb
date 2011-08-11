@@ -178,6 +178,18 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'name clash with multiple binary packages' do
+    setup do
+      FileUtils.cp_r('test/sample/name_clash_multiple/', tmpdir)
+      @target_dir = File.join(tmpdir, 'name_clash_multiple')
+      self.class.build_package(@target_dir)
+    end
+    should 'work' do
+      symlink = File.join(@target_dir, 'debian/ruby-name-clash/usr/lib/ruby/vendor_ruby/1.8/name_clash.rb')
+      assert File.exist?(symlink), 'symlink not installed at %s!' % symlink
+    end
+  end
+
   context 'using DESTDIR supplied by dh_auto_install' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
@@ -208,16 +220,21 @@ class DhRubyTest < Gem2DebTestCase
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
     Gem2Deb::DhMakeRuby.new(tarball).build
 
-    dh_ruby = Gem2Deb::DhRuby.new
-    dh_ruby.verbose = false
+    build_package(package_path)
+  end
 
-    silence_stream(STDOUT) do
-      Dir.chdir(package_path) do
+  def self.build_package(directory)
+    Dir.chdir(directory) do
+
+      dh_ruby = Gem2Deb::DhRuby.new
+      dh_ruby.verbose = false
+
+      silence_stream(STDOUT) do
         # This sequence tries to imitate what dh will actually do
         dh_ruby.clean
         dh_ruby.configure
         dh_ruby.build
-        dh_ruby.install File.join(package_path, 'debian', 'tmp')
+        dh_ruby.install File.join(directory, 'debian', 'tmp')
       end
     end
   end

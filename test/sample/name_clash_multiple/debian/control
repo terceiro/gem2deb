@@ -1,0 +1,26 @@
+Source: ruby-name-clash
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Antonio Terceiro <terceiro@debian.org>
+DM-Upload-Allowed: yes
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= 0.2.6~)
+Standards-Version: 3.9.2
+#Vcs-Git: git://git.debian.org/pkg-ruby-extras/ruby-simpleextension-with-name-clash.git
+#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/ruby-simpleextension-with-name-clash.git;a=summary
+Homepage: FIXME
+XS-Ruby-Versions: all
+
+Package: ruby-name-clash
+Architecture: any
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+Description: Simple native extension with .rb/.so name clash used to test dh_ruby
+ simpleextension_with_name_clash is a simple native extension that is used to test dh_ruby.
+
+Package: libname-clash-ruby
+Architecture: any
+Depends: ruby-name-clash
+Description: transitional package for ruby-name-clash
+ This packages is a transitional package for ruby-name-clash and can be safely
+ removed.
