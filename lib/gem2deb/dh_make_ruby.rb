@@ -21,6 +21,7 @@ require 'rubygems'
 require 'yaml'
 require 'fileutils'
 require 'erb'
+require 'date'
 
 module Gem2Deb
 
@@ -428,14 +429,14 @@ Description: <%= short_description ? short_description : 'FIXME' %>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/compat
 7
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/copyright
-FIXME. fill-in with DEP5 copyright file. http://dep.debian.net/deps/dep5/
-Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=173
+Format: http://dep.debian.net/deps/dep5
 Upstream-Name: <%= gem_name %>
-Source: FIXME (URL where source can be downloaded)
+Source: FIXME <http://example.com/>
 
 Files: *
-Copyright: Copyright 1998 John Doe <jdoe@example.com>
-License: GPL-2+
+Copyright: <years> <put author's name and email here>
+           <years> <likewise for another author>
+License: GPL-2+ (FIXME)
  This program is free software; you can redistribute it
  and/or modify it under the terms of the GNU General Public
  License as published by the Free Software Foundation; either
@@ -458,7 +459,7 @@ License: GPL-2+
  `/usr/share/common-licenses/GPL-2'.
 
 Files: debian/*
-Copyright: Copyright 1998 Jane Smith <jsmith@example.net>
+Copyright: <%= Date.today.year %> <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
 License:
  [LICENSE TEXT]
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/watch
