@@ -129,6 +129,7 @@ module Gem2Deb
         Dir.chdir(orig_tarball_dir) do
           create_orig_tarball
           extract
+          initialize_from_directory(source_dirname)
           build_in_directory(source_dirname)
         end
       end

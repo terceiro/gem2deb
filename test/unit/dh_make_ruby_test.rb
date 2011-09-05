@@ -94,6 +94,25 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  FANCY_PACKAGE_TARBALL = File.join(tmpdir, 'fancy-package-0.0.1.tar.gz')
+  one_time_setup do
+    Gem2Deb::Gem2Tgz.convert!(FANCY_PACKAGE, FANCY_PACKAGE_TARBALL)
+    $__fancy_package_dh_make_ruby = Gem2Deb::DhMakeRuby.new(FANCY_PACKAGE_TARBALL)
+    $__fancy_package_dh_make_ruby.build
+  end
+  context 'a package with a fancy name that is not a valid Debian package name' do
+    should 'use upstream name from metadata' do
+      assert_equal 'Fancy_Package', $__fancy_package_dh_make_ruby.gem_name
+    end
+    should 'use actual upstream name in debian/watch' do
+      assert_match /gemwatch\/Fancy_Package/, File.read(File.join(tmpdir, 'ruby-fancy-package-0.0.1/debian/watch'))
+    end
+    should 'use actual upstream name in debian/copyright' do
+      assert_match /Upstream-Name: Fancy_Package/, File.read(File.join(tmpdir, 'ruby-fancy-package-0.0.1/debian/copyright'))
+    end
+  end
+
+
   protected
 
   def packages
