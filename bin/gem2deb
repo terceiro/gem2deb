@@ -38,7 +38,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-t', '--only-tarball', 'stop after creating the tar.gz archive') do
-    $only_tarball = false
+    $only_tarball = true
   end
 
   opts.on('-s', '--only-source-dir', 'stop after preparing the Debian source package') do
