@@ -1,3 +1,5 @@
+make gem2deb work with Ruby 1.9 and Rubinius
+
 it should be possible to rewrite shebangs to something else than ruby1.8
 
 write test suite for Ruby-Versions settings
