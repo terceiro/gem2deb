@@ -7,6 +7,11 @@ require 'tempfile'
 
 class Gem2DebTestCase < Test::Unit::TestCase
 
+  VENDOR_ARCH_DIRS = {
+    'ruby1.8'   => `ruby1.8   -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
+    'ruby1.9.1' => `ruby1.9.1 -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
+  }
+
   require 'test/helper/samples'
   include Gem2DebTestCase::Samples
 
