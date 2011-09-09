@@ -12,7 +12,7 @@ class Gem2DebTestCase < Test::Unit::TestCase
     'ruby1.9.1' => `ruby1.9.1 -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
   }
 
-  require 'test/helper/samples'
+  require 'test_helper/samples'
   include Gem2DebTestCase::Samples
 
   GEM2DEB_ROOT_SOURCE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
