@@ -5,7 +5,8 @@ require 'fileutils'
 require 'tmpdir'
 require 'tempfile'
 
-class Gem2DebTestCase < Test::Unit::TestCase
+Gem2DebTestCase = Test::Unit::TestCase
+class Gem2DebTestCase
 
   VENDOR_ARCH_DIRS = {
     'ruby1.8'   => `ruby1.8   -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
@@ -23,6 +24,7 @@ class Gem2DebTestCase < Test::Unit::TestCase
     def tmpdir
       @tmpdir ||= File.join(Gem2DebTestCase::TMP_DIR, name)
       FileUtils.mkdir_p(@tmpdir)
+      @tmpdir
     end
     def one_time_setup_blocks
       @one_time_setup_blocks ||= []
@@ -38,6 +40,22 @@ class Gem2DebTestCase < Test::Unit::TestCase
         one_time_setup_blocks.each(&:call)
         @one_time_setup = true
       end
+      setup_cleanup
+    end
+    def setup_cleanup
+      unless $__gem2deb_tests_cleanup_installed
+        at_exit do
+          if ENV['GEM2DEB_DEBUG']
+            puts
+            puts "======================================================================="
+            puts "Temporary test files left in #{Gem2DebTestCase::TMP_DIR} for inspection!"
+            puts
+          else
+            FileUtils.rm_rf(Gem2DebTestCase::TMP_DIR)
+          end
+        end
+      end
+      $__gem2deb_tests_cleanup_installed = true
     end
   end
   def tmpdir
@@ -46,11 +64,6 @@ class Gem2DebTestCase < Test::Unit::TestCase
 
   def setup
     self.class.one_time_setup!
-  end
-
-  def run(runner)
-    return if @method_name.to_s == 'default_test'
-    super
   end
 
   protected
@@ -154,23 +167,4 @@ class Gem2DebTestCase < Test::Unit::TestCase
     self.class.run_command(cmd)
   end
 
-end
-
-class Test::Unit::AutoRunner
-  alias :orig_run :run
-  def run
-    ret = nil
-    if ENV['GEM2DEB_TEST_DEBUG']
-      puts "Running tests in debug mode ..."
-      ret = orig_run
-      puts
-      puts "======================================================================="
-      puts "Temporary test files left in #{Gem2DebTestCase::TMP_DIR} for inspection!"
-      puts
-    else
-      ret = orig_run
-      FileUtils.rm_rf(Gem2DebTestCase::TMP_DIR)
-    end
-    ret
-  end
 end

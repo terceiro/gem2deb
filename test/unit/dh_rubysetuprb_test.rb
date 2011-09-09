@@ -63,7 +63,7 @@ class DhRubySetuprbTest < Gem2DebTestCase
           dh_ruby.clean
           dh_ruby.configure
           dh_ruby.build
-          dh_ruby.install File.join(package_path, 'debian', 'tmp')
+          dh_ruby.install([File.join(package_path, 'debian', 'tmp')])
         end
       end
     end
