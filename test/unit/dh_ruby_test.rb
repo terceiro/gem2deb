@@ -148,6 +148,11 @@ class DhRubyTest < Gem2DebTestCase
     should 'rewrite shebangs in subdirs of bin/' do
       assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end
+    should 'add a shebang when there is none' do
+      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
+      assert_match %r{/usr/bin/ruby}, lines[0]
+      assert_match /puts/, lines[1]
+    end
   end
 
   context 'checking for require "rubygems"' do
