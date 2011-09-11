@@ -349,6 +349,7 @@ module Gem2Deb
           end
           output.print input.read
         end
+        File.chmod(0755, path)
       end
     end
 
