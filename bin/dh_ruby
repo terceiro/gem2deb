@@ -156,7 +156,7 @@ will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
 
 =item debian/I<ruby-test-files.yaml>, debian/I<ruby-tests.rake>, debian/I<ruby-tests.rb>
 
-Theses files can be used to explictly tell dh_ruby how to run the tests in your
+Theses files can be used to explicitly tell dh_ruby how to run the tests in your
 package. When running the tests, dh_ruby will automatically set RUBYLIB to
 include the appropriate directories where the package files were installed in
 your package to make sure the tests use them instead of the files in the source
