@@ -46,7 +46,7 @@ end
 
 desc "Checks for inconsistencies between version numbers in the code and in debian/changelog"
 task :version_check do
-  code_version = `ruby -Ilib -rgem2deb -e 'puts Gem2Deb::VERSION'`.strip
+  code_version = `ruby -Ilib -rgem2deb/version -e 'puts Gem2Deb::VERSION'`.strip
   debian_version = `dpkg-parsechangelog | grep '^Version: ' | cut -d ' ' -f 2`.strip
   if code_version != debian_version
     msg ="W: Inconsistent version numbers: lib/gem2deb.rb says #{code_version}, debian/changelog says #{debian_version}"

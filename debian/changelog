@@ -1,3 +1,19 @@
+gem2deb (0.2.8) unstable; urgency=low
+
+  * Generate a non-lintian-clean copyright file
+  * Fix --only-tarball option
+  * Fix typo in integration test
+  * Keep upstream names that are not valid Debian package names
+  * Make tests more portable
+  * Rename test_helper samples file
+  * Make tests pass under Ruby 1.9 as well
+  * Run tests under 1.8 and 1.9 during build
+  * Make sure that programs without shebangs get one
+  * Keep correct permission bits on rewritten programs
+  * Rewrite shebangs before running tests
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 11 Sep 2011 13:29:03 -0700
+
 gem2deb (0.2.7) unstable; urgency=low
 
   * Fix .so/.rb name clash resolution for the case of multiple binary

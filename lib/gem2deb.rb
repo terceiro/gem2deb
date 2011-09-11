@@ -15,8 +15,6 @@
 
 module Gem2Deb
 
-  VERSION = '0.2.7'
-
   class CommandFailed < Exception
   end
 
@@ -28,3 +26,5 @@ module Gem2Deb
     end
   end
 end
+
+require 'gem2deb/version'
