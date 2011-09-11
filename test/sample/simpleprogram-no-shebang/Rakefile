@@ -1,0 +1,22 @@
+require 'rubygems'
+require 'rake/gempackagetask'
+
+spec = Gem::Specification.new do |s|
+  s.platform = Gem::Platform::RUBY
+  s.summary = "Simple program used to test dh_ruby"
+  s.name = 'simpleprogram-no-shebang'
+  s.version = '1.2.3'
+  s.requirements << 'none'
+  s.require_path = 'lib'
+  #s.autorequire = 'rake'
+  s.files = Dir.glob('{bin,man}/**/*')
+  s.test_files = ['test/runprogram.rb']
+  s.description = <<EOF
+simpleprogram-no-shebang is a simple program that is used to test dh_ruby.
+EOF
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_zip = false
+  pkg.need_tar = false
+end

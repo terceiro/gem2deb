@@ -91,11 +91,11 @@ module Gem2Deb
 
       install_files_and_build_extensions(package, supported_versions)
 
+      update_shebangs(package)
+
       run_tests(supported_versions)
 
       install_substvars(package, supported_versions)
-
-      update_shebangs(package)
 
       check_rubygems
 
