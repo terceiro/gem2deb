@@ -1,11 +1,11 @@
 Format: http://dep.debian.net/deps/dep5/
 Upstream-Name: gem2deb
 Source: http://github.com/ln/gem2deb
-Copyright: 
- Copyright © 2010, Antonio Terceiro <terceiro@softwarelivre.org>
- Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 
 Files: *
+Copyright:
+ Copyright © 2010, 2011, Antonio Terceiro <terceiro@softwarelivre.org>
+ Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
