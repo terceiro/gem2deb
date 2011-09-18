@@ -1,12 +1,14 @@
 gem2deb (0.2.9) unstable; urgency=low
 
-  [ Antonio Terceiro ]
-  * Bugfix upload.
-
   [ Cédric Boutillier ]
   * Do not skip tests after failing one
 
- -- Antonio Terceiro <terceiro@debian.org>  Sun, 18 Sep 2011 00:27:31 -0700
+  [ Antonio Terceiro ]
+  * Bug fix upload.
+  * Split templates in their own files. This fixes the build on Ruby 1.9 under
+    the `C` locale.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 18 Sep 2011 01:04:43 -0700
 
 gem2deb (0.2.8) unstable; urgency=low
 
