@@ -251,7 +251,7 @@ module Gem2Deb
     end
 
     def run_tests(supported_versions)
-      supported_versions.each do |rubyver|
+      supported_versions.dup.each do |rubyver|
         if !run_tests_for_version(rubyver)
           supported_versions.delete(rubyver)
         end
