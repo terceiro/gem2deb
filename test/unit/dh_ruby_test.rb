@@ -216,6 +216,17 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'run_tests' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+    end
+    should 'not skip tests after one that fails' do
+      @dh_ruby.stubs(:run_tests_for_version).with('rubyX').returns(false)
+      @dh_ruby.expects(:run_tests_for_version).with('rubyY')
+      @dh_ruby.send(:run_tests, ['rubyX', 'rubyY'])
+    end
+  end
+
   protected
 
   def read_installed_file(gem_dirname, package, path)
