@@ -202,26 +202,23 @@ module Gem2Deb
     end
 
     def templates
-      @templates ||= Template.load
+      @templates ||= Template.load_all
     end
 
     class Template
       attr_accessor :filename
       attr_accessor :data
 
-      TEMPLATES_FILE = File.expand_path(__FILE__)
+      TEMPLATES_DIR = File.expand_path(File.join(File.dirname(__FILE__), 'dh_make_ruby', 'template'))
 
-      def self.load
-        result = []
-        File.read(TEMPLATES_FILE).gsub(/.*__END__\n/m, '').lines.each do |line|
-          if line =~ /^>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> (.*)/
-            filename = $1
-            result << Template.new(filename)
-          else
-            result.last.data << line
-          end
+      def self.load_all
+        template_files = Dir.glob("#{TEMPLATES_DIR}/**/*").select { |f| !File.directory?(f) }
+        template_files.map do |file|
+          filename = file.sub(/^#{TEMPLATES_DIR}\//, '')
+          template = Template.new(filename)
+          template.data = File.read(file)
+          template
         end
-        result
       end
 
       def initialize(filename)
@@ -382,89 +379,3 @@ module Gem2Deb
     end
   end
 end
-
-__END__
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/control
-Source: <%= source_package_name %>
-Section: ruby
-Priority: optional
-Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
-Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
-DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>~)
-Standards-Version: 3.9.2
-#Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
-#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
-Homepage: <%= homepage ? homepage : 'FIXME'%>
-XS-Ruby-Versions: <%= ruby_versions %>
-
-Package: <%= binary_package.name %>
-Architecture: <%= binary_package.architecture %>
-XB-Ruby-Versions: ${ruby:Versions}
-Depends: <%= binary_package.dependencies.join(', ') %>
-<% if binary_package.gem_dependencies.length > 0 %>
-# <%= binary_package.gem_dependencies.join(', ') %>
-<% end %>
-Description: <%= short_description ? short_description : 'FIXME' %>
-<% if long_description %>
-<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
-<% else %>
-<%= " <insert long description, indented with spaces>\n" %>
-<% end %>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/rules
-#!/usr/bin/make -f
-#export DH_VERBOSE=1
-#
-# Uncomment to ignore all test failures (but the tests will run anyway)
-#export DH_RUBY_IGNORE_TESTS=all
-#
-# Uncomment to ignore some test failures (but the tests will run anyway).
-# Valid values:
-#export DH_RUBY_IGNORE_TESTS=ruby1.8 ruby1.9.1 require-rubygems
-#
-# If you need to specify the .gemspec (eg there is more than one)
-#export DH_RUBY_GEMSPEC=gem.gemspec
-
-%:
-	dh $@ --buildsystem=ruby --with ruby
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/compat
-7
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/copyright
-Format: http://dep.debian.net/deps/dep5
-Upstream-Name: <%= gem_name %>
-Source: FIXME <http://example.com/>
-
-Files: *
-Copyright: <years> <put author's name and email here>
-           <years> <likewise for another author>
-License: GPL-2+ (FIXME)
- This program is free software; you can redistribute it
- and/or modify it under the terms of the GNU General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later
- version.
- .
- This program is distributed in the hope that it will be
- useful, but WITHOUT ANY WARRANTY; without even the implied
- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the GNU General Public License for more
- details.
- .
- You should have received a copy of the GNU General Public
- License along with this package; if not, write to the Free
- Software Foundation, Inc., 51 Franklin St, Fifth Floor,
- Boston, MA  02110-1301 USA
- .
- On Debian systems, the full text of the GNU General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/GPL-2'.
-
-Files: debian/*
-Copyright: <%= Date.today.year %> <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
-License:
- [LICENSE TEXT]
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/watch
-version=3
-http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/<%= gem_name %> .*/<%= gem_name %>-(.*).tar.gz
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debian/source/format
-3.0 (quilt)

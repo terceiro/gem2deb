@@ -1,0 +1,26 @@
+Source: <%= source_package_name %>
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
+DM-Upload-Allowed: yes
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>~)
+Standards-Version: 3.9.2
+#Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
+#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
+Homepage: <%= homepage ? homepage : 'FIXME'%>
+XS-Ruby-Versions: <%= ruby_versions %>
+
+Package: <%= binary_package.name %>
+Architecture: <%= binary_package.architecture %>
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: <%= binary_package.dependencies.join(', ') %>
+<% if binary_package.gem_dependencies.length > 0 %>
+# <%= binary_package.gem_dependencies.join(', ') %>
+<% end %>
+Description: <%= short_description ? short_description : 'FIXME' %>
+<% if long_description %>
+<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
+<% else %>
+<%= " <insert long description, indented with spaces>\n" %>
+<% end %>
