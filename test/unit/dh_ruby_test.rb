@@ -153,6 +153,10 @@ class DhRubyTest < Gem2DebTestCase
       assert_match %r{/usr/bin/env ruby}, lines[0]
       assert_match /puts/, lines[1]
     end
+    should 'not rewrite shebangs non-Ruby scripts' do
+      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')
+      assert_match %r{/bin/sh}, lines[0]
+    end
     should 'leave programs with correct permissions after rewriting shebangs' do
       assert_equal '100755', '%o' % File.stat(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang').mode
     end
