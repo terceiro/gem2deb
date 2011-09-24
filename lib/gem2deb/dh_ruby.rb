@@ -29,7 +29,7 @@ module Gem2Deb
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
 
-    RUBY_BINARY = '/usr/bin/ruby'
+    RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
 
     DEFAULT_RUBY_VERSION = 'ruby1.8'
 
@@ -330,7 +330,7 @@ module Gem2Deb
     def update_shebangs(package)
       ruby_binary =
         if all_ruby_versions_supported?
-          RUBY_BINARY
+          RUBY_SHEBANG_CALL
         else
           SUPPORTED_RUBY_VERSIONS[ruby_versions.first]
         end

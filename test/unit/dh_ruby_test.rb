@@ -26,7 +26,7 @@ class DhRubyTest < Gem2DebTestCase
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
     end
     should 'rewrite shebang of installed programs' do
-      assert_match %r(#!/usr/bin/ruby), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first
+      assert_match %r(#!/usr/bin/env ruby), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first
     end
   end
 
@@ -114,9 +114,9 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
       assert_equal false, @dh_ruby.send(:all_ruby_versions_supported?)
     end
-    should 'rewrite shebang to use /usr/bin/ruby if all versions are supported' do
+    should 'rewrite shebang to use `/usr/bin/env ruby` if all versions are supported' do
       @dh_ruby.stubs(:all_ruby_versions_supported?).returns(true)
-      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/ruby')
+      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/env ruby')
       @dh_ruby.send(:update_shebangs, 'foo')
     end
     should 'rewrite shebang to usr /usr/bin/ruby1.8 if only 1.8 is supported' do
@@ -136,21 +136,21 @@ class DhRubyTest < Gem2DebTestCase
 
       # The fact that this call does not crash means we won't crash when
       # /usr/bin has subdirectories
-      @dh_ruby.send(:rewrite_shebangs, 'ruby-foo', '/usr/bin/ruby')
+      @dh_ruby.send(:rewrite_shebangs, 'ruby-foo', '/usr/bin/env ruby')
     end
     teardown do
       FileUtils.rm_f(self.class.tmpdir + '/rewrite_shebangs')
     end
 
     should 'rewrite shebangs of programs directly under bin/' do
-      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
     end
     should 'rewrite shebangs in subdirs of bin/' do
-      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
+      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end
     should 'add a shebang when there is none' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
-      assert_match %r{/usr/bin/ruby}, lines[0]
+      assert_match %r{/usr/bin/env ruby}, lines[0]
       assert_match /puts/, lines[1]
     end
     should 'leave programs with correct permissions after rewriting shebangs' do
