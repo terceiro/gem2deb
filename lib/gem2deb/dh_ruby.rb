@@ -340,11 +340,16 @@ module Gem2Deb
     def rewrite_shebangs(package, ruby_binary)
       Dir.glob(File.join(destdir_for(package), @bindir, '**/*')).each do |path|
         next if File.directory?(path)
-        puts "Rewriting shebang line of #{path}" if @verbose
         atomic_rewrite(path) do |input, output|
-          old = input.gets # discard
-          output.puts "#!#{ruby_binary}"
-          unless old =~ /#!/
+          old = input.gets
+          if old =~ /ruby/ or old !~ /^#!/
+            puts "Rewriting shebang line of #{path}" if @verbose
+            output.puts "#!#{ruby_binary}"
+            unless old =~ /#!/
+              output.puts old
+            end
+          else
+            puts "Not rewriting shebang line of #{path}" if @verbose
             output.puts old
           end
           output.print input.read
