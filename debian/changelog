@@ -1,3 +1,14 @@
+gem2deb (0.2.10) unstable; urgency=low
+
+  [ Antonio Terceiro ]
+  * If all Rubies are supported, use `/usr/bin/env ruby` as shebang
+    line.
+
+  [ Dmitry Borodaenko ]
+  * Don't rewrite shebangs of non-Ruby scripts
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 24 Sep 2011 12:17:38 -0700
+
 gem2deb (0.2.9) unstable; urgency=low
 
   [ Cédric Boutillier ]
