@@ -1,3 +1,11 @@
+gem2deb (0.2.11) unstable; urgency=low
+
+  * Fix crash when removing duplicate files in subdirectories, e.g.
+    ${vendordir}/foo/bar.rb versus ${vendorarchdir}/foo/bar.rb. This was
+    found when trying to update libldap-ruby into a new ruby-ldap package.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 05 Nov 2011 23:05:57 -0200
+
 gem2deb (0.2.10) unstable; urgency=low
 
   [ Antonio Terceiro ]
