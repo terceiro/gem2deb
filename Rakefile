@@ -49,7 +49,7 @@ task :version_check do
   code_version = `ruby -Ilib -rgem2deb/version -e 'puts Gem2Deb::VERSION'`.strip
   debian_version = `dpkg-parsechangelog | grep '^Version: ' | cut -d ' ' -f 2`.strip
   if code_version != debian_version
-    msg ="W: Inconsistent version numbers: lib/gem2deb.rb says #{code_version}, debian/changelog says #{debian_version}"
+    msg ="W: Inconsistent version numbers: lib/gem2deb/version.rb says #{code_version}, debian/changelog says #{debian_version}"
     if STDIN.isatty && STDOUT.isatty && STDERR.isatty
       # highlight the message in red
       puts("\033[31;40m%s\033[m" % msg)
