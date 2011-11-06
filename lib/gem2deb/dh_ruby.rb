@@ -174,10 +174,10 @@ module Gem2Deb
           file_handler.rm(file2)
         elsif File.directory?(file1) and File.directory?(file2)
           remove_duplicate_files(file1, file2)
-          if (Dir.entries(file2) - ['.', '..']).empty?
-            file_handler.rmdir(file2)
-          end
         end
+      end
+      if (Dir.entries(dst) - ['.', '..']).empty?
+        file_handler.rmdir(dst)
       end
     end
 

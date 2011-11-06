@@ -235,16 +235,30 @@ class DhRubyTest < Gem2DebTestCase
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
       @dh_ruby.verbose = false
+      @tmpdir = Dir.mktmpdir
+    end
+    teardown do
+      FileUtils.rm_rf(@tmpdir)
+    end
+    should 'actually remove duplicates' do
+      Dir.chdir(@tmpdir) do
+        FileUtils.mkdir('dir1')
+        FileUtils.mkdir('dir2')
+        ['dir1','dir2'].each do |d|
+          File.open(File.join(d, 'test.rb'), 'w') { |f| f.puts "# Nice File"}
+        end
+        @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
+        assert !File.exists?('dir2')
+      end
     end
     should 'not crash with duplicates in subdirectories' do
-      Dir.mktmpdir do |dir|
-        Dir.chdir(dir) do
-          FileUtils.mkdir_p('dir1/subdir')
-          FileUtils.touch('dir1/subdir/test.rb')
-          FileUtils.mkdir_p('dir2/subdir')
-          FileUtils.touch('dir2/subdir/test.rb')
-          @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
-        end
+      Dir.chdir(@tmpdir) do
+        FileUtils.mkdir_p('dir1/subdir')
+        FileUtils.touch('dir1/subdir/test.rb')
+        FileUtils.mkdir_p('dir2/subdir')
+        FileUtils.touch('dir2/subdir/test.rb')
+        @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
+        assert !File.exists?('dir2')
       end
     end
   end
