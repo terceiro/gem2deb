@@ -231,6 +231,24 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'finding duplicate files' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+    should 'not crash with duplicates in subdirectories' do
+      Dir.mktmpdir do |dir|
+        Dir.chdir(dir) do
+          FileUtils.mkdir_p('dir1/subdir')
+          FileUtils.touch('dir1/subdir/test.rb')
+          FileUtils.mkdir_p('dir2/subdir')
+          FileUtils.touch('dir2/subdir/test.rb')
+          @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
+        end
+      end
+    end
+  end
+
   protected
 
   def read_installed_file(gem_dirname, package, path)

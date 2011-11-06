@@ -158,7 +158,7 @@ module Gem2Deb
           rb = File.basename(so).gsub(/\.so$/, '.rb')
           if File.exists?(File.join(vendordir, rb))
             Dir.chdir(vendorlibdir) do
-              FileUtils.ln_s "../#{rb}", rb
+              file_handler.ln_s "../#{rb}", rb
             end
           end
         end
@@ -166,25 +166,23 @@ module Gem2Deb
     end
 
     def remove_duplicate_files(src, dst)
-      candidates = (Dir::entries(src) & Dir::entries(dst)) - ['.', '..']
+      candidates = Dir::entries(src) - ['.', '..']
       candidates.each do |cand|
-        if File::file?(File.join(src, cand)) and File::file?(File.join(dst, cand)) and IO::read(File.join(src, cand)) == IO::read(File.join(dst, cand))
-          FileUtils::Verbose.rm(File.join(dst, cand))
-        elsif File::directory?(File.join(src, cand)) and File::directory?(File.join(dst, cand))
-          files_src = files_dst = nil
-          Dir::chdir(File.join(src, cand)) do
-            files_src = Dir::glob('**/*', File::FNM_DOTMATCH).sort
-          end
-          Dir::chdir(File.join(dst, cand)) do
-            files_dst = Dir::glob('**/*', File::FNM_DOTMATCH).sort
-          end
-          if files_src == files_dst
-            if files_src.all? { |f| File.ftype(File.join(src, f)) == File.ftype(File.join(dst, f)) and (not File.file?(File.join(src, f)) or IO::read(File.join(src, cand)) == IO::read(File.join(dst, cand))) }
-              FileUtils::Verbose.rm_rf(File.join(dst, cand))
-            end
+        file1 = File.join(src, cand)
+        file2 = File.join(dst, cand)
+        if File.file?(file1) and File.file?(file2) and (File.read(file1) == File.read(file2))
+          file_handler.rm(file2)
+        elsif File.directory?(file1) and File.directory?(file2)
+          remove_duplicate_files(file1, file2)
+          if (Dir.entries(file2) - ['.', '..']).empty?
+            file_handler.rmdir(file2)
           end
         end
       end
+    end
+
+    def file_handler
+      @verbose ? FileUtils::Verbose : FileUtils
     end
 
     def check_rubygems
