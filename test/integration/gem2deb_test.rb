@@ -32,7 +32,7 @@ class Gem2DebTest < Gem2DebTestCase
     tmpdir = Dir.mktmpdir
     FileUtils.cp_r(examples_package, tmpdir)
     Dir.chdir(File.join(tmpdir, 'examples')) do
-      run_command('dpkg-buildpackage -us -uc')
+      run_command('dpkg-buildpackage -d -us -uc')
       assert_no_file_exists 'debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb.gz'
       assert_file_exists 'debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb'
     end
