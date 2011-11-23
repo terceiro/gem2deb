@@ -4,7 +4,8 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Antonio Terceiro <terceiro@debian.org>,
-           Vincent Fourmond <fourmond@debian.org>
+           Vincent Fourmond <fourmond@debian.org>,
+	   Gunnar Wolf <gwolf@debian.org>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), rake, ruby-shoulda-context, ruby-mocha, rubygems1.8, ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, devscripts, ruby-setup, lintian
 Standards-Version: 3.9.2

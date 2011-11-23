@@ -29,6 +29,7 @@ binaries.each do |pkg|
 puts <<-EOF
 Package: #{pkg}
 Section: oldlibs
+Priority: extra
 Architecture: all
 Depends: ${misc:Depends}, #{package}
 Description: Transitional package for #{package}
