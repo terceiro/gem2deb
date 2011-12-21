@@ -14,10 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
-require 'yaml'
 require 'rubygems/ext'
-require 'yaml'
 require 'gem2deb/metadata'
+
+Gem.load_yaml
 
 module Gem2Deb
   class ExtensionBuilder

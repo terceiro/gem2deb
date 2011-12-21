@@ -18,10 +18,11 @@
 require 'gem2deb'
 require 'gem2deb/metadata'
 require 'rubygems'
-require 'yaml'
 require 'fileutils'
 require 'erb'
 require 'date'
+
+Gem.load_yaml
 
 module Gem2Deb
 
