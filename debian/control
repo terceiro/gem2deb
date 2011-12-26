@@ -7,14 +7,14 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Vincent Fourmond <fourmond@debian.org>,
 	   Gunnar Wolf <gwolf@debian.org>
 DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.0.50~), rake, ruby-shoulda-context, ruby-mocha, rubygems1.8, ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, devscripts, ruby-setup, lintian
+Build-Depends: debhelper (>= 7.0.50~), rake, ruby-shoulda-context, ruby-mocha, rubygems1.8 (>= 1.8.12-1~), ruby1.8, ruby1.8-dev, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), devscripts, ruby-setup, lintian
 Standards-Version: 3.9.2
 Vcs-Git: git://git.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/gem2deb.git;a=summary
 
 Package: gem2deb
 Architecture: all
-Depends: ruby1.8, rubygems1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev, build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ruby1.8, rubygems1.8 (>= 1.8.12-1~), ruby1.8-dev, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
