@@ -1,9 +1,14 @@
 gem2deb (0.2.13) unstable; urgency=low
 
+  [ Cédric Boutillier ]
   * Use Gem.load_yaml to require yaml, in order to ensure the definition of
     the constant Gem::SyckDefaultKey, required by newer versions of rubygems.
 
- -- Cédric Boutillier <cedric.boutillier@gmail.com>  Wed, 21 Dec 2011 21:14:44 +0100
+  [ Antonio Terceiro ]
+  * debian/control: adjust (Build-)Depends: to require the newest versions of
+    Rubygems.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 26 Dec 2011 10:55:41 -0200
 
 gem2deb (0.2.12) unstable; urgency=low
 
