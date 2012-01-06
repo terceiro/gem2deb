@@ -44,10 +44,6 @@ module Gem2Deb
     end
 
     # override in subclasses
-    def run_tests
-    end
-
-    # override in subclasses
     def required_file
       nil
     end
