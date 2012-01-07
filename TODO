@@ -1,0 +1,73 @@
+use ruby1.9.1 by default
+========================
+
+Currently we build packages for both 1.8 and 1.9.1, but 1.8 is still considered
+to be the "default version". As soon as Debian switches to 1.9.1 being the
+default, gem2deb should do so as well.
+
+dh_ruby: solve the --install X the world situation
+==================================================
+
+Currently, everything that dh_ruby does happens during `dh_ruby --install`.
+--configure, --build and --test are no-ops. We should either fix this, or
+remove these actions and leave only --install and --clean (and make --install
+the default so that we can call just `dh_ruby`).
+
+Rubygems integration
+====================
+
+It would be nice if Rubygems recognized packages created by gem2deb. For this,
+we need to install a .gemspec file somewhere, and patch Rubygems to look there
+for gemspecs as well (Rubygems already supports looking at multiple places for
+gemspecs). This should probably be discussed with Rubygems developers to
+reach the better integration possible and avoid noise.
+
+Other distributions may be already doing this, we should do some reasearch.
+
+autopkgtest support
+===================
+
+It would ne nice to have some sort of integration with autopkgtest (DEP-8), so
+that we could automatically run the automated testes of the package against the
+installed package instead of against the source package. This would probably be
+done by subclassing the test runner to not mess with the load paths, i.e. when
+the test code require's something, that something would come from the system
+libraries.
+
+See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=637917
+
+syntax/load test
+================
+
+This should be a minimal test that would try to check the syntax of every
+source file against all supported Ruby interpreters to make sure the code is
+valid everywhere.
+
+See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=645357
+
+(with the rising usage of http://travis-ci.org/, compatibility should not be an
+issue for most new packages, but it might be for "legacy", or not very active
+packages)
+
+Support Rubinius
+================
+
+This includes both installing stuff to be used by Rubinius, including
+extensions, and being able to run gem2deb under Rubinius. See the `rake test`
+lines in debian/rules, we should add one like that for Rubinius.
+
+Support JRuby
+=============
+
+This includes both installing stuff to be used by JRuby, including
+extensions, and being able to run gem2deb under JRuby. See the `rake test`
+lines in debian/rules, we should add one like that for JRuby.
+
+increase the coverage of the test suite
+=======================================
+
+We should packages simplecov (http://rubygems.org/gems/simplecov), run it
+against gem2deb, and find places that are not covered by the test suite.
+
+Also, some places might be being run, but not checked at all. One example
+if the code that handles XS-Ruby-Versions.
