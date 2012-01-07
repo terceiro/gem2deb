@@ -1,3 +1,10 @@
+gem2deb (0.2.14) UNRELEASED; urgency=low
+
+  * Remove duplicate method definition
+  * Write a better TODO list to encourage contribution
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 07 Jan 2012 10:23:52 -0200
+
 gem2deb (0.2.13) unstable; urgency=low
 
   [ Cédric Boutillier ]
