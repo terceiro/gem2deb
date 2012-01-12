@@ -1,3 +1,6 @@
+These enhancement ideas are listed in no particular order.
+
+
 use ruby1.9.1 by default
 ========================
 
@@ -71,3 +74,14 @@ against gem2deb, and find places that are not covered by the test suite.
 
 Also, some places might be being run, but not checked at all. One example
 if the code that handles XS-Ruby-Versions.
+
+Make Rubygems extension builders verbose
+========================================
+
+Currently Rubygems hides the compilation from users, what makes sense; but we
+do not want that when we are building Debian packages. If there is any error
+during the build, we want to be able to stop the error right away instead of
+looking at log files. Besides, it is fun to watch build log scroll over your
+a terminal. ;-)
+
+To work on this, look at rubygems source, lib/rubygems/ext/*
