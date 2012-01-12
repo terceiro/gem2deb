@@ -84,4 +84,6 @@ during the build, we want to be able to stop the error right away instead of
 looking at log files. Besides, it is fun to watch build log scroll over your
 a terminal. ;-)
 
-To work on this, look at rubygems source, lib/rubygems/ext/*
+To work on this, look at rubygems source, lib/rubygems/ext/builder.rb, you have
+to make both `make` and `run` commands spit the output from running commands to
+the terminal.
