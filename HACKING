@@ -1,0 +1,12 @@
+Running a development gem2deb version without installing
+========================================================
+
+To debug a gem2deb source tree, you might want to run the contained programs
+against other packages, but you probably don't want to install a development
+version on your system just to be able to that. 
+
+$ . /path/to/gem2deb/tools/shell.bash
+
+This will make the programs in bin/ available in your $PATH, the Ruby code in
+lib/ available for Ruby and the debhelper Perl code in debhelper7/ available
+for debhelper.
