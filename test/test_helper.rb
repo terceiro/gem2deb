@@ -129,13 +129,7 @@ class Gem2DebTestCase
   # system-wide installed versions.
   def self.run_command(cmd)
     # setup Perl lib for debhelper7
-    perl5lib = File.join(tmpdir, 'perl5')
-    debhelper_buildsystems = File.join(perl5lib, 'Debian/Debhelper/Buildsystem')
-    FileUtils.mkdir_p debhelper_buildsystems
-    FileUtils.cp "#{GEM2DEB_ROOT_SOURCE_DIR}/debhelper7/buildsystem/ruby.pm", debhelper_buildsystems
-    debhelper_sequences = File.join(perl5lib, 'Debian/Debhelper/Sequence')
-    FileUtils.mkdir_p debhelper_sequences
-    FileUtils.cp "#{GEM2DEB_ROOT_SOURCE_DIR}/debhelper7/sequence/ruby.pm", debhelper_sequences
+    perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper7')
 
     # setup the environment
     ENV['PERL5LIB'] = perl5lib
