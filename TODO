@@ -94,3 +94,11 @@ a terminal. ;-)
 To work on this, look at rubygems source, lib/rubygems/ext/builder.rb, you have
 to make both `make` and `run` commands spit the output from running commands to
 the terminal.
+
+Make the debhelper ruby buildsystem trigger automatically
+=========================================================
+
+This way we don't need to pass `--buildsystem=ruby --with ruby` to dh in
+debian/rules. It should build automatically the sources root contains either
+metadata.yml, *.gemspec. To get full automation, the buildsystem should be
+included in debhelper.
