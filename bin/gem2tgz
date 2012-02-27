@@ -18,6 +18,8 @@
 require 'gem2deb'
 require 'gem2deb/gem2tgz'
 require 'optparse'
+require 'rubygems'
+
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: gem2tgz [OPTIONS] GEMNAME|GEMFILE [TARBALL]"
@@ -45,7 +47,12 @@ gemfile = ARGV[0]
 if not File::exists?(gemfile) and gemfile !~ /.gem$/
   puts "#{gemfile} doesn't seem to exist. Let's try to download it with 'gem fetch #{ARGV[0]}'"
   run("gem", "fetch", gemfile)
-  gemfile = Dir::glob("#{gemfile}-*.gem")[0]
+  versions = Dir::glob("#{gemfile}-*.gem").map do |a|
+    Gem::Version.new(a.sub(/#{gemfile}-(.+)\.gem/, '\1'))
+  end
+  # and pick the most recent one
+  last_version = versions.max
+  gemfile = "#{gemfile}-#{last_version}.gem"
 end
 
 Gem2Deb::Gem2Tgz.convert!(gemfile, ARGV[1] || nil)
