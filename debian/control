@@ -8,7 +8,7 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
 	   Gunnar Wolf <gwolf@debian.org>
 DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), rake, ruby-shoulda-context, ruby-mocha, rubygems1.8 (>= 1.8.12-1~), ruby1.8, ruby1.8-dev, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), devscripts, ruby-setup, lintian
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/gem2deb.git;a=summary
 
