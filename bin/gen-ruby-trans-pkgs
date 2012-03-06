@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8 -w
+#!/usr/bin/ruby -w
 # Generate debian/control snippets
 
 if ARGV.length != 1
