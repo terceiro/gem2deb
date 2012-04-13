@@ -206,8 +206,12 @@ This file is expect to contain a YAML document with a list of files that must
 be ignored when checking for `require "rubygems"` lines. Example:
 
   --- 
-  - lib/foo.rb
-  - lib/foo/rubygems.rg
+  - debian/ruby-foo/usr/lib/ruby/vendor_ruby/foo.rb
+  - debian/ruby-foo/usr/lib/ruby/vendor_ruby/foo/rubygems.rg
+
+As you can see above, you have to list filenames based on their corresponding
+install locations in the package temporary install directory, i.e.
+`debian/${pkg}/..`
 
 =back
 
