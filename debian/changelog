@@ -1,7 +1,12 @@
 gem2deb (0.2.14) UNRELEASED; urgency=low
 
+  [ Antonio Terceiro ]
   * Remove duplicate method definition
   * Write a better TODO list to encourage contribution
+
+  [ Per Andersson ]
+  * Depend on rubygems instead of transitional package rubygems1.8.
+    (Closes: #654234)
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 07 Jan 2012 10:23:52 -0200
 
