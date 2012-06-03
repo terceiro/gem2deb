@@ -14,7 +14,7 @@ Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/gem2deb.git;a=summary
 
 Package: gem2deb
 Architecture: all
-Depends: ruby1.8, rubygems (>= 1.8.12-1~), ruby1.8-dev, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ruby | ruby-interpreter, ruby1.8, rubygems (>= 1.8.12-1~), ruby1.8-dev, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
