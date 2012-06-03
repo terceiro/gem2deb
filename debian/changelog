@@ -1,14 +1,22 @@
-gem2deb (0.2.14) UNRELEASED; urgency=low
+gem2deb (0.2.14) unstable; urgency=low
 
   [ Antonio Terceiro ]
-  * Remove duplicate method definition
-  * Write a better TODO list to encourage contribution
+  * New release.
+  * Fix documentation of require-rubygems.overrides
+  * Changed all shebangs from ruby.8 to ruby
+  * debian/control:
+    + Bump Standards version for gem2deb itself and for generated packages
+    + add dependency on `ruby | ruby-interpreter`
 
   [ Per Andersson ]
   * Depend on rubygems instead of transitional package rubygems1.8.
     (Closes: #654234)
+  * Correct typo in dh_ruby man page.
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 07 Jan 2012 10:23:52 -0200
+  [ Cédric Boutillier ]
+  * use official DEP5 copyright formal url in templates
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 03 Jun 2012 12:05:14 -0300
 
 gem2deb (0.2.13) unstable; urgency=low
 
