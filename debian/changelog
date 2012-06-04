@@ -1,3 +1,9 @@
+gem2deb (0.2.15) unstable; urgency=low
+
+  * dh_ruby: read debian/control as UTF-8, not ASCII. Closes: #675974
+
+ -- Lucas Nussbaum <lucas@debian.org>  Mon, 04 Jun 2012 23:06:19 +0200
+
 gem2deb (0.2.14) unstable; urgency=low
 
   [ Antonio Terceiro ]
