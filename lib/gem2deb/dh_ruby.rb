@@ -378,7 +378,11 @@ module Gem2Deb
       @ruby_versions ||=
         begin
           # find ruby versions to build the package for.
-          lines = File.readlines('debian/control').grep(/^XS-Ruby-Versions: /)
+          if String.instance_methods.include?(:encoding)
+            lines = File.readlines('debian/control', {:encoding => 'UTF-8'}).grep(/^XS-Ruby-Versions: /)
+          else
+            lines = File.readlines('debian/control').grep(/^XS-Ruby-Versions: /)
+          end
           if lines.empty?
             puts "No XS-Ruby-Versions: field found in source!" if @verbose
             exit(1)
