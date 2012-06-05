@@ -177,6 +177,17 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby.expects(:handle_test_failure).never
       @dh_ruby.send(:check_rubygems)
     end
+
+    %w[
+      utf8
+      latin1
+    ].each do |encoding|
+      should "handle #{encoding}" do
+        @dh_ruby.stubs(:ruby_source_files_in_package).returns(["test/encondings/#{encoding}.rb"])
+        @dh_ruby.send(:check_rubygems)
+      end
+    end
+
   end
 
   context 'libraries with name clash (between foo.rb and foo.so)' do

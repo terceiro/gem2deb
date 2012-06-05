@@ -198,7 +198,7 @@ module Gem2Deb
       packages.each do |pkg|
         pkg.chomp!
         ruby_source_files_in_package(pkg).each do |f|
-          lines = IO::readlines(f)
+          lines = readlines(f)
           rglines = lines.select { |l| l =~ /require.*rubygems/  && l !~ /^\s*#/ }
           rglines.each do |l|
             if not overrides.include?(f)
@@ -211,6 +211,14 @@ module Gem2Deb
       if found
         puts "Found some 'require rubygems' without overrides (see above)." if @verbose
         handle_test_failure('require-rubygems')
+      end
+    end
+
+    def readlines(filename)
+      if String.instance_methods.include?(:valid_encoding?)
+        File.readlines(filename).select { |l| l.valid_encoding? }
+      else
+        File.readlines(filename)
       end
     end
 
