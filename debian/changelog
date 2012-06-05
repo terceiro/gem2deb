@@ -1,3 +1,9 @@
+gem2deb (0.2.16) unstable; urgency=low
+
+  * Assume that any external files are UTF-8. Closes: #676192
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jun 2012 15:25:09 -0300
+
 gem2deb (0.2.15) unstable; urgency=low
 
   * dh_ruby: read debian/control as UTF-8, not ASCII. Closes: #675974
