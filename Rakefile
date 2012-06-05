@@ -1,5 +1,7 @@
 require 'rake/testtask'
 
+ENV['LANG'] = 'C'
+
 task :default => :test
 
 task :test => :version_check do
