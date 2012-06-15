@@ -1,8 +1,10 @@
-gem2deb (0.2.17) UNRELEASED; urgency=low
+gem2deb (0.2.17) unstable; urgency=low
 
-  * 
+  * Eliminate annoying warnings when running gem2deb/dh_ruby
+    + Only force default external encoding if absolutely required.
+    + Drop workaround for Rubygems/YAML issue.
 
- -- Antonio Terceiro <terceiro@debian.org>  Thu, 14 Jun 2012 21:59:53 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 14 Jun 2012 22:05:39 -0300
 
 gem2deb (0.2.16) unstable; urgency=low
 
