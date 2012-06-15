@@ -15,7 +15,7 @@
 
 require 'rubygems'
 require 'rubygems/specification'
-require 'gem2deb/yaml'
+require 'yaml'
 
 module Gem2Deb
   class Metadata

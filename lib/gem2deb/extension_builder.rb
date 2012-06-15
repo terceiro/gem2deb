@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
-require 'gem2deb/yaml'
+require 'yaml'
 require 'rubygems/ext'
 require 'gem2deb/metadata'
 
