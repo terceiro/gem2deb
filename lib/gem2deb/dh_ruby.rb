@@ -29,6 +29,11 @@ module Gem2Deb
       'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     }
 
+    RUBY_CONFIG_VERSION = {
+      'ruby1.8'   => '1.8',
+      'ruby1.9.1' => '1.9.1',
+    }
+
     RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
 
     DEFAULT_RUBY_VERSION = 'ruby1.8'
@@ -96,6 +101,8 @@ module Gem2Deb
       run_tests(supported_versions)
 
       install_substvars(package, supported_versions)
+
+      install_gemspec(package, supported_versions)
 
       check_rubygems
 
@@ -413,5 +420,18 @@ module Gem2Deb
         end
       end
     end
+
+    def install_gemspec(package, versions)
+      if metadata.gemspec
+        versions.each do |version|
+          target = File.join(destdir_for(package), "/usr/share/rubygems-integration/#{RUBY_CONFIG_VERSION[version]}/specifications/#{metadata.name}-#{metadata.version}.gemspec")
+          FileUtils.mkdir_p(File.dirname(target))
+          File.open(target, 'w') do |file|
+            file.write(metadata.gemspec.to_ruby)
+          end
+        end
+      end
+    end
+
   end
 end

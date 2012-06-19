@@ -274,6 +274,13 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'installing gemspec' do
+    should 'install gemspec for simplegem' do
+      assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/share/rubygems-integration/1.9.1/specifications/simplegem-0.0.1.gemspec'
+    end
+
+  end
+
   protected
 
   def read_installed_file(gem_dirname, package, path)
