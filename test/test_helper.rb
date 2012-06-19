@@ -45,7 +45,7 @@ class Gem2DebTestCase
     def setup_cleanup
       unless $__gem2deb_tests_cleanup_installed
         at_exit do
-          if ENV['GEM2DEB_DEBUG']
+          if ENV['GEM2DEB_TEST_DEBUG']
             puts
             puts "======================================================================="
             puts "Temporary test files left in #{Gem2DebTestCase::TMP_DIR} for inspection!"
