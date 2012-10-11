@@ -36,8 +36,6 @@ module Gem2Deb
 
     RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
 
-    DEFAULT_RUBY_VERSION = 'ruby1.8'
-
     RUBY_CODE_DIR = '/usr/lib/ruby/vendor_ruby'
 
     include Gem2Deb
