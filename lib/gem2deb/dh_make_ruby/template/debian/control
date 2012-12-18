@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
 Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>~)
-Standards-Version: 3.9.3
-#Vcs-Git: git://git.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
-#Vcs-Browser: http://git.debian.org/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
+Standards-Version: 3.9.4
+#Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
+#Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
 XS-Ruby-Versions: <%= ruby_versions %>
 
