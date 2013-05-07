@@ -1,3 +1,14 @@
+gem2deb (0.3.1) unstable; urgency=low
+
+  [ Antonio Terceiro ]
+  * remove unused constant
+  * Remove DM-Upload-Allowed from d/control template (Closes: #692152)
+
+  [ Cédric Boutillier ]
+  * d/control template: bump Standards-Version; point VCS fields to anonscm.d.o
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 07 May 2013 19:15:17 -0300
+
 gem2deb (0.3.0) unstable; urgency=low
 
   * Fix debug test mode
