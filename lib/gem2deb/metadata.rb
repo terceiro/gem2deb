@@ -65,7 +65,7 @@ module Gem2Deb
     end
 
     def test_files
-      gemspec ? gemspec.test_files : []
+      gemspec ? gemspec.test_files.select { |filename| filename =~ /\.rb$/ } : []
     end
 
     protected

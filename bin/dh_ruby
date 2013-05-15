@@ -142,7 +142,7 @@ by using debian/I<package>.install.
 
 Determines which file contain the gem specification with package metadata.  By
 default, dh_ruby will read metadata from a .gemspec file in the root of source
-package directory. You can use this variable to override that if want to
+package directory. You can use this variable to override that if you want to
 provide custom metadata for the Debian package.
 
 In the case there are more than one .gemspec in the source package root, you
@@ -202,7 +202,7 @@ Fine-tune the "require-rubygems" test. If the package has a very good reason to
 actually `require "rubygems"`, you can use this file as a whitelist of files
 allowed to have `require "rubygems"`.
 
-This file is expect to contain a YAML document with a list of files that must
+This file is expected to contain a YAML document with a list of files that must
 be ignored when checking for `require "rubygems"` lines. Example:
 
   --- 

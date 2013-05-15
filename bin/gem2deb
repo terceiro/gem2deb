@@ -189,7 +189,7 @@ It contains all the files the gem contains.
 
 =item Metadata
 
-It contains the gem metadata ends up in a file named ``metadata.yml`` inside
+It contains the gem metadata in a file named ``metadata.yml`` inside
 the I<mygem-0.1.0> directory.
 
 =back
