@@ -95,7 +95,7 @@ class MetaDataTest < Gem2DebTestCase
     end
 
     should 'obtain test files list from gemspec' do
-      @gemspec.stubs(:test_files).returns(['test/class1_test.rb', 'test/class2_test.rb'])
+      @gemspec.stubs(:test_files).returns(['test/class1_test.rb', 'test/class2_test.rb', 'test/not_a_test.txt'])
       assert_equal ['test/class1_test.rb', 'test/class2_test.rb'], @metadata.test_files
     end
 
