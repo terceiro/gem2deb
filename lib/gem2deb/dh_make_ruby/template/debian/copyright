@@ -6,6 +6,13 @@ Files: *
 Copyright: <years> <put author's name and email here>
            <years> <likewise for another author>
 License: GPL-2+ (FIXME)
+
+Files: debian/*
+Copyright: <%= Date.today.year %> <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
+License: GPL-2+ (FIXME)
+Comment: the Debian packaging is licensed under the same terms as the original package.
+
+License: GPL-2+ (FIXME)
  This program is free software; you can redistribute it
  and/or modify it under the terms of the GNU General Public
  License as published by the Free Software Foundation; either
@@ -26,8 +33,3 @@ License: GPL-2+ (FIXME)
  On Debian systems, the full text of the GNU General Public
  License version 2 can be found in the file
  `/usr/share/common-licenses/GPL-2'.
-
-Files: debian/*
-Copyright: <%= Date.today.year %> <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
-License:
- [LICENSE TEXT]
