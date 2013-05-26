@@ -1,0 +1,3 @@
+#!/usr/ruby/ruby
+
+puts "foo"

@@ -1,0 +1,25 @@
+Source: multibinary
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= 0.3.1~)
+Standards-Version: 3.9.4
+#Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/ruby-multibinary.git
+#Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/ruby-multibinary.git;a=summary
+Homepage: FIXME
+XS-Ruby-Versions: all
+
+Package: ruby-foo
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+Description: FIXME
+ <insert long description, indented with spaces>
+
+Package: ruby-bar
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+Description: FIXME
+ <insert long description, indented with spaces>

@@ -1,0 +1,5 @@
+multibinary (0.1.0~FIXME-1) UNRELEASED; urgency=low
+
+  * Initial release (Closes: #nnnn)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 26 May 2013 18:05:37 -0300
