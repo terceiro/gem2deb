@@ -65,27 +65,18 @@ module Gem2Deb
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
 
-      # FIXME supported_versions is passed a lot of times to the installer, it
-      # should probably be an attribute of that class
-      supported_versions =
-        if all_ruby_versions_supported?
-          SUPPORTED_RUBY_VERSIONS.keys.clone
-        else
-          ruby_versions.clone
-        end
-
       package = packages.first
       installer = installer_class.new(package, '.', ruby_versions)
       installer.verbose = self.verbose
       installer.dh_auto_install_destdir = argv.first
 
-      installer.install_files_and_build_extensions(supported_versions)
+      installer.install_files_and_build_extensions
       installer.update_shebangs
 
-      run_tests(supported_versions)
+      run_tests
 
-      installer.install_substvars(supported_versions)
-      installer.install_gemspec(supported_versions)
+      installer.install_substvars
+      installer.install_gemspec
       check_rubygems(installer)
 
       puts "  Leaving dh_ruby --install" if @verbose
@@ -130,16 +121,14 @@ module Gem2Deb
           exit(1)
         end
       else
-          puts "ERROR: Test \"#{test}\" failed. Exiting."
-          exit(1)
+        puts "ERROR: Test \"#{test}\" failed. Exiting."
+        exit(1)
       end
     end
 
-    def run_tests(supported_versions)
-      supported_versions.dup.each do |rubyver|
-        if !run_tests_for_version(rubyver)
-          supported_versions.delete(rubyver)
-        end
+    def run_tests
+      ruby_versions.each do |rubyver|
+        run_tests_for_version(rubyver)
       end
     end
 
@@ -154,9 +143,6 @@ module Gem2Deb
 
       if $?.exitstatus != 0
         handle_test_failure(rubyver)
-        return false
-      else
-        return true
       end
     end
 
@@ -185,13 +171,14 @@ module Gem2Deb
             puts "No XS-Ruby-Versions: field found in source!" if @verbose
             exit(1)
           else
-            lines.first.split[1..-1]
+            list = lines.first.split[1..-1]
+            if list.include?('all')
+              SUPPORTED_RUBY_VERSIONS.keys
+            else
+              list
+            end
           end
         end
-    end
-
-    def all_ruby_versions_supported?
-      ruby_versions.include?('all')
     end
 
   end

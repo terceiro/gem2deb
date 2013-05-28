@@ -19,8 +19,8 @@ module Gem2Deb
 
   class SetupRbInstaller < Installer
 
-    def install_files_and_build_extensions(supported_versions)
-      for rubyver in supported_versions
+    def install_files_and_build_extensions
+      ruby_versions.each do |rubyver|
         ruby = SUPPORTED_RUBY_VERSIONS[rubyver]
         siteruby = destdir(:libdir, rubyver)
         bindir = destdir(:bindir, rubyver)

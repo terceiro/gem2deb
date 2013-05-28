@@ -19,20 +19,20 @@ module Gem2Deb
     attr_accessor :verbose
     attr_accessor :dh_auto_install_destdir
 
-    def initialize(binary_package, root, ruby_versions = ['all'])
+    def initialize(binary_package, root, ruby_versions = SUPPORTED_RUBY_VERSIONS.keys)
       @binary_package = binary_package
       @root = File.expand_path(root)
       @ruby_versions = ruby_versions
       @metadata = Gem2Deb::Metadata.new(@root)
     end
 
-    def install_files_and_build_extensions(supported_versions)
+    def install_files_and_build_extensions
       install_files(bindir, destdir(:bindir), 755) if File::directory?(bindir)
 
       install_files(libdir, destdir(:libdir), 644) if File::directory?(libdir)
 
       if metadata.has_native_extensions?
-        supported_versions.each do |rubyver|
+        ruby_versions.each do |rubyver|
           puts "Building extension for #{rubyver} ..." if verbose
           run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{binary_package}")
 
@@ -46,7 +46,7 @@ module Gem2Deb
         end
       end
 
-      install_symlinks(supported_versions)
+      install_symlinks
     end
 
     def update_shebangs
@@ -59,15 +59,15 @@ module Gem2Deb
       rewrite_shebangs(ruby_binary)
     end
 
-    def install_substvars(supported_versions)
+    def install_substvars
       File.open("debian/#{binary_package}.substvars", "a") do |fd|
-        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
+        fd.puts "ruby:Versions=#{ruby_versions.join(' ')}"
       end
     end
 
-    def install_gemspec(versions)
+    def install_gemspec
       if metadata.gemspec
-        versions.each do |version|
+        ruby_versions.each do |version|
           target = File.join(destdir(:root), "/usr/share/rubygems-integration/#{RUBY_CONFIG_VERSION[version]}/specifications/#{metadata.name}-#{metadata.version}.gemspec")
           FileUtils.mkdir_p(File.dirname(target))
           File.open(target, 'w') do |file|
@@ -114,17 +114,10 @@ module Gem2Deb
       end
     end
 
-    def install_substvars(supported_versions)
-      File.open("debian/#{binary_package}.substvars", "a") do |fd|
-        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
-      end
-    end
-
     protected
 
-    # FIXME this duplicates Gem2Deb::DhRuby::all_ruby_versions_supported?
     def all_ruby_versions_supported?
-      ruby_versions.include?('all')
+      ruby_versions == SUPPORTED_RUBY_VERSIONS.keys
     end
 
     def bindir
@@ -195,8 +188,8 @@ module Gem2Deb
     end
 
 
-    def install_symlinks(supported_versions)
-      supported_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
+    def install_symlinks
+      ruby_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
         archdir = destdir(:archdir, rubyver)
         vendordir = destdir(:libdir, rubyver)
         vendorlibdir = File.dirname(archdir)

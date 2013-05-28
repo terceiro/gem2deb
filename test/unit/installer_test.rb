@@ -160,6 +160,20 @@ class InstallerTest < Gem2DebTestCase
     end
   end
 
+  context "Ruby versions supported" do
+    setup do
+      @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+    end
+    should 'know when all versions are supported' do
+      # ruby_versions contains all supported versions by default
+      assert_equal true, @installer.send(:all_ruby_versions_supported?)
+    end
+    should 'know when not all versions are supported' do
+      @installer.stubs(:ruby_versions).returns(['ruby1.8'])
+      assert_equal false, @installer.send(:all_ruby_versions_supported?)
+    end
+  end
+
 
 end
 

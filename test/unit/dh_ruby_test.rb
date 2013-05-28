@@ -95,15 +95,7 @@ class DhRubyTest < Gem2DebTestCase
     end
     should 'read supported versions from debian/control' do
       File.expects(:readlines).with('debian/control').returns(["XS-Ruby-Versions: all\n"])
-      assert_equal ['all'], @dh_ruby.send(:ruby_versions)
-    end
-    should 'known when all versions are supported' do
-      @dh_ruby.stubs(:ruby_versions).returns(['all'])
-      assert_equal true, @dh_ruby.send(:all_ruby_versions_supported?)
-    end
-    should 'known when not all versions are supported' do
-      @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
-      assert_equal false, @dh_ruby.send(:all_ruby_versions_supported?)
+      assert_equal SUPPORTED_RUBY_VERSIONS.keys, @dh_ruby.send(:ruby_versions)
     end
   end
 
@@ -127,17 +119,6 @@ class DhRubyTest < Gem2DebTestCase
     should 'work' do
       symlink = File.join(@target_dir, 'debian/ruby-name-clash/usr/lib/ruby/vendor_ruby/1.8/name_clash.rb')
       assert File.exist?(symlink), 'symlink not installed at %s!' % symlink
-    end
-  end
-
-  context 'run_tests' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-    end
-    should 'not skip tests after one that fails' do
-      @dh_ruby.stubs(:run_tests_for_version).with('rubyX').returns(false)
-      @dh_ruby.expects(:run_tests_for_version).with('rubyY')
-      @dh_ruby.send(:run_tests, ['rubyX', 'rubyY'])
     end
   end
 
