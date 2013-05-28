@@ -17,15 +17,15 @@ require 'gem2deb/dh_ruby'
 
 module Gem2Deb
 
-  class DhRubySetupRb < DhRuby
+  class SetupRbInstaller < Installer
 
-    def install_files_and_build_extensions(package, supported_versions)
+    def install_files_and_build_extensions(supported_versions)
       for rubyver in supported_versions
         ruby = SUPPORTED_RUBY_VERSIONS[rubyver]
-        siteruby = destdir(package, :libdir, rubyver)
-        bindir = destdir(package, :bindir, rubyver)
-        archdir = destdir(package, :archdir, rubyver)
-        prefix = destdir(package, :prefix, rubyver)
+        siteruby = destdir(:libdir, rubyver)
+        bindir = destdir(:bindir, rubyver)
+        archdir = destdir(:archdir, rubyver)
+        prefix = destdir(:prefix, rubyver)
 
         # First configure
         run("#{ruby} setup.rb config --prefix=#{prefix} --bindir=#{bindir} --siteruby=#{siteruby} --siterubyver=#{siteruby} --siterubyverarch=#{archdir}")
@@ -38,16 +38,9 @@ module Gem2Deb
 
         # Then clean
         run("#{ruby} setup.rb distclean")
-        
+
       end
     end
-
-
-    def run_tests(supported_versions)
-      # Todo: we should first check for setup-rb specific tests.
-      super
-    end
-
 
   end
 

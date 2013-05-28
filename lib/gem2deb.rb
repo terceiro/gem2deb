@@ -22,6 +22,26 @@ module Gem2Deb
   class CommandFailed < Exception
   end
 
+  SUPPORTED_RUBY_VERSIONS = {
+    #name             Ruby binary
+    #---------------  -------------------
+    'ruby1.8'   => '/usr/bin/ruby1.8',
+    'ruby1.9.1' => '/usr/bin/ruby1.9.1',
+  }
+
+  RUBY_CONFIG_VERSION = {
+    'ruby1.8'   => '1.8',
+    'ruby1.9.1' => '1.9.1',
+  }
+
+  RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
+
+  BIN_DIR = '/usr/bin'
+
+  RUBY_CODE_DIR = '/usr/lib/ruby/vendor_ruby'
+
+  LIBDIR = File.expand_path(File.dirname(__FILE__))
+
   def run(cmd)
     puts(cmd) if $VERBOSE
     system(cmd)

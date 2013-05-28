@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'shoulda-context'
-require 'mocha'
+require 'mocha/setup'
 require 'fileutils'
 require 'tmpdir'
 require 'tempfile'

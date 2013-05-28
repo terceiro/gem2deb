@@ -1,0 +1,165 @@
+require 'test_helper'
+require 'gem2deb/installer'
+
+class InstallerTest < Gem2DebTestCase
+
+  MULTIBINARY = 'test/sample/multibinary'
+  FOO = File.join(MULTIBINARY, 'foo')
+  BAR = File.join(MULTIBINARY, 'foo')
+
+  context 'constructor' do
+
+    setup do
+      @foo_installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+    end
+
+    should 'store binary package name' do
+      assert_equal 'ruby-foo', @foo_installer.binary_package
+    end
+
+    should 'expand and store root directory' do
+      assert_match %r{.+#{FOO}$}, @foo_installer.root
+    end
+
+    should 'read metadata' do
+      assert @foo_installer.metadata.is_a?(Gem2Deb::Metadata)
+    end
+
+  end
+
+  context 'finding duplicate files' do
+    setup do
+      @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+      @installer.verbose = false
+      @tmpdir = Dir.mktmpdir
+    end
+    teardown do
+      FileUtils.rm_rf(@tmpdir)
+    end
+    should 'remove duplicates' do
+      Dir.chdir(@tmpdir) do
+        FileUtils.mkdir('dir1')
+        FileUtils.mkdir('dir2')
+        ['dir1','dir2'].each do |d|
+          File.open(File.join(d, 'test.rb'), 'w') { |f| f.puts "# Nice File"}
+        end
+        @installer.send(:remove_duplicate_files, 'dir1', 'dir2')
+        assert !File.exists?('dir2')
+      end
+    end
+    should 'not crash with duplicates in subdirectories' do
+      Dir.chdir(@tmpdir) do
+        FileUtils.mkdir_p('dir1/subdir')
+        FileUtils.touch('dir1/subdir/test.rb')
+        FileUtils.mkdir_p('dir2/subdir')
+        FileUtils.touch('dir2/subdir/test.rb')
+        @installer.send(:remove_duplicate_files, 'dir1', 'dir2')
+        assert !File.exists?('dir2')
+      end
+    end
+  end
+
+  context 'installing Ruby files' do
+    should 'not crash when directories to be installed have names in the exclusion list' do
+      installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+      Dir.chdir('test/sample/install_files/') do
+        installer.send(:install_files, 'lib', File.join(tmpdir, 'install_files_destdir'), 644)
+      end
+    end
+  end
+
+  context 'rewriting shebangs' do
+    setup do
+      @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+      @installer.verbose = false
+
+      FileUtils.cp_r('test/sample/rewrite_shebangs', self.class.tmpdir)
+      @installer.stubs(:destdir).with(:bindir).returns(self.class.tmpdir + '/rewrite_shebangs')
+
+      # The fact that this call does not crash means we won't crash when
+      # /usr/bin has subdirectories
+      @installer.send(:rewrite_shebangs, '/usr/bin/env ruby')
+    end
+    teardown do
+      FileUtils.rm_f(self.class.tmpdir + '/rewrite_shebangs')
+    end
+
+    should 'rewrite shebangs of programs directly under bin/' do
+      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+    end
+    should 'rewrite shebangs in subdirs of bin/' do
+      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
+    end
+    should 'add a shebang when there is none' do
+      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
+      assert_match %r{/usr/bin/env ruby}, lines[0]
+      assert_match /puts/, lines[1]
+    end
+    should 'not rewrite shebangs non-Ruby scripts' do
+      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')
+      assert_match %r{/bin/sh}, lines[0]
+    end
+    should 'leave programs with correct permissions after rewriting shebangs' do
+      assert_equal '100755', '%o' % File.stat(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang').mode
+    end
+    should 'rewrite shebang to use `/usr/bin/env ruby` if all versions are supported' do
+      @installer.stubs(:all_ruby_versions_supported?).returns(true)
+      @installer.expects(:rewrite_shebangs).with('/usr/bin/env ruby')
+      @installer.send(:update_shebangs)
+    end
+    should 'rewrite shebang to usr /usr/bin/ruby1.8 if only 1.8 is supported' do
+      @installer.stubs(:ruby_versions).returns(['ruby1.8'])
+      @installer.expects(:rewrite_shebangs).with('/usr/bin/ruby1.8')
+      @installer.send(:update_shebangs)
+    end
+  end
+
+  context 'checking for require "rubygems"' do
+    setup do
+      @installer = Gem2Deb::Installer.new("ruby-foo", FOO)
+      @installer.verbose = false
+    end
+    should 'detect require "rubygems"' do
+      @installer.stubs(:installed_ruby_files).returns(['test/sample/check_rubygems/bad.rb'])
+      assert_raises(Gem2Deb::Installer::RequireRubygemsFound) do
+        @installer.check_rubygems
+      end
+    end
+    should 'not complain about commented require "rubygems"' do
+      @installer.stubs(:installed_ruby_files).returns(['test/sample/check_rubygems/good.rb'])
+      @installer.check_rubygems
+    end
+
+    %w[
+      utf8
+      latin1
+    ].each do |encoding|
+      should "handle #{encoding}" do
+        @installer.stubs(:installed_ruby_files).returns(["test/encondings/#{encoding}.rb"])
+        @installer.check_rubygems
+      end
+    end
+
+  end
+
+  context 'DESTDIR' do
+    setup do
+      @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
+      @installer.dh_auto_install_destdir = '/path/to/source-package/debian/tmp'
+    end
+    should 'be debian/${binary_package} by default' do
+      assert_match /\/debian\/ruby-foo$/, @installer.send(:destdir, :root)
+    end
+    should 'install to debian/tmp when DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is set' do
+      saved_env = ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
+      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = 'yes'
+
+      assert_equal '/path/to/source-package/debian/tmp', @installer.send(:destdir, :root)
+
+      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = saved_env
+    end
+  end
+
+
+end
+
