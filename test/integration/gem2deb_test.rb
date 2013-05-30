@@ -27,18 +27,6 @@ class Gem2DebTest < Gem2DebTestCase
     assert_match /E: ruby-simplegem: helper-templates-in-copyright/, `lintian #{changes_file}`
   end
 
-  should 'not compress *.rb files installed as examples' do
-    examples_package = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'test/sample/examples')
-    tmpdir = Dir.mktmpdir
-    FileUtils.cp_r(examples_package, tmpdir)
-    Dir.chdir(File.join(tmpdir, 'examples')) do
-      run_command('dpkg-buildpackage -d -us -uc')
-      assert_no_file_exists 'debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb.gz'
-      assert_file_exists 'debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb'
-    end
-    FileUtils.rm_rf(tmpdir)
-  end
-
   def self.build_tree(directory)
     FileUtils.cp_r(directory, tmpdir)
     dir = File.join(tmpdir, File.basename(directory))
@@ -63,6 +51,13 @@ class Gem2DebTest < Gem2DebTestCase
       should 'install bar.rb ruby-bar' do
         assert_file_exists "#{dir}/debian/ruby-bar/usr/lib/ruby/vendor_ruby/bar.rb"
       end
+    end
+  end
+
+  self.build_tree('test/sample/examples') do |dir|
+    should 'not compress *.rb files installed as examples' do
+      assert_no_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb.gz"
+      assert_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb"
     end
   end
 
