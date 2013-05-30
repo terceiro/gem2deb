@@ -1,4 +1,4 @@
-gem2deb (0.4.0) UNRELEASED; urgency=low
+gem2deb (0.4.0) unstable; urgency=low
 
   [ Cédric Boutillier ]
   * debian/control: remove obsolete DM-Upload-Allowed flag
@@ -15,7 +15,7 @@ gem2deb (0.4.0) UNRELEASED; urgency=low
     details.
   * Install CHANGELOG* as upstream changelog (Closes: #702160)
 
- -- Antonio Terceiro <terceiro@debian.org>  Thu, 30 May 2013 15:44:13 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 30 May 2013 18:25:25 -0300
 
 gem2deb (0.3.1) unstable; urgency=low
 
