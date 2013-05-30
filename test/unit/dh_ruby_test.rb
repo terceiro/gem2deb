@@ -13,7 +13,6 @@ class DhRubyTest < Gem2DebTestCase
     build(SIMPLE_MIXED, SIMPLE_MIXED_DIRNAME)
     build(SIMPLE_ROOT_EXTENSION, SIMPLE_ROOT_EXTENSION_DIRNAME)
     build(SIMPLE_EXTENSION_WITH_NAME_CLASH, SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME)
-    build_from_tree('test/sample/multibinary')
   end
 
   context 'installing simplegem' do
@@ -129,21 +128,6 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context "multi-binary source packages" do
-    should 'install program in ruby-foo' do
-      assert_installed 'multibinary', 'ruby-foo', '/usr/bin/foo', false
-    end
-    should 'install library in ruby-foo' do
-      assert_installed 'multibinary', 'ruby-foo', '/usr/lib/ruby/vendor_ruby/foo.rb', false
-    end
-    should 'install program in ruby-bar' do
-      assert_installed 'multibinary', 'ruby-bar', '/usr/bin/bar', false
-    end
-    should 'install library in ruby-bar' do
-      assert_installed 'multibinary', 'ruby-bar', '/usr/lib/ruby/vendor_ruby/bar.rb', false
-    end
-  end
-
   context "selecting package layout" do
 
     setup do
@@ -182,12 +166,6 @@ class DhRubyTest < Gem2DebTestCase
     Gem2Deb::DhMakeRuby.new(tarball).build
 
     build_package(package_path)
-  end
-
-  def self.build_from_tree(directory)
-    FileUtils.cp_r(directory, tmpdir)
-    target = File.join(tmpdir, File.basename(directory))
-    build_package(target)
   end
 
   def self.build_package(directory)
