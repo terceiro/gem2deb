@@ -1,6 +1,19 @@
 gem2deb (0.4.0) UNRELEASED; urgency=low
 
-  * 
+  [ Cédric Boutillier ]
+  * debian/control: remove obsolete DM-Upload-Allowed flag
+  * use canonical URI in Vcs-* fields
+  * fix typos in gem2deb and dh_ruby manpages.
+    Thanks Francesco Poli (Closes: #691132, #691133)
+  * filter out non Ruby files when creating test-ruby-files.yaml
+    (Closes: #691236)
+  * dh-make-ruby: suggest same copyright as original package in generated
+    debian/copyright
+
+  [ Antonio Terceiro ]
+  * Added support for multi-binary source packages. See dh_ruby(1) for
+    details.
+  * Install CHANGELOG* as upstream changelog (Closes: #702160)
 
  -- Antonio Terceiro <terceiro@debian.org>  Thu, 30 May 2013 15:44:13 -0300
 
