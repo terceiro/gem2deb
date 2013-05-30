@@ -1,4 +1,3 @@
-require 'gem2deb/dh_ruby'
 require 'gem2deb/metadata'
 
 module Gem2Deb
