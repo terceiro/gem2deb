@@ -2,10 +2,10 @@ require 'test_helper'
 require 'gem2deb/gem2tgz'
 require 'gem2deb/dh_make_ruby'
 require 'gem2deb/dh_ruby'
-require 'gem2deb/dh_ruby_setuprb'
+require 'gem2deb/setup_rb_installer'
 require 'rbconfig'
 
-class DhRubySetuprbTest < Gem2DebTestCase
+class SetupRbInstallerTest < Gem2DebTestCase
 
   one_time_setup do
     build(SIMPLE_SETUPRB_NAME, SIMPLE_SETUPRB_DIRNAME)
@@ -53,7 +53,8 @@ class DhRubySetuprbTest < Gem2DebTestCase
     FileUtils.rm_rf(File.join(tmpdir, source_dir))
     Gem2Deb::DhMakeRuby.new(tarball).build
 
-    dh_ruby = Gem2Deb::DhRubySetupRb.new
+    dh_ruby = Gem2Deb::DhRuby.new
+    dh_ruby.installer_class = Gem2Deb::SetupRbInstaller
     dh_ruby.verbose = false
 
     silence_stream(STDOUT) do

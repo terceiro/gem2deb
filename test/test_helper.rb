@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'shoulda-context'
-require 'mocha'
+require 'mocha/setup'
 require 'fileutils'
 require 'tmpdir'
 require 'tempfile'
@@ -103,12 +103,13 @@ class Gem2DebTestCase
 
   # Installation-related functions
 
-  def installed_file_path(gem_dirname, package, path)
-    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
+  def installed_file_path(gem_dirname, package, path, convert_gem_name = true)
+    source_package_name = convert_gem_name ? 'ruby-' + gem_dirname : gem_dirname
+    File.join(self.class.tmpdir, source_package_name, 'debian', package, path)
   end
 
-  def assert_installed(gem_dirname, package, path)
-    assert_file_exists installed_file_path(gem_dirname, package, path)
+  def assert_installed(gem_dirname, package, path, convert_gem_name = true)
+    assert_file_exists installed_file_path(gem_dirname, package, path, convert_gem_name)
   end
 
   def self.silence_stream(stream)
@@ -159,6 +160,17 @@ class Gem2DebTestCase
   # See above
   def run_command(cmd)
     self.class.run_command(cmd)
+  end
+
+  # Utility method to fake contents in debian/control in the scope of a
+  # test.
+  def debian_control
+    @debian_control ||=
+      begin
+        lines = []
+        File.expects(:readlines).with('debian/control').returns(lines)
+        lines
+      end
   end
 
 end

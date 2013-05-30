@@ -39,4 +39,31 @@ class Gem2DebTest < Gem2DebTestCase
     FileUtils.rm_rf(tmpdir)
   end
 
+  def self.build_tree(directory)
+    FileUtils.cp_r(directory, tmpdir)
+    dir = File.join(tmpdir, File.basename(directory))
+    yield(dir)
+    puts "Building #{directory} ..."
+    Dir.chdir(dir) do
+      run_command('fakeroot debian/rules install')
+    end
+  end
+
+  self.build_tree('test/sample/multibinary') do |dir|
+    context "multibinary source package" do
+      should "install foo in ruby-foo" do
+        assert_file_exists "#{dir}/debian/ruby-foo/usr/bin/foo"
+      end
+      should 'install foo.rb in ruby-foo' do
+        assert_file_exists "#{dir}/debian/ruby-foo/usr/lib/ruby/vendor_ruby/foo.rb"
+      end
+      should 'install bar in ruby-bar' do
+        assert_file_exists "#{dir}/debian/ruby-bar/usr/bin/bar"
+      end
+      should 'install bar.rb ruby-bar' do
+        assert_file_exists "#{dir}/debian/ruby-bar/usr/lib/ruby/vendor_ruby/bar.rb"
+      end
+    end
+  end
+
 end

@@ -13,6 +13,7 @@ class DhRubyTest < Gem2DebTestCase
     build(SIMPLE_MIXED, SIMPLE_MIXED_DIRNAME)
     build(SIMPLE_ROOT_EXTENSION, SIMPLE_ROOT_EXTENSION_DIRNAME)
     build(SIMPLE_EXTENSION_WITH_NAME_CLASH, SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME)
+    build_from_tree('test/sample/multibinary')
   end
 
   context 'installing simplegem' do
@@ -60,15 +61,6 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context 'installing Ruby files' do
-    should 'not crash when directories to be installed have names in the exclusion list' do
-      Dir.chdir('test/sample/install_files/') do
-        dh_ruby = Gem2Deb::DhRuby.new
-        dh_ruby.send(:install_files, 'lib', File.join(tmpdir, 'install_files_destdir'), 644)
-      end
-    end
-  end
-
   context 'skipping checks' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
@@ -104,90 +96,8 @@ class DhRubyTest < Gem2DebTestCase
     end
     should 'read supported versions from debian/control' do
       File.expects(:readlines).with('debian/control').returns(["XS-Ruby-Versions: all\n"])
-      assert_equal ['all'], @dh_ruby.send(:ruby_versions)
+      assert_equal SUPPORTED_RUBY_VERSIONS.keys, @dh_ruby.send(:ruby_versions)
     end
-    should 'known when all versions are supported' do
-      @dh_ruby.stubs(:ruby_versions).returns(['all'])
-      assert_equal true, @dh_ruby.send(:all_ruby_versions_supported?)
-    end
-    should 'known when not all versions are supported' do
-      @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
-      assert_equal false, @dh_ruby.send(:all_ruby_versions_supported?)
-    end
-    should 'rewrite shebang to use `/usr/bin/env ruby` if all versions are supported' do
-      @dh_ruby.stubs(:all_ruby_versions_supported?).returns(true)
-      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/env ruby')
-      @dh_ruby.send(:update_shebangs, 'foo')
-    end
-    should 'rewrite shebang to usr /usr/bin/ruby1.8 if only 1.8 is supported' do
-      @dh_ruby.stubs(:ruby_versions).returns(['ruby1.8'])
-      @dh_ruby.expects(:rewrite_shebangs).with(anything, '/usr/bin/ruby1.8')
-      @dh_ruby.send(:update_shebangs, 'foo')
-    end
-  end
-
-  context 'rewriting shebangs' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-      @dh_ruby.verbose = false
-
-      FileUtils.cp_r('test/sample/rewrite_shebangs', self.class.tmpdir)
-      @dh_ruby.expects(:destdir_for).returns(self.class.tmpdir + '/rewrite_shebangs')
-
-      # The fact that this call does not crash means we won't crash when
-      # /usr/bin has subdirectories
-      @dh_ruby.send(:rewrite_shebangs, 'ruby-foo', '/usr/bin/env ruby')
-    end
-    teardown do
-      FileUtils.rm_f(self.class.tmpdir + '/rewrite_shebangs')
-    end
-
-    should 'rewrite shebangs of programs directly under bin/' do
-      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
-    end
-    should 'rewrite shebangs in subdirs of bin/' do
-      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
-    end
-    should 'add a shebang when there is none' do
-      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
-      assert_match %r{/usr/bin/env ruby}, lines[0]
-      assert_match /puts/, lines[1]
-    end
-    should 'not rewrite shebangs non-Ruby scripts' do
-      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')
-      assert_match %r{/bin/sh}, lines[0]
-    end
-    should 'leave programs with correct permissions after rewriting shebangs' do
-      assert_equal '100755', '%o' % File.stat(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang').mode
-    end
-  end
-
-  context 'checking for require "rubygems"' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-      @dh_ruby.verbose = false
-    end
-    should 'detect require "rubygems"' do
-      @dh_ruby.stubs(:ruby_source_files_in_package).returns(['test/sample/check_rubygems/bad.rb'])
-      @dh_ruby.expects(:handle_test_failure).once
-      @dh_ruby.send(:check_rubygems)
-    end
-    should 'not complain about commented require "rubygems"' do
-      @dh_ruby.stubs(:ruby_source_files_in_package).returns(['test/sample/check_rubygems/good.rb'])
-      @dh_ruby.expects(:handle_test_failure).never
-      @dh_ruby.send(:check_rubygems)
-    end
-
-    %w[
-      utf8
-      latin1
-    ].each do |encoding|
-      should "handle #{encoding}" do
-        @dh_ruby.stubs(:ruby_source_files_in_package).returns(["test/encondings/#{encoding}.rb"])
-        @dh_ruby.send(:check_rubygems)
-      end
-    end
-
   end
 
   context 'libraries with name clash (between foo.rb and foo.so)' do
@@ -213,70 +123,48 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context 'using DESTDIR supplied by dh_auto_install' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-      @dh_ruby.dh_auto_install_destdir = '/path/to/source-package/debian/tmp'
-    end
-    should 'normally install to debian/${package}' do
-      assert_match /\/debian\/foo$/, @dh_ruby.send(:destdir_for, 'foo')
-    end
-    should 'install to debian/tmp when DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is set' do
-      saved_env = ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
-      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = 'yes'
-
-      assert_equal '/path/to/source-package/debian/tmp', @dh_ruby.send(:destdir_for, 'foo')
-
-      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = saved_env
-    end
-  end
-
-  context 'run_tests' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-    end
-    should 'not skip tests after one that fails' do
-      @dh_ruby.stubs(:run_tests_for_version).with('rubyX').returns(false)
-      @dh_ruby.expects(:run_tests_for_version).with('rubyY')
-      @dh_ruby.send(:run_tests, ['rubyX', 'rubyY'])
-    end
-  end
-
-  context 'finding duplicate files' do
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-      @dh_ruby.verbose = false
-      @tmpdir = Dir.mktmpdir
-    end
-    teardown do
-      FileUtils.rm_rf(@tmpdir)
-    end
-    should 'actually remove duplicates' do
-      Dir.chdir(@tmpdir) do
-        FileUtils.mkdir('dir1')
-        FileUtils.mkdir('dir2')
-        ['dir1','dir2'].each do |d|
-          File.open(File.join(d, 'test.rb'), 'w') { |f| f.puts "# Nice File"}
-        end
-        @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
-        assert !File.exists?('dir2')
-      end
-    end
-    should 'not crash with duplicates in subdirectories' do
-      Dir.chdir(@tmpdir) do
-        FileUtils.mkdir_p('dir1/subdir')
-        FileUtils.touch('dir1/subdir/test.rb')
-        FileUtils.mkdir_p('dir2/subdir')
-        FileUtils.touch('dir2/subdir/test.rb')
-        @dh_ruby.send(:remove_duplicate_files, 'dir1', 'dir2')
-        assert !File.exists?('dir2')
-      end
-    end
-  end
-
   context 'installing gemspec' do
     should 'install gemspec for simplegem' do
       assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/share/rubygems-integration/1.9.1/specifications/simplegem-0.0.1.gemspec'
+    end
+  end
+
+  context "multi-binary source packages" do
+    should 'install program in ruby-foo' do
+      assert_installed 'multibinary', 'ruby-foo', '/usr/bin/foo', false
+    end
+    should 'install library in ruby-foo' do
+      assert_installed 'multibinary', 'ruby-foo', '/usr/lib/ruby/vendor_ruby/foo.rb', false
+    end
+    should 'install program in ruby-bar' do
+      assert_installed 'multibinary', 'ruby-bar', '/usr/bin/bar', false
+    end
+    should 'install library in ruby-bar' do
+      assert_installed 'multibinary', 'ruby-bar', '/usr/lib/ruby/vendor_ruby/bar.rb', false
+    end
+  end
+
+  context "selecting package layout" do
+
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+
+    should 'default to single-binary' do
+      debian_control << 'Package: ruby-foo'
+      debian_control << 'Package: ruby-bar'
+      ruby_foo = { :binary_package => 'ruby-foo', :root => '.' }
+      assert_equal [ruby_foo], @dh_ruby.send(:packages)
+    end
+
+    should 'ignore packages without X-DhRuby-Root when one of them has it' do
+      debian_control << 'Package: ruby-foo'
+      debian_control << 'Package: ruby-bar'
+      debian_control << 'X-DhRuby-Root: bar'
+
+      ruby_bar = { :binary_package => 'ruby-bar', :root => 'bar' }
+      assert_equal [ruby_bar], @dh_ruby.send(:packages)
     end
 
   end
@@ -294,6 +182,12 @@ class DhRubyTest < Gem2DebTestCase
     Gem2Deb::DhMakeRuby.new(tarball).build
 
     build_package(package_path)
+  end
+
+  def self.build_from_tree(directory)
+    FileUtils.cp_r(directory, tmpdir)
+    target = File.join(tmpdir, File.basename(directory))
+    build_package(target)
   end
 
   def self.build_package(directory)

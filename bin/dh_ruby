@@ -17,12 +17,11 @@
 
 require 'gem2deb'
 require 'gem2deb/dh_ruby'
-require 'gem2deb/dh_ruby_setuprb'
+require 'gem2deb/setup_rb_installer'
 require 'optparse'
 include Gem2Deb
 
-cls = DhRuby
-
+engine = Gem2Deb::DhRuby.new
 
 optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show help') do
@@ -31,7 +30,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('', '--setuprb', 'use setup.rb for installation') do
-    cls = DhRubySetupRb
+    engine.installer_class = Gem2Deb::SetupRbInstaller
   end
 
   opts.on('-v', '--version', 'show dh_ruby version') do
@@ -40,27 +39,27 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('', '--clean', 'debhelper clean helper') do
-    cls.new.clean
+    engine.clean
     exit(0)
   end
 
   opts.on('', '--configure', 'debhelper configure helper') do
-    cls.new.configure
+    engine.configure
     exit(0)
   end
 
   opts.on('', '--build', 'debhelper build helper') do
-    cls.new.build
+    engine.build
     exit(0)
   end
 
   opts.on('', '--test', 'debhelper test helper') do
-    cls.new.test
+    engine.test
     exit(0)
   end
 
   opts.on('', '--install', 'debhelper install helper') do
-    cls.new.install(ARGV)
+    engine.install(ARGV)
     exit(0)
   end
 end
@@ -89,6 +88,88 @@ dh_ruby can automatically run your tests against all supported Ruby versions,
 see the "FILES" section below.
 
 See dh_ruby --help for details.
+
+=head1 SOURCE PACKAGE LAYOUT
+
+B<dh_ruby> supports two different source package styles: single-binary source
+packages, and multi-binary source packages.
+
+=head2 Single-binary layout
+
+The default layout is the B<single-binary> layout. This is the layout used by
+most Ruby packages upstream, i.e. Ruby code in I<lib>/, executable programs in
+I<bin>/, etc. Packages imported from Rubygems using B<gem2deb(1)> will have
+this layout.
+
+When using this layout, B<dh_ruby> will install files (Ruby code,
+executables, gemspecs) to the I<first binary package> listed in
+I<debian/control>.
+
+=head2 Multi-binary layout
+
+B<gem2deb> version I<0.4> introduced support for the B<multi-binary>
+layout. This layout should be used when you have a set of different Ruby
+packages maintained upstream in a single VCS, and you decide that you
+also want to maintain a single source package in Debian producing the
+different components as separate binary packages.
+
+In this layout, the source package contains the separate components in
+subdirectories where each of them will use the standard Ruby layout
+(I<lib>/, I<bin>/, etc).
+
+To indicate that you want to use a multi-binary layout, we have to 1)
+list your multiple binary packages in I<debian/control> as usual, and
+add an extra-field called I<X-DhRuby-Root> to each binary package
+stanza, indicating each directory has to be used as the root for that
+binary package.
+
+An example:
+
+    Source: mymultibinarypackage
+    [...]
+    
+    Package: ruby-foo
+    X-DhRuby-Root: path/to/foo
+    [...]
+    
+    Package: ruby-bar
+    X-DhRuby-Root: path/to/bar
+
+The corresponding source package should be layed out like this:
+
+    foo/
+      foo.gemspec
+      lib/
+        foo.rb
+      bin/foo
+    bar/
+      bar.gemspec
+      lib/
+        bar.rb
+      bin/
+        bar
+
+Important notes about multi-binary packages and the usage of
+I<X-DhRuby-Root>:
+
+=over
+
+=item
+
+If your package uses the multi-binary layout, it must include `I<gem2deb>
+(>= 0.4~)` in I<Build-Depends>.
+
+=item
+
+The path indicated in I<X-DhRuby-Root>, as you have probably guessed by
+now, must be relative to the root of the source package.
+
+=item
+
+If any binary package declares a I<X-DhRuby-Root> field, all other
+binary packages that don't have one will be ignored by B<dh_ruby>.
+
+=back
 
 =head1 OPTIONS
 

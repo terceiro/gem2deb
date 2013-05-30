@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
-require 'gem2deb/metadata'
+require 'gem2deb/installer'
 require 'find'
 require 'fileutils'
 
@@ -22,38 +22,24 @@ module Gem2Deb
 
   class DhRuby
 
-    SUPPORTED_RUBY_VERSIONS = {
-      #name             Ruby binary
-      #---------------  -------------------
-      'ruby1.8'   => '/usr/bin/ruby1.8',
-      'ruby1.9.1' => '/usr/bin/ruby1.9.1',
-    }
-
-    RUBY_CONFIG_VERSION = {
-      'ruby1.8'   => '1.8',
-      'ruby1.9.1' => '1.9.1',
-    }
-
-    RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
-
-    RUBY_CODE_DIR = '/usr/lib/ruby/vendor_ruby'
-
     include Gem2Deb
 
     attr_accessor :verbose
-
-    attr_reader :metadata
+    attr_accessor :installer_class
 
     def initialize
       @verbose = true
-      @bindir = '/usr/bin'
       @skip_checks = nil
-      @metadata = Gem2Deb::Metadata.new('.')
+      @installer_class = Gem2Deb::Installer
     end
-    
+
     def clean
       puts "  Entering dh_ruby --clean" if @verbose
-      run_make_clean_on_extensions
+
+      installers.each do |installer|
+        installer.run_make_clean_on_extensions
+      end
+
       puts "  Leaving dh_ruby --clean" if @verbose
     end
 
@@ -72,163 +58,40 @@ module Gem2Deb
       # puts "  Leaving dh_ruby --test" if @verbose
     end
 
-    EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
     TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'test_runner.rb'))
-    LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
-    attr_accessor :dh_auto_install_destdir
 
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
 
-      self.dh_auto_install_destdir = argv.first
+      installers.each do |installer|
+        installer.dh_auto_install_destdir = argv.first
+        installer.install_files_and_build_extensions
+        installer.update_shebangs
+      end
 
-      supported_versions =
-        if all_ruby_versions_supported?
-          SUPPORTED_RUBY_VERSIONS.keys.clone
-        else
-          ruby_versions.clone
-        end
+      run_tests
 
-      package = packages.first
-
-      install_files_and_build_extensions(package, supported_versions)
-
-      update_shebangs(package)
-
-      run_tests(supported_versions)
-
-      install_substvars(package, supported_versions)
-
-      install_gemspec(package, supported_versions)
-
-      check_rubygems
+      installers.each do |installer|
+        installer.install_substvars
+        installer.install_gemspec
+        check_rubygems(installer)
+      end
 
       puts "  Leaving dh_ruby --install" if @verbose
     end
 
     protected
 
-    # This function returns the installation path for the given
-    # package and the given "component", which is one of:
-    # * :bindir
-    # * :libdir
-    # * :archdir
-    # * :prefix
-    #
-    # _rubyver_ is the ruby version, needed only for :archdir for now.
-    def destdir(package, which, rubyver = nil)
-      case which
-      when :bindir
-        return File.join(destdir_for(package), @bindir)
-      when :libdir
-        return File.join(destdir_for(package), RUBY_CODE_DIR)
-      when :archdir
-        return File.join(destdir_for(package), `#{SUPPORTED_RUBY_VERSIONS[rubyver]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.chomp)
-      when :prefix
-        return File.join(destdir_for(package), "usr/")
-      end
-    end
-
-
-    def install_files_and_build_extensions(package, supported_versions)
-      install_files('bin', destdir(package, :bindir), 755) if File::directory?('bin')
-
-      install_files('lib', destdir(package, :libdir), 644) if File::directory?('lib')
-
-      if metadata.has_native_extensions?
-        supported_versions.each do |rubyver|
-          puts "Building extension for #{rubyver} ..." if @verbose
-          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{package}")
-
-          # Remove duplicate files installed by rubygems in the arch dir
-          # This is a hack to workaround a problem in rubygems
-          vendor_dir = destdir(package, :libdir)
-          vendor_arch_dir = destdir(package, :archdir, rubyver)
-          if File::exists?(vendor_dir) and File::exists?(vendor_arch_dir)
-            remove_duplicate_files(vendor_dir, vendor_arch_dir)
-          end
-        end
-      end
-
-      install_symlinks(package, supported_versions)
-    end
-
-    def install_symlinks(package, supported_versions)
-      supported_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
-        archdir = destdir(package, :archdir, rubyver)
-        vendordir = destdir(package, :libdir, rubyver)
-        vendorlibdir = File.dirname(archdir)
-        Dir.glob(File.join(archdir, '*.so')).each do |so|
-          rb = File.basename(so).gsub(/\.so$/, '.rb')
-          if File.exists?(File.join(vendordir, rb))
-            Dir.chdir(vendorlibdir) do
-              file_handler.ln_s "../#{rb}", rb
-            end
-          end
-        end
-      end
-    end
-
-    def remove_duplicate_files(src, dst)
-      candidates = Dir::entries(src) - ['.', '..']
-      candidates.each do |cand|
-        file1 = File.join(src, cand)
-        file2 = File.join(dst, cand)
-        if File.file?(file1) and File.file?(file2) and (File.read(file1) == File.read(file2))
-          file_handler.rm(file2)
-        elsif File.directory?(file1) and File.directory?(file2)
-          remove_duplicate_files(file1, file2)
-        end
-      end
-      if (Dir.entries(dst) - ['.', '..']).empty?
-        file_handler.rmdir(dst)
-      end
-    end
-
-    def file_handler
-      @verbose ? FileUtils::Verbose : FileUtils
-    end
-
-    def check_rubygems
+    def check_rubygems(installer)
       if skip_checks?
         return
       end
-      found = false
-      if File::exists?('debian/require-rubygems.overrides')
-        overrides = YAML::load_file('debian/require-rubygems.overrides')
-      else
-        overrides = []
-      end
-      packages.each do |pkg|
-        pkg.chomp!
-        ruby_source_files_in_package(pkg).each do |f|
-          lines = readlines(f)
-          rglines = lines.select { |l| l =~ /require.*rubygems/  && l !~ /^\s*#/ }
-          rglines.each do |l|
-            if not overrides.include?(f)
-              puts "#{f}: #{l}" if @verbose
-              found = true
-            end
-          end
-        end
-      end
-      if found
-        puts "Found some 'require rubygems' without overrides (see above)." if @verbose
-        handle_test_failure('require-rubygems')
-      end
-    end
 
-    def readlines(filename)
-      if String.instance_methods.include?(:valid_encoding?)
-        File.readlines(filename).select { |l| l.valid_encoding? }
-      else
-        File.readlines(filename)
+      begin
+        installer.check_rubygems
+      rescue Gem2Deb::Installer::RequireRubygemsFound
+        handle_test_failure("require-rubygems")
       end
-    end
-
-    def ruby_source_files_in_package(pkg)
-      Dir["debian/#{pkg}/usr/lib/ruby/vendor_ruby/**/*.rb"]
     end
 
     def handle_test_failure(test)
@@ -256,16 +119,14 @@ module Gem2Deb
           exit(1)
         end
       else
-          puts "ERROR: Test \"#{test}\" failed. Exiting."
-          exit(1)
+        puts "ERROR: Test \"#{test}\" failed. Exiting."
+        exit(1)
       end
     end
 
-    def run_tests(supported_versions)
-      supported_versions.dup.each do |rubyver|
-        if !run_tests_for_version(rubyver)
-          supported_versions.delete(rubyver)
-        end
+    def run_tests
+      ruby_versions.each do |rubyver|
+        run_tests_for_version(rubyver)
       end
     end
 
@@ -280,15 +141,6 @@ module Gem2Deb
 
       if $?.exitstatus != 0
         handle_test_failure(rubyver)
-        return false
-      else
-        return true
-      end
-    end
-
-    def install_substvars(package, supported_versions)
-      File.open("debian/#{package}.substvars", "a") do |fd|
-        fd.puts "ruby:Versions=#{supported_versions.join(' ')}"
       end
     end
 
@@ -304,87 +156,46 @@ module Gem2Deb
       @skip_checks
     end
 
-    JUNK_FILES = %w( RCSLOG tags TAGS .make.state .nse_depinfo )
-    HOOK_FILES = %w( pre-%s post-%s pre-%s.rb post-%s.rb ).map {|fmt|
-      %w( config setup install clean ).map {|t| sprintf(fmt, t) }
-      }.flatten
-    JUNK_PATTERNS = [ /^#/, /^\.#/, /^cvslog/, /^,/, /^\.del-*/, /\.olb$/,
-        /~$/, /\.(old|bak|BAK|orig|rej)$/, /^_\$/, /\$$/, /\.org$/, /\.in$/, /^\./ ]
-
-    DO_NOT_INSTALL = (JUNK_FILES + HOOK_FILES).map { |file| /^#{file}$/ } + JUNK_PATTERNS
-
-    def install_files(src, dest, mode)
-      run "install -d #{dest}"
-      files_to_install = Dir.chdir(src) do
-        Dir.glob('**/*').reject do |file|
-          filename = File.basename(file)
-          File.directory?(file) || DO_NOT_INSTALL.any? { |pattern| filename =~ pattern }
-        end
-      end
-      files_to_install.each do |file|
-        from = File.join(src, file)
-        to = File.join(dest, file)
-        run "install -D -m#{mode} #{from} #{to}"
-      end
-    end
-
-    def destdir_for(package)
-      destdir =
-        if ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
-          self.dh_auto_install_destdir
-        else
-          File.join('debian', package)
-        end
-      File.expand_path(destdir)
-    end
-
-    def update_shebangs(package)
-      ruby_binary =
-        if all_ruby_versions_supported?
-          RUBY_SHEBANG_CALL
-        else
-          SUPPORTED_RUBY_VERSIONS[ruby_versions.first]
-        end
-      rewrite_shebangs(package, ruby_binary)
-    end
-
-    def rewrite_shebangs(package, ruby_binary)
-      Dir.glob(File.join(destdir_for(package), @bindir, '**/*')).each do |path|
-        next if File.directory?(path)
-        atomic_rewrite(path) do |input, output|
-          old = input.gets
-          if old =~ /ruby/ or old !~ /^#!/
-            puts "Rewriting shebang line of #{path}" if @verbose
-            output.puts "#!#{ruby_binary}"
-            unless old =~ /#!/
-              output.puts old
-            end
-          else
-            puts "Not rewriting shebang line of #{path}" if @verbose
-            output.puts old
-          end
-          output.print input.read
-        end
-        File.chmod(0755, path)
-      end
-    end
-
-    def atomic_rewrite(path, &block)
-      tmpfile = path + '.tmp'
-      begin
-        File.open(tmpfile, 'wb') do |output|
-          File.open(path, 'rb') do |input|
-            yield(input, output)
-          end
-        end
-        File.rename tmpfile, path
-      ensure
-        File.unlink tmpfile if File.exist?(tmpfile)
-      end
-    end
-
     def packages
-      @packages ||= `dh_listpackages`.split
+      @packages ||=
+        begin
+          packages = []
+          multibinary = false
+          File.readlines('debian/control').select do |line|
+            if line =~ /^Package:\s*(\S*)\s*$/
+              package = $1
+              packages.push({ :binary_package => package })
+            elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
+              root = $1
+              if packages.last
+                packages.last[:root] = root
+              end
+              multibinary = true
+            end
+          end
+          if multibinary
+            packages.select { |p| p[:root] }
+          else
+            package = packages.first
+            package[:root] = '.'
+            [package]
+          end
+        end
+    end
+
+    def installers
+      @installers ||=
+        begin
+          packages.map do |package|
+            installer_class.new(
+              package[:binary_package],
+              package[:root],
+              ruby_versions
+            ).tap do |installer|
+              installer.verbose = self.verbose
+            end
+          end
+        end
     end
 
     def ruby_versions
@@ -396,39 +207,14 @@ module Gem2Deb
             puts "No XS-Ruby-Versions: field found in source!" if @verbose
             exit(1)
           else
-            lines.first.split[1..-1]
-          end
-        end
-    end
-
-    def all_ruby_versions_supported?
-      ruby_versions.include?('all')
-    end
-
-    def run_make_clean_on_extensions
-      if metadata.has_native_extensions?
-        metadata.native_extensions.each do |extension|
-          extension_dir = File.dirname(extension)
-          if File.exists?(File.join(extension_dir, 'Makefile'))
-            puts "Running 'make distclean || make clean' in #{extension_dir}..."
-            Dir.chdir(extension_dir) do
-              run 'make distclean || make clean'
+            list = lines.first.split[1..-1]
+            if list.include?('all')
+              SUPPORTED_RUBY_VERSIONS.keys
+            else
+              list
             end
           end
         end
-      end
-    end
-
-    def install_gemspec(package, versions)
-      if metadata.gemspec
-        versions.each do |version|
-          target = File.join(destdir_for(package), "/usr/share/rubygems-integration/#{RUBY_CONFIG_VERSION[version]}/specifications/#{metadata.name}-#{metadata.version}.gemspec")
-          FileUtils.mkdir_p(File.dirname(target))
-          File.open(target, 'w') do |file|
-            file.write(metadata.gemspec.to_ruby)
-          end
-        end
-      end
     end
 
   end
