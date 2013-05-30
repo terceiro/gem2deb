@@ -164,7 +164,7 @@ module Gem2Deb
           File.readlines('debian/control').select do |line|
             if line =~ /^Package:\s*(\S*)\s*$/
               package = $1
-              packages.push({:binary_package => package, :root => '.'})
+              packages.push({ :binary_package => package })
             elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
               root = $1
               if packages.last
@@ -174,9 +174,11 @@ module Gem2Deb
             end
           end
           if multibinary
-            packages
+            packages.select { |p| p[:root] }
           else
-            [packages.first]
+            package = packages.first
+            package[:root] = '.'
+            [package]
           end
         end
     end
