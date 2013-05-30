@@ -37,6 +37,20 @@ class Gem2DebTest < Gem2DebTestCase
     end
   end
 
+  self.build_tree('test/sample/examples') do |dir|
+
+    should 'not compress *.rb files installed as examples' do
+      assert_no_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb.gz"
+      assert_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb"
+    end
+
+    should 'install CHANGELOG.rdoc as upstream changelog' do
+      changelog = "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/changelog.gz"
+      assert_file_exists changelog
+    end
+
+  end
+
   self.build_tree('test/sample/multibinary') do |dir|
     context "multibinary source package" do
       should "install foo in ruby-foo" do
@@ -51,21 +65,10 @@ class Gem2DebTest < Gem2DebTestCase
       should 'install bar.rb ruby-bar' do
         assert_file_exists "#{dir}/debian/ruby-bar/usr/lib/ruby/vendor_ruby/bar.rb"
       end
+      should 'support installing upstream CHANGELOG in multibinary package' do
+        assert_file_exists "#{dir}/debian/ruby-bar/usr/share/doc/ruby-bar/changelog.gz"
+      end
     end
-  end
-
-  self.build_tree('test/sample/examples') do |dir|
-
-    should 'not compress *.rb files installed as examples' do
-      assert_no_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb.gz"
-      assert_file_exists "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/examples/test.rb"
-    end
-
-    should 'install CHANGELOG.rdoc as upstream changelog' do
-      changelog = "#{dir}/debian/ruby-examples/usr/share/doc/ruby-examples/changelog.gz"
-      assert_file_exists changelog
-    end
-
   end
 
 end

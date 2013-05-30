@@ -272,8 +272,8 @@ module Gem2Deb
     end
 
     def install_changelog
-      Dir.glob(File.join(root, 'CHANGELOG*')).each do |changelog|
-        changelog = File.basename(changelog)
+      changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
+      if changelog
         run("dh_installchangelogs -p#{binary_package} #{changelog} upstream")
       end
     end
