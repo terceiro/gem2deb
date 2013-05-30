@@ -107,7 +107,7 @@ I<debian/control>.
 
 =head2 Multi-binary layout
 
-B<gem2deb> version I<0.4> introduced support for the B<multi-binary>
+B<gem2deb> version I<0.4.0> introduced support for the B<multi-binary>
 layout. This layout should be used when you have a set of different Ruby
 packages maintained upstream in a single VCS, and you decide that you
 also want to maintain a single source package in Debian producing the
@@ -157,7 +157,7 @@ I<X-DhRuby-Root>:
 =item
 
 If your package uses the multi-binary layout, it must include `I<gem2deb>
-(>= 0.4~)` in I<Build-Depends>.
+(>= 0.4.0~)` in I<Build-Depends>.
 
 =item
 
