@@ -174,6 +174,5 @@ class InstallerTest < Gem2DebTestCase
     end
   end
 
-
 end
 

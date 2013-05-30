@@ -36,11 +36,9 @@ module Gem2Deb
     def clean
       puts "  Entering dh_ruby --clean" if @verbose
 
-      package = packages.first
-      installer = installer_class.new(package, '.')
-      installer.verbose = self.verbose
-
-      installer.run_make_clean_on_extensions
+      installers.each do |installer|
+        installer.run_make_clean_on_extensions
+      end
 
       puts "  Leaving dh_ruby --clean" if @verbose
     end
@@ -65,19 +63,19 @@ module Gem2Deb
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
 
-      package = packages.first
-      installer = installer_class.new(package, '.', ruby_versions)
-      installer.verbose = self.verbose
-      installer.dh_auto_install_destdir = argv.first
-
-      installer.install_files_and_build_extensions
-      installer.update_shebangs
+      installers.each do |installer|
+        installer.dh_auto_install_destdir = argv.first
+        installer.install_files_and_build_extensions
+        installer.update_shebangs
+      end
 
       run_tests
 
-      installer.install_substvars
-      installer.install_gemspec
-      check_rubygems(installer)
+      installers.each do |installer|
+        installer.install_substvars
+        installer.install_gemspec
+        check_rubygems(installer)
+      end
 
       puts "  Leaving dh_ruby --install" if @verbose
     end
@@ -159,7 +157,43 @@ module Gem2Deb
     end
 
     def packages
-      @packages ||= `dh_listpackages`.split
+      @packages ||=
+        begin
+          packages = []
+          multibinary = false
+          File.readlines('debian/control').select do |line|
+            if line =~ /^Package:\s*(\S*)\s*$/
+              package = $1
+              packages.push({:binary_package => package, :root => '.'})
+            elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
+              root = $1
+              if packages.last
+                packages.last[:root] = root
+              end
+              multibinary = true
+            end
+          end
+          if multibinary
+            packages
+          else
+            [packages.first]
+          end
+        end
+    end
+
+    def installers
+      @installers ||=
+        begin
+          packages.map do |package|
+            installer_class.new(
+              package[:binary_package],
+              package[:root],
+              ruby_versions
+            ).tap do |installer|
+              installer.verbose = self.verbose
+            end
+          end
+        end
     end
 
     def ruby_versions

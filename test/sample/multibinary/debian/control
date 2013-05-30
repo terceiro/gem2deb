@@ -11,6 +11,7 @@ Homepage: FIXME
 XS-Ruby-Versions: all
 
 Package: ruby-foo
+X-DhRuby-Root: foo
 Architecture: all
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
@@ -18,6 +19,7 @@ Description: FIXME
  <insert long description, indented with spaces>
 
 Package: ruby-bar
+X-DhRuby-Root: bar
 Architecture: all
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter

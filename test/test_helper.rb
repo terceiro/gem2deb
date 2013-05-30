@@ -103,12 +103,13 @@ class Gem2DebTestCase
 
   # Installation-related functions
 
-  def installed_file_path(gem_dirname, package, path)
-    File.join(self.class.tmpdir, 'ruby-' + gem_dirname, 'debian', package, path)
+  def installed_file_path(gem_dirname, package, path, convert_gem_name = true)
+    source_package_name = convert_gem_name ? 'ruby-' + gem_dirname : gem_dirname
+    File.join(self.class.tmpdir, source_package_name, 'debian', package, path)
   end
 
-  def assert_installed(gem_dirname, package, path)
-    assert_file_exists installed_file_path(gem_dirname, package, path)
+  def assert_installed(gem_dirname, package, path, convert_gem_name = true)
+    assert_file_exists installed_file_path(gem_dirname, package, path, convert_gem_name)
   end
 
   def self.silence_stream(stream)
