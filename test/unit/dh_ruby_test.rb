@@ -151,15 +151,6 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby.verbose = false
     end
 
-    def debian_control
-      @debian_control ||=
-        begin
-          lines = []
-          File.expects(:readlines).with('debian/control').returns(lines)
-          lines
-        end
-    end
-
     should 'default to single-binary' do
       debian_control << 'Package: ruby-foo'
       debian_control << 'Package: ruby-bar'

@@ -162,4 +162,15 @@ class Gem2DebTestCase
     self.class.run_command(cmd)
   end
 
+  # Utility method to fake contents in debian/control in the scope of a
+  # test.
+  def debian_control
+    @debian_control ||=
+      begin
+        lines = []
+        File.expects(:readlines).with('debian/control').returns(lines)
+        lines
+      end
+  end
+
 end
