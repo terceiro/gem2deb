@@ -110,17 +110,21 @@ I<debian/control>.
 B<gem2deb> version I<0.4.0> introduced support for the B<multi-binary>
 layout. This layout should be used when you have a set of different Ruby
 packages maintained upstream in a single VCS, and you decide that you
-also want to maintain a single source package in Debian producing the
+also want to maintain a single source package in Debian having the
 different components as separate binary packages.
 
 In this layout, the source package contains the separate components in
 subdirectories where each of them will use the standard Ruby layout
 (I<lib>/, I<bin>/, etc).
 
+This layout does not support creating separate binary packages from the same
+root directory. For those cases, see the documentation on
+I<DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR> below.
+
 To indicate that you want to use a multi-binary layout, we have to 1)
 list your multiple binary packages in I<debian/control> as usual, and
 add an extra-field called I<X-DhRuby-Root> to each binary package
-stanza, indicating each directory has to be used as the root for that
+stanza, indicating which directory has to be used as the root for that
 binary package.
 
 An example:
@@ -215,9 +219,15 @@ informed by dh_auto_install(1), usually I<debian/tmp>. By default, gem2deb will
 install files to debian/I<package>, where I<package> is the first binary
 package listed in debian/control.
 
-This is useful for multi-binary source packages, where you will have all files
-installed to I<debian/tmp>, and can them split the files into separate packages
-by using debian/I<package>.install.
+This is useful for multi-binary source packages that don't conform to
+the supported layout (i.e. separate subdirectories each with I<lib>/,
+I<bin>/ etc). Using this, all files will be installed to I<debian/tmp>, and
+you can them distribute them into separate binary packages by using
+I<debian/$package.install> files or explicit shell calls in
+I<debian/rules>.
+
+Mixing I<DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR> and multi-binary layout is
+not supported.
 
 =item I<DH_RUBY_GEMSPEC>
 
