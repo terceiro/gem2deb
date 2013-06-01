@@ -1,0 +1,6 @@
+#!/usr/bin/make -f
+
+export DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR=1
+
+%:
+	dh $@ --buildsystem=ruby --with ruby

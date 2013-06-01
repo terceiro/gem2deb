@@ -1,0 +1,5 @@
+ruby-simpleextension-dh-auto-install-destdir (0.1.0~FIXME-1) UNRELEASED; urgency=low
+
+  * Initial release (Closes: #nnnn)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 01 Jun 2013 16:52:32 -0300

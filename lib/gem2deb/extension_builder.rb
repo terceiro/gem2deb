@@ -24,12 +24,10 @@ module Gem2Deb
     include Gem2Deb
 
     attr_reader :extension
-    attr_reader :package
     attr_reader :directory
 
-    def initialize(extension, pkg)
+    def initialize(extension)
       @extension = extension
-      @package = pkg
       @directory = File.dirname(extension)
     end
 
@@ -41,7 +39,7 @@ module Gem2Deb
       end
     end
 
-    def build_and_install
+    def build_and_install(destdir)
       clean
       results = []
       rubygems_builder =
@@ -57,7 +55,7 @@ module Gem2Deb
           exit(1)
         end
       begin
-        target = File.expand_path(File.join('debian', package, RbConfig::CONFIG['vendorarchdir']))
+        target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
         Dir.chdir(directory) do
           rubygems_builder.build(extension, '.', target, results)
           puts results
@@ -68,11 +66,11 @@ module Gem2Deb
       end
     end
 
-    def self.build_all_extensions(package)
+    def self.build_all_extensions(destdir)
       all_extensions.each do |extension|
-        ext = new(extension, package)
+        ext = new(extension)
         ext.clean
-        ext.build_and_install
+        ext.build_and_install(destdir)
       end
     end
 
@@ -87,7 +85,7 @@ if $PROGRAM_NAME == __FILE__
   if ARGV.length == 1
     Gem2Deb::ExtensionBuilder.build_all_extensions(ARGV.first)
   else
-    puts "usage: #{File.basename($PROGRAM_NAME)} PKGNAME"
+    puts "usage: #{File.basename($PROGRAM_NAME)} DESTDIR"
     exit(1)
   end
 end

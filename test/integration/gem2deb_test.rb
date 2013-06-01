@@ -71,4 +71,10 @@ class Gem2DebTest < Gem2DebTestCase
     end
   end
 
+  self.build_tree('test/sample/simpleextension_dh_auto_install_destdir') do |dir|
+    should 'honor DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR when building extensions' do
+      assert Dir.glob("#{dir}/debian/tmp/usr/lib/ruby/vendor_ruby/**/*.so").size > 0, 'no .so files found in debian/tmp/'
+    end
+  end
+
 end
