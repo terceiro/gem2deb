@@ -155,7 +155,6 @@ module Gem2Deb
 
     def destdir_base
       if ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
-        puts 'W: Using DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is deprecated and will be removed in the future. Please see dh_ruby(1) for the supported way for producing multiple binary packages.' if verbose
         self.dh_auto_install_destdir
       else
         File.join('debian', binary_package)
