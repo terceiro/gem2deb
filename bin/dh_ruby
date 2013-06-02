@@ -160,8 +160,13 @@ I<X-DhRuby-Root>:
 
 =item
 
-If your package uses the multi-binary layout, it must include `I<gem2deb>
-(>= 0.4.0~)` in I<Build-Depends>.
+If your package uses the multi-binary layout, it must include
+`I<gem2deb> (>= 0.4.0~)` in I<Build-Depends>.
+
+B<Version 0.4.0 had a bug in the support for native extensions> in
+multi-binary packages, so if your package uses the multi-binary feature
+and at least one of the sub-components has native extensions, you must
+use `I<gem2deb> (>= 0.4.1~)` in I<Build-Depends> instead.
 
 =item
 
