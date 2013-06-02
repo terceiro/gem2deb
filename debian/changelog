@@ -1,6 +1,14 @@
-gem2deb (0.4.1) UNRELEASED; urgency=low
+gem2deb (0.4.1) unstable; urgency=low
 
-  * 
+  * Give up on deprecating DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR
+  * Improve documentation on multi-binary packages
+  * Make extension buidler honor DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR
+    (Closes: #701716)
+  * Fix native extensions support for multi-binary packages
+  * Update docs on Build-Depends for multi-binary source packages.
+    For multi-binary packages with native extensions, gem2deb (>= 0.4.1~) is
+    required.
+  * Bump standards version to 3.9.4; no changes needed.
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 01 Jun 2013 22:46:10 -0300
 
