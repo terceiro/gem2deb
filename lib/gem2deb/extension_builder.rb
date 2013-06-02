@@ -66,26 +66,26 @@ module Gem2Deb
       end
     end
 
-    def self.build_all_extensions(destdir)
-      all_extensions.each do |extension|
+    def self.build_all_extensions(root, destdir)
+      all_extensions(root).each do |extension|
         ext = new(extension)
         ext.clean
         ext.build_and_install(destdir)
       end
     end
 
-    def self.all_extensions
-      @metadata ||= Gem2Deb::Metadata.new('.')
+    def self.all_extensions(root)
+      @metadata ||= Gem2Deb::Metadata.new(root)
       @metadata.native_extensions
     end
   end
 end
 
 if $PROGRAM_NAME == __FILE__
-  if ARGV.length == 1
-    Gem2Deb::ExtensionBuilder.build_all_extensions(ARGV.first)
+  if ARGV.length == 2
+    Gem2Deb::ExtensionBuilder.build_all_extensions(*ARGV)
   else
-    puts "usage: #{File.basename($PROGRAM_NAME)} DESTDIR"
+    puts "usage: #{File.basename($PROGRAM_NAME)} ROOT DESTDIR"
     exit(1)
   end
 end

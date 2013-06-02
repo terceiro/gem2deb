@@ -101,5 +101,26 @@ class MetaDataTest < Gem2DebTestCase
 
   end
 
+  context 'on multi-binary source packages' do
+
+    setup do
+      Dir.chdir('test/sample/multibinary') do
+        @metadata = Gem2Deb::Metadata.new('baz')
+      end
+    end
+
+    should 'get the right path for extensions without a gemspec' do
+      assert_equal ['baz/ext/baz/extconf.rb'], @metadata.native_extensions
+    end
+
+    should 'get the right path to extensions with a gemspec' do
+      @gemspec = mock
+      @metadata.stubs(:gemspec).returns(@gemspec)
+      @gemspec.expects(:extensions).returns(['path/to/extconf.rb'])
+      assert_equal ['baz/path/to/extconf.rb'], @metadata.native_extensions
+    end
+
+  end
+
 end
 

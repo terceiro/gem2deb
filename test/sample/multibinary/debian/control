@@ -25,3 +25,11 @@ XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
 Description: FIXME
  <insert long description, indented with spaces>
+
+Package: ruby-baz
+X-DhRuby-Root: baz
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+Description: FIXME
+ <insert long description, indented with spaces>

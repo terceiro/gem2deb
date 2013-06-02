@@ -68,6 +68,10 @@ class Gem2DebTest < Gem2DebTestCase
       should 'support installing upstream CHANGELOG in multibinary package' do
         assert_file_exists "#{dir}/debian/ruby-bar/usr/share/doc/ruby-bar/changelog.gz"
       end
+
+      should 'support native extensions' do
+        assert Dir.glob("#{dir}/debian/ruby-baz/**/baz.so").size > 0, 'baz.so not found!!!'
+      end
     end
   end
 

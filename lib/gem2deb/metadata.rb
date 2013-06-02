@@ -21,23 +21,33 @@ module Gem2Deb
   class Metadata
 
     attr_reader :gemspec
+    attr_reader :source_dir
+    attr_reader :root
 
-    attr_reader :native_extensions
-
-    def initialize(directory)
-      @source_dir = File.expand_path(directory)
-      Dir.chdir(directory) do
+    def initialize(root)
+      @source_dir = File.expand_path(root)
+      @root = root
+      Dir.chdir(source_dir) do
         load_gemspec
-        if gemspec
-          initialize_from_gemspec
-        else
-          initialize_without_gemspec
-        end
       end
     end
 
     def has_native_extensions?
       native_extensions.size > 0
+    end
+
+    def native_extensions
+      @native_extensions ||=
+        if gemspec
+          gemspec.extensions
+        else
+          Dir.chdir(source_dir) do
+            list = []
+            list += Dir.glob('**/extconf.rb')
+            list += Dir.glob('ext/**/{configure,Rakefile}')
+            list
+          end
+        end.map { |ext| File.join(root, ext) }
     end
 
     def name
@@ -70,8 +80,6 @@ module Gem2Deb
 
     protected
 
-    attr_reader :source_dir
-
     def load_gemspec
       if File.exists?('metadata.yml')
         @gemspec = YAML.load_file('metadata.yml')
@@ -87,14 +95,6 @@ module Gem2Deb
           end
         end
       end
-    end
-
-    def initialize_from_gemspec
-      @native_extensions = gemspec.extensions
-    end
-
-    def initialize_without_gemspec
-      @native_extensions = Dir.glob('**/extconf.rb') + Dir.glob('ext/**/{configure,Rakefile}')
     end
 
     # FIXME duplicated logic (see below)

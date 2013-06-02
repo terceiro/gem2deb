@@ -12,7 +12,7 @@ class ExtensionBuilderTest < Gem2DebTestCase
     FileUtils.cp_r(File.join('test/sample/', gem), target_dir)
     Dir.chdir(target_dir) do
       silence_stream STDOUT do
-        Gem2Deb::ExtensionBuilder.build_all_extensions(package)
+        Gem2Deb::ExtensionBuilder.build_all_extensions('.', "debian/#{package}")
       end
     end
   end
