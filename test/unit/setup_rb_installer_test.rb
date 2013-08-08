@@ -15,9 +15,7 @@ class SetupRbInstallerTest < Gem2DebTestCase
   package = "ruby-simplesetuprb"
 
   context 'installing native extension with setuprb' do
-    [
-     '1.9.1',
-    ].each do |version_number|
+    SUPPORTED_VERSION_NUMBERS.each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]
       target_so = "#{vendorarchdir}/simplesetuprb.so"
       should "install native extension for Ruby #{version_number} for #{package}" do

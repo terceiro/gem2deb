@@ -29,7 +29,7 @@ include Gem2Deb
       std_deps = []
       ruby_deps = []
       deps.each do |dep|
-        if ['libruby1.9.1'].include?(dep.split(' ')[0])
+        if SUPPORTED_RUBY_SHARED_LIBRARIES.include?(dep.split(' ')[0])
           ruby_deps << dep
         else
           std_deps << dep

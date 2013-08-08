@@ -107,10 +107,10 @@ class InstallerTest < Gem2DebTestCase
       @installer.expects(:rewrite_shebangs).with('/usr/bin/env ruby')
       @installer.send(:update_shebangs)
     end
-    should 'rewrite shebang to usr /usr/bin/ruby1.9.1 if only 1.9.1 is supported' do
-      @installer.stubs(:ruby_versions).returns(['ruby1.9.1'])
-      @installer.stubs(:supported_ruby_versions).returns(['ruby1.9.1', 'rubyX.Y'])
-      @installer.expects(:rewrite_shebangs).with('/usr/bin/ruby1.9.1')
+    should "rewrite shebang to usr #{OLDER_RUBY_VERSION_BINARY} if only #{OLDER_RUBY_VERSION} is supported" do
+      @installer.stubs(:ruby_versions).returns([OLDER_RUBY_VERSION])
+      @installer.stubs(:supported_ruby_versions).returns([OLDER_RUBY_VERSION, 'rubyX.Y'])
+      @installer.expects(:rewrite_shebangs).with(OLDER_RUBY_VERSION_BINARY)
       @installer.send(:update_shebangs)
     end
   end
@@ -170,8 +170,8 @@ class InstallerTest < Gem2DebTestCase
       assert_equal true, @installer.send(:all_ruby_versions_supported?)
     end
     should 'know when not all versions are supported' do
-      @installer.stubs(:ruby_versions).returns(['ruby1.9.1'])
-      @installer.stubs(:supported_ruby_versions).returns(['ruby1.9.1', 'rubyX.Y'])
+      @installer.stubs(:ruby_versions).returns([OLDER_RUBY_VERSION])
+      @installer.stubs(:supported_ruby_versions).returns([OLDER_RUBY_VERSION, 'rubyX.Y'])
       assert_equal false, @installer.send(:all_ruby_versions_supported?)
     end
   end

@@ -34,6 +34,11 @@ module Gem2Deb
     'ruby2.0'   => '2.0',
   }
 
+  SUPPORTED_RUBY_SHARED_LIBRARIES = [
+    'libruby1.9.1',
+    'libruby2.0',
+  ]
+
   RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
 
   BIN_DIR = '/usr/bin'

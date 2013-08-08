@@ -31,9 +31,7 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   context 'installing native extension' do
-    [
-      '1.9.1',
-    ].each do |version_number|
+    SUPPORTED_VERSION_NUMBERS.each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]
       target_so = "#{vendorarchdir}/simpleextension.so"
       should "install native extension for Ruby #{version_number}" do
@@ -47,9 +45,7 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   context 'installing native extension with extconf.rb in the sources root' do
-    [
-      '1.9.1',
-    ].each do |version_number|
+    SUPPORTED_VERSION_NUMBERS.each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]
       target_so = "#{vendorarchdir}/simpleextension_in_root.so"
       should "install native extension for Ruby #{version_number}" do
@@ -98,8 +94,10 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   context 'installing gemspec' do
-    should 'install gemspec for simplegem' do
-      assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', '/usr/share/rubygems-integration/1.9.1/specifications/simplegem-0.0.1.gemspec'
+    SUPPORTED_VERSION_NUMBERS.each do |version|
+      should 'install gemspec for simplegem under Ruby ' + version do
+        assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', "/usr/share/rubygems-integration/#{version}/specifications/simplegem-0.0.1.gemspec"
+      end
     end
   end
 

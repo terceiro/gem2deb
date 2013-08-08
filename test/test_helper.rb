@@ -5,12 +5,21 @@ require 'fileutils'
 require 'tmpdir'
 require 'tempfile'
 
+require 'gem2deb'
+
 Gem2DebTestCase = Test::Unit::TestCase
 class Gem2DebTestCase
 
-  VENDOR_ARCH_DIRS = {
-    'ruby1.9.1' => `ruby1.9.1 -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
-  }
+  SUPPORTED_VERSION_NUMBERS = Gem2Deb::RUBY_CONFIG_VERSION.values.sort
+
+  OLDER_RUBY_VERSION = Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.select { |m| m =~ /^ruby/ }.sort.first
+  OLDER_RUBY_VERSION_BINARY = Gem2Deb::SUPPORTED_RUBY_VERSIONS[OLDER_RUBY_VERSION]
+
+  VENDOR_ARCH_DIRS = {}
+  Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.each do |version|
+    VENDOR_ARCH_DIRS[version] =
+      `#{Gem2Deb::SUPPORTED_RUBY_VERSIONS[version]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip
+  end
 
   require 'test_helper/samples'
   include Gem2DebTestCase::Samples
