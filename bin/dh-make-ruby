@@ -85,7 +85,7 @@ Ruby versions to build the package for. This is used to generate the
 X-Ruby-Versions: field in the source package, that can later be used to tune
 this value.  By default, gem2deb generates a package that works on all known
 Ruby versions, but it might be necessary to only build the package for Ruby
-1.8, for example (using B<--ruby-versions "ruby1.8">).
+1.9.1, for example (using B<--ruby-versions "ruby1.9.1">).
 
 =item B<-h>, B<--help>
 

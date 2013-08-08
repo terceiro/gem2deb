@@ -212,8 +212,7 @@ first !
 
 This is a space-separated list of tests that dh_ruby will ignore during package
 build. The available test names are "require-rubygems" plus the names of all
-supported Ruby versions. At the time of writing, only "ruby1.8" and "ruby1.9.1"
-are supported.
+supported Ruby versions. At the time of writing, only "ruby1.9.1" is supported.
 
 If set to "all", all tests will be ignored during the package build.
 

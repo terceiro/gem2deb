@@ -9,7 +9,6 @@ Gem2DebTestCase = Test::Unit::TestCase
 class Gem2DebTestCase
 
   VENDOR_ARCH_DIRS = {
-    'ruby1.8'   => `ruby1.8   -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
     'ruby1.9.1' => `ruby1.9.1 -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip,
   }
 

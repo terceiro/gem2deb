@@ -16,7 +16,6 @@ class SetupRbInstallerTest < Gem2DebTestCase
 
   context 'installing native extension with setuprb' do
     [
-     '1.8',
      '1.9.1',
     ].each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]

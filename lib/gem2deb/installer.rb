@@ -45,7 +45,6 @@ module Gem2Deb
         end
       end
 
-      install_symlinks
       install_changelog
     end
 
@@ -117,7 +116,11 @@ module Gem2Deb
     protected
 
     def all_ruby_versions_supported?
-      ruby_versions == SUPPORTED_RUBY_VERSIONS.keys
+      ruby_versions == supported_ruby_versions
+    end
+
+    def supported_ruby_versions
+      SUPPORTED_RUBY_VERSIONS.keys
     end
 
     def bindir
@@ -183,23 +186,6 @@ module Gem2Deb
         from = File.join(src, file)
         to = File.join(dest, file)
         run "install -D -m#{mode} #{from} #{to}"
-      end
-    end
-
-
-    def install_symlinks
-      ruby_versions.select { |v| v == 'ruby1.8' }.each do |rubyver|
-        archdir = destdir(:archdir, rubyver)
-        vendordir = destdir(:libdir, rubyver)
-        vendorlibdir = File.dirname(archdir)
-        Dir.glob(File.join(archdir, '*.so')).each do |so|
-          rb = File.basename(so).gsub(/\.so$/, '.rb')
-          if File.exists?(File.join(vendordir, rb))
-            Dir.chdir(vendorlibdir) do
-              file_handler.ln_s "../#{rb}", rb
-            end
-          end
-        end
       end
     end
 

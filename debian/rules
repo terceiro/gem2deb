@@ -6,7 +6,6 @@
 override_dh_auto_build:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	# NO_PKG_MANGLE=1 is only useful on Ubuntu buildds, to disable pkgbinarymangler
-	NO_PKG_MANGLE=1 ruby1.8		-S rake test
 	NO_PKG_MANGLE=1 ruby1.9.1	-S rake test
 endif
 	mkdir -p man

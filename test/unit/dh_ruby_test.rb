@@ -32,7 +32,6 @@ class DhRubyTest < Gem2DebTestCase
 
   context 'installing native extension' do
     [
-      '1.8',
       '1.9.1',
     ].each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]
@@ -49,7 +48,6 @@ class DhRubyTest < Gem2DebTestCase
 
   context 'installing native extension with extconf.rb in the sources root' do
     [
-      '1.8',
       '1.9.1',
     ].each do |version_number|
       vendorarchdir = VENDOR_ARCH_DIRS['ruby' + version_number]
@@ -96,29 +94,6 @@ class DhRubyTest < Gem2DebTestCase
     should 'read supported versions from debian/control' do
       File.expects(:readlines).with('debian/control').returns(["XS-Ruby-Versions: all\n"])
       assert_equal SUPPORTED_RUBY_VERSIONS.keys, @dh_ruby.send(:ruby_versions)
-    end
-  end
-
-  context 'libraries with name clash (between foo.rb and foo.so)' do
-    should "install symlinks for foo.rb in Ruby 1.8 vendorlibdir" do
-      symlink = installed_file_path(SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME, 'ruby-simpleextension-with-name-clash', "/usr/lib/ruby/vendor_ruby/1.8/simpleextension_with_name_clash.rb")
-      assert_file_exists symlink
-    end
-    should 'not install symlink for foo.rb in Ruby 1.9 vendorlibdir' do
-      symlink = installed_file_path(SIMPLE_EXTENSION_WITH_NAME_CLASH_DIRNAME, 'ruby-simpleextension-with-name-clash', "/usr/lib/ruby/vendor_ruby/1.9.1/simpleextension_with_name_clash.rb")
-      assert !File.exist?(symlink), 'should not install symlink for Ruby 1.9 (it\'s not needed'
-    end
-  end
-
-  context 'name clash with multiple binary packages' do
-    setup do
-      FileUtils.cp_r('test/sample/name_clash_multiple/', tmpdir)
-      @target_dir = File.join(tmpdir, 'name_clash_multiple')
-      self.class.build_package(@target_dir)
-    end
-    should 'work' do
-      symlink = File.join(@target_dir, 'debian/ruby-name-clash/usr/lib/ruby/vendor_ruby/1.8/name_clash.rb')
-      assert File.exist?(symlink), 'symlink not installed at %s!' % symlink
     end
   end
 

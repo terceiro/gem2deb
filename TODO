@@ -1,18 +1,10 @@
 These enhancement ideas are listed in no particular order.
 
-
-use ruby1.9.1 by default
-========================
-
-Currently we build packages for both 1.8 and 1.9.1, but 1.8 is still considered
-to be the "default version". As soon as Debian switches to 1.9.1 being the
-default, gem2deb should do so as well.
-
 do not stop running tests after the first failing test suite
 ============================================================
 
 Currently dh_ruby will stop after the first test suite fails, i.e. if the test
-suite fails under ruby 1.8, it will not run under ruby 1.9. Instead, dh_ruby
+suite fails under ruby 1.9.1, it will not run under ruby 2.0. Instead, dh_ruby
 should run all tests, and fail if any of them fail, but still run all of them.
 
 dh_ruby: solve the --install X the world situation

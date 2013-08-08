@@ -25,12 +25,10 @@ module Gem2Deb
   SUPPORTED_RUBY_VERSIONS = {
     #name             Ruby binary
     #---------------  -------------------
-    'ruby1.8'   => '/usr/bin/ruby1.8',
     'ruby1.9.1' => '/usr/bin/ruby1.9.1',
   }
 
   RUBY_CONFIG_VERSION = {
-    'ruby1.8'   => '1.8',
     'ruby1.9.1' => '1.9.1',
   }
 
