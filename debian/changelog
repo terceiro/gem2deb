@@ -1,3 +1,13 @@
+gem2deb (0.5.0) unstable; urgency=low
+
+  * Drop Ruby 1.8 support
+  * Add Ruby 2.0 support
+  * Centralize references to supported Ruby versions to make it dead simple to
+    remove/add new ones.
+  * Run tests in verbose mode during package build
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 03 Sep 2013 23:42:41 -0300
+
 gem2deb (0.4.1) unstable; urgency=low
 
   * Give up on deprecating DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR
