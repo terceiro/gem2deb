@@ -26,10 +26,12 @@ module Gem2Deb
     #name             Ruby binary
     #---------------  -------------------
     'ruby1.9.1' => '/usr/bin/ruby1.9.1',
+    'ruby2.0'   => '/usr/bin/ruby2.0',
   }
 
   RUBY_CONFIG_VERSION = {
     'ruby1.9.1' => '1.9.1',
+    'ruby2.0'   => '2.0',
   }
 
   RUBY_SHEBANG_CALL = '/usr/bin/env ruby'

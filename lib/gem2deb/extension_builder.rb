@@ -17,6 +17,7 @@ require 'gem2deb'
 require 'yaml'
 require 'rubygems/ext'
 require 'gem2deb/metadata'
+require 'fileutils'
 
 module Gem2Deb
   class ExtensionBuilder
@@ -56,6 +57,7 @@ module Gem2Deb
         end
       begin
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
+        FileUtils.mkdir_p(File.dirname(target))
         Dir.chdir(directory) do
           rubygems_builder.build(extension, '.', target, results)
           puts results
