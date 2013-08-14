@@ -276,7 +276,7 @@ task. gem2deb includes utility test task that makes it easier for you by
 creating a default task automatically. Example:
 
   require 'gem2deb/rake/testtask'
-  Gem2Deb:Rake::TestTask.new do |t|
+  Gem2Deb::Rake::TestTask.new do |t|
     t.test_files = FileList['test/*_test.rb']
   end
 
