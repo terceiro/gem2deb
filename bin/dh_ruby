@@ -38,6 +38,13 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
+  opts.on('', '--print-supported', 'prints supported Ruby versions') do
+    Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.each do |v|
+      puts v
+    end
+    exit
+  end
+
   opts.on('', '--clean', 'debhelper clean helper') do
     engine.clean
     exit(0)
@@ -187,6 +194,10 @@ binary packages that don't have one will be ignored by B<dh_ruby>.
 =item B<--clean>, B<--configure>, B<--build>, B<--test>, B<--install>
 
 Commands called by debhelper at various steps of the build process.
+
+=item B<--print-supported>
+
+Prints the supported Ruby versions.
 
 =item B<-h>, B<--help>
 
