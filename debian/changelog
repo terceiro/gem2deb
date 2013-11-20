@@ -1,3 +1,14 @@
+gem2deb (0.5.1) unstable; urgency=low
+
+  * Don't interpolate arguments for shell commands.
+    This fixes handling of files with weird characters in their names such
+    as ")" and whitespace in general, and improves security against
+    maliciously-crafted filenames which could inject unwanted shell
+    commands in the system that is building a package with gem2deb.
+    (Closes: #729981)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 20 Nov 2013 16:19:46 -0300
+
 gem2deb (0.5.0) unstable; urgency=low
 
   * Drop Ruby 1.8 support
