@@ -167,18 +167,18 @@ module Gem2Deb
       dpkg_buildpackage_opts << '-d' unless check_build_deps
 
       Dir.chdir(source_dirname) do
-        run("dpkg-buildpackage -us -uc #{dpkg_buildpackage_opts.join(' ')}")
+        run('dpkg-buildpackage', '-us', '-uc', *dpkg_buildpackage_opts)
       end
     end
 
     def create_orig_tarball
       if source_package_name != orig_tarball_name && !File.exists?(orig_tarball_name)
-        run "ln -s #{source_tarball_name} #{orig_tarball_name}"
+        run('ln', '-s', source_tarball_name, orig_tarball_name)
       end
     end
 
     def extract
-      run("tar xzf #{orig_tarball_name}")
+      run('tar', 'xzf', orig_tarball_name)
       if !File.directory?(gem_dirname)
         raise "Extracting did not create #{gem_dirname} directory."
       end
@@ -190,7 +190,7 @@ module Gem2Deb
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
       unless File.exists?('debian/changelog')
-        run "dch --create --empty --package #{source_package_name} --newversion #{gem_version}-1 'Initial release (Closes: #nnnn)'"
+        run('dch', '--create', '--empty', '--package', source_package_name, '--newversion', "#{gem_version}-1", 'Initial release (Closes: #nnnn)')
       end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)

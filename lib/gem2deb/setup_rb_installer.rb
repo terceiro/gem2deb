@@ -28,16 +28,16 @@ module Gem2Deb
         prefix = destdir(:prefix, rubyver)
 
         # First configure
-        run("#{ruby} setup.rb config --prefix=#{prefix} --bindir=#{bindir} --siteruby=#{siteruby} --siterubyver=#{siteruby} --siterubyverarch=#{archdir}")
+        run(ruby, 'setup.rb', 'config', "--prefix=#{prefix}", "--bindir=#{bindir}", "--siteruby=#{siteruby}", "--siterubyver=#{siteruby}", "--siterubyverarch=#{archdir}")
 
         # Then setup
-        run("#{ruby} setup.rb setup")
+        run(ruby, 'setup.rb', 'setup')
 
         # Then install
-        run("#{ruby} setup.rb install")
+        run(ruby, 'setup.rb', 'install')
 
         # Then clean
-        run("#{ruby} setup.rb distclean")
+        run(ruby, 'setup.rb', 'distclean')
 
       end
     end

@@ -73,7 +73,7 @@ module Gem2Deb
 
     def extract_gem_contents
       Dir.chdir(@target_dir) do
-        run "tar xfm #{gem_full_path}"
+        run('tar', 'xfm', gem_full_path)
         run 'tar xzfm data.tar.gz'
         FileUtils.rm_f('data.tar.gz')
         run "zcat metadata.gz > metadata.yml"
@@ -83,13 +83,13 @@ module Gem2Deb
 
     def extract_tgz_contents
       Dir.chdir(@target_dir) do
-        run "tar xfm #{gem_full_path} --strip 1"
+        run('tar', 'xfm', gem_full_path, '--strip', '1')
       end
     end
 
     def create_resulting_tarball
       Dir.chdir(@tmp_dir) do
-        run "tar czf #{@tarball_full_path} #{@target_dirname}"
+        run('tar', 'czf', @tarball_full_path, @target_dirname)
       end
     end
 

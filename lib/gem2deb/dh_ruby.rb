@@ -135,8 +135,7 @@ module Gem2Deb
         return
       end
 
-      cmd = "#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{TEST_RUNNER}"
-      run(cmd)
+      run(SUPPORTED_RUBY_VERSIONS[rubyver], '-I' + LIBDIR, TEST_RUNNER)
 
       if $?.exitstatus != 0
         handle_test_failure(rubyver)

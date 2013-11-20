@@ -47,12 +47,18 @@ module Gem2Deb
 
   LIBDIR = File.expand_path(File.dirname(__FILE__))
 
-  def run(cmd)
-    puts(cmd) if $VERBOSE
-    system(cmd)
+  def run(*argv)
+    puts(_format_cmdline(argv)) if $VERBOSE
+    system(*argv)
     if $?.exitstatus != 0
-      raise Gem2Deb::CommandFailed, "[#{cmd} failed!]"
+      raise Gem2Deb::CommandFailed, _format_cmdline(argv)
     end
+  end
+
+  private
+
+  def _format_cmdline(argv)
+    argv.map { |a| a =~ /\s/ && a.inspect || a }.join(' ')
   end
 end
 

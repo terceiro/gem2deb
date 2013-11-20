@@ -33,7 +33,7 @@ module Gem2Deb
       if metadata.has_native_extensions?
         ruby_versions.each do |rubyver|
           puts "Building extension for #{rubyver} ..." if verbose
-          run("#{SUPPORTED_RUBY_VERSIONS[rubyver]} -I#{LIBDIR} #{EXTENSION_BUILDER} #{root} #{destdir_base}")
+          run(SUPPORTED_RUBY_VERSIONS[rubyver], "-I#{LIBDIR}", EXTENSION_BUILDER, root, destdir_base)
 
           # Remove duplicate files installed by rubygems in the arch dir
           # This is a hack to workaround a problem in rubygems
@@ -175,7 +175,7 @@ module Gem2Deb
 
 
     def install_files(src, dest, mode)
-      run "install -d #{dest}"
+      run("install", "-d", dest)
       files_to_install = Dir.chdir(src) do
         Dir.glob('**/*').reject do |file|
           filename = File.basename(file)
@@ -185,7 +185,7 @@ module Gem2Deb
       files_to_install.each do |file|
         from = File.join(src, file)
         to = File.join(dest, file)
-        run "install -D -m#{mode} #{from} #{to}"
+        run("install", "-D", "-m#{mode}", from, to)
       end
     end
 
@@ -259,7 +259,7 @@ module Gem2Deb
     def install_changelog
       changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
       if changelog
-        run("dh_installchangelogs -p#{binary_package} #{changelog} upstream")
+        run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
       end
     end
 
