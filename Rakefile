@@ -60,15 +60,32 @@ end
 
 desc "Checks for inconsistencies between version numbers in the code and in debian/changelog"
 task :version_check do
-  code_version = `ruby -Ilib -rgem2deb/version -e 'puts Gem2Deb::VERSION'`.strip
-  debian_version = `dpkg-parsechangelog | grep '^Version: ' | cut -d ' ' -f 2`.strip
-  if code_version != debian_version
-    msg ="W: Inconsistent version numbers: lib/gem2deb/version.rb says #{code_version}, debian/changelog says #{debian_version}"
+  $code_version = `ruby -Ilib -rgem2deb/version -e 'puts Gem2Deb::VERSION'`.strip
+  $debian_version = `dpkg-parsechangelog | grep '^Version: ' | cut -d ' ' -f 2`.strip
+  if $code_version != $debian_version
+    msg ="W: Inconsistent version numbers: lib/gem2deb/version.rb says #{$code_version}, debian/changelog says #{$debian_version}"
     if STDIN.isatty && STDOUT.isatty && STDERR.isatty
       # highlight the message in red
       puts("\033[31;40m%s\033[m" % msg)
     else
       puts msg
     end
+    fail if ENV.has_key?('VERSION_CHECK_FATAL')
+  end
+end
+
+namespace :release do
+  desc "Releases to Debian sid (very much tied to terceiro's workflow)"
+  task :sid do
+    ENV['VERSION_CHECK_FATAL'] = 'yes'
+    Rake::Task['version_check'].invoke
+    arch = `dpkg-architecture -qDEB_BUILD_ARCH`.strip
+
+    sh 'git buildpackage --git-builder=sbuild'
+    sh 'git buildpackage --git-tag-only'
+    sh 'git push --all'
+    sh 'git push --tags'
+    sh 'debsign'
+    sh "dput ../gem2deb_#{$debian_version}#{arch}.changes"
   end
 end
