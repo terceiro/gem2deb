@@ -86,6 +86,6 @@ namespace :release do
     sh 'git push --all'
     sh 'git push --tags'
     sh 'debsign'
-    sh "dput ../gem2deb_#{$debian_version}#{arch}.changes"
+    sh "dput ../gem2deb_#{$debian_version}_#{arch}.changes"
   end
 end
