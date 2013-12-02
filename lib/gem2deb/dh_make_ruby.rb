@@ -212,11 +212,10 @@ module Gem2Deb
       TEMPLATES_DIR = File.expand_path(File.join(File.dirname(__FILE__), 'dh_make_ruby', 'template'))
 
       def self.load_all
-        template_files = Dir.glob("#{TEMPLATES_DIR}/**/*").select { |f| !File.directory?(f) }
-        template_files.map do |file|
-          filename = file.sub(/^#{TEMPLATES_DIR}\//, '')
+        template_files = Dir.chdir(TEMPLATES_DIR) { Dir.glob("**/*").select { |f| !File.directory?(f) } }
+        template_files.map do |filename|
           template = Template.new(filename)
-          template.data = File.read(file)
+          template.data = File.read(File.join(TEMPLATES_DIR, filename))
           template
         end
       end
