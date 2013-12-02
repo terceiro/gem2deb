@@ -1,3 +1,17 @@
+gem2deb (0.6.0) unstable; urgency=low
+
+  * gem2tgz: fix full path handling when generating tarball name
+    (Closes: #730854)
+  * Don't interpolate path in regular expression when loading templates.
+    This fixes the build when the source directory contains regular
+    expression metacharacters such as '+' (Closes: #730854)
+  * debian/control: add versioned build-depends on ruby-mocha (Closes: #730690)
+  * Ignore non-installed interpreters.
+    This will ease backports of gem2deb without also having to backport the
+    interpreters supported in unstable. (Closes: #730694)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 02 Dec 2013 09:49:30 -0300
+
 gem2deb (0.5.1) unstable; urgency=low
 
   * Don't interpolate arguments for shell commands.
