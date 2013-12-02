@@ -41,10 +41,15 @@ module Gem2Deb
         @gem_full_path      = File.expand_path(gem)
         @tarball            = tarball
         if @tarball.nil?
+          path = File.dirname(@gem)
+          filename = File.basename(@gem)
+
           # the _ -> - substitution is required because '_' is invalid
           # in Debian packages names
           # same for downcase
-          @tarball = @gem.gsub(@ext, '.tar.gz').gsub(/_/,'-').downcase
+          filename = filename.gsub(@ext, '.tar.gz').gsub(/_/,'-').downcase
+
+          @tarball = File.join(path, filename)
         end
         @tarball_full_path  = File.expand_path(@tarball)
         @target_dirname     = File::basename(@tarball).gsub('.tar.gz', '')

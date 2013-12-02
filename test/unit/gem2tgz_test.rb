@@ -78,4 +78,15 @@ class Gem2TgzTest < Gem2DebTestCase
     end
   end
 
+  should 'not mess with the full path' do
+    testdir = File.join(tmpdir, 'Downloads') # uppercase
+    FileUtils.mkdir_p(testdir)
+    FileUtils.cp(SIMPLE_GEM, testdir)
+    gem = File.join(testdir, File.basename(SIMPLE_GEM))
+    tarball = gem.gsub('.gem', '.tar.gz')
+
+    Gem2Deb::Gem2Tgz.new(gem).convert!
+    assert File.exists?(tarball)
+  end
+
 end
