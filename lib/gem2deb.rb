@@ -23,11 +23,16 @@ module Gem2Deb
   end
 
   SUPPORTED_RUBY_VERSIONS = {
+
     #name             Ruby binary
     #---------------  -------------------
     'ruby1.9.1' => '/usr/bin/ruby1.9.1',
     'ruby2.0'   => '/usr/bin/ruby2.0',
-  }
+
+  }.select do |version, binary|
+    # To help backporters without having to also backport the interpreters.
+    File.exists?(binary)
+  end
 
   RUBY_CONFIG_VERSION = {
     'ruby1.9.1' => '1.9.1',
