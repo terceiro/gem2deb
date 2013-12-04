@@ -77,6 +77,22 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'running tests' do
+    setup do
+      @dh_ruby = Gem2Deb::DhRuby.new
+      @dh_ruby.verbose = false
+    end
+
+    should 'handle test failure gracefully' do
+      @dh_ruby.stubs(:skip_checks?).returns(false)
+      @dh_ruby.expects(:run).raises(Gem2Deb::CommandFailed)
+
+      @dh_ruby.expects(:handle_test_failure)
+
+      @dh_ruby.send(:run_tests_for_version, SUPPORTED_RUBY_VERSIONS.keys.first)
+    end
+  end
+
   context 'versions supported' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
