@@ -135,9 +135,9 @@ module Gem2Deb
         return
       end
 
-      run(SUPPORTED_RUBY_VERSIONS[rubyver], '-I' + LIBDIR, TEST_RUNNER)
-
-      if $?.exitstatus != 0
+      begin
+        run(SUPPORTED_RUBY_VERSIONS[rubyver], '-I' + LIBDIR, TEST_RUNNER)
+      rescue Gem2Deb::CommandFailed
         handle_test_failure(rubyver)
       end
     end
