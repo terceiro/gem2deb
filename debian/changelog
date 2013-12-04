@@ -1,3 +1,13 @@
+gem2deb (0.6.1) unstable; urgency=low
+
+  [ Marc Deslauriers ]
+  * Fix regression when handling test failures
+
+  [ Antonio Terceiro ]
+  * Add unit test for regression fix when handling test failures
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 03 Dec 2013 21:26:35 -0300
+
 gem2deb (0.6.0) unstable; urgency=low
 
   * gem2tgz: fix full path handling when generating tarball name
