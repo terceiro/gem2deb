@@ -79,13 +79,12 @@ namespace :release do
   task :sid do
     ENV['VERSION_CHECK_FATAL'] = 'yes'
     Rake::Task['version_check'].invoke
-    arch = `dpkg-architecture -qDEB_BUILD_ARCH`.strip
 
     sh 'git buildpackage --git-builder=sbuild'
     sh 'git buildpackage --git-tag-only'
     sh 'git push --all'
     sh 'git push --tags'
     sh 'debsign'
-    sh "dput ../gem2deb_#{$debian_version}_#{arch}.changes"
+    sh 'debrelease'
   end
 end
