@@ -29,7 +29,7 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
-  opts.on('', '--setuprb', 'use setup.rb for installation') do
+  opts.on('--setuprb', 'use setup.rb for installation') do
     engine.installer_class = Gem2Deb::SetupRbInstaller
   end
 
@@ -38,34 +38,34 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
-  opts.on('', '--print-supported', 'prints supported Ruby versions') do
+  opts.on('--print-supported', 'prints supported Ruby versions') do
     Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.each do |v|
       puts v
     end
     exit
   end
 
-  opts.on('', '--clean', 'debhelper clean helper') do
+  opts.on('--clean', 'debhelper clean helper') do
     engine.clean
     exit(0)
   end
 
-  opts.on('', '--configure', 'debhelper configure helper') do
+  opts.on('--configure', 'debhelper configure helper') do
     engine.configure
     exit(0)
   end
 
-  opts.on('', '--build', 'debhelper build helper') do
+  opts.on('--build', 'debhelper build helper') do
     engine.build
     exit(0)
   end
 
-  opts.on('', '--test', 'debhelper test helper') do
+  opts.on('--test', 'debhelper test helper') do
     engine.test
     exit(0)
   end
 
-  opts.on('', '--install', 'debhelper install helper') do
+  opts.on('--install', 'debhelper install helper') do
     engine.install(ARGV)
     exit(0)
   end
