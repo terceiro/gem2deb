@@ -42,6 +42,11 @@ module Gem2Deb
       end
     end
 
+    def run_make_clean_on_extensionss
+      ruby = SUPPORTED_RUBY_VERSIONS.keys.sort.first
+      run(ruby, 'setup.rb', 'distclean')
+    end
+
   end
 
 end
