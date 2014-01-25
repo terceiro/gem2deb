@@ -56,6 +56,11 @@ module Gem2Deb
           exit(1)
         end
       begin
+        # override make environment variable to set V variable to 1 for verbose builds
+        env_make_old = ENV['make']
+        ENV['make'] ||= 'make'
+        ENV['make'] += " V=1"
+
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
         FileUtils.mkdir_p(File.dirname(target))
         Dir.chdir(directory) do
@@ -65,6 +70,8 @@ module Gem2Deb
       rescue Exception => e
         puts results
         raise e
+      ensure
+        ENV['make']=env_make_old
       end
     end
 
