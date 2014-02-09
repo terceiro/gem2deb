@@ -5,6 +5,12 @@ gem2deb (0.6.2) UNRELEASED; urgency=medium
     - that -w does not help us much
     - build logs will become a lot cleaner now
   * dh_ruby: remove blank lines from --help output
+  * dh_ruby: install a single gemspec for pure-Ruby packages
+    - This single gemspec will be installed at
+      /usr/share/rubygems-integration/all and will be made available to all
+      interpreters by rubygems-integration >= 1.5. This way when a new
+      interpreter is added there is no need to re-upload every package to
+      make it seen by that new interpreter rubygems.
 
   [ Cédric Boutillier ]
   * Make build of C extensions verbose

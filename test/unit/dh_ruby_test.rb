@@ -110,9 +110,12 @@ class DhRubyTest < Gem2DebTestCase
   end
 
   context 'installing gemspec' do
+      should 'install gemspec for simplegem for all interpreters' do
+        assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', "/usr/share/rubygems-integration/all/specifications/simplegem-0.0.1.gemspec"
+      end
     SUPPORTED_VERSION_NUMBERS.each do |version|
-      should 'install gemspec for simplegem under Ruby ' + version do
-        assert_installed SIMPLE_GEM_DIRNAME, 'ruby-simplegem', "/usr/share/rubygems-integration/#{version}/specifications/simplegem-0.0.1.gemspec"
+      should 'install gemspec for simpleextension under Ruby ' + version do
+        assert_installed SIMPLE_EXTENSION_DIRNAME, 'ruby-simpleextension', "/usr/share/rubygems-integration/#{version}/specifications/simpleextension-1.2.3.gemspec"
       end
     end
   end
