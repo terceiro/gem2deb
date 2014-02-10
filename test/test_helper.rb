@@ -137,13 +137,17 @@ class Gem2DebTestCase
   # make sure that everything that comes from gem2deb has precedence over
   # system-wide installed versions.
   def self.run_command(cmd)
-    # setup Perl lib for debhelper7
-    perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper7')
+    if !@environment_setup && !ENV['ADTTMP']
+      # setup Perl lib for debhelper7
+      perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper7')
 
-    # setup the environment
-    ENV['PERL5LIB'] = perl5lib
-    ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
-    ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
+      # setup the environment
+      ENV['PERL5LIB'] = perl5lib
+      ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
+      ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
+
+      @environment_setup = true
+    end
 
     @run_command_id ||= -1
     @run_command_id += 1
