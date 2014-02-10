@@ -11,6 +11,7 @@ gem2deb (0.6.2) UNRELEASED; urgency=medium
       interpreters by rubygems-integration >= 1.5. This way when a new
       interpreter is added there is no need to re-upload every package to
       make it seen by that new interpreter rubygems.
+  * add ruby-test-unit to Build-Depends
 
   [ Cédric Boutillier ]
   * Make build of C extensions verbose
