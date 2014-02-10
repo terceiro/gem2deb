@@ -12,6 +12,10 @@ gem2deb (0.6.2) UNRELEASED; urgency=medium
       interpreter is added there is no need to re-upload every package to
       make it seen by that new interpreter rubygems.
   * add ruby-test-unit to Build-Depends
+  * dh_ruby: change shebangs from `/usr/bin/env ruby` to `/usr/bin/ruby`
+    - multiple interpreters won't be supported for Jessie, and any interpreter
+      that is not /usr/bin/ruby will have been installed by hand so we don't
+      want system binaries using external interpreters.
 
   [ Cédric Boutillier ]
   * Make build of C extensions verbose

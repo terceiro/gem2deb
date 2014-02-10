@@ -26,7 +26,7 @@ class DhRubyTest < Gem2DebTestCase
       assert_installed SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram'
     end
     should 'rewrite shebang of installed programs' do
-      assert_match %r(#!/usr/bin/env ruby), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first
+      assert_match %r(#!/usr/bin/ruby), read_installed_file(SIMPLE_PROGRAM_DIRNAME, 'ruby-simpleprogram', '/usr/bin/simpleprogram').lines.first
     end
   end
 

@@ -44,7 +44,7 @@ module Gem2Deb
     'libruby2.0',
   ]
 
-  RUBY_SHEBANG_CALL = '/usr/bin/env ruby'
+  RUBY_SHEBANG_CALL = '/usr/bin/ruby'
 
   BIN_DIR = '/usr/bin'
 

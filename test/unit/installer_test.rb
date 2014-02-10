@@ -78,21 +78,21 @@ class InstallerTest < Gem2DebTestCase
 
       # The fact that this call does not crash means we won't crash when
       # /usr/bin has subdirectories
-      @installer.send(:rewrite_shebangs, '/usr/bin/env ruby')
+      @installer.send(:rewrite_shebangs, '/usr/bin/ruby')
     end
     teardown do
       FileUtils.rm_f(self.class.tmpdir + '/rewrite_shebangs')
     end
 
     should 'rewrite shebangs of programs directly under bin/' do
-      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
     end
     should 'rewrite shebangs in subdirs of bin/' do
-      assert_match %r{/usr/bin/env ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
+      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end
     should 'add a shebang when there is none' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
-      assert_match %r{/usr/bin/env ruby}, lines[0]
+      assert_match %r{/usr/bin/ruby}, lines[0]
       assert_match /puts/, lines[1]
     end
     should 'not rewrite shebangs non-Ruby scripts' do
@@ -102,9 +102,9 @@ class InstallerTest < Gem2DebTestCase
     should 'leave programs with correct permissions after rewriting shebangs' do
       assert_equal '100755', '%o' % File.stat(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang').mode
     end
-    should 'rewrite shebang to use `/usr/bin/env ruby` if all versions are supported' do
+    should 'rewrite shebang to use `/usr/bin/ruby` if all versions are supported' do
       @installer.stubs(:all_ruby_versions_supported?).returns(true)
-      @installer.expects(:rewrite_shebangs).with('/usr/bin/env ruby')
+      @installer.expects(:rewrite_shebangs).with('/usr/bin/ruby')
       @installer.send(:update_shebangs)
     end
     should "rewrite shebang to usr #{OLDER_RUBY_VERSION_BINARY} if only #{OLDER_RUBY_VERSION} is supported" do
