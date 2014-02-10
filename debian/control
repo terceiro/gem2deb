@@ -10,6 +10,7 @@ Build-Depends: debhelper (>= 7.0.50~), rake, ruby-test-unit, ruby-shoulda-contex
 Standards-Version: 3.9.5
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: http://anonscm.debian.org/gitweb?p=pkg-ruby-extras/gem2deb.git;a=summary
+XS-Testsuite: autopkgtest
 
 Package: gem2deb
 Architecture: all

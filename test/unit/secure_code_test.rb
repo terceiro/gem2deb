@@ -7,7 +7,6 @@ class SecureCodeTest < Gem2DebTestCase
     unless insecure_code.empty?
       fail "files containing insecure code: \n\t" + insecure_code.join("\n\t")
     end
-  end
-
+  end unless ENV['ADTTMP']
 
 end

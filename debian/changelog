@@ -16,6 +16,7 @@ gem2deb (0.7.0) UNRELEASED; urgency=medium
     - multiple interpreters won't be supported for Jessie, and any interpreter
       that is not /usr/bin/ruby will have been installed by hand so we don't
       want system binaries using external interpreters.
+  * Add support for running the gem2deb testsuite with autopkgtest
 
   [ Cédric Boutillier ]
   * Make build of C extensions verbose (Closes: #721674)

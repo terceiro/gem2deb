@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mv lib lib.off
+
+rake
+status=$?
+
+mv lib.off lib
+
+exit $status
