@@ -14,11 +14,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'rbconfig'
+require 'fileutils'
 
 module Gem2Deb
   class TestRunner
 
+    include FileUtils::Verbose
+
+    attr_accessor :autopkgtest
+
+    def initialize
+      self.autopkgtest = autopkgtest
+    end
+
     def load_path
+      if self.autopkgtest
+        return []
+      end
+
       # We should only use installation paths for the current Ruby
       # version.
       #
@@ -60,7 +73,29 @@ module Gem2Deb
         puts cmd.map { |part| part =~ /['"]/ ? part.inspect : part }.join(' ')
       end
       ENV['RUBYLIB'] = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
-      exec(*cmd)
+      if autopkgtest
+        move_away 'lib'
+        move_away 'ext'
+      end
+      system(*cmd)
+      exitstatus = $?.exitstatus
+      if autopkgtest
+        restore 'lib'
+        restore 'ext'
+      end
+      exit(exitstatus)
+    end
+
+    def move_away(dir)
+      if File.exists?(dir)
+        mv dir, '.gem2deb.' + dir
+      end
+    end
+
+    def restore(dir)
+      if File.exists?('.gem2deb.' + dir)
+        mv '.gem2deb.' + dir, dir
+      end
     end
 
     def self.inherited(subclass)
@@ -70,13 +105,14 @@ module Gem2Deb
     def self.subclasses
       @subclasses
     end
-    def self.detect_and_run
-      detect.run_tests
-    end
     def self.detect
       subclasses.map(&:new).find do |runner|
         runner.activate?
-      end
+      end || bail("E: this tool must be run from inside a Debian source package.")
+    end
+    def self.bail(msg)
+      puts msg
+      exit 1
     end
     def rubyver
       @rubyver ||= RbConfig::CONFIG['ruby_install_name']
@@ -139,11 +175,17 @@ module Gem2Deb
 end
 
 if $PROGRAM_NAME == __FILE__
-  if ARGV.length == 0
-    Gem2Deb::TestRunner.detect_and_run
-  else
-    puts "usage: #{File.basename($PROGRAM_NAME)}"
+  autopkgtest = false
+
+  if ARGV.length == 1 && ARGV.first == '--autopkgtest'
+    autopkgtest = true
+  elsif ARGV.length != 0
+    puts "usage: #{File.basename($PROGRAM_NAME)} [--autopkgtest]"
     exit(1)
   end
+
+  runner = Gem2Deb::TestRunner.detect
+  runner.autopkgtest = autopkgtest
+  runner.run_tests
 end
 
