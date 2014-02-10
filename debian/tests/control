@@ -1,3 +1,3 @@
 Tests: testsuite
-Depends: @, @builddeps@
+Depends: @, @builddeps@, build-essential, fakeroot
 Restrictions: rw-build-tree allow-stderr
