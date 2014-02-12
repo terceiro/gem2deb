@@ -17,32 +17,19 @@ if defined?(Encoding) && Encoding.default_external.name == 'US-ASCII'
   Encoding.default_external = 'UTF-8'
 end
 
+require 'ruby_debian_dev'
+
 module Gem2Deb
 
   class CommandFailed < Exception
   end
 
-  SUPPORTED_RUBY_VERSIONS = {
+  include RubyDebianDev
 
-    #name             Ruby binary
-    #---------------  -------------------
-    'ruby1.9.1' => '/usr/bin/ruby1.9.1',
-    'ruby2.0'   => '/usr/bin/ruby2.0',
-
-  }.select do |version, binary|
+  SUPPORTED_RUBY_VERSIONS.select! do |version, binary|
     # To help backporters without having to also backport the interpreters.
     File.exists?(binary)
   end
-
-  RUBY_CONFIG_VERSION = {
-    'ruby1.9.1' => '1.9.1',
-    'ruby2.0'   => '2.0',
-  }
-
-  SUPPORTED_RUBY_SHARED_LIBRARIES = [
-    'libruby1.9.1',
-    'libruby2.0',
-  ]
 
   RUBY_SHEBANG_CALL = '/usr/bin/ruby'
 

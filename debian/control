@@ -6,7 +6,7 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Antonio Terceiro <terceiro@debian.org>,
            Vincent Fourmond <fourmond@debian.org>,
 	   Gunnar Wolf <gwolf@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), rake, ruby-test-unit, ruby-shoulda-context, ruby-mocha (>= 0.14.0), ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), ruby2.0, ruby2.0-dev, devscripts, ruby-setup, lintian
+Build-Depends: debhelper (>= 7.0.50~), rake, ruby-test-unit, ruby-shoulda-context, ruby-mocha (>= 0.14.0), ruby-all-dev (>= 1:1.9.3.4), devscripts, ruby-setup, lintian
 Standards-Version: 3.9.5
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: http://anonscm.debian.org/gitweb?p=pkg-ruby-extras/gem2deb.git;a=summary
@@ -14,7 +14,7 @@ XS-Testsuite: autopkgtest
 
 Package: gem2deb
 Architecture: all
-Depends: ruby | ruby-interpreter, ruby1.9.1 (>= 1.9.3.0-1~), ruby1.9.1-dev (>= 1.9.3.0-1~), ruby2.0, ruby2.0-dev, build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ruby | ruby-interpreter, ruby-all-dev (>= 1:1.9.3.4), build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
