@@ -3,14 +3,21 @@
 %:
 	dh $@
 
-override_dh_auto_build:
-ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	# NO_PKG_MANGLE=1 is only useful on Ubuntu buildds, to disable pkgbinarymangler
-	NO_PKG_MANGLE=1 ruby1.9.1 -S rake test TESTOPTS=-v
-	NO_PKG_MANGLE=1 ruby2.0   -S rake test TESTOPTS=-v
-endif
+ruby_versions := $(shell ruby -Ilib -rgem2deb -e 'puts Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.join(" ")')
+
+override_dh_auto_build: $(ruby_versions)
 	mkdir -p man
 	for i in bin/*; do pod2man -c "" -r "" $$i > man/$$(basename $$i).1; done
+
+.PHONY: $(ruby_versions)
+
+$(ruby_versions):
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	# NO_PKG_MANGLE=1 only useful on Ubuntu buildds, to disable pkgbinarymangler
+	NO_PKG_MANGLE=1 $@ -S rake test TESTOPTS=-v
+else
+	@echo "Skipping tests for $@ as DEB_BUILD_OPTIONS contains 'nocheck'"
+endif
 
 override_dh_auto_clean:
 	rm -rf man/
