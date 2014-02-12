@@ -1,4 +1,4 @@
-gem2deb (0.7.0) UNRELEASED; urgency=medium
+gem2deb (0.7.0) unstable; urgency=medium
 
   [ Antonio Terceiro ]
   * Drop -w (verbose mode) switch from shebang lines
@@ -22,7 +22,7 @@ gem2deb (0.7.0) UNRELEASED; urgency=medium
   [ Cédric Boutillier ]
   * Make build of C extensions verbose (Closes: #721674)
 
- -- Antonio Terceiro <terceiro@debian.org>  Sun, 09 Feb 2014 23:33:46 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 12 Feb 2014 10:01:08 -0300
 
 gem2deb (0.6.1) unstable; urgency=low
 
