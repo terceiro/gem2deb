@@ -1,3 +1,13 @@
+gem2deb (0.7.1) unstable; urgency=medium
+
+  [ Jonas Genannt ]
+  * updated standards version in template to current 3.9.5
+
+  [ Christian Hofstaedtler ]
+  * Set ruby:Versions to 'all' if possible
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 18 Mar 2014 19:41:20 -0300
+
 gem2deb (0.7.0) unstable; urgency=medium
 
   [ Antonio Terceiro ]
