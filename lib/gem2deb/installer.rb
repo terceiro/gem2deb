@@ -59,8 +59,14 @@ module Gem2Deb
     end
 
     def install_substvars
+      versions =
+        if all_ruby_versions_supported? && !metadata.has_native_extensions?
+          ['all']
+        else
+          ruby_versions
+        end
       File.open("debian/#{binary_package}.substvars", "a") do |fd|
-        fd.puts "ruby:Versions=#{ruby_versions.join(' ')}"
+        fd.puts "ruby:Versions=#{versions.join(' ')}"
       end
     end
 
