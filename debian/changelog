@@ -1,3 +1,11 @@
+gem2deb (0.7.2) unstable; urgency=medium
+
+  * fix one test to work without Ruby 1.9 support
+    - the test was assuming an non-multiarch binary extension installation
+      path.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 30 Mar 2014 13:03:25 -0300
+
 gem2deb (0.7.1) unstable; urgency=medium
 
   [ Jonas Genannt ]
