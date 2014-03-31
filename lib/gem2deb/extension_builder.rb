@@ -62,7 +62,7 @@ module Gem2Deb
         ENV['make'] += " V=1"
 
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
-        FileUtils.mkdir_p(File.dirname(target))
+        FileUtils.mkdir_p(target)
         Dir.chdir(directory) do
           rubygems_builder.build(extension, '.', target, results)
           puts results

@@ -1,3 +1,10 @@
+gem2deb (0.7.3) unstable; urgency=medium
+
+  * extension_builder: create full vendorarchdir path before building
+    extensions. This fixes building extensions for Ruby 2.1
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 31 Mar 2014 12:42:14 -0300
+
 gem2deb (0.7.2) unstable; urgency=medium
 
   * fix one test to work without Ruby 1.9 support
