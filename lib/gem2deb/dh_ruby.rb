@@ -63,6 +63,13 @@ module Gem2Deb
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
 
+      ruby_versions.each do |version|
+        if !SUPPORTED_RUBY_VERSIONS.include?(version)
+          puts "E: #{version} is not supported by gem2deb anymore"
+          exit(1)
+        end
+      end
+
       installers.each do |installer|
         installer.dh_auto_install_destdir = argv.first
         installer.install_files_and_build_extensions
