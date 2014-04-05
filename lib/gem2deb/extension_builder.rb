@@ -67,6 +67,16 @@ module Gem2Deb
           rubygems_builder.build(extension, '.', target, results)
           puts results
         end
+
+        # handle mkmf.log being installed at the extension directory by
+        # Rubygems on Ruby 2.1+
+        mkmf_log = File.join(target, 'mkmf.log')
+        if File.exists?(mkmf_log)
+          puts "cat #{mkmf_log}"
+          system("cat", mkmf_log)
+          FileUtils::Verbose.rm_f mkmf_log
+        end
+
       rescue Exception => e
         puts results
         raise e

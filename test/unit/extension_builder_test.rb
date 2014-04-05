@@ -23,6 +23,12 @@ class ExtensionBuilderTest < Gem2DebTestCase
         assert_file_exists File.join('debian', package, RbConfig::CONFIG['vendorarchdir'] + '/simpleextension_with_name_clash.so')
       end
     end
+
+    should 'not install mkmf.log' do
+      Dir.chdir(target_dir) do
+        assert Dir.glob(File.join('debian', package, RbConfig::CONFIG['vendorarchdir'], 'mkmf.log')).empty?, 'mkmf.log installed to extension dir!'
+      end
+    end
   end
 
 end
