@@ -64,8 +64,15 @@ module Gem2Deb
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
         FileUtils.mkdir_p(target)
         Dir.chdir(directory) do
+          verbose = Gem.configuration.verbose
+          # will make Rubygems builder send the output to the terminal in
+          # real time
+          Gem.configuration.verbose = 'YES'
+
           rubygems_builder.build(extension, '.', target, results)
           puts results
+
+          Gem.configuration.verbose = verbose
         end
 
         # handle mkmf.log being installed at the extension directory by

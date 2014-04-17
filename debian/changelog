@@ -1,3 +1,9 @@
+gem2deb (0.7.6) UNRELEASED; urgency=medium
+
+  * extension builder: display build logs in real time
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 17 Apr 2014 17:39:38 -0300
+
 gem2deb (0.7.5) unstable; urgency=medium
 
   * Removes mkmf.log installed at the binary extension directory by Rubygems
