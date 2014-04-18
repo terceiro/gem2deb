@@ -30,6 +30,18 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('foo_ruby-1.2.3.tar.gz').source_package_name
   end
 
+  should 'not use #nnnn if no ITP bug exists' do
+      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz')
+      @dh_make_ruby.stubs(:wnpp_check).returns('')
+      assert_equal @dh_make_ruby.itp_bug, '#nnnn'
+  end
+
+  should 'use ITP bug if it exists' do
+      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz')
+      @dh_make_ruby.stubs(:wnpp_check).returns('(ITP - #42) http://bugs.debian.org/42 ruby-foo')
+      assert_equal @dh_make_ruby.itp_bug, '#42'
+  end
+
   context 'simple gem' do
     %w[
       debian/control
