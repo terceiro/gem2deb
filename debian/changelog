@@ -1,8 +1,13 @@
 gem2deb (0.7.6) UNRELEASED; urgency=medium
 
+ [ Antonio Terceiro ]
   * extension builder: display build logs in real time
 
- -- Antonio Terceiro <terceiro@debian.org>  Thu, 17 Apr 2014 17:39:38 -0300
+ [ Per Andersson ]
+  * dh-make-ruby: if an ITP bug exists, add its number to the generated
+    changelog (Closes: #704651)
+
+ -- Per Andersson <avtobiff@debian.org>  Thu, 29 May 2014 14:39:50 +0200
 
 gem2deb (0.7.5) unstable; urgency=medium
 

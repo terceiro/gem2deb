@@ -187,10 +187,24 @@ module Gem2Deb
       end
     end
 
+    def wnpp_check
+      `wnpp-check #{source_package_name}`
+    end
+
+    def itp_bug
+      if wnpp_check.length > 0
+        wnpp_check.split(" ")[2].chomp(")")
+      else
+        "#nnnn"
+      end
+    end
+
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
       unless File.exists?('debian/changelog')
-        run('dch', '--create', '--empty', '--package', source_package_name, '--newversion', "#{gem_version}-1", 'Initial release (Closes: #nnnn)')
+        run('dch', '--create', '--empty', '--package', source_package_name,
+            '--newversion', "#{gem_version}-1",
+            "Initial release (Closes: #{itp_bug})")
       end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
