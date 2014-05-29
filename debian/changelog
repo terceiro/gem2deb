@@ -1,3 +1,10 @@
+gem2deb (0.7.6) UNRELEASED; urgency=medium
+
+  * dh-make-ruby: if an ITP bug exists, add its number to the generated
+    changelog (Closes: #704651)
+
+ -- Per Andersson <avtobiff@debian.org>  Thu, 29 May 2014 14:39:50 +0200
+
 gem2deb (0.7.5) unstable; urgency=medium
 
   * Removes mkmf.log installed at the binary extension directory by Rubygems
