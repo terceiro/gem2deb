@@ -79,16 +79,16 @@ module Gem2Deb
         # Rubygems on Ruby 2.1+
         mkmf_log = File.join(target, 'mkmf.log')
         if File.exists?(mkmf_log)
-          puts "cat #{mkmf_log}"
-          system("cat", mkmf_log)
           FileUtils::Verbose.rm_f mkmf_log
         end
 
       rescue Exception => e
-        if File.exists?('mkmf.log')
-          puts 'vvvvvvvvvvvvvvvvvvvvv mkmf.log vvvvvvvvvvvvvvvvvvvvv'
+        target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
+        mkmf_log = File.join(target, 'mkmf.log')
+        if File.exists?(mkmf_log)
+          puts '~~~~~~~~~~~~~~~~~~~~~ ↓ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'
           system('cat', 'mkmf.log')
-          puts '^^^^^^^^^^^^^^^^^^^^^ mkmf.log ^^^^^^^^^^^^^^^^^^^^^'
+          puts '~~~~~~~~~~~~~~~~~~~~~ ↑ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'
         end
         raise e
       ensure
