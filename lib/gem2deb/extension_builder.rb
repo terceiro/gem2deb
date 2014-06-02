@@ -85,7 +85,11 @@ module Gem2Deb
         end
 
       rescue Exception => e
-        puts results
+        if File.exists?('mkmf.log')
+          puts 'vvvvvvvvvvvvvvvvvvvvv mkmf.log vvvvvvvvvvvvvvvvvvvvv'
+          system('cat', 'mkmf.log')
+          puts '^^^^^^^^^^^^^^^^^^^^^ mkmf.log ^^^^^^^^^^^^^^^^^^^^^'
+        end
         raise e
       ensure
         ENV['make']=env_make_old

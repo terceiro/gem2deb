@@ -1,9 +1,11 @@
 gem2deb (0.7.6) UNRELEASED; urgency=medium
 
- [ Antonio Terceiro ]
-  * extension builder: display build logs in real time
+  [ Antonio Terceiro ]
+  * extension builder:
+    - display build logs in real time
+    - show output of mkmf.log on failure
 
- [ Per Andersson ]
+  [ Per Andersson ]
   * dh-make-ruby: if an ITP bug exists, add its number to the generated
     changelog (Closes: #704651)
 
