@@ -58,7 +58,11 @@ module Gem2Deb
       # puts "  Leaving dh_ruby --test" if @verbose
     end
 
-    TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'test_runner.rb'))
+    if File.exist? File.expand_path(File.join(File.dirname(__FILE__),'../../bin','gem2deb-test-runner'))
+      TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'../../../bin','gem2deb-test-runner'))
+    else
+      TEST_RUNNER = "/usr/bin/gem2deb-test-runner"
+    end
 
     def install(argv)
       puts "  Entering dh_ruby --install" if @verbose
