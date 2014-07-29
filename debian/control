@@ -15,10 +15,18 @@ XS-Testsuite: autopkgtest
 
 Package: gem2deb
 Architecture: all
-Depends: ruby | ruby-interpreter, ruby-all-dev (>= 1:1.9.3.4), build-essential, devscripts, debhelper (>= 7.0.50~), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ruby | ruby-interpreter, ruby-all-dev (>= 1:1.9.3.4), build-essential, devscripts, debhelper (>= 7.0.50~), gem2deb-test-runner, ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
  then dh-make-ruby creates a Debian source package from that archive. That
  Debian package uses the included Debhelper7 helper, dh_ruby, to generate
  a proper Debian package. Both pure-ruby and native packages are supported.
+
+Package: gem2deb-test-runner
+Architecture: all
+Description: Debian Ruby packaging suite - tool to run tests
+ gem2deb is a set of tools to create Debian package from ruby software
+ distributed with Rubygems.
+ .
+ This package contains the tool to run the tests.

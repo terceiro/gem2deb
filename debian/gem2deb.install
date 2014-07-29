@@ -1,3 +1,9 @@
-bin/* /usr/bin/
+bin/dh-make-ruby /usr/bin/
+bin/dh_ruby /usr/bin/
+bin/dh_ruby_fixdepends /usr/bin/
+bin/gem2deb /usr/bin/
+bin/gem2tgz /usr/bin/
+bin/gen-ruby-trans-pkgs /usr/bin/
+
 lib/* /usr/lib/ruby/vendor_ruby/
 debhelper7/* /usr/share/perl5/
