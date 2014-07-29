@@ -2,6 +2,8 @@ gem2deb (0.7.7) UNRELEASED; urgency=medium
 
   * Add no-wnpp-check option to gem2deb in integration tests
   * Update sample gems with non obsolete rake rules
+  * Extract a test runner tool into a new gem2deb-test-runner binary package
+  * Provide templates for autopkgtest in packages created with gem2deb 
 
  -- Cédric Boutillier <boutil@debian.org>  Mon, 11 Aug 2014 14:22:55 +0200
 
