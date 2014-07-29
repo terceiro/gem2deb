@@ -173,19 +173,3 @@ module Gem2Deb
   end
 
 end
-
-if $PROGRAM_NAME == __FILE__
-  autopkgtest = false
-
-  if ARGV.length == 1 && ARGV.first == '--autopkgtest'
-    autopkgtest = true
-  elsif ARGV.length != 0
-    puts "usage: #{File.basename($PROGRAM_NAME)} [--autopkgtest]"
-    exit(1)
-  end
-
-  runner = Gem2Deb::TestRunner.detect
-  runner.autopkgtest = autopkgtest
-  runner.run_tests
-end
-
