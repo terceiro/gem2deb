@@ -1,4 +1,4 @@
-gem2deb (0.7.6) UNRELEASED; urgency=medium
+gem2deb (0.7.6) unstable; urgency=medium
 
   [ Antonio Terceiro ]
   * extension builder:
@@ -14,7 +14,7 @@ gem2deb (0.7.6) UNRELEASED; urgency=medium
     dh-make-ruby to check the existense of an ITP bug.
   * Add myself to the Uploaders.
 
- -- Per Andersson <avtobiff@debian.org>  Thu, 29 May 2014 14:39:50 +0200
+ -- Cédric Boutillier <boutil@debian.org>  Wed, 30 Jul 2014 15:39:15 +0200
 
 gem2deb (0.7.5) unstable; urgency=medium
 
