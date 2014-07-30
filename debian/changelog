@@ -12,6 +12,7 @@ gem2deb (0.7.6) UNRELEASED; urgency=medium
   [ Cédric Boutillier ]
   * Add a --no-wnpp-check option to dh-make-ruby and gem2deb to prevent
     dh-make-ruby to check the existense of an ITP bug.
+  * Add myself to the Uploaders.
 
  -- Per Andersson <avtobiff@debian.org>  Thu, 29 May 2014 14:39:50 +0200
 

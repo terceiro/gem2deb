@@ -5,7 +5,8 @@ Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.al
 Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Antonio Terceiro <terceiro@debian.org>,
            Vincent Fourmond <fourmond@debian.org>,
-	   Gunnar Wolf <gwolf@debian.org>
+           Gunnar Wolf <gwolf@debian.org>,
+           Cédric Boutillier <boutil@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), rake, ruby-test-unit, ruby-shoulda-context, ruby-mocha (>= 0.14.0), ruby-all-dev (>= 1:1.9.3.4), devscripts, ruby-setup, lintian
 Standards-Version: 3.9.5
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/gem2deb.git
