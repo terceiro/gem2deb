@@ -39,6 +39,11 @@ optparse = OptionParser.new do |opts|
   opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
     options[:ruby_versions] = versions
   end
+
+  options[:do_wnpp_check] = true
+  opts.on('', '--no-wnpp-check', 'prevent dh-make-ruby from checking wnpp reports') do
+    options[:do_wnpp_check] = false
+  end
 end
 optparse.parse!
 
@@ -94,6 +99,12 @@ Displays the help
 =item B<-v>, B<--version>
 
 Displays version information and exits.
+
+=item B<--no-wnpp-check>
+
+Prevents B<dh-make-ruby> to check wnpp reports to get the number of a possible
+ITP (intend to package) bug report. By default, B<dh-make-ruby> does check these
+reports, which requires an Internet access.
 
 =back
 
