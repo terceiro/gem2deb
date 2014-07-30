@@ -31,13 +31,13 @@ class DhMakeRubyTest < Gem2DebTestCase
   end
 
   should 'use #nnnn if no ITP bug exists' do
-      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz')
+      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz', :do_wnpp_check => true)
       @dh_make_ruby.stubs(:wnpp_check).returns('')
       assert_equal @dh_make_ruby.itp_bug, '#nnnn'
   end
 
   should 'use ITP bug if it exists' do
-      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz')
+      @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz', :do_wnpp_check => true)
       @dh_make_ruby.stubs(:wnpp_check).returns('(ITP - #42) http://bugs.debian.org/42 ruby-foo')
       assert_equal @dh_make_ruby.itp_bug, '#42'
   end

@@ -55,6 +55,8 @@ module Gem2Deb
 
     attr_accessor :input_directory
 
+    attr_accessor :do_wnpp_check
+
     def initialize(input, options = {})
       initialize_from_options(options)
       if File.directory?(input)
@@ -192,7 +194,7 @@ module Gem2Deb
     end
 
     def itp_bug
-      if wnpp_check.length > 0
+      if do_wnpp_check && wnpp_check.length > 0
         wnpp_check.split(" ")[2].chomp(")")
       else
         "#nnnn"
