@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#FIXME: replace LIB by the name of the main file of the library
+#ruby -r LIB -e "puts true"

@@ -1,0 +1,6 @@
+Tests: testsuite
+Depends: @, @builddeps@, gem2deb-test-runner
+
+Tests: load-test
+Depends: @
+
