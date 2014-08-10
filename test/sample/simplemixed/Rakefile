@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
@@ -9,6 +8,10 @@ spec = Gem::Specification.new do |s|
   s.requirements << 'none'
   s.require_path = 'ext'
   s.extensions << 'ext/simplemixed/extconf.rb'
+  s.author = 'Debian Ruby Extras Maintainers'
+  s.email = 'pkg-ruby-extras-maintainers@lists.alioth.debian.org'
+  s.homepage = 'https://wiki.debian.org/Teams/Ruby'
+  s.license = 'GPL-3+'
   #s.autorequire = 'rake'
   s.files = Dir.glob('{bin,ext,lib}/**/*')
   s.description = <<EOF
@@ -16,7 +19,7 @@ simplemixed is a simple mixed library (both pure-Ruby and native extension) that
 EOF
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = false
   pkg.need_tar = false
 end

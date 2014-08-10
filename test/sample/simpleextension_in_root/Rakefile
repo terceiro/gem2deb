@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
@@ -9,6 +8,10 @@ spec = Gem::Specification.new do |s|
   s.requirements << 'none'
   s.require_path = '.'
   s.extensions << 'extconf.rb'
+  s.author = 'Debian Ruby Extras Maintainers'
+  s.email = 'pkg-ruby-extras-maintainers@lists.alioth.debian.org'
+  s.homepage = 'https://wiki.debian.org/Teams/Ruby'
+  s.license = 'GPL-3+'
   #s.autorequire = 'rake'
   s.files = ['extconf.rb', 'simpleextension_in_root.c']
   s.description = <<EOF
@@ -18,7 +21,7 @@ directory, instead of inside ext/ subdirectory.
 EOF
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = false
   pkg.need_tar = false
 end
