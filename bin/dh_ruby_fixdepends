@@ -27,17 +27,15 @@ include Gem2Deb
     if l =~ /^shlibs:Depends=/
       deps = l.chomp.split('=', 2)[1].split(', ')
       std_deps = []
-      ruby_deps = []
+      libruby_deps = []
       deps.each do |dep|
         if SUPPORTED_RUBY_SHARED_LIBRARIES.include?(dep.split(' ')[0])
-          ruby_deps << dep
+          libruby_deps << dep
         else
           std_deps << dep
         end
       end
-      # p ruby_deps
-      # p std_deps
-      newdeps = (std_deps + [(ruby_deps.join(' | '))]).join(', ')
+      newdeps = (std_deps + [(libruby_deps.join(' | '))]).join(', ')
       fd.puts "shlibs:Depends=#{newdeps}"
     else
       fd.puts l
