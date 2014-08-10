@@ -3,6 +3,9 @@ gem2deb (0.8) UNRELEASED; urgency=medium
   * dh_ruby_fixdepends: inject minimum Ruby dependency provided by
     ruby-all-dev in the shared library dependencies. For that, bump dependency
     on ruby-all-dev to (>= 1:2.1.0.3~)
+  * test/test_helper.rb: add test/bin to $PATH during tests
+  * test/bin/wnpp-check: mock the actual wnpp-check during tests to avoid
+    hitting the network
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Aug 2014 22:35:16 -0300
 
