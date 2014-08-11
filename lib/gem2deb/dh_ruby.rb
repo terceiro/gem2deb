@@ -59,7 +59,7 @@ module Gem2Deb
     end
 
     if File.exist? File.expand_path(File.join(File.dirname(__FILE__),'../../bin','gem2deb-test-runner'))
-      TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'../../../bin','gem2deb-test-runner'))
+      TEST_RUNNER = File.expand_path(File.join(File.dirname(__FILE__),'../../bin','gem2deb-test-runner'))
     else
       TEST_RUNNER = "/usr/bin/gem2deb-test-runner"
     end
