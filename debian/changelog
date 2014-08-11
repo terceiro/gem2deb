@@ -1,3 +1,10 @@
+gem2deb (0.7.7) UNRELEASED; urgency=medium
+
+  * Add no-wnpp-check option to gem2deb in integration tests
+  * Update sample gems with non obsolete rake rules
+
+ -- Cédric Boutillier <boutil@debian.org>  Mon, 11 Aug 2014 14:22:55 +0200
+
 gem2deb (0.7.6) unstable; urgency=medium
 
   [ Antonio Terceiro ]
