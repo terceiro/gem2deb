@@ -1,5 +1,6 @@
 gem2deb (0.8.0) unstable; urgency=medium
 
+  [Antonio Terceiro]
   * dh_ruby_fixdepends: inject minimum Ruby dependency provided by
     ruby-all-dev in the shared library dependencies. For that, bump dependency
     on ruby-all-dev to (>= 1:2.1.0.3~)
@@ -7,7 +8,11 @@ gem2deb (0.8.0) unstable; urgency=medium
   * test/bin/wnpp-check: mock the actual wnpp-check during tests to avoid
     hitting the network
 
- -- Antonio Terceiro <terceiro@debian.org>  Sun, 10 Aug 2014 18:47:30 -0300
+  [Cédric Boutillier]
+  * Add no-wnpp-check option to gem2deb and dh_make_ruby in integration tests
+  * Update sample gems with non obsolete rake rules
+
+ -- Cédric Boutillier <boutil@debian.org>  Mon, 11 Aug 2014 14:22:55 +0200
 
 gem2deb (0.7.6) unstable; urgency=medium
 

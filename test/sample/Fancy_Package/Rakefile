@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
@@ -8,6 +7,10 @@ spec = Gem::Specification.new do |s|
   s.version = '0.0.1'
   s.requirements << 'none'
   s.require_path = 'lib'
+  s.author = 'Debian Ruby Extras Maintainers'
+  s.email = 'pkg-ruby-extras-maintainers@lists.alioth.debian.org'
+  s.homepage = 'https://wiki.debian.org/Teams/Ruby'
+  s.license = 'GPL-3+'
   s.files = Dir.glob('lib/**')
   s.description = <<EOF
 This package contains two elements of ridiculous upstream names: uppercase
@@ -17,7 +20,7 @@ debian/watch
 EOF
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = false
   pkg.need_tar = false
 end
