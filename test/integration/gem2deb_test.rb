@@ -6,7 +6,7 @@ class Gem2DebTest < Gem2DebTestCase
     FileUtils.cp gem, tmpdir
     gem = File.basename(gem)
     Dir.chdir(tmpdir) do
-      cmd = "gem2deb --no-wnpp-check -d #{gem}"
+      cmd = "gem2deb -d #{gem}"
       run_command(cmd)
     end
   end

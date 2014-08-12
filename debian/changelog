@@ -9,7 +9,6 @@ gem2deb (0.8.0) unstable; urgency=medium
     hitting the network
 
   [Cédric Boutillier]
-  * Add no-wnpp-check option to gem2deb and dh_make_ruby in integration tests
   * Update sample gems with non obsolete rake rules
 
  -- Cédric Boutillier <boutil@debian.org>  Mon, 11 Aug 2014 14:22:55 +0200
