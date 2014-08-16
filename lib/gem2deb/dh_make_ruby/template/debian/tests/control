@@ -1,6 +1,7 @@
-Tests: testsuite
+Test-Command: gem2deb-test-runner
 Depends: @, @builddeps@, gem2deb-test-runner
 
-Tests: load-test
-Depends: @
+#FIXME: replace LIB by the name of the main file of the library
+#Test-Command: ruby -r LIB -e "puts true"
+#Depends: @
 
