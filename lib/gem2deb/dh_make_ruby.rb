@@ -201,6 +201,12 @@ module Gem2Deb
       end
     end
 
+    def write_if_missing(filename)
+      unless File.exist? filename
+        File.open(filename, 'w') { |f| yield f }
+      end
+    end
+
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
       unless File.exists?('debian/changelog')
@@ -210,7 +216,7 @@ module Gem2Deb
       end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
-        File.open(template.filename, 'w') do |f|
+        write_if_missing(template.filename) do |f|
           f.puts ERB.new(template.data, nil, '<>').result(binding)
         end
       end
@@ -290,12 +296,12 @@ module Gem2Deb
 
     def test_suite
       if !metadata.test_files.empty?
-        File::open("debian/ruby-test-files.yaml", 'w') do |f|
+        write_if_missing("debian/ruby-test-files.yaml") do |f|
           YAML::dump(metadata.test_files, f)
         end
       else
         if File::directory?("test") or File::directory?("spec")
-          File::open("debian/ruby-tests.rb", 'w') do |f|
+          write_if_missing("debian/ruby-tests.rb") do |f|
             f.puts <<-EOF
 # FIXME
 # there's a spec/ or a test/ directory in the upstream source, but
@@ -335,7 +341,7 @@ module Gem2Deb
         docs << "# #{r}\n"
       end
       if docs != ""
-        File::open("debian/#{source_package_name}.docs", 'w') do |f|
+        write_if_missing("debian/#{source_package_name}.docs") do |f|
           f.puts docs
         end
       end
@@ -352,7 +358,7 @@ module Gem2Deb
         end
       end
       if examples != ""
-        File::open("debian/#{source_package_name}.examples", 'w') do |f|
+        write_if_missing("debian/#{source_package_name}.examples") do |f|
           f.puts examples
         end
       end
@@ -374,7 +380,7 @@ module Gem2Deb
         EOF
       end
       if installs != ""
-        File::open("debian/#{source_package_name}.install", 'w') do |f|
+        write_if_missing("debian/#{source_package_name}.install") do |f|
           f.puts installs
         end
       end
@@ -384,7 +390,7 @@ module Gem2Deb
         manpages = Dir.glob("man/**/*.[1-8]")
         manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
 
-        File::open("debian/#{source_package_name}.manpages", 'w') do |f|
+        write_if_missing("debian/#{source_package_name}.manpages") do |f|
           f.puts manpages_header
           manpages.each do |m|
             f.puts "# " + m
