@@ -30,7 +30,7 @@ if $PROGRAM_NAME == __FILE__
     exit(1)
   end
 
-  runner = Gem2Deb::TestRunner.detect
+  runner = Gem2Deb::TestRunner.detect!
   runner.autopkgtest = autopkgtest
   runner.run_tests
 end

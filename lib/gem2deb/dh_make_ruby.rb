@@ -18,6 +18,7 @@
 require 'gem2deb'
 require 'yaml'
 require 'gem2deb/metadata'
+require 'gem2deb/test_runner'
 require 'rubygems'
 require 'fileutils'
 require 'erb'
@@ -295,30 +296,67 @@ module Gem2Deb
     end
 
     def test_suite
+      if !Gem2Deb::TestRunner.detect
+        test_suite_rspec or test_suite_yaml or test_suite_rb
+      end
+    end
+
+    def test_suite_rspec
+      if File::directory?("spec")
+        write_if_missing("debian/ruby-tests.rake") do |f|
+          f.puts <<-EOF
+# FIXME
+# there's a rspec/ directory in the upstream source.
+# The recommended way to run the RSpec suite is via a rake task.
+# The following commands are enough in many cases and can be adapted to other
+# situations.
+#
+# require 'rspec/core/rake_task'
+#
+# RSpec::Core::RakeTask.new(:spec) do |spec|
+#  spec.pattern      = './spec/*_spec.rb'
+# end
+#
+# task :default => :spec
+        EOF
+        end
+      else
+        false
+      end
+    end
+
+
+    def test_suite_yaml
       if !metadata.test_files.empty?
         write_if_missing("debian/ruby-test-files.yaml") do |f|
           YAML::dump(metadata.test_files, f)
         end
       else
-        if File::directory?("test") or File::directory?("spec")
-          write_if_missing("debian/ruby-tests.rb") do |f|
-            f.puts <<-EOF
+        false
+      end
+    end
+
+    def test_suite_rb
+      if File::directory?("test")
+        write_if_missing("debian/ruby-tests.rb") do |f|
+          f.puts <<-EOF
 # FIXME
-# there's a spec/ or a test/ directory in the upstream source, but
+# there's a test/ directory in the upstream source, but
 # no test suite was defined in the Gem specification. It would be
 # a good idea to define it here so the package gets tested at build time.
 # Examples:
-# $: << 'lib' << '.'
-# Dir['{spec,test}/**/*.rb'].each { |f| require f }
+# $: << './test/'
+# Dir['./test/**/*.rb'].each { |f| require f }
 #
-# require 'test/ts_foo.rb'
+# require './test/ts_foo.rb'
 #
 # require 'rbconfig'
-# ruby = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
+# ruby = ENV['RUBY_TEST_BIN']
 # exec("\#{ruby} -I. test/runtests.rb")
-            EOF
-          end
+        EOF
         end
+      else
+        false
       end
     end
 
