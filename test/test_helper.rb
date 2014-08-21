@@ -143,7 +143,7 @@ class Gem2DebTestCase
 
       # setup the environment
       ENV['PERL5LIB'] = perl5lib
-      ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), ENV['PATH']].join(':')
+      ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), File.join(GEM2DEB_ROOT_SOURCE_DIR, 'test', 'bin'), ENV['PATH']].join(':')
       ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
 
       @environment_setup = true

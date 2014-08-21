@@ -1,9 +1,15 @@
-gem2deb (0.7.7) UNRELEASED; urgency=medium
+gem2deb (0.8.0) unstable; urgency=medium
 
-  * Add no-wnpp-check option to gem2deb in integration tests
+  [Antonio Terceiro]
+  * dh_ruby_fixdepends: inject minimum Ruby dependency provided by
+    ruby-all-dev in the shared library dependencies. For that, bump dependency
+    on ruby-all-dev to (>= 1:2.1.0.3~)
+  * test/test_helper.rb: add test/bin to $PATH during tests
+  * test/bin/wnpp-check: mock the actual wnpp-check during tests to avoid
+    hitting the network
+
+  [Cédric Boutillier]
   * Update sample gems with non obsolete rake rules
-  * Extract a test runner tool into a new gem2deb-test-runner binary package
-  * Provide templates for autopkgtest in packages created with gem2deb 
 
  -- Cédric Boutillier <boutil@debian.org>  Mon, 11 Aug 2014 14:22:55 +0200
 

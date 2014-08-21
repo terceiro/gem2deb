@@ -6,7 +6,7 @@ class Gem2DebTest < Gem2DebTestCase
     FileUtils.cp gem, tmpdir
     gem = File.basename(gem)
     Dir.chdir(tmpdir) do
-      cmd = "gem2deb --no-wnpp-check -d #{gem}"
+      cmd = "gem2deb -d #{gem}"
       run_command(cmd)
     end
   end
@@ -33,7 +33,7 @@ class Gem2DebTest < Gem2DebTestCase
     yield(dir)
     puts "Building #{directory} ..."
     Dir.chdir(dir) do
-      run_command('fakeroot debian/rules install')
+      run_command('fakeroot debian/rules binary')
     end
   end
 
@@ -71,6 +71,13 @@ class Gem2DebTest < Gem2DebTestCase
 
       should 'support native extensions' do
         assert Dir.glob("#{dir}/debian/ruby-baz/**/baz.so").size > 0, 'baz.so not found!!!'
+      end
+
+      should 'inject dependency on ruby (>= something)' do
+        deps = File.readlines("#{dir}/debian/ruby-baz/DEBIAN/control").find do |line|
+          line =~ /^Depends:\s*/
+        end.sub(/^Depends:\s*/, '').split(/\s*,\s*/)
+        assert deps.any? { |dep| dep =~ /ruby \(>= [^)]+\)/}, "#{deps.inspect} expected to include 'ruby (>= something)'"
       end
     end
   end
