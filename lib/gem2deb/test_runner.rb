@@ -67,6 +67,8 @@ module Gem2Deb
 
     def run_ruby(*cmd)
       rubylib = load_path.join(':')
+      # disable warning when running autopkgtest
+      cmd.unshift("-W0") if autopkgtest
       cmd.unshift(rubyver)
       if $VERBOSE
         print "RUBYLIB=#{rubylib} "
@@ -108,7 +110,10 @@ module Gem2Deb
     def self.detect
       subclasses.map(&:new).find do |runner|
         runner.activate?
-      end || bail("E: this tool must be run from inside a Debian source package.")
+      end
+    end
+    def self.detect!
+      detect || bail("E: this tool must be run from inside a Debian source package.")
     end
     def self.bail(msg)
       puts msg
