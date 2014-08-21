@@ -19,7 +19,7 @@ require 'fileutils'
 module Gem2Deb
   class TestRunner
 
-    include FileUtils::Verbose
+    include FileUtils
 
     attr_accessor :autopkgtest
 
