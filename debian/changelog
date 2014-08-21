@@ -1,3 +1,18 @@
+gem2deb (0.9.0) UNRELEASED; urgency=medium
+
+  * Provide support for DEP-8 autopkgtest
+    + split out a gem2deb-test-runner binary package
+    + add a XS-Testsuite: autopkgtest field to template debian/control
+    + add templates for debian/tests files and XS-Testsuite: autopkgtest field
+      to debian/control template
+  * Make dh-make-ruby idempotent
+  * Disable output to sterr when running autopkgtest
+    +  disable warning with -W0 when calling ruby for tests
+    +  do not make FileUtils verbose
+  * Refactor test_suite creation in dh_make_ruby
+
+ -- Cédric Boutillier <boutil@debian.org>  Thu, 21 Aug 2014 22:33:08 +0200
+
 gem2deb (0.8.0) unstable; urgency=medium
 
   [Antonio Terceiro]
