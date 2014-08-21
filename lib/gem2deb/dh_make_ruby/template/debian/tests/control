@@ -1,4 +1,4 @@
-Test-Command: gem2deb-test-runner
+Test-Command: gem2deb-test-runner --autopkgtest
 Depends: @, @builddeps@, gem2deb-test-runner
 
 #FIXME: replace LIB by the name of the main file of the library
