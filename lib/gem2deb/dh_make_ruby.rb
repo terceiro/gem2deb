@@ -306,7 +306,7 @@ module Gem2Deb
         write_if_missing("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
 # FIXME
-# there's a rspec/ directory in the upstream source.
+# there's a spec/ directory in the upstream source.
 # The recommended way to run the RSpec suite is via a rake task.
 # The following commands are enough in many cases and can be adapted to other
 # situations.
