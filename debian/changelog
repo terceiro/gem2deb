@@ -2,7 +2,7 @@ gem2deb (0.9.0) UNRELEASED; urgency=medium
 
   * Provide support for DEP-8 autopkgtest
     + split out a gem2deb-test-runner binary package
-    + add a XS-Testsuite: autopkgtest field to template debian/control
+    + add a Testsuite: autopkgtest field to template debian/control
     + add templates for debian/tests files and XS-Testsuite: autopkgtest field
       to debian/control template
   * Make dh-make-ruby idempotent
