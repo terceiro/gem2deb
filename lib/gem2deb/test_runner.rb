@@ -19,7 +19,7 @@ require 'fileutils'
 module Gem2Deb
   class TestRunner
 
-    include FileUtils
+    include FileUtils::Verbose
 
     attr_accessor :autopkgtest
 
@@ -67,8 +67,6 @@ module Gem2Deb
 
     def run_ruby(*cmd)
       rubylib = load_path.join(':')
-      # disable warning when running autopkgtest
-      cmd.unshift("-W0") if autopkgtest
       cmd.unshift(rubyver)
       if $VERBOSE
         print "RUBYLIB=#{rubylib} "

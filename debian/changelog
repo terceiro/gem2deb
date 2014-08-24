@@ -6,9 +6,6 @@ gem2deb (0.9.0) UNRELEASED; urgency=medium
     + add templates for debian/tests files and XS-Testsuite: autopkgtest field
       to debian/control template
   * Make dh-make-ruby idempotent
-  * Disable output to sterr when running autopkgtest
-    +  disable warning with -W0 when calling ruby for tests
-    +  do not make FileUtils verbose
   * Refactor test_suite creation in dh_make_ruby
 
  -- Cédric Boutillier <boutil@debian.org>  Thu, 21 Aug 2014 22:33:08 +0200
