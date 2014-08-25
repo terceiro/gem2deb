@@ -44,7 +44,7 @@ class InstallerTest < Gem2DebTestCase
           File.open(File.join(d, 'test.rb'), 'w') { |f| f.puts "# Nice File"}
         end
         @installer.send(:remove_duplicate_files, 'dir1', 'dir2')
-        assert !File.exists?('dir2')
+        assert !File.exist?('dir2')
       end
     end
     should 'not crash with duplicates in subdirectories' do
@@ -54,7 +54,7 @@ class InstallerTest < Gem2DebTestCase
         FileUtils.mkdir_p('dir2/subdir')
         FileUtils.touch('dir2/subdir/test.rb')
         @installer.send(:remove_duplicate_files, 'dir1', 'dir2')
-        assert !File.exists?('dir2')
+        assert !File.exist?('dir2')
       end
     end
   end

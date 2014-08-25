@@ -86,7 +86,7 @@ class Gem2TgzTest < Gem2DebTestCase
     tarball = gem.gsub('.gem', '.tar.gz')
 
     Gem2Deb::Gem2Tgz.new(gem).convert!
-    assert File.exists?(tarball)
+    assert File.exist?(tarball)
   end
 
 end

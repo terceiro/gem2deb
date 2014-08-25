@@ -175,7 +175,7 @@ module Gem2Deb
     end
 
     def create_orig_tarball
-      if source_package_name != orig_tarball_name && !File.exists?(orig_tarball_name)
+      if source_package_name != orig_tarball_name && !File.exist?(orig_tarball_name)
         run('ln', '-s', source_tarball_name, orig_tarball_name)
       end
     end
@@ -185,7 +185,7 @@ module Gem2Deb
       if !File.directory?(gem_dirname)
         raise "Extracting did not create #{gem_dirname} directory."
       end
-      if gem_dirname != source_dirname && !File.exists?(source_dirname)
+      if gem_dirname != source_dirname && !File.exist?(source_dirname)
         FileUtils.mv gem_dirname, source_dirname
       end
     end
@@ -210,7 +210,7 @@ module Gem2Deb
 
     def create_debian_boilerplates
       FileUtils.mkdir_p('debian')
-      unless File.exists?('debian/changelog')
+      unless File.exist?('debian/changelog')
         run('dch', '--create', '--empty', '--package', source_package_name,
             '--newversion', "#{gem_version}-1",
             "Initial release (Closes: #{itp_bug})")

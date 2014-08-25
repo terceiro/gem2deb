@@ -116,7 +116,7 @@ module Gem2Deb
       if metadata.has_native_extensions?
         metadata.native_extensions.each do |extension|
           extension_dir = File.dirname(extension)
-          if File.exists?(File.join(extension_dir, 'Makefile'))
+          if File.exist?(File.join(extension_dir, 'Makefile'))
             puts "Running 'make distclean || make clean' in #{extension_dir}..."
             Dir.chdir(extension_dir) do
               run 'make distclean || make clean'

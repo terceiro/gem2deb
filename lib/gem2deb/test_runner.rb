@@ -62,7 +62,7 @@ module Gem2Deb
     end
 
     def activate?
-      required_file && File.exists?(required_file)
+      required_file && File.exist?(required_file)
     end
 
     def run_ruby(*cmd)
@@ -87,13 +87,13 @@ module Gem2Deb
     end
 
     def move_away(dir)
-      if File.exists?(dir)
+      if File.exist?(dir)
         mv dir, '.gem2deb.' + dir
       end
     end
 
     def restore(dir)
-      if File.exists?('.gem2deb.' + dir)
+      if File.exist?('.gem2deb.' + dir)
         mv '.gem2deb.' + dir, dir
       end
     end

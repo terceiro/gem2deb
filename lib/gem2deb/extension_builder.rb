@@ -34,7 +34,7 @@ module Gem2Deb
 
     def clean
       Dir.chdir(directory) do
-        if File.exists?('Makefile')
+        if File.exist?('Makefile')
           run 'make clean'
         end
       end
@@ -78,14 +78,14 @@ module Gem2Deb
         # handle mkmf.log being installed at the extension directory by
         # Rubygems on Ruby 2.1+
         mkmf_log = File.join(target, 'mkmf.log')
-        if File.exists?(mkmf_log)
+        if File.exist?(mkmf_log)
           FileUtils::Verbose.rm_f mkmf_log
         end
 
       rescue Exception => e
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
         mkmf_log = File.join(target, 'mkmf.log')
-        if File.exists?(mkmf_log)
+        if File.exist?(mkmf_log)
           puts '~~~~~~~~~~~~~~~~~~~~~ ↓ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'
           system('cat', 'mkmf.log')
           puts '~~~~~~~~~~~~~~~~~~~~~ ↑ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'

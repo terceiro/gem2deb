@@ -81,7 +81,7 @@ module Gem2Deb
     protected
 
     def load_gemspec
-      if File.exists?('metadata.yml')
+      if File.exist?('metadata.yml')
         @gemspec = YAML.load_file('metadata.yml')
       elsif ENV['DH_RUBY_GEMSPEC']
         @gemspec = Gem::Specification.load(ENV['DH_RUBY_GEMSPEC'])

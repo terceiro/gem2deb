@@ -28,7 +28,7 @@ module Gem2Deb
 
   SUPPORTED_RUBY_VERSIONS.select! do |version, binary|
     # To help backporters without having to also backport the interpreters.
-    File.exists?(binary)
+    File.exist?(binary)
   end
 
   RUBY_SHEBANG_CALL = '/usr/bin/ruby'
