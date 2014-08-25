@@ -15,6 +15,9 @@
 
 require 'fileutils'
 require 'tmpdir'
+require 'digest'
+require 'yaml'
+require 'zlib'
 
 require 'gem2deb'
 include Gem2Deb
@@ -79,6 +82,7 @@ module Gem2Deb
     def extract_gem_contents
       Dir.chdir(@target_dir) do
         run('tar', 'xfm', gem_full_path)
+        verify_and_strip_checksums if File.exist?('checksums.yaml.gz')
         run 'tar xzfm data.tar.gz'
         FileUtils.rm_f('data.tar.gz')
         run "zcat metadata.gz > metadata.yml"
@@ -100,6 +104,30 @@ module Gem2Deb
 
     def cleanup
       FileUtils.rm_rf(@tmp_dir)
+    end
+
+    def verify_and_strip_checksums
+      checksums = read_checksums
+      [Digest::SHA1, Digest::SHA512].each do |digest|
+        hash_name = digest.name.sub(/^Digest::/,'')
+        ["data.tar.gz", "metadata.gz"].each do |f|
+          unless correct_checksum?(digest, f, checksums[hash_name][f])
+            puts "E: (#{gem}) the #{hash_name} checksum for #{f} is inconsistent with the one recorded in checksums.yaml.gz"
+            exit(1)
+          end
+        end
+      end
+      FileUtils.rm_f('checksums.yaml.gz')
+    end
+
+    def read_checksums
+      Zlib::GzipReader.open('checksums.yaml.gz') do |checksums_file|
+        YAML.load(checksums_file.read)
+      end
+    end
+
+    def correct_checksum?(digest, f, checksum)
+      digest.file(f).hexdigest == checksum
     end
 
   end

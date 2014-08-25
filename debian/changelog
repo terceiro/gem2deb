@@ -8,6 +8,8 @@ gem2deb (0.9.0) UNRELEASED; urgency=medium
   * Make dh-make-ruby idempotent
   * Refactor test_suite creation in dh_make_ruby
   * Remove alternative dependency on ruby-interpreter (Closes: #758806)
+  * Verify checksums included in the gems and remove checksums.yaml.gz upon
+    conversion of the gems to tarballs (Closes: #725348)
 
  -- Cédric Boutillier <boutil@debian.org>  Thu, 21 Aug 2014 22:33:08 +0200
 

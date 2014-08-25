@@ -50,6 +50,9 @@ class Gem2TgzTest < Gem2DebTestCase
         assert_file_exists 'simplegem-0.0.1/metadata.yml'
       end
     end
+    should 'not include checksums.yaml.gz' do
+      assert_not_contained_in_tarball SIMPLE_GEM_TARBALL, 'simplegem-0.0.1/checksums.yaml.gz'
+    end
     context 'looking inside metadata.yml' do
       setup do
         @gemspec = unpack(SIMPLE_GEM_TARBALL) do
