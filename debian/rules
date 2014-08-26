@@ -6,8 +6,9 @@
 ruby_versions := $(shell ruby -Ilib -rgem2deb -e 'puts Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.join(" ")')
 
 override_dh_auto_build: $(ruby_versions)
-	mkdir -p man
-	for i in bin/*; do pod2man -c "" -r "" $$i > man/$$(basename $$i).1; done
+	mkdir -p man/gem2deb man/gem2deb-test-runner
+	for i in bin/*; do pod2man -c "" -r "" $$i > man/gem2deb/$$(basename $$i).1; done
+	mv man/gem2deb/gem2deb-test-runner.1 man/gem2deb-test-runner
 
 override_dh_install:
 	dh_install -pgem2deb -Xgem2deb-test-runner -Xtest_runner.rb
