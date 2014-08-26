@@ -35,3 +35,44 @@ if $PROGRAM_NAME == __FILE__
   runner.run_tests
 end
 
+__END__
+=head1 NAME
+
+gem2deb-test-runner - runs test suite contained in Debian Ruby packages
+
+=head1 SYNOPSIS
+
+B<gem2deb-test-runner> [B<--autopkgtest>]
+
+=head1 DESCRIPTION
+
+B<gem2deb-test-runner> runs the tests shipped inside a source Debian Ruby
+package. The way the tests are run is configured in one of the three files:
+I<debian/ruby-test-files.yaml>, I<debian/ruby-tests.rake>,
+I<debian/ruby-tests.rb>. See the B<FILES> section in B<dh_ruby>(1) for details.
+
+If called without argument in the root of the source package after the package
+is built and installed under debian/I<package_name>, then the tests will be run
+using the files of the package installed under debian/I<package_name>. This call
+is part of the B<dh_ruby>(1) sequence when building a Ruby package with gem2deb.
+
+If the option B<--autopkgtest> is used, the package needs to be installed on
+the system. B<gem2deb-test-runner> will not try to load files under debian/ and
+will move away temporarily the lib/ and ext/ directory to ensure the test
+suite is run against the installed package. This is used in the context of
+automatic as-installed package testing, through the autopkgtest framework.
+
+=head1 OPTIONS
+
+=over
+
+=item B<--autopkgtest>
+
+Run the tests against the installed package for automatic as-installed package
+testing. Useful in conjonction with B<adt-run>(1).
+
+=back
+
+=head1 SEE ALSO
+
+L<B<dh_ruby>>(1), L<B<gem2deb>>(1)
