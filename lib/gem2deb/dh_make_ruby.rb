@@ -320,6 +320,7 @@ module Gem2Deb
 # task :default => :spec
         EOF
         end
+        true
       else
         false
       end
@@ -331,6 +332,7 @@ module Gem2Deb
         write_if_missing("debian/ruby-test-files.yaml") do |f|
           YAML::dump(metadata.test_files, f)
         end
+        true
       else
         false
       end
@@ -355,6 +357,7 @@ module Gem2Deb
 # exec("\#{ruby} -I. test/runtests.rb")
         EOF
         end
+        true
       else
         false
       end
