@@ -1,3 +1,9 @@
+gem2deb (0.9.1) unstable; urgency=medium
+
+  * gem2deb-test-runner now Breaks/Replaces gem2deb < 0.9. (Closes: #759431)
+
+ -- Cédric Boutillier <boutil@debian.org>  Wed, 27 Aug 2014 14:06:00 +0200
+
 gem2deb (0.9.0) unstable; urgency=medium
 
   * Provide support for DEP-8 autopkgtest (Closes: #637917)
