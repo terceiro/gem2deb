@@ -29,7 +29,7 @@ module Gem2Deb
 
     def load_path
       if self.autopkgtest
-        return []
+        return ['.']
       end
 
       # We should only use installation paths for the current Ruby
