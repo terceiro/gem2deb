@@ -23,10 +23,6 @@ module Gem2Deb
 
     attr_accessor :autopkgtest
 
-    def initialize
-      self.autopkgtest = autopkgtest
-    end
-
     def load_path
       if self.autopkgtest
         return ['.']
