@@ -11,7 +11,7 @@ override_dh_auto_build: $(ruby_versions)
 	mv man/gem2deb/gem2deb-test-runner.1 man/gem2deb-test-runner
 
 override_dh_install:
-	dh_install -pgem2deb -Xgem2deb-test-runner -Xtest_runner.rb
+	dh_install -pgem2deb -Xgem2deb-test-runner -Xtest_runner.rb -Xtesttask.rb
 	dh_install -pgem2deb-test-runner
 
 .PHONY: $(ruby_versions)
