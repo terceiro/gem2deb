@@ -43,7 +43,7 @@ task 'snapshot:build' do
   date = `date --iso=seconds |sed 's/+.*//' |sed 's/[-T:]//g'`.chomp
   sh "sed -i '1 s/)/~git#{date})/' debian/changelog"
   sh 'ls debian/changelog.git'
-  sh 'dpkg-buildpackage -us -uc'
+  sh 'DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc'
 end
 
 desc 'Build and install a git snapshot'
