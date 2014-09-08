@@ -58,6 +58,8 @@ module Gem2Deb
 
     attr_accessor :do_wnpp_check
 
+    attr_accessor :extra_build_dependencies
+
     def initialize(input, options = {})
       initialize_from_options(options)
       if File.directory?(input)
@@ -65,6 +67,7 @@ module Gem2Deb
       else
         initialize_from_tarball(input)
       end
+      @extra_build_dependencies = []
     end
 
     def initialize_from_options(options)
@@ -141,9 +144,10 @@ module Gem2Deb
     def build_in_directory(directory)
       Dir.chdir(directory) do
         read_upstream_source_info
-        create_debian_boilerplates
+        FileUtils.mkdir_p('debian')
         other_files
         test_suite
+        create_debian_boilerplates
       end
     end
     
@@ -303,21 +307,16 @@ module Gem2Deb
 
     def test_suite_rspec
       if File::directory?("spec")
+        extra_build_dependencies << 'ruby-rspec' << 'rake'
         write_if_missing("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
-# FIXME
-# there's a spec/ directory in the upstream source.
-# The recommended way to run the RSpec suite is via a rake task.
-# The following commands are enough in many cases and can be adapted to other
-# situations.
-#
-# require 'rspec/core/rake_task'
-#
-# RSpec::Core::RakeTask.new(:spec) do |spec|
-#  spec.pattern      = './spec/*_spec.rb'
-# end
-#
-# task :default => :spec
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = './spec/*_spec.rb'
+end
+
+task :default => :spec
         EOF
         end
         true
@@ -340,21 +339,14 @@ module Gem2Deb
 
     def test_suite_rb
       if File::directory?("test")
-        write_if_missing("debian/ruby-tests.rb") do |f|
+        extra_build_dependencies << 'rake'
+        write_if_missing("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
-# FIXME
-# there's a test/ directory in the upstream source, but
-# no test suite was defined in the Gem specification. It would be
-# a good idea to define it here so the package gets tested at build time.
-# Examples:
-# $: << './test/'
-# Dir['./test/**/*.rb'].each { |f| require f }
-#
-# require './test/ts_foo.rb'
-#
-# require 'rbconfig'
-# ruby = ENV['RUBY_TEST_BIN']
-# exec("\#{ruby} -I. test/runtests.rb")
+require 'gem2deb/rake/testtask'
+
+Gem2Deb::Rake::TestTask.new do |t|
+  t.test_files = FileList['test/*_test.rb']
+end
         EOF
         end
         true

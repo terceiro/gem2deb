@@ -13,6 +13,7 @@ Build-Depends: debhelper (>= 7.0.50~),
                rake,
                ruby-all-dev (>= 1:2.1.0.3~),
                ruby-mocha (>= 0.14.0),
+               ruby-rspec,
                ruby-setup,
                ruby-shoulda-context,
                ruby-test-unit

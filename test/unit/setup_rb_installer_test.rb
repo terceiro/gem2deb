@@ -54,6 +54,7 @@ class SetupRbInstallerTest < Gem2DebTestCase
     dh_ruby.installer_class = Gem2Deb::SetupRbInstaller
     dh_ruby.verbose = false
 
+    ENV['RUBYLIB'] = File.join(File.dirname(__FILE__), '../../lib')
     silence_stream(STDOUT) do
       silence_stream(STDERR) do
         Dir.chdir(package_path) do

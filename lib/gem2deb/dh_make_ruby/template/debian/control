@@ -3,7 +3,7 @@ Section: ruby
 Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
-Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>~)
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= <%= Gem2Deb::VERSION %>~)<%= extra_build_dependencies.map { |d| ", #{d}" }.join %>
 Standards-Version: 3.9.5
 #Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
 #Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
