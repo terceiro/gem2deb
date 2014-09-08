@@ -1,9 +1,0 @@
-Test-Command: gem2deb-test-runner --autopkgtest 2>&1
-Depends: @, gem2deb-test-runner
-#FIXME: add to Depends ruby-rspec, ruby-test-unit... if needed
-#Restrictions: allow-stderr
-
-#FIXME: replace LIB by the name of the main file of the library
-#Test-Command: ruby -r LIB -e "puts true"
-#Depends: @
-
