@@ -1,3 +1,10 @@
+gem2deb (0.11) UNRELEASED; urgency=medium
+
+  * dh-make-ruby: remove version qualifier from build-dependency on gem2deb to
+    remove friction when backporting.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 10 Sep 2014 10:00:08 -0300
+
 gem2deb (0.10) unstable; urgency=medium
 
   * gem2deb-test-runner: add '.' to $LOAD_PATH with --autopkgtest
