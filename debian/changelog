@@ -1,3 +1,13 @@
+gem2deb (0.11) UNRELEASED; urgency=medium
+
+  * dh-make-ruby: generate 'Testsuite: autopkgtest-pkg-ruby' to not conflict
+    with DEP-8 spec (i.e., if the 'Testsuite' field contains 'autopkgtest',
+    then debian/tests/control *must* exist).
+    - autopkgtest-pkg-ruby will be handled by autopkgtest and the implicit
+      test control data that uses gem2deb-test-runner will be used.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Sep 2014 10:28:55 -0300
+
 gem2deb (0.10) unstable; urgency=medium
 
   * gem2deb-test-runner: add '.' to $LOAD_PATH with --autopkgtest

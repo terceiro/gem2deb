@@ -8,7 +8,7 @@ Standards-Version: 3.9.5
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
 Homepage: <%= homepage ? homepage : 'FIXME'%>
-Testsuite: autopkgtest
+Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: <%= ruby_versions %>
 
 Package: <%= binary_package.name %>
