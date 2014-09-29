@@ -80,7 +80,7 @@ module Gem2Deb
           end
         versions.each do |version|
           target = File.join(destdir(:root), "/usr/share/rubygems-integration/#{version}/specifications/#{metadata.name}-#{metadata.version}.gemspec")
-          puts "generating gemspec at ${target}"
+          puts "generating gemspec at #{target}"
           FileUtils.mkdir_p(File.dirname(target))
           File.open(target, 'w') do |file|
             file.write(metadata.gemspec.to_ruby)
