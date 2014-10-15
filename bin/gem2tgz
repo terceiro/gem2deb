@@ -20,6 +20,9 @@ require 'gem2deb/gem2tgz'
 require 'optparse'
 
 optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: gem2tgz [OPTIONS] GEMNAME|GEMFILE [TARBALL]"
+  opts.separator "Options:"
+
   opts.on('-h', '--help', 'show help') do
     puts opts
     exit

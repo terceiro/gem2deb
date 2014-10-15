@@ -27,6 +27,9 @@ $check_build_deps = true
 dh_make_ruby_options = {}
 
 optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: gem2deb [OPTIONS] GEMNAME|GEMFILE"
+  opts.separator "Options:"
+
   opts.on('-h', '--help', 'show gem2deb help') do
     puts opts
     exit

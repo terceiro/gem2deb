@@ -22,6 +22,9 @@ require 'optparse'
 options = {}
 
 optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: dh-make-ruby [OPTIONS] TARBALL|DIRECTORY"
+  opts.separator 'Options:'
+
   opts.on('-h', '--help', 'show help') do
     puts opts
     exit

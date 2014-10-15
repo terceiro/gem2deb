@@ -5,6 +5,7 @@ gem2deb (0.11) UNRELEASED; urgency=medium
     then debian/tests/control *must* exist).
     - autopkgtest-pkg-ruby will be handled by autopkgtest and the implicit
       test control data that uses gem2deb-test-runner will be used.
+  * improved "usage: " banner in several of the provided programs
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Sep 2014 10:28:55 -0300
 

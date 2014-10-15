@@ -24,6 +24,9 @@ include Gem2Deb
 engine = Gem2Deb::DhRuby.new
 
 optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: dh_ruby [OPTIONS]"
+  opts.separator "Options:"
+
   opts.on('-h', '--help', 'show help') do
     puts opts
     exit
