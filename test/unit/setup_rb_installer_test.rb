@@ -43,9 +43,6 @@ class SetupRbInstallerTest < Gem2DebTestCase
     source_dir = File.join(tmpdir, source_package)
 
     FileUtils.cp_r("test/sample/#{pkgname}", source_dir)
-    # Here, copy setup.rb to the source dir.
-    FileUtils.cp("/usr/lib/ruby/vendor_ruby/setup.rb", 
-                 source_dir)
     system("tar czf #{tarball} -C#{tmpdir} #{source_package}")
     FileUtils.rm_rf(File.join(tmpdir, source_dir))
     Gem2Deb::DhMakeRuby.new(tarball).build

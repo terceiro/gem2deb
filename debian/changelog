@@ -6,6 +6,7 @@ gem2deb (0.11) UNRELEASED; urgency=medium
     - autopkgtest-pkg-ruby will be handled by autopkgtest and the implicit
       test control data that uses gem2deb-test-runner will be used.
   * improved "usage: " banner in several of the provided programs
+  * SetupRbInstaller: always use the system copy of setup.rb
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Oct 2014 16:16:04 -0300
 

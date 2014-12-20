@@ -27,24 +27,43 @@ module Gem2Deb
         archdir = destdir(:archdir, rubyver)
         prefix = destdir(:prefix, rubyver)
 
-        # First configure
-        run(ruby, 'setup.rb', 'config', "--prefix=#{prefix}", "--bindir=#{bindir}", "--siteruby=#{siteruby}", "--siterubyver=#{siteruby}", "--siterubyverarch=#{archdir}")
+        with_system_setuprb do
+          # First configure
+          run(ruby, 'setup.rb', 'config', "--prefix=#{prefix}", "--bindir=#{bindir}", "--siteruby=#{siteruby}", "--siterubyver=#{siteruby}", "--siterubyverarch=#{archdir}")
 
-        # Then setup
-        run(ruby, 'setup.rb', 'setup')
+          # Then setup
+          run(ruby, 'setup.rb', 'setup')
 
-        # Then install
-        run(ruby, 'setup.rb', 'install')
+          # Then install
+          run(ruby, 'setup.rb', 'install')
 
-        # Then clean
-        run(ruby, 'setup.rb', 'distclean')
+          # Then clean
+          run(ruby, 'setup.rb', 'distclean')
+        end
 
       end
     end
 
     def run_make_clean_on_extensionss
       ruby = SUPPORTED_RUBY_VERSIONS.keys.sort.first
-      run(ruby, 'setup.rb', 'distclean')
+      with_system_setuprb do
+        run(ruby, 'setup.rb', 'distclean')
+      end
+    end
+
+    def with_system_setuprb(*argv)
+      if File.exists?('setup.rb')
+        run('mv', 'setup.rb', 'setup.rb.gem2deb-orig')
+      end
+      run('ln', '-s', '/usr/lib/ruby/vendor_ruby/setup.rb', 'setup.rb')
+      begin
+        yield
+      ensure
+        run('rm', '-f', 'setup.rb')
+        if File.exists?('setup.rb.gem2deb-orig')
+          run('mv setup.rb.gem2deb-orig', 'setup.rb')
+        end
+      end
     end
 
   end
