@@ -79,7 +79,7 @@ module Gem2Deb
         # Rubygems on Ruby 2.1+
         mkmf_log = File.join(target, 'mkmf.log')
         if File.exist?(mkmf_log)
-          FileUtils::Verbose.rm_f mkmf_log
+          run 'rm', '-f', mkmf_log
         end
 
       rescue Exception => e
