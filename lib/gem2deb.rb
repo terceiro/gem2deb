@@ -21,6 +21,10 @@ require 'ruby_debian_dev'
 
 module Gem2Deb
 
+  class << self
+    attr_accessor :verbose
+  end
+
   class CommandFailed < Exception
   end
 
@@ -40,7 +44,7 @@ module Gem2Deb
   LIBDIR = File.expand_path(File.dirname(__FILE__))
 
   def run(*argv)
-    puts(_format_cmdline(argv)) if $VERBOSE
+    puts(_format_cmdline(argv)) if Gem2Deb.verbose
     system(*argv)
     if $?.exitstatus != 0
       raise Gem2Deb::CommandFailed, _format_cmdline(argv)
@@ -53,5 +57,7 @@ module Gem2Deb
     argv.map { |a| a =~ /\s/ && a.inspect || a }.join(' ')
   end
 end
+
+Gem2Deb.verbose = true
 
 require 'gem2deb/version'

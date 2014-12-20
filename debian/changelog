@@ -7,6 +7,8 @@ gem2deb (0.11) UNRELEASED; urgency=medium
       test control data that uses gem2deb-test-runner will be used.
   * improved "usage: " banner in several of the provided programs
   * SetupRbInstaller: always use the system copy of setup.rb
+  * Gem2Deb#run: always print command lines being executed. This makes build
+    logs much more detailed, what is a good thing.
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Oct 2014 16:16:04 -0300
 
