@@ -61,7 +61,7 @@ module Gem2Deb
       ensure
         run('rm', '-f', 'setup.rb')
         if File.exists?('setup.rb.gem2deb-orig')
-          run('mv setup.rb.gem2deb-orig', 'setup.rb')
+          run('mv', 'setup.rb.gem2deb-orig', 'setup.rb')
         end
       end
     end
