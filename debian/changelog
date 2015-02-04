@@ -9,6 +9,8 @@ gem2deb (0.11) UNRELEASED; urgency=medium
   * SetupRbInstaller: always use the system copy of setup.rb
   * Gem2Deb#run: always print command lines being executed. This makes build
     logs much more detailed, what is a good thing.
+  * dh-make-ruby: look for test files recursively in generated
+    debian/ruby-tests.rake for both test/unit and rspec style tests.
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Oct 2014 16:16:04 -0300
 

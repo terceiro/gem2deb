@@ -313,7 +313,7 @@ module Gem2Deb
 require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = './spec/*_spec.rb'
+  spec.pattern = './spec/**/*_spec.rb'
 end
 
 task :default => :spec
@@ -345,7 +345,7 @@ task :default => :spec
 require 'gem2deb/rake/testtask'
 
 Gem2Deb::Rake::TestTask.new do |t|
-  t.test_files = FileList['test/*_test.rb']
+  t.test_files = FileList['test/**/*_test.rb']
 end
         EOF
         end
