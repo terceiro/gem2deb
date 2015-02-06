@@ -168,10 +168,22 @@ module Gem2Deb
 
     def initialize_binary_package
       self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
-      metadata.dependencies.each do |dependency|
-        binary_package.gem_dependencies << dependency
+      with_each_runtime_dependency do |dependency|
+        binary_package.dependencies << dependency
       end
       binary_package
+    end
+
+    def with_each_runtime_dependency
+      (metadata.dependencies).select do |dep|
+        dep.type == :runtime
+      end.each do |dep|
+        dependency = gem_name_to_source_package_name(dep.name)
+        if dep.requirements != '>= 0'
+          dependency << (' (%s)' % dep.requirements.gsub('~>', '>='))
+        end
+        yield(dependency)
+      end
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
@@ -298,10 +310,11 @@ module Gem2Deb
         self.architecture = architecture
       end
       def dependencies
-        ['${shlibs:Depends}', '${misc:Depends}', 'ruby | ruby-interpreter' ]
-      end
-      def gem_dependencies
-        @gem_dependencies ||= []
+        @dependencies ||= [
+          '${shlibs:Depends}',
+          '${misc:Depends}',
+          'ruby | ruby-interpreter',
+        ]
       end
     end
 

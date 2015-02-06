@@ -11,6 +11,9 @@ gem2deb (0.11) UNRELEASED; urgency=medium
     logs much more detailed, what is a good thing.
   * dh-make-ruby: look for test files recursively in generated
     debian/ruby-tests.rake for both test/unit and rspec style tests.
+  * dh-make-ruby: gem dependencies will now be included in debian/control
+    uncommented and transformed to Debian package names, i.e. foo → ruby-foo,
+    except for known exceptions (such as rake and rails initially).
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Oct 2014 16:16:04 -0300
 
