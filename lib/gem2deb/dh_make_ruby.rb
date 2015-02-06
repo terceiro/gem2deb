@@ -104,8 +104,14 @@ module Gem2Deb
       end
     end
 
+    GEM_TO_PACKAGE = {
+      'rake' => 'rake',
+      'rails' => 'rails',
+    }
+
     def gem_name_to_source_package_name(gem_name)
-      'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
+      map = GEM_TO_PACKAGE
+      map[gem_name] || 'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
     end
 
     def gem_dirname
