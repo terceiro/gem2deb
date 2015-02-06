@@ -1,3 +1,8 @@
+unless ENV['ADTTMP']
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+end
+
+
 require 'test/unit'
 require 'shoulda-context'
 require 'mocha/setup'
@@ -22,7 +27,7 @@ class Gem2DebTestCase
       `#{Gem2Deb::SUPPORTED_RUBY_VERSIONS[version]} -rrbconfig -e "puts RbConfig::CONFIG['vendorarchdir']"`.strip
   end
 
-  require 'test_helper/samples'
+  require_relative 'test_helper/samples'
   include Gem2DebTestCase::Samples
 
   GEM2DEB_ROOT_SOURCE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))

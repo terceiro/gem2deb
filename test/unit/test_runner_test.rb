@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../test_helper'
 require 'gem2deb/test_runner'
 
 class TestRunnerTest < Gem2DebTestCase
