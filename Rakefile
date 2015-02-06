@@ -56,6 +56,7 @@ end
 task 'snapshot:clean' do
   sh 'ls debian/changelog.git'
   sh 'mv debian/changelog.git debian/changelog'
+  sh 'debclean'
 end
 
 desc "Checks for inconsistencies between version numbers in the code and in debian/changelog"
