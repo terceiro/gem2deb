@@ -179,10 +179,15 @@ module Gem2Deb
         dep.type == :runtime
       end.each do |dep|
         dependency = gem_name_to_source_package_name(dep.name)
-        if dep.requirements != '>= 0'
-          dependency << (' (%s)' % dep.requirements.gsub('~>', '>='))
+        version = dep.requirement.to_s
+        if version == '>= 0'
+          yield(dependency)
+        else
+          dep.requirements_list.each do |v|
+            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1')
+            yield('%s (%s)' % [dependency, spec])
+          end
         end
-        yield(dependency)
       end
     end
 

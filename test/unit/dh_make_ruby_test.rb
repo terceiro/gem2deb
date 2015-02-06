@@ -124,6 +124,29 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'dependencies' do
+    setup do
+      text = File.read(File.join(DEBIANIZED_SIMPLE_GEM, 'debian/control'))
+      line = text.lines.find { |l| l =~ /^Depends: / }.strip
+      @dependencies = line.gsub(/^Depends:\s*/, '').split(/\s*,\s*/)
+    end
+    should 'get simple dependency' do
+      assert_include @dependencies, 'ruby-dep'
+    end
+    should 'get dependency with an exact version' do
+      assert_include @dependencies, 'ruby-depwithversion (= 1.0)'
+    end
+    should 'get version with spermy' do
+      assert_include @dependencies, 'ruby-depwithspermy (>= 1.0)'
+    end
+    should 'get version with >' do
+      assert_include @dependencies, 'ruby-depwithgt (>> 1.0)'
+    end
+    should 'get version with two requirements' do
+      assert_include @dependencies, 'ruby-depwith2versions (>= 1.0)'
+      assert_include @dependencies, 'ruby-depwith2versions (<< 2.0)'
+    end
+  end
 
   protected
 

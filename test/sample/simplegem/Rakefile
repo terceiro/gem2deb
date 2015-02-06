@@ -16,6 +16,12 @@ spec = Gem::Specification.new do |s|
   s.description = <<EOF
 simplegem is a simple gem that is used to test gem2tgz.
 EOF
+
+  s.add_runtime_dependency 'dep'
+  s.add_runtime_dependency 'depwithversion', '1.0'
+  s.add_runtime_dependency 'depwithspermy', '~> 1.0'
+  s.add_runtime_dependency 'depwithgt', '> 1.0'
+  s.add_runtime_dependency 'depwith2versions', '>= 1.0', '< 2.0'
 end
 
 Gem::PackageTask.new(spec) do |pkg|
