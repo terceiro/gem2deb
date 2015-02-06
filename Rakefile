@@ -76,16 +76,16 @@ task :version_check do
 end
 
 namespace :release do
-  desc "Releases to Debian sid (very much tied to terceiro's workflow)"
-  task :sid do
+  desc "Releases to Debian (very much tied to terceiro's workflow)"
+  task :debian do
     ENV['VERSION_CHECK_FATAL'] = 'yes'
     Rake::Task['version_check'].invoke
 
     sh 'git buildpackage --git-builder=sbuild'
     sh 'git buildpackage --git-tag-only'
+    sh 'debsign'
     sh 'git push --all'
     sh 'git push --tags'
-    sh 'debsign'
     sh 'debrelease'
   end
 end
