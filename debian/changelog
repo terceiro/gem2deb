@@ -1,4 +1,4 @@
-gem2deb (0.11) UNRELEASED; urgency=medium
+gem2deb (0.11) experimental; urgency=medium
 
   * dh-make-ruby: generate 'Testsuite: autopkgtest-pkg-ruby' to not conflict
     with DEP-8 spec (i.e., if the 'Testsuite' field contains 'autopkgtest',
@@ -15,7 +15,7 @@ gem2deb (0.11) UNRELEASED; urgency=medium
     uncommented and transformed to Debian package names, i.e. foo → ruby-foo,
     except for known exceptions (such as rake and rails initially).
 
- -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Oct 2014 16:16:04 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 06 Feb 2015 15:37:58 -0200
 
 gem2deb (0.10) unstable; urgency=medium
 
