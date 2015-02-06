@@ -1,17 +1,17 @@
 # vim: ts=2 sw=2 expandtab
 # -*- coding: utf-8 -*-
 # Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -150,7 +150,7 @@ module Gem2Deb
         create_debian_boilerplates
       end
     end
-    
+
     def read_upstream_source_info
       read_metadata('.')
       initialize_binary_package
@@ -295,7 +295,7 @@ module Gem2Deb
         ['${shlibs:Depends}', '${misc:Depends}', 'ruby | ruby-interpreter' ]
       end
       def gem_dependencies
-	@gem_dependencies ||= []
+        @gem_dependencies ||= []
       end
     end
 
