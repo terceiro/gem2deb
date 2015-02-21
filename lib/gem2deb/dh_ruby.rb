@@ -34,28 +34,23 @@ module Gem2Deb
     end
 
     def clean
-      puts "  Entering dh_ruby --clean" if @verbose
+      puts "   dh_ruby --clean" if @verbose
 
       installers.each do |installer|
         installer.run_make_clean_on_extensions
       end
-
-      puts "  Leaving dh_ruby --clean" if @verbose
     end
 
     def configure
-      # puts "  Entering dh_ruby --configure" if @verbose
-      # puts "  Leaving dh_ruby --configure" if @verbose
+      # puts "   dh_ruby --configure" if @verbose
     end
 
     def build
-      # puts "  Entering dh_ruby --build" if @verbose
-      # puts "  Leaving dh_ruby --build" if @verbose
+      # puts "   dh_ruby --build" if @verbose
     end
 
     def test
-      # puts "  Entering dh_ruby --test" if @verbose
-      # puts "  Leaving dh_ruby --test" if @verbose
+      # puts "   dh_ruby --test" if @verbose
     end
 
     if File.exist? File.expand_path(File.join(File.dirname(__FILE__),'../../bin','gem2deb-test-runner'))
@@ -65,7 +60,7 @@ module Gem2Deb
     end
 
     def install(argv)
-      puts "  Entering dh_ruby --install" if @verbose
+      puts "   dh_ruby --install" if @verbose
 
       ruby_versions.each do |version|
         if !SUPPORTED_RUBY_VERSIONS.include?(version)
@@ -87,8 +82,6 @@ module Gem2Deb
         installer.install_gemspec
         check_rubygems(installer)
       end
-
-      puts "  Leaving dh_ruby --install" if @verbose
     end
 
     protected
