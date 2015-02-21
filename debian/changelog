@@ -4,6 +4,7 @@ gem2deb (0.12) UNRELEASED; urgency=medium
     the build. See docs in dh_ruby(1)
   * dh-make-ruby: use a cache based on the output of apt-file to map gem names
     to Debian package names when generating dependencies.
+    - add apt-file to Recommends:
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 21 Feb 2015 18:38:18 -0200
 
