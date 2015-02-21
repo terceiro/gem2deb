@@ -61,6 +61,8 @@ module Gem2Deb
     attr_accessor :extra_build_dependencies
 
     def initialize(input, options = {})
+      generate_or_update_gem_to_package_data
+
       initialize_from_options(options)
       if File.directory?(input)
         initialize_from_directory(input)
@@ -104,15 +106,45 @@ module Gem2Deb
       end
     end
 
-    GEM_TO_PACKAGE = {
-      'rake' => 'rake',
-      'rails' => 'rails',
-    }
-
     def gem_name_to_source_package_name(gem_name)
-      map = GEM_TO_PACKAGE
-      map[gem_name] || 'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
+      @gem_to_package[gem_name] || 'ruby-' + gem_name.gsub(/^ruby[-_]|[-_]ruby$/, '')
     end
+
+    def generate_or_update_gem_to_package_data
+      if Gem2Deb.testing
+        @gem_to_package = { 'rake' => 'rake', 'rails' => 'rails' }
+        return
+      end
+
+      if !File.exists?('/usr/bin/apt-file')
+        puts "E: apt-file not found. Please install the package apt-file"
+        exit 1
+      end
+
+      cache_dir = File.join(ENV['HOME'], '.cache', 'gem2deb')
+      FileUtils.mkdir_p(cache_dir)
+      cache = File.join(cache_dir, 'gem_to_packages.yaml')
+
+      if File.exists?(cache)
+        stat = File.stat(cache)
+        update = (Time.now.to_i - stat.mtime.to_i) > (60*60*24) # keep cache for 24h
+      else
+        update = true
+      end
+
+      if update
+        if system('apt-file search /usr/share/rubygems-integration/ > ' + cache + '.new')
+          system('sed', '-i', '-e', 's#/.*/##; s/-[0-9.]\+.gemspec//', cache + '.new')
+          FileUtils.mv(cache + '.new', cache)
+        else
+          puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names to package names'
+          exit $?.exitstatus
+        end
+      end
+
+      @gem_to_package = YAML.load_file(cache).invert
+    end
+
 
     def gem_dirname
       [gem_name, gem_version].join('-')
