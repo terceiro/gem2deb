@@ -15,6 +15,7 @@
 
 require 'gem2deb'
 require 'gem2deb/installer'
+require 'gem2deb/make'
 require 'find'
 require 'fileutils'
 
@@ -36,6 +37,8 @@ module Gem2Deb
     def clean
       puts "   dh_ruby --clean" if @verbose
 
+      make.clean
+
       installers.each do |installer|
         installer.run_make_clean_on_extensions
       end
@@ -46,7 +49,9 @@ module Gem2Deb
     end
 
     def build
-      # puts "   dh_ruby --build" if @verbose
+      puts "   dh_ruby --build" if @verbose
+
+      make.build
     end
 
     def test
@@ -62,6 +67,10 @@ module Gem2Deb
     def install(argv)
       puts "   dh_ruby --install" if @verbose
 
+      dh_auto_install_destdir = argv.first
+
+      make.install(destdir_for(packages.first[:binary_package], dh_auto_install_destdir))
+
       ruby_versions.each do |version|
         if !SUPPORTED_RUBY_VERSIONS.include?(version)
           puts "E: #{version} is not supported by gem2deb anymore"
@@ -70,7 +79,7 @@ module Gem2Deb
       end
 
       installers.each do |installer|
-        installer.dh_auto_install_destdir = argv.first
+        installer.destdir_base = destdir_for(installer.binary_package, dh_auto_install_destdir)
         installer.install_files_and_build_extensions
         installer.update_shebangs
       end
@@ -84,7 +93,8 @@ module Gem2Deb
       end
     end
 
-    protected
+    protected # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
     def check_rubygems(installer)
       if skip_checks?
@@ -217,6 +227,18 @@ module Gem2Deb
             end
           end
         end
+    end
+
+    def make
+      @make ||= Gem2Deb::Make.new
+    end
+
+    def destdir_for(binary_package, dh_auto_install_destdir)
+      if ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
+        dh_auto_install_destdir
+      else
+        File.join('debian', binary_package.to_s)
+      end
     end
 
   end

@@ -143,24 +143,6 @@ class InstallerTest < Gem2DebTestCase
 
   end
 
-  context 'DESTDIR' do
-    setup do
-      @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
-      @installer.dh_auto_install_destdir = '/path/to/source-package/debian/tmp'
-    end
-    should 'be debian/${binary_package} by default' do
-      assert_match /\/debian\/ruby-foo$/, @installer.send(:destdir, :root)
-    end
-    should 'install to debian/tmp when DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is set' do
-      saved_env = ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']
-      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = 'yes'
-
-      assert_equal '/path/to/source-package/debian/tmp', @installer.send(:destdir, :root)
-
-      ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR'] = saved_env
-    end
-  end
-
   context "Ruby versions supported" do
     setup do
       @installer = Gem2Deb::Installer.new('ruby-foo', FOO)

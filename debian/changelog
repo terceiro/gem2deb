@@ -1,3 +1,10 @@
+gem2deb (0.12) UNRELEASED; urgency=medium
+
+  * dh_ruby: if debian/dh_ruby.{mk,rake} exists, call {make,rake} on it during
+    the build. See docs in dh_ruby(1)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 21 Feb 2015 18:38:18 -0200
+
 gem2deb (0.11) experimental; urgency=medium
 
   * dh-make-ruby: generate 'Testsuite: autopkgtest-pkg-ruby' to not conflict
