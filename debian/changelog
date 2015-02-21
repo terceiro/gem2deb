@@ -1,4 +1,4 @@
-gem2deb (0.12) UNRELEASED; urgency=medium
+gem2deb (0.12) experimental; urgency=medium
 
   * dh_ruby: if debian/dh_ruby.{mk,rake} exists, call {make,rake} on it during
     the build. See docs in dh_ruby(1)
@@ -6,7 +6,7 @@ gem2deb (0.12) UNRELEASED; urgency=medium
     to Debian package names when generating dependencies.
     - add apt-file to Recommends:
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 21 Feb 2015 18:38:18 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 21 Feb 2015 20:34:04 -0200
 
 gem2deb (0.11) experimental; urgency=medium
 
