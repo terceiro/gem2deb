@@ -12,6 +12,7 @@ require 'tempfile'
 
 require 'gem2deb'
 Gem2Deb.verbose = false
+Gem2Deb.testing = true
 
 Gem2DebTestCase = Test::Unit::TestCase
 class Gem2DebTestCase

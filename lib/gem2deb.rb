@@ -23,6 +23,12 @@ module Gem2Deb
 
   class << self
     attr_accessor :verbose
+    def testing
+      ENV['GEM2DEB_TESTING']
+    end
+    def testing=(v)
+      ENV['GEM2DEB_TESTING'] = v.to_s
+    end
   end
 
   class CommandFailed < Exception
