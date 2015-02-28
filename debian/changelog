@@ -1,3 +1,9 @@
+gem2deb (0.13) UNRELEASED; urgency=medium
+
+  * dh-make-ruby: bump Standards-Version in template to 3.9.6
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 28 Feb 2015 13:27:25 -0300
+
 gem2deb (0.12) experimental; urgency=medium
 
   * dh_ruby: if debian/dh_ruby.{mk,rake} exists, call {make,rake} on it during
