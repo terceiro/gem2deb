@@ -348,8 +348,6 @@ module Gem2Deb
       end
       def dependencies
         @dependencies ||= [
-          '${shlibs:Depends}',
-          '${misc:Depends}',
           'ruby | ruby-interpreter',
         ]
       end

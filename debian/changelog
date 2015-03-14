@@ -1,6 +1,7 @@
 gem2deb (0.13) UNRELEASED; urgency=medium
 
   * dh-make-ruby: bump Standards-Version in template to 3.9.6
+  * dh-make-ruby: add gem runtime dependencies to Build-Depends: as well
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 28 Feb 2015 13:27:25 -0300
 
