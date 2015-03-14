@@ -39,11 +39,11 @@ desc "Builds a git snapshot package"
 task :snapshot => ['snapshot:build', 'snapshot:clean']
 
 task 'snapshot:build' do
-  sh 'cp debian/changelog debian/changelog.git'
   date = `date --iso=seconds |sed 's/+.*//' |sed 's/[-T:]//g'`.chomp
   sh "sed -i '1 s/)/~git#{date})/' debian/changelog"
-  sh 'ls debian/changelog.git'
-  sh 'DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc'
+  sh 'git commit -a -m snapshot-' + date
+  sh 'git branch snapshot-' + date
+  sh 'DEB_BUILD_OPTIONS=nocheck git-buildpackage --git-ignore-branch -us -uc'
 end
 
 desc 'Build and install a git snapshot'
@@ -54,8 +54,7 @@ task 'snapshot:install' do
 end
 
 task 'snapshot:clean' do
-  sh 'ls debian/changelog.git'
-  sh 'mv debian/changelog.git debian/changelog'
+  sh 'git reset --hard HEAD^'
   sh 'fakeroot debian/rules clean'
 end
 
