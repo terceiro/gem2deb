@@ -347,9 +347,7 @@ module Gem2Deb
         self.architecture = architecture
       end
       def dependencies
-        @dependencies ||= [
-          'ruby | ruby-interpreter',
-        ]
+        @dependencies ||= []
       end
     end
 

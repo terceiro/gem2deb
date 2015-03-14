@@ -14,7 +14,7 @@ XS-Ruby-Versions: <%= ruby_versions %>
 Package: <%= binary_package.name %>
 Architecture: <%= binary_package.architecture %>
 XB-Ruby-Versions: ${ruby:Versions}
-Depends: ${shlibs:Depends}, ${misc:Depends}, <%= binary_package.dependencies.join(', ') %>
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter, <%= binary_package.dependencies.join(', ') %>
 Description: <%= short_description ? short_description : 'FIXME' %>
 <% if long_description %>
 <%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
