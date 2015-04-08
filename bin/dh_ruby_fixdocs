@@ -1,0 +1,61 @@
+#!/usr/bin/ruby
+#
+# Copyright © 2015, Christian Hofstaedtler <zeha@debian.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+require 'gem2deb'
+require 'gem2deb/dh_ruby'
+include Gem2Deb
+
+`dh_listpackages`.split.each do |package|
+  Dir.glob("debian/#{package}/usr/share/doc/**/created.rid").each do |path|
+    next if File.directory?(path)
+    File.unlink(path)
+  end
+end
+__END__
+=head1 NAME
+
+dh_ruby_fixdocs - remove unused files from rdoc directories
+
+=head1 SYNOPSIS
+
+B<dh_ruby_fixdocs>
+
+=head1 DESCRIPTION
+
+B<dh_ruby_fixdocs> is called by the I<ruby> dh sequence. You should
+not call it directly.
+
+=head1 SEE ALSO
+
+L<B<gem2deb>>(1), L<B<dh_ruby>>(1)
+
+=head1 COPYRIGHT AND AUTHORS
+
+Copyright (c) 2015, Christian Hofstaedtler <zeha@debian.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
