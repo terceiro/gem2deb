@@ -1,9 +1,15 @@
-gem2deb (0.13) UNRELEASED; urgency=medium
+gem2deb (0.13) experimental; urgency=medium
 
+  [ Antonio Terceiro ]
   * dh-make-ruby: bump Standards-Version in template to 3.9.6
   * dh-make-ruby: add gem runtime dependencies to Build-Depends: as well
+  * dh-make-ruby: fix generate rspec rake task in debian/ruby-tests.rb to work
+    with rspec 3. Closes: #782161
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 28 Feb 2015 13:27:25 -0300
+  [ Christian Hofstaedtler ]
+  * Remove rdoc stamp files at install time
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 09 Apr 2015 12:26:04 +0200
 
 gem2deb (0.12) experimental; urgency=medium
 
