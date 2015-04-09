@@ -1,3 +1,10 @@
+gem2deb (0.14) UNRELEASED; urgency=medium
+
+  * TestRunner: when running build time tests, use the full path for extra
+    library directories installed in debian/$pkg
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 09 Apr 2015 16:14:32 +0200
+
 gem2deb (0.13) experimental; urgency=medium
 
   [ Antonio Terceiro ]

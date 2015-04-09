@@ -39,7 +39,7 @@ module Gem2Deb
 
       dirs = []
       $LOAD_PATH.grep(/vendor/).each do |dir|
-        dirs += Dir.glob('debian/*/' + dir)
+        dirs += Dir.glob('debian/*/' + dir).map { |d| File.expand_path(d) }
       end
 
       # And we add the current directory:
