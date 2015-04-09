@@ -1,14 +1,3 @@
-gem2deb (0.14) UNRELEASED; urgency=medium
-
-  * TestRunner: when running build time tests, use the full path for extra
-    library directories installed in debian/$pkg
-  * SetupRbInstaller: copy system copy of setup.rb instead of symlinking. This
-    will fail if it's not there.
-  * gem2deb: add missing dependency on ruby-setup, since setup.rb is used
-    explicitly by gem2deb
-
- -- Antonio Terceiro <terceiro@debian.org>  Thu, 09 Apr 2015 16:14:32 +0200
-
 gem2deb (0.13) experimental; urgency=medium
 
   [ Antonio Terceiro ]
@@ -16,6 +5,12 @@ gem2deb (0.13) experimental; urgency=medium
   * dh-make-ruby: add gem runtime dependencies to Build-Depends: as well
   * dh-make-ruby: fix generate rspec rake task in debian/ruby-tests.rb to work
     with rspec 3. Closes: #782161
+  * TestRunner: when running build time tests, use the full path for extra
+    library directories installed in debian/$pkg
+  * SetupRbInstaller: copy system copy of setup.rb instead of symlinking. This
+    will fail if it's not there.
+  * gem2deb: add missing dependency on ruby-setup, since setup.rb is used
+    explicitly by gem2deb
 
   [ Christian Hofstaedtler ]
   * Remove rdoc stamp files at install time
