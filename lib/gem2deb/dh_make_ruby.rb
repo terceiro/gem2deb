@@ -364,8 +364,8 @@ module Gem2Deb
           f.puts <<-EOF
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = './spec/**/*_spec.rb'
+task :spec do
+  ruby '-S', 'rspec'
 end
 
 task :default => :spec
