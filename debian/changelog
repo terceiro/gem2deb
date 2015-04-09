@@ -3,8 +3,6 @@ gem2deb (0.13) experimental; urgency=medium
   [ Antonio Terceiro ]
   * dh-make-ruby: bump Standards-Version in template to 3.9.6
   * dh-make-ruby: add gem runtime dependencies to Build-Depends: as well
-  * dh-make-ruby: fix generate rspec rake task in debian/ruby-tests.rb to work
-    with rspec 3. Closes: #782161
   * TestRunner: when running build time tests, use the full path for extra
     library directories installed in debian/$pkg
   * SetupRbInstaller: copy system copy of setup.rb instead of symlinking. This
