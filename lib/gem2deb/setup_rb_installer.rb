@@ -55,7 +55,7 @@ module Gem2Deb
       if File.exists?('setup.rb')
         run('mv', 'setup.rb', 'setup.rb.gem2deb-orig')
       end
-      run('ln', '-s', '/usr/lib/ruby/vendor_ruby/setup.rb', 'setup.rb')
+      run('cp', '/usr/lib/ruby/vendor_ruby/setup.rb', 'setup.rb')
       begin
         yield
       ensure

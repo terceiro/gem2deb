@@ -4,6 +4,8 @@ gem2deb (0.14) UNRELEASED; urgency=medium
     library directories installed in debian/$pkg
   * SetupRbInstaller: copy system copy of setup.rb instead of symlinking. This
     will fail if it's not there.
+  * gem2deb: add missing dependency on ruby-setup, since setup.rb is used
+    explicitly by gem2deb
 
  -- Antonio Terceiro <terceiro@debian.org>  Thu, 09 Apr 2015 16:14:32 +0200
 
