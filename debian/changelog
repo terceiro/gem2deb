@@ -2,6 +2,8 @@ gem2deb (0.14) UNRELEASED; urgency=medium
 
   * TestRunner: when running build time tests, use the full path for extra
     library directories installed in debian/$pkg
+  * SetupRbInstaller: copy system copy of setup.rb instead of symlinking. This
+    will fail if it's not there.
 
  -- Antonio Terceiro <terceiro@debian.org>  Thu, 09 Apr 2015 16:14:32 +0200
 

@@ -30,6 +30,7 @@ Depends: build-essential,
          gem2deb-test-runner (= ${source:Version}),
          ruby,
          ruby-all-dev (>= 1:2.1.0.3~),
+         ruby-setup,
          ${misc:Depends},
          ${perl:Depends},
          ${shlibs:Depends}
