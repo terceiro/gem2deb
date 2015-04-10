@@ -57,6 +57,15 @@ module Gem2Deb
     end
   end
 
+  def run_ruby(ruby, *args)
+    cmd = args.dup
+    if !$LOAD_PATH.include?(LIBDIR)
+      cmd.unshift("-I", LIBDIR)
+    end
+    cmd.unshift(ruby)
+    run(*cmd)
+  end
+
   private
 
   def _format_cmdline(argv)

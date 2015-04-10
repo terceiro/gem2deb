@@ -150,7 +150,7 @@ module Gem2Deb
       end
 
       begin
-        run(SUPPORTED_RUBY_VERSIONS[rubyver], '-I' + LIBDIR, TEST_RUNNER)
+        run_ruby(SUPPORTED_RUBY_VERSIONS[rubyver], TEST_RUNNER)
       rescue Gem2Deb::CommandFailed
         handle_test_failure(rubyver)
       end
