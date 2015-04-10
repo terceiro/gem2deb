@@ -30,6 +30,14 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('foo_ruby-1.2.3.tar.gz').source_package_name
   end
 
+  should 'properly convert CFPropertyList to debian package name' do
+    assert_equal 'ruby-cfpropertylist', Gem2Deb::DhMakeRuby.new('CFPropertyList-1.2.3.tar.gz').source_package_name
+  end
+
+  should 'properly convert Fancy_Package to debian package name' do
+    assert_equal 'ruby-fancy-package', Gem2Deb::DhMakeRuby.new('Fancy_Package-1.2.3.tar.gz').source_package_name
+  end
+
   should 'use #nnnn if no ITP bug exists' do
       @dh_make_ruby = Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz', :do_wnpp_check => true)
       @dh_make_ruby.stubs(:wnpp_check).returns('')
