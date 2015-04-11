@@ -1,4 +1,4 @@
-gem2deb (0.14) UNRELEASED; urgency=medium
+gem2deb (0.14) experimental; urgency=medium
 
   [ Antonio Terceiro ]
   * dh-make-ruby: fix conversion of gem names with uppercase characters into
@@ -13,7 +13,7 @@ gem2deb (0.14) UNRELEASED; urgency=medium
   [ Sebastien Badia ]
   * Update Vcs-Browser to cgit URL and HTTPS.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 10 Apr 2015 10:49:34 +0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 11 Apr 2015 17:41:31 +0200
 
 gem2deb (0.13) experimental; urgency=medium
 
