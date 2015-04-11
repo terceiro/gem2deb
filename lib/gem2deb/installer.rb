@@ -4,8 +4,6 @@ module Gem2Deb
 
   class Installer
 
-    class RequireRubygemsFound < Exception; end
-
     include Gem2Deb
 
     EXTENSION_BUILDER = File.expand_path(File.join(File.dirname(__FILE__),'extension_builder.rb'))
@@ -86,29 +84,6 @@ module Gem2Deb
             file.write(metadata.gemspec.to_ruby)
           end
         end
-      end
-    end
-
-    def check_rubygems
-      found = false
-      if File::exists?('debian/require-rubygems.overrides')
-        overrides = YAML::load_file('debian/require-rubygems.overrides')
-      else
-        overrides = []
-      end
-      installed_ruby_files.each do |f|
-        lines = readlines(f)
-        rglines = lines.select { |l| l =~ /require.*rubygems/  && l !~ /^\s*#/ }
-          rglines.each do |l|
-          if not overrides.include?(f)
-            puts "#{f}: #{l}" if verbose
-            found = true
-          end
-          end
-      end
-      if found
-        puts "Found some 'require rubygems' without overrides (see above)." if verbose
-        raise RequireRubygemsFound
       end
     end
 

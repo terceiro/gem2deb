@@ -225,9 +225,8 @@ first !
 =item I<DH_RUBY_IGNORE_TESTS>
 
 This is a space-separated list of tests that dh_ruby will ignore during package
-build. The available test names are "require-rubygems" plus the names of all
-supported Ruby versions. At the time of writing, only "ruby1.9.1" and ruby2.0
-are supported.
+build. The available test names are the names of all supported Ruby versions
+(you can list them with `dh_ruby --print-supported`).
 
 If set to "all", all tests will be ignored during the package build.
 
@@ -305,23 +304,6 @@ the tests failed. A simple example:
       assert_equal 4, MyPackage.sum(2,2)
     end
   end
-
-=item debian/I<require-rubygems.overrides>
-
-Fine-tune the "require-rubygems" test. If the package has a very good reason to
-actually `require "rubygems"`, you can use this file as a whitelist of files
-allowed to have `require "rubygems"`.
-
-This file is expected to contain a YAML document with a list of files that must
-be ignored when checking for `require "rubygems"` lines. Example:
-
-  --- 
-  - debian/ruby-foo/usr/lib/ruby/vendor_ruby/foo.rb
-  - debian/ruby-foo/usr/lib/ruby/vendor_ruby/foo/rubygems.rg
-
-As you can see above, you have to list filenames based on their corresponding
-install locations in the package temporary install directory, i.e.
-`debian/${pkg}/..`
 
 =item debian/I<dh_ruby.mk>
 

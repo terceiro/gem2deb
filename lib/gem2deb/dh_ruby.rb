@@ -89,24 +89,15 @@ module Gem2Deb
       installers.each do |installer|
         installer.install_substvars
         installer.install_gemspec
-        check_rubygems(installer)
+      end
+
+      # FIXME remove this message after stretch
+      if File.exists?('debian/require-rubygems.overrides')
+        puts "W: debian/require-rubygems.overrides is obsolete, and is now ignored"
       end
     end
 
     protected # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-    def check_rubygems(installer)
-      if skip_checks?
-        return
-      end
-
-      begin
-        installer.check_rubygems
-      rescue Gem2Deb::Installer::RequireRubygemsFound
-        handle_test_failure("require-rubygems")
-      end
-    end
 
     def handle_test_failure(test)
       if ENV['DH_RUBY_IGNORE_TESTS']

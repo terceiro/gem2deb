@@ -115,34 +115,6 @@ class InstallerTest < Gem2DebTestCase
     end
   end
 
-  context 'checking for require "rubygems"' do
-    setup do
-      @installer = Gem2Deb::Installer.new("ruby-foo", FOO)
-      @installer.verbose = false
-    end
-    should 'detect require "rubygems"' do
-      @installer.stubs(:installed_ruby_files).returns(['test/sample/check_rubygems/bad.rb'])
-      assert_raises(Gem2Deb::Installer::RequireRubygemsFound) do
-        @installer.check_rubygems
-      end
-    end
-    should 'not complain about commented require "rubygems"' do
-      @installer.stubs(:installed_ruby_files).returns(['test/sample/check_rubygems/good.rb'])
-      @installer.check_rubygems
-    end
-
-    %w[
-      utf8
-      latin1
-    ].each do |encoding|
-      should "handle #{encoding}" do
-        @installer.stubs(:installed_ruby_files).returns(["test/encondings/#{encoding}.rb"])
-        @installer.check_rubygems
-      end
-    end
-
-  end
-
   context "Ruby versions supported" do
     setup do
       @installer = Gem2Deb::Installer.new('ruby-foo', FOO)
