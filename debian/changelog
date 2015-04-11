@@ -1,5 +1,6 @@
 gem2deb (0.14) UNRELEASED; urgency=medium
 
+  [ Antonio Terceiro ]
   * dh-make-ruby: fix conversion of gem names with uppercase characters into
     debian package names
   * dh_ruby: don't pass LIBDIR into command line when running different
@@ -8,6 +9,9 @@ gem2deb (0.14) UNRELEASED; urgency=medium
     processes for packages that e.g. hang while running their tests.
   * debian/requires-rubygems.overrides it not supported anymore. Patching out
     instances of `require 'rubygems'` is now considered an antipattern.
+
+  [ Sebastien Badia ]
+  * Update Vcs-Browser to cgit URL and HTTPS.
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 10 Apr 2015 10:49:34 +0200
 

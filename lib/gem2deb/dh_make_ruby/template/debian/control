@@ -6,7 +6,7 @@ Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
 Build-Depends: debhelper (>= 7.0.50~), gem2deb<%= (extra_build_dependencies + binary_package.dependencies).map { |d| ", #{d}" }.join %>
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/<%= source_package_name %>.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/<%= source_package_name %>.git;a=summary
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/<%= source_package_name %>.git
 Homepage: <%= homepage ? homepage : 'FIXME'%>
 Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: <%= ruby_versions %>
