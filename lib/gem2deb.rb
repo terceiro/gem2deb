@@ -59,7 +59,8 @@ module Gem2Deb
 
   def run_ruby(ruby, *args)
     cmd = args.dup
-    if !$LOAD_PATH.include?(LIBDIR)
+    if LIBDIR != '/usr/lib/ruby/vendor_ruby'
+      # only add LIBDIR to load path is not running the installed copy
       cmd.unshift("-I", LIBDIR)
     end
     cmd.unshift(ruby)
