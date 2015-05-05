@@ -397,7 +397,8 @@ task :default => :spec
 require 'gem2deb/rake/testtask'
 
 Gem2Deb::Rake::TestTask.new do |t|
-  t.test_files = FileList['test/**/*_test.rb']
+  t.libs = ['test']
+  t.test_files = FileList['test/**/*_test.rb'] + FileList['test/**/test_*.rb']
 end
         EOF
         end

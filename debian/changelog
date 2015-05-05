@@ -1,3 +1,11 @@
+gem2deb (0.15) UNRELEASED; urgency=medium
+
+  * dh-make-ruby, debian/ruby-tests.rake for test/unit: add 'test' to the
+    $LOAD_PATH by default, and also run tests on test/**/test_*.rb.
+    (Closes: #784323)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 May 2015 11:51:16 -0300
+
 gem2deb (0.14) experimental; urgency=medium
 
   [ Antonio Terceiro ]
