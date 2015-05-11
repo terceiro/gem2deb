@@ -8,15 +8,16 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Gunnar Wolf <gwolf@debian.org>,
            Cédric Boutillier <boutil@debian.org>
 Build-Depends: debhelper (>= 7.0.50~),
-               devscripts,
-               lintian,
-               rake,
+               devscripts <!nocheck>,
+               lintian <!nocheck>,
+               rake <!nocheck>,
+               ruby (>= 1:2.1.0.3~),
                ruby-all-dev (>= 1:2.1.0.3~),
-               ruby-mocha (>= 0.14.0),
-               ruby-rspec,
-               ruby-setup,
-               ruby-shoulda-context,
-               ruby-test-unit
+               ruby-mocha (>= 0.14.0) <!nocheck>,
+               ruby-rspec <!nocheck>,
+               ruby-setup <!nocheck>,
+               ruby-shoulda-context <!nocheck>,
+               ruby-test-unit <!nocheck>
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/gem2deb.git

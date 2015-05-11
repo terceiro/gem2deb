@@ -1,3 +1,10 @@
+gem2deb (0.16) UNRELEASED; urgency=medium
+
+  * Add support for a 'nocheck' build profile, and document it in
+    README.source. Closes: #632776
+
+ -- Lucas Nussbaum <lucas@debian.org>  Mon, 11 May 2015 21:10:48 +0200
+
 gem2deb (0.15) unstable; urgency=medium
 
   * dh-make-ruby, debian/ruby-tests.rake for test/unit: add 'test' to the
