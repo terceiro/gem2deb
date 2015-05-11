@@ -6,6 +6,8 @@ gem2deb (0.16) UNRELEASED; urgency=medium
     2012, that makes gem2tgz pick the most recent (in terms of gem version)
     gem file, instead of just the first one, after running gem fetch.
     Closes: #733171
+  * bin/dh-make-ruby: use '.' (current directory) as default target.
+    Closes: #777747
 
  -- Lucas Nussbaum <lucas@debian.org>  Mon, 11 May 2015 21:10:48 +0200
 
