@@ -8,6 +8,9 @@ gem2deb (0.16) UNRELEASED; urgency=medium
     Closes: #733171
   * bin/dh-make-ruby: use '.' (current directory) as default target.
     Closes: #777747
+  * dh-make-ruby: run wrap-and-sort after generating boilerplate from
+    templates. test/unit/dh_make_ruby_test.rb also had to be modified
+    to robustify the dependencies extractor. Closes: #784556
 
  -- Lucas Nussbaum <lucas@debian.org>  Mon, 11 May 2015 21:10:48 +0200
 

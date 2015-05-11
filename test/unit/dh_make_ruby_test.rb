@@ -134,9 +134,9 @@ class DhMakeRubyTest < Gem2DebTestCase
 
   context 'dependencies' do
     setup do
-      text = File.read(File.join(DEBIANIZED_SIMPLE_GEM, 'debian/control'))
-      line = text.lines.find { |l| l =~ /^Depends: / }.strip
-      @dependencies = line.gsub(/^Depends:\s*/, '').split(/\s*,\s*/)
+      file = File.join(DEBIANIZED_SIMPLE_GEM, 'debian/control')
+      deps = `grep-dctrl -sDepends -n '' #{file}`
+      @dependencies = deps.split(/\s*,\s*/)
     end
     should 'get simple dependency' do
       assert_include @dependencies, 'ruby-dep'

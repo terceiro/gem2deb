@@ -186,7 +186,12 @@ module Gem2Deb
         other_files
         test_suite
         create_debian_boilerplates
+        wrap_and_sort
       end
+    end
+
+    def wrap_and_sort
+      run('wrap-and-sort')
     end
 
     def read_upstream_source_info
