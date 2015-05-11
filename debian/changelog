@@ -2,6 +2,10 @@ gem2deb (0.16) UNRELEASED; urgency=medium
 
   * Add support for a 'nocheck' build profile, and document it in
     README.source. Closes: #632776
+  * Add patch from Cédric Boutillier, from a debian-ruby@ discussion from
+    2012, that makes gem2tgz pick the most recent (in terms of gem version)
+    gem file, instead of just the first one, after running gem fetch.
+    Closes: #733171
 
  -- Lucas Nussbaum <lucas@debian.org>  Mon, 11 May 2015 21:10:48 +0200
 
