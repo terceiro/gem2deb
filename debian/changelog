@@ -1,7 +1,8 @@
-gem2deb (0.16) UNRELEASED; urgency=medium
+gem2deb (0.16) unstable; urgency=medium
 
   * Add support for a 'nocheck' build profile, and document it in
     README.source. Closes: #632776
+    + Also add version restrictions on dpkg-dev and debhelper.
   * Add patch from Cédric Boutillier, from a debian-ruby@ discussion from
     2012, that makes gem2tgz pick the most recent (in terms of gem version)
     gem file, instead of just the first one, after running gem fetch.
@@ -11,8 +12,9 @@ gem2deb (0.16) UNRELEASED; urgency=medium
   * dh-make-ruby: run wrap-and-sort after generating boilerplate from
     templates. test/unit/dh_make_ruby_test.rb also had to be modified
     to robustify the dependencies extractor. Closes: #784556
+  * Run wrap-and-sort --wrap-always + minor cleanup.
 
- -- Lucas Nussbaum <lucas@debian.org>  Mon, 11 May 2015 21:10:48 +0200
+ -- Lucas Nussbaum <lucas@debian.org>  Sat, 16 May 2015 11:52:39 +0200
 
 gem2deb (0.15) unstable; urgency=medium
 
