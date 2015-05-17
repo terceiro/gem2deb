@@ -57,11 +57,6 @@ module Gem2Deb
       nil
     end
 
-    # override in subclasses if needed
-    def real_runner?
-      true
-    end
-
     def activate?
       required_file && File.exist?(required_file)
     end
@@ -113,11 +108,6 @@ module Gem2Deb
     end
     def self.detect!
       detect || bail("E: this tool must be run from inside a Debian source package.")
-    end
-    def self.detect_real_runner
-      subclasses.map(&:new).find do |runner|
-        runner.real_runner? && runner.activate?
-      end
     end
     def self.bail(msg)
       puts msg
@@ -176,9 +166,6 @@ module Gem2Deb
       end
       def run_tests
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
-      end
-      def real_runner?
-        false
       end
     end
 
