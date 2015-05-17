@@ -39,5 +39,7 @@ class Gem2DebTestCase
     FANCY_PACKAGE_NAME      = 'Fancy_Package'
     FANCY_PACKAGE           = File.join(SAMPLE_DIR, "#{FANCY_PACKAGE_NAME}/pkg/#{FANCY_PACKAGE_NAME}-0.0.1.gem")
 
+    KILLERAPP_DIR           = File.join(SAMPLE_DIR, 'killerapp')
+
   end
 end

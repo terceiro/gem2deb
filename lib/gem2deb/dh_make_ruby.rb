@@ -86,7 +86,16 @@ module Gem2Deb
       read_metadata(directory)
       self.gem_name = metadata.name
       self.gem_version = metadata.version
-      self.source_package_name ||= gem_name_to_source_package_name(gem_name)
+      self.source_package_name ||= get_source_package_name(directory)
+    end
+
+    def get_source_package_name(directory)
+      changelog = File.join(directory, 'debian/changelog')
+      if File.exist?(changelog)
+        `dpkg-parsechangelog -l#{changelog} -SSource`.strip
+      else
+        gem_name_to_source_package_name(gem_name)
+      end
     end
 
     def initialize_from_tarball(tarball)

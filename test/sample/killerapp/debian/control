@@ -1,0 +1,22 @@
+Source: killerapp
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper (>= 7.0.50~),
+               gem2deb
+Standards-Version: 3.9.6
+Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/killerapp.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/killerapp.git
+Homepage: FIXME
+Testsuite: autopkgtest-pkg-ruby
+XS-Ruby-Versions: all
+
+Package: killerapp
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ruby | ruby-interpreter,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: FIXME
+ <insert long description, indented with spaces>

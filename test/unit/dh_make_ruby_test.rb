@@ -17,6 +17,11 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal 'ruby-simplegem', Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL).source_package_name
   end
 
+  should 'use existing package name if present' do
+    dmr = Gem2Deb::DhMakeRuby.new(KILLERAPP_DIR)
+    assert_equal 'killerapp', dmr.source_package_name
+  end
+
   should 'be able to specify a package name' do
     assert_equal 'xyz', Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_UPSTREAM_TARBALL, :source_package_name => 'xyz').source_package_name
   end
