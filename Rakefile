@@ -38,24 +38,24 @@ end
 desc "Builds a git snapshot package"
 task :snapshot => ['snapshot:build', 'snapshot:clean']
 
-task 'snapshot:build' do
+task 'snapshot:install' do
+  if !system('git diff-index --quiet HEAD')
+    fail "Can't build package; you have uncommitted changes"
+  end
+
   date = `date --iso=seconds |sed 's/+.*//' |sed 's/[-T:]//g'`.chomp
+  branch = `git symbolic-ref --short HEAD`.strip
+  newbranch = 'snapshot-' + date
+
+  sh 'git checkout -b ' + newbranch
   sh "sed -i '1 s/)/~git#{date})/' debian/changelog"
   sh 'git commit -a -m snapshot-' + date
-  sh 'git branch snapshot-' + date
-  sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
-end
-
-desc 'Build and install a git snapshot'
-task 'snapshot:install' do
-  Rake::Task['snapshot:build'].invoke
-  sh 'sudo debi'
-  Rake::Task['snapshot:clean'].invoke
-end
-
-task 'snapshot:clean' do
-  sh 'git reset --hard HEAD^'
-  sh 'fakeroot debian/rules clean'
+  begin
+    sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
+    sh 'sudo debi'
+  ensure
+    sh 'git checkout ' + branch
+  end
 end
 
 desc "Checks for inconsistencies between version numbers in the code and in debian/changelog"
