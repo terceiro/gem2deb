@@ -43,7 +43,7 @@ task 'snapshot:build' do
   sh "sed -i '1 s/)/~git#{date})/' debian/changelog"
   sh 'git commit -a -m snapshot-' + date
   sh 'git branch snapshot-' + date
-  sh 'DEB_BUILD_OPTIONS=nocheck git-buildpackage --git-ignore-branch -us -uc'
+  sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
 end
 
 desc 'Build and install a git snapshot'
@@ -80,8 +80,8 @@ namespace :release do
     ENV['VERSION_CHECK_FATAL'] = 'yes'
     Rake::Task['version_check'].invoke
 
-    sh 'git buildpackage --git-builder=sbuild'
-    sh 'git buildpackage --git-tag-only'
+    sh 'gbp buildpackage --git-builder=sbuild'
+    sh 'gbp buildpackage --git-tag-only'
     sh 'debsign'
     sh 'git push --all'
     sh 'git push --tags'
