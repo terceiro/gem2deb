@@ -10,6 +10,9 @@
 #
 # If you need to specify the .gemspec (eg there is more than one)
 #export DH_RUBY_GEMSPEC=gem.gemspec
+#
+# Uncomment to check dependencies during build:
+# export GEM2DEB_TEST_RUNNER = --check-dependencies
 
 %:
 	dh $@ --buildsystem=ruby --with ruby

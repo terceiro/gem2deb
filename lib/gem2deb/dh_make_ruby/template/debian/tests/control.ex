@@ -5,7 +5,7 @@
 # be assumed (with the exception of gem2deb being filtered out from
 # @builddeps@):
 
-Test-Command: gem2deb-test-runner --autopkgtest 2>&1
+Test-Command: gem2deb-test-runner --autopkgtest --check-dependencies 2>&1
 Depends: @, @builddeps@, gem2deb-test-runner
 
 # if you would need to change something to the above, to that and rename this
