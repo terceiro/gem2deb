@@ -60,6 +60,8 @@ module Gem2Deb
 
     attr_accessor :extra_build_dependencies
 
+    attr_accessor :overwrite
+
     def initialize(input, options = {})
       generate_or_update_gem_to_package_data
 
@@ -266,10 +268,11 @@ module Gem2Deb
       end
     end
 
-    def write_if_missing(filename)
-      unless File.exist? filename
-        File.open(filename, 'w') { |f| yield f }
+    def maybe_create(filename)
+      if File.exist?(filename) && !overwrite
+        return
       end
+      File.open(filename, 'w') { |f| yield f }
     end
 
     def create_debian_boilerplates
@@ -281,7 +284,7 @@ module Gem2Deb
       end
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
-        write_if_missing(template.filename) do |f|
+        maybe_create(template.filename) do |f|
           f.puts ERB.new(template.data, nil, '<>').result(binding)
         end
       end
@@ -365,7 +368,7 @@ module Gem2Deb
     def test_suite_rspec
       if File::directory?("spec")
         extra_build_dependencies << 'ruby-rspec' << 'rake'
-        write_if_missing("debian/ruby-tests.rake") do |f|
+        maybe_create("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
 require 'rspec/core/rake_task'
 
@@ -385,7 +388,7 @@ task :default => :spec
 
     def test_suite_yaml
       if !metadata.test_files.empty?
-        write_if_missing("debian/ruby-test-files.yaml") do |f|
+        maybe_create("debian/ruby-test-files.yaml") do |f|
           YAML::dump(metadata.test_files, f)
         end
         true
@@ -397,7 +400,7 @@ task :default => :spec
     def test_suite_rb
       if File::directory?("test")
         extra_build_dependencies << 'rake'
-        write_if_missing("debian/ruby-tests.rake") do |f|
+        maybe_create("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
 require 'gem2deb/rake/testtask'
 
@@ -432,7 +435,7 @@ end
         docs << "# #{r}\n"
       end
       if docs != ""
-        write_if_missing("debian/#{source_package_name}.docs") do |f|
+        maybe_create("debian/#{source_package_name}.docs") do |f|
           f.puts docs
         end
       end
@@ -449,7 +452,7 @@ end
         end
       end
       if examples != ""
-        write_if_missing("debian/#{source_package_name}.examples") do |f|
+        maybe_create("debian/#{source_package_name}.examples") do |f|
           f.puts examples
         end
       end
@@ -471,7 +474,7 @@ end
         EOF
       end
       if installs != ""
-        write_if_missing("debian/#{source_package_name}.install") do |f|
+        maybe_create("debian/#{source_package_name}.install") do |f|
           f.puts installs
         end
       end
@@ -481,7 +484,7 @@ end
         manpages = Dir.glob("man/**/*.[1-8]")
         manpages_header = "# FIXME: man/ dir found in source. Consider installing manpages"
 
-        write_if_missing("debian/#{source_package_name}.manpages") do |f|
+        maybe_create("debian/#{source_package_name}.manpages") do |f|
           f.puts manpages_header
           manpages.each do |m|
             f.puts "# " + m
