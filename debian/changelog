@@ -15,6 +15,7 @@ gem2deb (0.17) UNRELEASED; urgency=medium
     - always print command lines used to run the tests
     - add support for passing options via the GEM2DEB_TEST_RUNNER environment
       variable
+    - add support for checking Rubygems dependencies during build
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 16 May 2015 22:51:18 -0300
 

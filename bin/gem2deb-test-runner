@@ -94,6 +94,17 @@ Before running the tests, checks whether all dependencies of the package, as
 declared in the Rubygems metadata, are present. Makes the program exit with a
 non-zero status code (i.e. fails) if they aren't.
 
+If you want to check dependencies during the build, you can add something like
+this to debian/rules:
+
+=over
+
+export GEM2DEB_TEST_RUNNER = --check-dependencies
+
+=back
+
+=back
+
 =head1 ENVIRONMENT
 
 =over

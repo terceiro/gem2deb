@@ -52,6 +52,14 @@ module Gem2Deb
       dirs
     end
 
+    def gem_path
+      if self.autopkgtest
+        ''
+      else
+        Dir.glob('debian/*/usr/share/rubygems-integration/*').join(':')
+      end
+    end
+
     def run_tests
       if check_dependencies
         do_check_dependencies
@@ -83,8 +91,9 @@ module Gem2Deb
       rubylib = load_path.join(':')
       cmd.unshift(rubyver)
 
-      puts "RUBYLIB=#{rubylib} " + cmd.shelljoin
+      puts "RUBYLIB=#{rubylib} " + "GEMPATH=#{gem_path} " +  cmd.shelljoin
 
+      ENV['GEMPATH'] = (ENV['GEMPATH'] ? ENV['GEMPATH'] + ':' : '') + gem_path
       ENV['RUBYLIB'] = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
       if autopkgtest
         move_away 'lib'
