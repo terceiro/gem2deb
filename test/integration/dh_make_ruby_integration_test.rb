@@ -15,5 +15,17 @@ class DhMakeRubyIntegrationTest < Gem2DebTestCase
     run_command("dh-make-ruby #{target_dir}")
   end
 
+  should 'be idempotent with --overwrite' do
+    target_dir = File.join(tmpdir, 'pkg')
+    FileUtils.cp_r(SIMPLE_GIT, target_dir)
+
+    run_command("dh-make-ruby #{target_dir}")
+    FileUtils.cp_r(target_dir, target_dir + '.old')
+
+    run_command("dh-make-ruby --overwrite #{target_dir}")
+
+    assert_equal '', `diff -Nru #{target_dir}.old #{target_dir}`.strip
+  end
+
 end
 

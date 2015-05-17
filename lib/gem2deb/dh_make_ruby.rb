@@ -372,9 +372,7 @@ module Gem2Deb
     end
 
     def test_suite
-      if !Gem2Deb::TestRunner.detect
-        test_suite_rspec or test_suite_yaml or test_suite_rb
-      end
+      test_suite_rspec or test_suite_yaml or test_suite_rb
     end
 
     def test_suite_rspec
