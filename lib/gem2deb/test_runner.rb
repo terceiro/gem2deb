@@ -15,6 +15,7 @@
 
 require 'rbconfig'
 require 'fileutils'
+require 'shellwords'
 
 require 'gem2deb/metadata'
 
@@ -81,10 +82,9 @@ module Gem2Deb
     def run_ruby(*cmd)
       rubylib = load_path.join(':')
       cmd.unshift(rubyver)
-      if $VERBOSE
-        print "RUBYLIB=#{rubylib} "
-        puts cmd.map { |part| part =~ /['"]/ ? part.inspect : part }.join(' ')
-      end
+
+      puts "RUBYLIB=#{rubylib} " + cmd.shelljoin
+
       ENV['RUBYLIB'] = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
       if autopkgtest
         move_away 'lib'

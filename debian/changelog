@@ -12,6 +12,7 @@ gem2deb (0.17) UNRELEASED; urgency=medium
     - add -c/--check-dependencies to check for dependencies (as declared in
       the Rubygems metadata, not as declared in debian/control) before running
       the tests (Closes: #785120, #785120)
+    - always print command lines used to run the tests
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 16 May 2015 22:51:18 -0300
 
