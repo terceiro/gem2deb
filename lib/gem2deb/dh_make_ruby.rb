@@ -191,7 +191,7 @@ module Gem2Deb
     end
 
     def wrap_and_sort
-      run('wrap-and-sort --wrap-always')
+      run('wrap-and-sort', '--wrap-always')
     end
 
     def read_upstream_source_info

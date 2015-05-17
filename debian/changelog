@@ -1,3 +1,9 @@
+gem2deb (0.17) UNRELEASED; urgency=medium
+
+  * dh-make-ruby: fix call to wrap-and-sort
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 16 May 2015 22:51:18 -0300
+
 gem2deb (0.16) unstable; urgency=medium
 
   * Add support for a 'nocheck' build profile, and document it in
