@@ -8,6 +8,10 @@ gem2deb (0.17) UNRELEASED; urgency=medium
     - when acting on an existing source package, read the source package name
       from debian/changelog.
     - always create test suite files to make dh-make-ruby idempotent
+  * gem2deb-test-runner:
+    - add -c/--check-dependencies to check for dependencies (as declared in
+      the Rubygems metadata, not as declared in debian/control) before running
+      the tests (Closes: #785120, #785120)
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 16 May 2015 22:51:18 -0300
 

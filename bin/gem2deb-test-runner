@@ -17,23 +17,34 @@
 
 require 'rbconfig'
 require 'fileutils'
+require 'optparse'
 
 require 'gem2deb/test_runner'
 
-if $PROGRAM_NAME == __FILE__
-  autopkgtest = false
+options = {}
 
-  if ARGV.length == 1 && ARGV.first == '--autopkgtest'
-    autopkgtest = true
-  elsif ARGV.length != 0
-    puts "usage: #{File.basename($PROGRAM_NAME)} [--autopkgtest]"
-    exit(1)
+optparse =  OptionParser.new do |opts|
+
+  opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [OPTIONS]"
+  opts.separator 'Options:'
+
+  opts.on('--autopkgtest', 'Runs tests against the installed package') do
+    options[:autopkgtest] = true
   end
 
-  runner = Gem2Deb::TestRunner.detect!
-  runner.autopkgtest = autopkgtest
-  runner.run_tests
+  opts.on('-c', '--check-dependencies', 'Check dependencies') do
+    options[:check_dependencies] = true
+  end
+
 end
+
+optparse.parse!
+
+runner = Gem2Deb::TestRunner.detect!
+options.each do |opt,value|
+  runner.send("#{opt}=", value)
+end
+runner.run_tests
 
 __END__
 =head1 NAME
@@ -69,7 +80,13 @@ automatic as-installed package testing, through the autopkgtest framework.
 =item B<--autopkgtest>
 
 Run the tests against the installed package for automatic as-installed package
-testing. Useful in conjonction with B<adt-run>(1).
+testing. Useful in conjunction with B<adt-run>(1).
+
+=item B<-c>, B<--check-dependencies>
+
+Before running the tests, checks whether all dependencies of the package, as
+declared in the Rubygems metadata, are present. Makes the program exit with a
+non-zero status code (i.e. fails) if they aren't.
 
 =back
 

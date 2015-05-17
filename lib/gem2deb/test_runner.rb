@@ -16,12 +16,15 @@
 require 'rbconfig'
 require 'fileutils'
 
+require 'gem2deb/metadata'
+
 module Gem2Deb
   class TestRunner
 
     include FileUtils::Verbose
 
     attr_accessor :autopkgtest
+    attr_accessor :check_dependencies
 
     def load_path
       if self.autopkgtest
@@ -48,8 +51,22 @@ module Gem2Deb
       dirs
     end
 
-    # Override in subclasses
     def run_tests
+      if check_dependencies
+        do_check_dependencies
+      end
+      do_run_tests
+    end
+
+    def do_check_dependencies
+      metadata = Gem2Deb::Metadata.new('.')
+      if metadata.gemspec
+        run_ruby '-e', 'gem "%s"' % metadata.name
+      end
+    end
+
+    # Override in subclasses
+    def do_run_tests
     end
 
     # override in subclasses
@@ -124,10 +141,10 @@ module Gem2Deb
       def required_file
         'debian/ruby-test-files.yaml'
       end
-      def run_tests
+      def do_run_tests
         puts "Running tests for #{rubyver} with test file list from debian/ruby-test-files.yaml ..."
         run_ruby(
-          '-ryaml', 
+          '-ryaml',
           '-e',
           'YAML.load_file("debian/ruby-test-files.yaml").each { |f| require f }'
         )
@@ -138,7 +155,7 @@ module Gem2Deb
       def required_file
         'debian/ruby-tests.rake'
       end
-      def run_tests
+      def do_run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rake ..."
         run_ruby(
           '-rrake',
@@ -152,7 +169,7 @@ module Gem2Deb
       def required_file
         'debian/ruby-tests.rb'
       end
-      def run_tests
+      def do_run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
         ENV['RUBY_TEST_VERSION'] = rubyver
         ENV['RUBY_TEST_BIN'] = ruby_binary
@@ -164,7 +181,7 @@ module Gem2Deb
       def required_file
         'debian/rules'
       end
-      def run_tests
+      def do_run_tests
         puts "Running tests for #{rubyver}: found no way to run a test suite!"
       end
     end
