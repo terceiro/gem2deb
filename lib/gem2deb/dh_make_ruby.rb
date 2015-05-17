@@ -184,11 +184,14 @@ module Gem2Deb
     def build_in_directory(directory)
       Dir.chdir(directory) do
         read_upstream_source_info
+        previously_debianized = File.directory?('debian')
         FileUtils.mkdir_p('debian')
         other_files
         test_suite
         create_debian_boilerplates
-        wrap_and_sort
+        if overwrite || !previously_debianized
+          wrap_and_sort
+        end
       end
     end
 
