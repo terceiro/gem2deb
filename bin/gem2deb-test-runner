@@ -18,10 +18,16 @@
 require 'rbconfig'
 require 'fileutils'
 require 'optparse'
+require 'shellwords'
 
 require 'gem2deb/test_runner'
 
 options = {}
+
+if ENV['GEM2DEB_TEST_RUNNER']
+  opts = Shellwords.split(ENV['GEM2DEB_TEST_RUNNER'])
+  ARGV.unshift(*opts)
+end
 
 optparse =  OptionParser.new do |opts|
 
@@ -87,6 +93,14 @@ testing. Useful in conjunction with B<adt-run>(1).
 Before running the tests, checks whether all dependencies of the package, as
 declared in the Rubygems metadata, are present. Makes the program exit with a
 non-zero status code (i.e. fails) if they aren't.
+
+=head1 ENVIRONMENT
+
+=over
+
+=item GEM2DEB_TEST_RUNNER
+
+Used to pass options to gem2deb-test-runner via the environment.
 
 =back
 
