@@ -2,7 +2,8 @@ gem2deb (0.17) UNRELEASED; urgency=medium
 
   * dh-make-ruby:
     - fix call to wrap-and-sort
-    - add -w/--overwrite option to overwrite files under debian/
+    - add -w/--overwrite option to overwrite files under debian/.
+      Closes: #785106
     - only call wrap-and-sort if either there was no previous
       packaging, or -w/--overwrite was passed.
     - when acting on an existing source package, read the source package name
