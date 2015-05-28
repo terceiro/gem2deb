@@ -24,7 +24,7 @@ Build-Depends: debhelper (>= 9.20141010),
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/gem2deb.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/gem2deb.git
-XS-Testsuite: autopkgtest
+Testsuite: autopkgtest
 
 Package: gem2deb
 Architecture: all
