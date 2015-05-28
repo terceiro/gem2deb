@@ -52,8 +52,8 @@ Architecture: all
 Depends: ruby | ruby-interpreter,
          ${misc:Depends},
          ${shlibs:Depends}
-Breaks: gem2deb (<< 0.9~)
-Replaces: gem2deb (<< 0.9~)
+Breaks: gem2deb (<< 0.17~)
+Replaces: gem2deb (<< 0.17~)
 Description: Debian Ruby packaging suite - tool to run tests
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems.
