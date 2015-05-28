@@ -13,7 +13,7 @@ gem2deb (0.17) unstable; urgency=medium
   * gem2deb-test-runner:
     - add -c/--check-dependencies to check for dependencies (as declared in
       the Rubygems metadata, not as declared in debian/control) before running
-      the tests (Closes: #785120)
+      the tests (Closes: #785120, #770748)
     - always print command lines used to run the tests
     - add support for passing options via the GEM2DEB_TEST_RUNNER environment
       variable
