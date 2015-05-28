@@ -1,4 +1,4 @@
-gem2deb (0.17) UNRELEASED; urgency=medium
+gem2deb (0.17) unstable; urgency=medium
 
   * dh-make-ruby:
     - fix call to wrap-and-sort
@@ -21,7 +21,7 @@ gem2deb (0.17) UNRELEASED; urgency=medium
     - Breaks:/Replaces: gem2deb (<< 0.17~) because lib/gem2deb/metadata.rb was
       moved from gem2deb to gem2deb-test-runner.
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 16 May 2015 22:51:18 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 28 May 2015 08:39:49 -0300
 
 gem2deb (0.16) unstable; urgency=medium
 
