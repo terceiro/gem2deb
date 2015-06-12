@@ -153,7 +153,16 @@ module Gem2Deb
         end
       end
 
-      @gem_to_package = YAML.load_file(cache).invert
+      data = YAML.load_file(cache)
+      unless data.respond_to?(:invert)
+        File.unlink(cache)
+        puts 'E: Failed to load "gem name to package name" cache from'
+        puts '   ' +  cache
+        puts 'I: The existing cache was removed and will be rebuilt next time.'
+        puts 'I: please try again.'
+        exit 1
+      end
+      @gem_to_package = data.invert
     end
 
 
