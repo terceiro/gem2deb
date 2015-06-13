@@ -70,7 +70,13 @@ module Gem2Deb
     def do_check_dependencies
       metadata = Gem2Deb::Metadata.new('.')
       if metadata.gemspec
-        run_ruby '-e', 'gem "%s"' % metadata.name
+        cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
+        puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
+        system({ 'GEM_PATH' => gem_path }, *cmd)
+        exitstatus = $?.exitstatus
+        if exitstatus != 0
+          exit(exitstatus)
+        end
       end
     end
 
@@ -91,15 +97,14 @@ module Gem2Deb
       rubylib = load_path.join(':')
       cmd.unshift(rubyver)
 
-      puts "RUBYLIB=#{rubylib} " + "GEM_PATH=#{gem_path} " +  cmd.shelljoin
+      rlib = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
+      puts "RUBYLIB=#{rubylib} " + cmd.shelljoin
 
-      ENV['GEM_PATH'] = (ENV['GEM_PATH'] ? ENV['GEM_PATH'] + ':' : '') + gem_path
-      ENV['RUBYLIB'] = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
       if autopkgtest
         move_away 'lib'
         move_away 'ext'
       end
-      system(*cmd)
+      system({ 'RUBYLIB' => rlib }, *cmd)
       exitstatus = $?.exitstatus
       if autopkgtest
         restore 'lib'

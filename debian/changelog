@@ -6,6 +6,8 @@ gem2deb (0.18) UNRELEASED; urgency=medium
     dependencies when running tests actually works.
   * gem2deb-test-runner: fix dependency checking during build (by fixing name
     of Rubygems environment variable, s/GEMPATH/GEM_PATH/)
+  * gem2deb-test-runner: when called with --check-dependencies, do not exit
+    after successfully checking dependencies, but before running tests.
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 11:04:47 -0300
 
