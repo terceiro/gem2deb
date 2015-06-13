@@ -118,7 +118,7 @@ module Gem2Deb
     end
 
     def gem_name_to_source_package_name(gem_name)
-      @gem_to_package[gem_name] || 'ruby-' + gem_name.downcase.gsub(/^ruby[-_]|[-_]ruby$/, '')
+      @gem_to_package[gem_name] || 'ruby-' + gem_name.downcase.gsub(/^ruby[-_]|[-_]ruby$/, '').gsub('_', '-')
     end
 
     def generate_or_update_gem_to_package_data
