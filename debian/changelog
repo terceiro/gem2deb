@@ -1,3 +1,10 @@
+gem2deb (0.18.2) UNRELEASED; urgency=medium
+
+  * gem2deb-test-runner: when under autopkgtest, don't pass any GEM_PATH at
+    all, no even an empty one. This fixes dependency checks under autopkgtest.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 13 Jun 2015 12:13:45 -0300
+
 gem2deb (0.18.1) unstable; urgency=medium
 
   * gem2deb-test-runner: include `Gem.path` in GEM_PATH so that dependency

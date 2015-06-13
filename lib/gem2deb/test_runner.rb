@@ -52,11 +52,13 @@ module Gem2Deb
       dirs
     end
 
-    def gem_path
+    def env_with_gem_path
       if self.autopkgtest
-        ''
+        { }
       else
-        (Gem.path + Dir.glob('debian/*/usr/share/rubygems-integration/*')).join(':')
+        {
+          'GEM_PATH' => (Gem.path + Dir.glob('debian/*/usr/share/rubygems-integration/*')).join(':')
+        }
       end
     end
 
@@ -71,8 +73,8 @@ module Gem2Deb
       metadata = Gem2Deb::Metadata.new('.')
       if metadata.gemspec
         cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
-        puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
-        system({ 'GEM_PATH' => gem_path }, *cmd)
+        puts "GEM_PATH=#{env_with_gem_path['GEM_PATH']} " + cmd.shelljoin
+        system(env_with_gem_path, *cmd)
         exitstatus = $?.exitstatus
         if exitstatus != 0
           exit(exitstatus)
