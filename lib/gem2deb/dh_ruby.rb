@@ -84,12 +84,12 @@ module Gem2Deb
         installer.update_shebangs
       end
 
-      run_tests
-
       installers.each do |installer|
         installer.install_substvars
         installer.install_gemspec
       end
+
+      run_tests
 
       # FIXME remove this message after stretch
       if File.exists?('debian/require-rubygems.overrides')
