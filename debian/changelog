@@ -1,9 +1,9 @@
-gem2deb (0.19) UNRELEASED; urgency=medium
+gem2deb (0.18.1) unstable; urgency=medium
 
   * gem2deb-test-runner: include `Gem.path` in GEM_PATH so that dependency
     checking works against the system-installed gemspecs.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 22:35:37 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 22:40:41 -0300
 
 gem2deb (0.18) unstable; urgency=medium
 
