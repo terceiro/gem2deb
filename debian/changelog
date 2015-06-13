@@ -1,4 +1,4 @@
-gem2deb (0.18) UNRELEASED; urgency=medium
+gem2deb (0.18) unstable; urgency=medium
 
   * make dh-make-ruby resilient against a corrupt "gem name to package name"
     cache (Closes: #786841)
@@ -9,7 +9,7 @@ gem2deb (0.18) UNRELEASED; urgency=medium
   * gem2deb-test-runner: when called with --check-dependencies, do not exit
     after successfully checking dependencies, but before running tests.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 11:04:47 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 22:17:18 -0300
 
 gem2deb (0.17) unstable; urgency=medium
 
