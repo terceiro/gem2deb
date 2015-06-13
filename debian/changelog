@@ -4,6 +4,8 @@ gem2deb (0.18) UNRELEASED; urgency=medium
     cache (Closes: #786841)
   * dh_ruby: install gemspecs _before_ running tests so that checking
     dependencies when running tests actually works.
+  * gem2deb-test-runner: fix dependency checking during build (by fixing name
+    of Rubygems environment variable, s/GEMPATH/GEM_PATH/)
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 12 Jun 2015 11:04:47 -0300
 

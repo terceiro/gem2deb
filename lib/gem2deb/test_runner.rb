@@ -91,9 +91,9 @@ module Gem2Deb
       rubylib = load_path.join(':')
       cmd.unshift(rubyver)
 
-      puts "RUBYLIB=#{rubylib} " + "GEMPATH=#{gem_path} " +  cmd.shelljoin
+      puts "RUBYLIB=#{rubylib} " + "GEM_PATH=#{gem_path} " +  cmd.shelljoin
 
-      ENV['GEMPATH'] = (ENV['GEMPATH'] ? ENV['GEMPATH'] + ':' : '') + gem_path
+      ENV['GEM_PATH'] = (ENV['GEM_PATH'] ? ENV['GEM_PATH'] + ':' : '') + gem_path
       ENV['RUBYLIB'] = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
       if autopkgtest
         move_away 'lib'
