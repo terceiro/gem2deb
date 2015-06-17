@@ -72,7 +72,7 @@ module Gem2Deb
       if metadata.gemspec
         versions =
           if metadata.has_native_extensions?
-            ruby_versions.map { |v| RUBY_CONFIG_VERSION[v] }
+            ruby_versions.map { |v| RUBY_API_VERSION[v] }
           else
             ['all']
           end

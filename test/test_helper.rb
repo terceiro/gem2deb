@@ -18,6 +18,7 @@ Gem2DebTestCase = Test::Unit::TestCase
 class Gem2DebTestCase
 
   SUPPORTED_VERSION_NUMBERS = Gem2Deb::RUBY_CONFIG_VERSION.values.sort
+  SUPPORTED_API_NUMBERS = Gem2Deb::RUBY_API_VERSION.values.sort
 
   OLDER_RUBY_VERSION = Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.select { |m| m =~ /^ruby/ }.sort.first
   OLDER_RUBY_VERSION_BINARY = Gem2Deb::SUPPORTED_RUBY_VERSIONS[OLDER_RUBY_VERSION]

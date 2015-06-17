@@ -4,6 +4,8 @@ gem2deb (0.18.2) UNRELEASED; urgency=medium
     all, no even an empty one. This fixes dependency checks under autopkgtest.
   * dh-make-ruby: convert *all* underscores (`_`) to dashes (`-`) when
     converting gem names to source package names (not just the first one).
+  * dh_ruby: install gemspecs to rubygems-integration directories using
+    API_VERSION (e.g. 2.2.0) and not the short version (e.g. 2.2)
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 13 Jun 2015 12:13:45 -0300
 
