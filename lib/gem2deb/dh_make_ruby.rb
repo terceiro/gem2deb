@@ -244,7 +244,7 @@ module Gem2Deb
           yield(dependency)
         else
           dep.requirements_list.each do |v|
-            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1')
+            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1').gsub(/^=(\s+)/, '>=\1')
             yield('%s (%s)' % [dependency, spec])
           end
         end

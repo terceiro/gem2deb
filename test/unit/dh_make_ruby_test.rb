@@ -141,13 +141,13 @@ class DhMakeRubyTest < Gem2DebTestCase
     setup do
       file = File.join(DEBIANIZED_SIMPLE_GEM, 'debian/control')
       deps = `grep-dctrl -sDepends -n '' #{file}`
-      @dependencies = deps.split(/\s*,\s*/)
+      @dependencies = deps.strip.split(/\s*,\s*/)
     end
     should 'get simple dependency' do
       assert_include @dependencies, 'ruby-dep'
     end
-    should 'get dependency with an exact version' do
-      assert_include @dependencies, 'ruby-depwithversion (= 1.0)'
+    should 'not use dependencies with exact versions' do
+      assert_include @dependencies, 'ruby-depwithversion (>= 1.0)'
     end
     should 'get version with spermy' do
       assert_include @dependencies, 'ruby-depwithspermy (>= 1.0)'
