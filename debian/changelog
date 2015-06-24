@@ -1,3 +1,9 @@
+gem2deb (0.18.4) UNRELEASED; urgency=medium
+
+  * gem2deb: download .gem files in a temporary directory
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 24 Jun 2015 17:23:08 -0300
+
 gem2deb (0.18.3) unstable; urgency=medium
 
   * gem2deb-test-runner: add dependency on ruby-test-unit

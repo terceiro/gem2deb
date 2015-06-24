@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'fileutils'
 require 'gem2deb'
 require 'gem2deb/gem2tgz'
 require 'gem2deb/dh_make_ruby'
@@ -81,8 +82,24 @@ gemfile = ARGV[0]
 # Download gem if not available locally
 if not File::exists?(gemfile) and gemfile !~ /.gem$/
   puts "#{gemfile} doesn't seem to exist. Let's try to download it with 'gem fetch #{ARGV[0]}'"
-  run("gem", "fetch", gemfile)
-  gemfile = Dir::glob("#{gemfile}-*.gem")[0]
+
+  tmpdir = Dir.mktmpdir
+  begin
+    Dir.chdir(tmpdir) do
+      run("gem", "fetch", gemfile)
+      gemfile = Dir.glob('*.gem').first
+      unless gemfile
+        # no .gem means that `gem fetch` failed (but still exited with 0)
+        raise RuntimeError.new("Failed to download .gem file")
+      end
+    end
+    FileUtils.mv(File.join(tmpdir, gemfile), '.')
+  rescue RuntimeError => ex
+    puts ex.message
+    exit(1)
+  ensure
+    FileUtils.rm_rf(tmpdir)
+  end
 end
 
 puts "-- Creating source tarball from #{gemfile} ..."
