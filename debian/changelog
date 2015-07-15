@@ -1,4 +1,4 @@
-gem2deb (0.18.4) UNRELEASED; urgency=medium
+gem2deb (0.19) UNRELEASED; urgency=medium
 
   * gem2deb: download .gem files in a temporary directory
   * gem2deb-test-runner: add dependency on ruby-minitest
