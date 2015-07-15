@@ -1,10 +1,10 @@
-gem2deb (0.19) UNRELEASED; urgency=medium
+gem2deb (0.19) unstable; urgency=medium
 
   * gem2deb: download .gem files in a temporary directory
   * gem2deb-test-runner: add dependency on ruby-minitest
   * dh-make-ruby: add README's uncommented to debian/ruby-foo.docs
 
- -- Antonio Terceiro <terceiro@debian.org>  Wed, 24 Jun 2015 17:23:08 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 15 Jul 2015 18:28:03 -0300
 
 gem2deb (0.18.3) unstable; urgency=medium
 
