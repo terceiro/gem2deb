@@ -3,7 +3,7 @@
 %:
 	dh $@
 
-ruby_versions := $(shell ruby -Ilib -rgem2deb -e 'puts Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.join(" ")')
+ruby_versions := $(shell ruby -Ilib ./bin/dh_ruby --print-supported)
 
 override_dh_auto_build: $(ruby_versions)
 	mkdir -p man/gem2deb man/gem2deb-test-runner
