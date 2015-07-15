@@ -35,9 +35,7 @@ task :install do
   sh "sudo debi"
 end
 
-desc "Builds a git snapshot package"
-task :snapshot => ['snapshot:build', 'snapshot:clean']
-
+desc "Builds and installs a git snapshot package"
 task 'snapshot:install' do
   if !system('git diff-index --quiet HEAD')
     fail "Can't build package; you have uncommitted changes"
