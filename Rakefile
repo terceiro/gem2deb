@@ -50,7 +50,7 @@ task 'snapshot:install' do
   sh 'git commit -a -m snapshot-' + date
   begin
     sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
-    sh 'sudo debi'
+    sh 'debi'
   ensure
     sh 'git checkout ' + branch
   end
