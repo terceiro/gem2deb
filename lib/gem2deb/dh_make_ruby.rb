@@ -447,15 +447,11 @@ end
             EOF
       end
       readmes = Dir::glob('README*')
-      docs += <<-EOF
-# FIXME: READMEs found
-      EOF
-      readmes.each do |r|
-        docs << "# #{r}\n"
-      end
-      if docs != ""
+      if !readmes.empty?
         maybe_create("debian/#{source_package_name}.docs") do |f|
-          f.puts docs
+          readmes.each do |r|
+            f.puts r
+          end
         end
       end
 
