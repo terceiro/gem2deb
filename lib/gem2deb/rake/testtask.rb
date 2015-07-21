@@ -6,7 +6,7 @@ module Gem2Deb
       def initialize
         super(:default)
       end
-      def define(args, &task_block)
+      def define
         self.libs.reject! { |path| ['lib','ext'].include?(path) }
         self.verbose = true
         self.options = '-v'
