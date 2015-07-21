@@ -57,7 +57,7 @@ module Gem2Deb
         { }
       else
         {
-          'GEM_PATH' => (Gem.path + Dir.glob('debian/*/usr/share/rubygems-integration/*')).join(':')
+          'GEM_PATH' => (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/#{rubyver}")).join(':')
         }
       end
     end

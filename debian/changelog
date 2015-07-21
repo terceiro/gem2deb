@@ -1,3 +1,10 @@
+gem2deb (0.20) UNRELEASED; urgency=medium
+
+  * gem2deb-test-runner: when checking dependencies, don't add
+    rubygems-integration paths from different Ruby versions to GEM_PATH.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Jul 2015 23:12:27 -0300
+
 gem2deb (0.19) unstable; urgency=medium
 
   * gem2deb: download .gem files in a temporary directory
