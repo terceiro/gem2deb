@@ -49,7 +49,8 @@ Description: Debian Ruby packaging suite
 
 Package: gem2deb-test-runner
 Architecture: all
-Depends: ruby | ruby-interpreter,
+Depends: rake,
+         ruby | ruby-interpreter,
          ruby-minitest,
          ruby-test-unit,
          ${misc:Depends},

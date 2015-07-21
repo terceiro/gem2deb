@@ -173,11 +173,7 @@ module Gem2Deb
       end
       def do_run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rake ..."
-        run_ruby(
-          '-rrake',
-          '-e',
-          'ARGV.unshift("-f", "debian/ruby-tests.rake"); Rake.application.run'
-        )
+        run_ruby('-S', 'rake', '-f', 'debian/ruby-tests.rake')
       end
     end
 
