@@ -9,7 +9,7 @@ module Gem2Deb
       def define(args, &task_block)
         self.libs.reject! { |path| ['lib','ext'].include?(path) }
         self.verbose = true
-        ENV['TESTOPTS'] = '-v'
+        self.options = '-v'
         super
       end
     end
