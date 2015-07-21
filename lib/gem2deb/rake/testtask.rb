@@ -8,6 +8,8 @@ module Gem2Deb
       end
       def define
         self.libs.reject! { |path| ['lib','ext'].include?(path) }
+        self.verbose = true
+        ENV['TESTOPTS'] = '-v'
         super
       end
     end
