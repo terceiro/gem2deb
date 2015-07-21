@@ -4,6 +4,8 @@ gem2deb (0.20) UNRELEASED; urgency=medium
     rubygems-integration paths from different Ruby versions to GEM_PATH.
   * gem2deb/rake/testtask: Use options to make all test runs verbose by
     default
+  * gem2deb/rake/spectask: add a utility task for running tests with rspec
+  * dh-make-ruby: generate debian/ruby-tests.rake using gem2deb/rake/spectask
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Jul 2015 23:12:27 -0300
 

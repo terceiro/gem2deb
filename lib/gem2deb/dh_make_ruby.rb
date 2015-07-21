@@ -389,13 +389,11 @@ module Gem2Deb
         extra_build_dependencies << 'ruby-rspec' << 'rake'
         maybe_create("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
-require 'rspec/core/rake_task'
+require 'gem2deb/rake/spectask'
 
-RSpec::Core::RakeTask.new(:spec) do |spec|
+Gem2Deb::Rake::RSpecTask.new do |spec|
   spec.pattern = './spec/**/*_spec.rb'
 end
-
-task :default => :spec
         EOF
         end
         true
