@@ -162,12 +162,20 @@ module Gem2Deb
       @ruby_binary ||= File.join('/usr/bin', rubyver)
     end
 
+    def print_banner(msg)
+      puts
+      puts '┌' + '─' * 78 + '┐'
+      puts '│ %-77s│' % msg
+      puts '└' + '─' * 78 + '┘'
+      puts
+    end
+
     class TestsListedInMetadata < TestRunner
       def required_file
         'debian/ruby-test-files.yaml'
       end
       def do_run_tests
-        puts "Running tests for #{rubyver} with test file list from debian/ruby-test-files.yaml ..."
+        print_banner "Running tests for #{rubyver} from debian/ruby-test-files.yaml"
         run_ruby(
           '-ryaml',
           '-e',
@@ -181,7 +189,7 @@ module Gem2Deb
         'debian/ruby-tests.rake'
       end
       def do_run_tests
-        puts "Running tests for #{rubyver} using debian/ruby-tests.rake ..."
+        print_banner "Running tests for #{rubyver} from debian/ruby-tests.rake"
         run_rake('-f', 'debian/ruby-tests.rake')
       end
     end
@@ -191,7 +199,7 @@ module Gem2Deb
         'debian/ruby-tests.rb'
       end
       def do_run_tests
-        puts "Running tests for #{rubyver} using debian/ruby-tests.rb..."
+        print_banner "Running tests for #{rubyver} from debian/ruby-tests.rb"
         ENV['RUBY_TEST_VERSION'] = rubyver
         ENV['RUBY_TEST_BIN'] = ruby_binary
         run_ruby(required_file)
@@ -203,7 +211,7 @@ module Gem2Deb
         'debian/rules'
       end
       def do_run_tests
-        puts "Running tests for #{rubyver}: found no way to run a test suite!"
+        print_banner "Running tests for #{rubyver}: found no way to run a test suite!"
       end
     end
 
