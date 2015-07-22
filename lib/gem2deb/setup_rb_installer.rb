@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'gem2deb/banner'
 require 'gem2deb/dh_ruby'
 
 module Gem2Deb
@@ -21,6 +22,9 @@ module Gem2Deb
 
     def install_files_and_build_extensions
       ruby_versions.each do |rubyver|
+
+        Gem2Deb::Banner.print "Install files for #{rubyver} with setup.rb"
+
         ruby = SUPPORTED_RUBY_VERSIONS[rubyver]
         siteruby = destdir(:libdir, rubyver)
         bindir = destdir(:bindir, rubyver)

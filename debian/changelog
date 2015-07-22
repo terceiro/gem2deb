@@ -9,6 +9,9 @@ gem2deb (0.20) UNRELEASED; urgency=medium
     - gem2deb/rake/spectask: add a utility task for running tests with rspec
     - print a sbuild-like banner before start running tests
   * dh-make-ruby: generate debian/ruby-tests.rake using gem2deb/rake/spectask
+  * dh_ruby:
+    - print sbuild-like banners before installing files and before building
+      native extensions
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Jul 2015 23:12:27 -0300
 

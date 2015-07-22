@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'gem2deb'
+require 'gem2deb/banner'
 require 'gem2deb/installer'
 require 'gem2deb/make'
 require 'find'
@@ -95,6 +96,8 @@ module Gem2Deb
       if File.exists?('debian/require-rubygems.overrides')
         puts "W: debian/require-rubygems.overrides is obsolete, and is now ignored"
       end
+
+      Gem2Deb::Banner.print 'dh_ruby --install finished'
     end
 
     protected # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

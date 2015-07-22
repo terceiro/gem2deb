@@ -1,3 +1,4 @@
+require 'gem2deb/banner'
 require 'gem2deb/metadata'
 
 module Gem2Deb
@@ -24,13 +25,15 @@ module Gem2Deb
     end
 
     def install_files_and_build_extensions
-      install_files(bindir, destdir(:bindir), 755) if File::directory?(bindir)
 
+      Gem2Deb::Banner.print "Install files"
+      install_files(bindir, destdir(:bindir), 755) if File::directory?(bindir)
       install_files(libdir, destdir(:libdir), 644) if File::directory?(libdir)
 
       if metadata.has_native_extensions?
         ruby_versions.each do |rubyver|
-          puts "Building extension for #{rubyver} ..." if verbose
+          Gem2Deb::Banner.print "Build native extensions for #{rubyver}" if verbose
+
           run_ruby(SUPPORTED_RUBY_VERSIONS[rubyver], EXTENSION_BUILDER, root, destdir_base)
 
           # Remove duplicate files installed by rubygems in the arch dir
@@ -69,6 +72,7 @@ module Gem2Deb
     end
 
     def install_gemspec
+      Gem2Deb::Banner.print "Install Rubygems integration metadata"
       if metadata.gemspec
         versions =
           if metadata.has_native_extensions?
