@@ -1,4 +1,4 @@
-gem2deb (0.20) UNRELEASED; urgency=medium
+gem2deb (0.20) unstable; urgency=medium
 
   * gem2deb-test-runner:
     - when checking dependencies, don't add rubygems-integration paths from
@@ -13,7 +13,7 @@ gem2deb (0.20) UNRELEASED; urgency=medium
     - print sbuild-like banners before installing files and before building
       native extensions
 
- -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Jul 2015 23:12:27 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 21 Jul 2015 22:55:15 -0300
 
 gem2deb (0.19) unstable; urgency=medium
 
