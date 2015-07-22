@@ -17,6 +17,7 @@ require 'rbconfig'
 require 'fileutils'
 require 'shellwords'
 
+require 'gem2deb/banner'
 require 'gem2deb/metadata'
 
 module Gem2Deb
@@ -95,7 +96,6 @@ module Gem2Deb
       required_file && File.exist?(required_file)
     end
 
-
     def run_ruby(*args)
       run(rubyver, *args)
     end
@@ -163,11 +163,7 @@ module Gem2Deb
     end
 
     def print_banner(msg)
-      puts
-      puts '┌' + '─' * 78 + '┐'
-      puts '│ %-77s│' % msg
-      puts '└' + '─' * 78 + '┘'
-      puts
+      Gem2Deb::Banner.print(msg)
     end
 
     class TestsListedInMetadata < TestRunner
