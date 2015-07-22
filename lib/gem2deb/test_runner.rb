@@ -95,9 +95,18 @@ module Gem2Deb
       required_file && File.exist?(required_file)
     end
 
-    def run_ruby(*cmd)
+
+    def run_ruby(*args)
+      run(rubyver, *args)
+    end
+
+    def run_rake(*args)
+      run(rubyver.sub('ruby', 'rake'), *args)
+    end
+
+    def run(program, *args)
       rubylib = load_path.join(':')
-      cmd.unshift(rubyver)
+      cmd = [program] + args
 
       rlib = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
       puts "RUBYLIB=#{rubylib} " + cmd.shelljoin
@@ -173,7 +182,7 @@ module Gem2Deb
       end
       def do_run_tests
         puts "Running tests for #{rubyver} using debian/ruby-tests.rake ..."
-        run_ruby('-S', 'rake', '-f', 'debian/ruby-tests.rake')
+        run_rake('-f', 'debian/ruby-tests.rake')
       end
     end
 
