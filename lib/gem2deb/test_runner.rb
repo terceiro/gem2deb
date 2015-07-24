@@ -58,7 +58,7 @@ module Gem2Deb
         { }
       else
         {
-          'GEM_PATH' => (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/#{rubyver}")).join(':')
+          'GEM_PATH' => (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/#{ruby_api_version}")).join(':')
         }
       end
     end
@@ -157,6 +157,9 @@ module Gem2Deb
     end
     def rubyver
       @rubyver ||= RbConfig::CONFIG['ruby_install_name']
+    end
+    def ruby_api_version
+      RbConfig::CONFIG['ruby_version']
     end
     def ruby_binary
       @ruby_binary ||= File.join('/usr/bin', rubyver)
