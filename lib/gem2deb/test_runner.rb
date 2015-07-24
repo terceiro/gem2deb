@@ -71,6 +71,7 @@ module Gem2Deb
     end
 
     def do_check_dependencies
+      print_banner "Checking Rubygems dependency resolution on #{rubyver}"
       metadata = Gem2Deb::Metadata.new('.')
       if metadata.gemspec
         cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
@@ -210,7 +211,7 @@ module Gem2Deb
         'debian/rules'
       end
       def do_run_tests
-        print_banner "Run tests for #{rubyver}: found no way to run a test suite!"
+        print_banner "Run tests for #{rubyver}: no test suite!"
       end
     end
 
