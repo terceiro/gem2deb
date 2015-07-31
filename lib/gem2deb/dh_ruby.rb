@@ -134,6 +134,7 @@ module Gem2Deb
 
     def interactive
       STDIN.isatty && STDOUT.isatty && STDERR.isatty &&
+        ENV['DEB_BUILD_OPTIONS'] &&
         ENV['DEB_BUILD_OPTIONS'].split.include?('dh_ruby_interactive')
     end
 
