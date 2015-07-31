@@ -118,6 +118,8 @@ exit(0) if  $only_source_dir
 
 puts
 puts "-- Building Debian package ..."
+ENV['DEB_BUILD_OPTIONS'] =
+  [ENV['DEB_BUILD_OPTIONS'], 'dh_ruby_interactive'].compact.join(' ')
 dmr.buildpackage($only_debian_source, $check_build_deps)
 puts "-- Debian package successfully built!"
 

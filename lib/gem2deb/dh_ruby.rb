@@ -112,7 +112,7 @@ module Gem2Deb
           return
         end
       end
-      if STDIN.isatty and STDOUT.isatty and STDERR.isatty
+      if interactive
         # running interactively
         continue = nil
         begin
@@ -130,6 +130,11 @@ module Gem2Deb
         puts "ERROR: Test \"#{test}\" failed. Exiting."
         exit(1)
       end
+    end
+
+    def interactive
+      STDIN.isatty && STDOUT.isatty && STDERR.isatty &&
+        ENV['DEB_BUILD_OPTIONS'].split.include?('dh_ruby_interactive')
     end
 
     def run_tests
