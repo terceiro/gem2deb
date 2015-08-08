@@ -1,6 +1,7 @@
-gem2deb (0.20.3) UNRELEASED; urgency=medium
+gem2deb (0.21) UNRELEASED; urgency=medium
 
   * dh_ruby: only ask questions interactively when called by gem2deb
+  * dh-make-ruby: use debhelper compatibility level 9 by default
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 31 Jul 2015 09:40:58 -0300
 
