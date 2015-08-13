@@ -5,6 +5,7 @@ gem2deb (0.21) UNRELEASED; urgency=medium
     - use debhelper compatibility level 9 by default
     - don't generate debian/tests/control.ex anymore. So far a few dozen
       packages, I have deleted it every single time.
+    - use homepage as default for Source: field in debian/copyright
   * gem2deb-test-runner: call `gem list` when dependency checking fails to
     ease debugging
 
