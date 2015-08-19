@@ -1,3 +1,11 @@
+gem2deb (0.21.1) unstable; urgency=medium
+
+  * gem2deb-test-runner: fix call to `gem list` after a dependency checking
+    failure; avoid exec'ing `gem list` to be able to actually return non-0
+    from gem2deb-test-runner.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 20 Aug 2015 00:11:53 +0200
+
 gem2deb (0.21) unstable; urgency=medium
 
   * dh_ruby: only ask questions interactively when called by gem2deb

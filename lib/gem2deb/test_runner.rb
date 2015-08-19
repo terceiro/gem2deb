@@ -79,7 +79,7 @@ module Gem2Deb
         system(env_with_gem_path, *cmd)
         exitstatus = $?.exitstatus
         if exitstatus != 0
-          run 'gem', 'list'
+          system 'gem', 'list'
           exit(exitstatus)
         end
       end
