@@ -86,7 +86,11 @@ if not File::exists?(gemfile) and gemfile !~ /.gem$/
   tmpdir = Dir.mktmpdir
   begin
     Dir.chdir(tmpdir) do
-      run("gem", "fetch", gemfile)
+      if gemfile =~ /^rails-assets/
+        run("gem", "fetch", "--source", "https://rails-assets.org", gemfile)
+      else
+        run("gem", "fetch", gemfile)
+      end
       gemfile = Dir.glob('*.gem').first
       unless gemfile
         # no .gem means that `gem fetch` failed (but still exited with 0)

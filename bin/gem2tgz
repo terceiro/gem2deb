@@ -46,7 +46,11 @@ gemfile = ARGV[0]
 # Download gem if not available locally
 if not File::exists?(gemfile) and gemfile !~ /.gem$/
   puts "#{gemfile} doesn't seem to exist. Let's try to download it with 'gem fetch #{ARGV[0]}'"
-  run("gem", "fetch", gemfile)
+      if gemfile =~ /^rails-assets/
+        run("gem", "fetch", "--source", "https://rails-assets.org", gemfile)
+      else
+        run("gem", "fetch", gemfile)
+      end
   versions = Dir::glob("#{gemfile}-*.gem").map do |a|
     Gem::Version.new(a.sub(/#{gemfile}-(.+)\.gem/, '\1'))
   end
