@@ -1,3 +1,9 @@
+gem2deb (0.21.2) UNRELEASED; urgency=medium
+
+  * use --source https://rails-assets.org for rails-assets-* (Closes: #771212)
+
+ -- Pirate Praveen <praveen@debian.org>  Fri, 04 Sep 2015 12:34:00 +0530
+
 gem2deb (0.21.1) unstable; urgency=medium
 
   * gem2deb-test-runner: fix call to `gem list` after a dependency checking
