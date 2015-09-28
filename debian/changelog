@@ -1,6 +1,12 @@
 gem2deb (0.21.2) UNRELEASED; urgency=medium
 
+  [ Pirate Praveen ]
   * use --source https://rails-assets.org for rails-assets-* (Closes: #771212)
+
+  [ Antonio Terceiro ]
+  * dh-make-ruby:
+    - handle the case where apt-file exits successfully but still does not
+      find anything (Closes: #800108)
 
  -- Pirate Praveen <praveen@debian.org>  Fri, 04 Sep 2015 12:34:00 +0530
 

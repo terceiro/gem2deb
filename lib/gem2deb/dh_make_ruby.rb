@@ -144,11 +144,20 @@ module Gem2Deb
       end
 
       if update
-        if system('apt-file search /usr/share/rubygems-integration/ > ' + cache + '.new')
-          system('sed', '-i', '-e', 's#/.*/##; s/-[0-9.]\+.gemspec//', cache + '.new')
-          FileUtils.mv(cache + '.new', cache)
+        new_cache = cache + '.new'
+        if system('apt-file search /usr/share/rubygems-integration/ > ' + new_cache)
+          if File.stat(new_cache).size > 0
+            system('sed', '-i', '-e', 's#/.*/##; s/-[0-9.]\+.gemspec//', new_cache)
+            FileUtils.mv(cache + '.new', cache)
+          else
+            puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names'
+            puts 'E: to package names but apt-file has an invalid cache. Please run '
+            puts 'E: `apt-file update` and make sure that `apt-file search` works.'
+            exit 1
+          end
         else
           puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names to package names'
+          puts 'E: make sure that apt-file has an updated cache (run `apt-file update`)'
           exit $?.exitstatus
         end
       end
