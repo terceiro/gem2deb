@@ -18,6 +18,7 @@
 require 'gem2deb'
 require 'gem2deb/dh_ruby'
 require 'gem2deb/setup_rb_installer'
+require 'gem2deb/gem_installer'
 require 'optparse'
 require 'shellwords'
 include Gem2Deb
@@ -41,6 +42,10 @@ optparse = OptionParser.new do |opts|
 
   opts.on('--setuprb', 'use setup.rb for installation') do
     engine.installer_class = Gem2Deb::SetupRbInstaller
+  end
+
+  opts.on('--gem-install', 'install files as a gem') do
+    engine.installer_class = Gem2Deb::GemInstaller
   end
 
   opts.on('-v', '--version', 'show dh_ruby version') do
@@ -216,6 +221,13 @@ Displays B<dh_ruby> usage information.
 =item B<-v>, B<--version>
 
 Displays B<dh_ruby> version information.
+
+=item B<--gem-install>
+
+This option indicates that the build should use the B<gem> command to install
+the files, instead of the homegrown installer. Native packages will be
+installed to I</usr/lib/$ARCH/rubygems-integration/$RUBY_VERSION>, while pure
+Ruby packages will be installed to I</usr/share/rubygems-integration/all>.
 
 =item B<--setuprb>
 

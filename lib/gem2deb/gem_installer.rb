@@ -1,0 +1,138 @@
+# Copyright © 2015, Antonio Terceiro <terceiro@debian.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+require 'gem2deb/installer'
+require 'tmpdir'
+
+module Gem2Deb
+
+  class GemInstaller < Installer
+
+    def install_files_and_build_extensions
+      done = false
+
+      ruby_versions.each do |rubyver|
+        if done && !metadata.has_native_extensions?
+          break
+        end
+
+        ruby = SUPPORTED_RUBY_VERSIONS[rubyver]
+        tmpdir = Dir.mktmpdir
+
+        # generate gemspec at temporary directory
+        gemspec_data = gemspec_data!
+        gemspec = File.join(tmpdir, 'gemspec')
+
+        File.open(gemspec, 'w') do |f|
+          f.write(gemspec_data.to_ruby)
+        end
+
+        # build .gem
+        Dir.chdir(root) do
+          gem(ruby, 'build', gemspec)
+          FileUtils.mv(Dir.glob('*.gem').first, tmpdir)
+        end
+
+        # install .gem
+        ENV['make'] = 'make V=1'
+        gempkg = Dir.glob(File.join(tmpdir, '*.gem')).first
+        target_dir = rubygems_integration_target(rubyver)
+        gem(
+          ruby,
+          'install',
+          '--local',
+          '--verbose',
+          '--no-rdoc',
+          '--no-ri',
+          '--ignore-dependencies',
+          '--install-dir', File.join(destdir_base, target_dir),
+          gempkg
+        )
+
+        # Install binaries to /usr/bin
+        programs = Dir.glob(File.join(destdir_base, target_dir, 'bin/*'))
+        if !programs.empty?
+          bindir = File.join(destdir_base, 'usr/bin')
+          FileUtils::Verbose.mkdir_p bindir
+          programs.each do |prog|
+            FileUtils::Verbose.mv(prog, bindir)
+          end
+        end
+
+        %w[
+          bin
+          build_info
+          cache
+          doc
+        ].each do |dir|
+          final_dir = File.join(destdir_base, target_dir, dir)
+          FileUtils::Verbose.rm_rf(final_dir)
+        end
+
+        if !metadata.has_native_extensions?
+          ext_dir = File.join(destdir_base, target_dir, 'extensions')
+          FileUtils::Verbose.rmdir(ext_dir)
+        end
+
+        Dir.glob(File.join(destdir_base, target_dir, '**/Makefile')).each do |makefile|
+          Dir.chdir(File.dirname(makefile)) do
+            run('make distclean || make clean')
+          end
+        end
+
+        # remove tmpdir
+        FileUtils.rm_f(tmpdir)
+
+        done = true
+      end
+    end
+
+    def install_gemspec
+      # noop; regular installation already installs a gemspec
+    end
+
+    class NoGemspec < Exception
+      def initialize(root)
+        super("No gemspec found at #{root}")
+      end
+    end
+
+    protected
+
+    def rubygems_integration_target(rubyver)
+      if metadata.has_native_extensions?
+        arch = RbConfig::CONFIG['arch']
+        api_version = Gem2Deb::RUBY_API_VERSION[rubyver]
+        "/usr/lib/#{arch}/rubygems-integration/#{api_version}"
+      else
+        "/usr/share/rubygems-integration/all"
+      end
+    end
+
+    def gem(ruby, command, *args)
+      run(ruby, '-S', 'gem', command, '--config-file', '/dev/null', '--verbose', *args)
+    end
+
+    def gemspec_data!
+      if metadata.gemspec
+        metadata.gemspec
+      else
+        raise NoGemspec.new(root)
+      end
+    end
+
+  end
+
+end
