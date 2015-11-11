@@ -32,7 +32,7 @@ engine = Gem2Deb::DhRuby.new
 action = nil
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: dh_ruby [OPTIONS]"
+  opts.banner = "Usage: dh_ruby [OPTIONS] ACTION"
   opts.separator "Options:"
 
   opts.on('-h', '--help', 'show help') do
@@ -60,6 +60,7 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
+  opts.separator "ACTION must be one of:"
   opts.on('--clean', 'debhelper clean helper') do
     action = :clean
   end
