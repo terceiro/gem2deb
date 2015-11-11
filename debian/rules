@@ -19,7 +19,7 @@ override_dh_install:
 $(ruby_versions):
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	# NO_PKG_MANGLE=1 only useful on Ubuntu buildds, to disable pkgbinarymangler
-	NO_PKG_MANGLE=1 $@ -S rake test TESTOPTS=-v
+	NO_PKG_MANGLE=1 $@ -S rake test:unit TESTOPTS=-v
 else
 	@echo "Skipping tests for $@ as DEB_BUILD_OPTIONS contains 'nocheck'"
 endif
