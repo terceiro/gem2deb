@@ -28,8 +28,8 @@ if ENV['DH_RUBY']
   ARGV.unshift(*opts)
 end
 
-
 engine = Gem2Deb::DhRuby.new
+action = nil
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: dh_ruby [OPTIONS]"
@@ -61,34 +61,39 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('--clean', 'debhelper clean helper') do
-    engine.clean
-    exit(0)
+    action = :clean
   end
 
   opts.on('--configure', 'debhelper configure helper') do
-    engine.configure
-    exit(0)
+    action = :configure
   end
 
   opts.on('--build', 'debhelper build helper') do
-    engine.build
-    exit(0)
+    action = :build
   end
 
   opts.on('--test', 'debhelper test helper') do
-    engine.test
-    exit(0)
+    action = :test
   end
 
   opts.on('--install', 'debhelper install helper') do
-    engine.install(ARGV)
-    exit(0)
+    action = :install
   end
 end
 optparse.parse!
 
-puts optparse
-exit(1)
+if action.nil?
+  puts "E: no action selected. You must pass one (and only one) of:"
+  puts "   --install, --clean, --configure, --build, --test"
+  puts optparse
+  exit(1)
+end
+
+if action == :install
+  engine.install(ARGV)
+else
+  engine.send(action)
+end
 
 __END__
 =head1 NAME
@@ -96,6 +101,7 @@ __END__
 dh_ruby - debhelper7 build system for Ruby software
 
 =head1 SYNOPSIS
+
 
 B<dh_ruby> [I<OPTIONS>]
 
