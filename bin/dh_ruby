@@ -19,7 +19,14 @@ require 'gem2deb'
 require 'gem2deb/dh_ruby'
 require 'gem2deb/setup_rb_installer'
 require 'optparse'
+require 'shellwords'
 include Gem2Deb
+
+if ENV['DH_RUBY']
+  opts = Shellwords.split(ENV['DH_RUBY'])
+  ARGV.unshift(*opts)
+end
+
 
 engine = Gem2Deb::DhRuby.new
 
