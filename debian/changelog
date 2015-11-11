@@ -1,4 +1,4 @@
-gem2deb (0.21.2) UNRELEASED; urgency=medium
+gem2deb (0.22) unstable; urgency=medium
 
   [ Pirate Praveen ]
   * use --source https://rails-assets.org for rails-assets-* (Closes: #771212)
@@ -10,7 +10,7 @@ gem2deb (0.21.2) UNRELEASED; urgency=medium
     - cleanup template debian/rules, and make it set
       `GEM2DEB_TEST_RUNNER = --check-dependencies` by default
 
- -- Pirate Praveen <praveen@debian.org>  Fri, 04 Sep 2015 12:34:00 +0530
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 11 Nov 2015 13:39:06 -0200
 
 gem2deb (0.21.1) unstable; urgency=medium
 
