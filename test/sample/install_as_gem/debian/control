@@ -1,0 +1,22 @@
+Source: ruby-install-as-gem
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper (>= 9~),
+               gem2deb
+Standards-Version: 3.9.6
+Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/ruby-install-as-gem.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/ruby-install-as-gem.git
+Homepage:
+Testsuite: autopkgtest-pkg-ruby
+XS-Ruby-Versions: all
+
+Package: ruby-install-as-gem
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ruby | ruby-interpreter,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Simple gem to test the gem2deb gem installer
+ Simple gem to test the gem2deb gem installer

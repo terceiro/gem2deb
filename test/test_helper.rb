@@ -140,6 +140,14 @@ class Gem2DebTestCase
     end
   end
 
+  def self.silently
+    silence_stream STDOUT do
+      silence_stream STDERR do
+        yield
+      end
+    end
+  end
+
   # Runs a command with the current (in-development) gem2deb environment
   # loaded. PATH, PERL5LIB and RUBYLIB environment variables are tweaked to
   # make sure that everything that comes from gem2deb has precedence over
