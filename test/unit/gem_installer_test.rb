@@ -20,6 +20,8 @@ class GemInstallerTest < Gem2DebTestCase
     assert_file_exists INSTALLDIR  + '/usr/bin/install_as_gem'
   end
 
-  should 'not install debian/ directory'
+  should 'not install debian/ directory' do
+    assert_no_file_exists INSTALLDIR + '/usr/share/rubygems-integration/all/gems/install_as_gem-0.0.1/debian'
+  end
 
 end

@@ -93,6 +93,17 @@ module Gem2Deb
           end
         end
 
+        # remove debian/ directory that could be installed if gemspec specifies
+        # Dir['**/*'] or something equivalent
+        debian_dir = File.join(
+          destdir_base,
+          target_dir,
+          'gems',
+          [metadata.name, metadata.version].join('-'),
+          'debian'
+        )
+        FileUtils.rm_rf(debian_dir)
+
         # remove tmpdir
         FileUtils.rm_f(tmpdir)
 
