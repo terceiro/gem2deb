@@ -103,7 +103,7 @@ module Gem2Deb
     end
 
     def run_rake(*args)
-      run(rubyver.sub('ruby', 'rake'), *args)
+      run(rubyver, '-S', 'rake', *args)
     end
 
     def run(program, *args)

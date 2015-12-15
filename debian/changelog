@@ -2,6 +2,8 @@ gem2deb (0.24) UNRELEASED; urgency=medium
 
   * gem installer: avoid installing the debian/ directory when upstream
     metadata specifies the packages files as '**/*'
+  * test runner: call `rubyX.Y -S rake` instead of `rakeX.Y`. Ruby 2.3 does
+    not ship a rake2.3 anymore.
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Nov 2015 19:28:16 -0200
 
