@@ -4,6 +4,7 @@ gem2deb (0.24) UNRELEASED; urgency=medium
     metadata specifies the packages files as '**/*'
   * test runner: call `rubyX.Y -S rake` instead of `rakeX.Y`. Ruby 2.3 does
     not ship a rake2.3 anymore.
+  * dh-make-ruby: change generated Vcs-Git URL from git:// to https://
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Nov 2015 19:28:16 -0200
 
