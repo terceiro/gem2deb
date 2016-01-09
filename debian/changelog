@@ -1,3 +1,9 @@
+gem2deb (0.25) UNRELEASED; urgency=medium
+
+  * debian/control: switch from git:// to https:// in Vcs-Git:
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 21:00:29 -0200
+
 gem2deb (0.24) experimental; urgency=medium
 
   * gem installer: avoid installing the debian/ directory when upstream
