@@ -1,4 +1,4 @@
-gem2deb (0.24) UNRELEASED; urgency=medium
+gem2deb (0.24) experimental; urgency=medium
 
   * gem installer: avoid installing the debian/ directory when upstream
     metadata specifies the packages files as '**/*'
@@ -6,7 +6,7 @@ gem2deb (0.24) UNRELEASED; urgency=medium
     not ship a rake2.3 anymore.
   * dh-make-ruby: change generated Vcs-Git URL from git:// to https://
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Nov 2015 19:28:16 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 20:54:02 -0200
 
 gem2deb (0.23) experimental; urgency=medium
 
