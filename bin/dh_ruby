@@ -248,6 +248,13 @@ first !
 
 =over
 
+=item I<DH_RUBY>
+
+Use this variable to pass command line parameters to dh_ruby. For example in
+debian/rules:
+
+    export DH_RUBY = --gem-install
+
 =item I<DH_RUBY_IGNORE_TESTS>
 
 This is a space-separated list of tests that dh_ruby will ignore during package
