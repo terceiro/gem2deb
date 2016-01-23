@@ -390,7 +390,7 @@ module Gem2Deb
     end
 
     def test_suite
-      test_suite_rspec or test_suite_yaml or test_suite_rb
+      test_suite_rspec or test_suite_rb
     end
 
     def test_suite_rspec
@@ -404,18 +404,6 @@ Gem2Deb::Rake::RSpecTask.new do |spec|
   spec.pattern = './spec/**/*_spec.rb'
 end
         EOF
-        end
-        true
-      else
-        false
-      end
-    end
-
-
-    def test_suite_yaml
-      if !metadata.test_files.empty?
-        maybe_create("debian/ruby-test-files.yaml") do |f|
-          YAML::dump(metadata.test_files, f)
         end
         true
       else
