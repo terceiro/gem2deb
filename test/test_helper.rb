@@ -141,9 +141,13 @@ class Gem2DebTestCase
   end
 
   def self.silently
-    silence_stream STDOUT do
-      silence_stream STDERR do
-        yield
+    if ENV['GEM2DEB_TEST_DEBUG']
+      yield
+    else
+      silence_stream STDOUT do
+        silence_stream STDERR do
+          yield
+        end
       end
     end
   end
