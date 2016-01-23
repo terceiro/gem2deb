@@ -88,4 +88,12 @@ class Gem2DebTest < Gem2DebTestCase
     end
   end
 
+  self.build_tree('test/sample/install_as_gem') do |dir|
+    context 'using --gem-install' do
+      should 'install' do
+        assert Dir.glob("#{dir}/debian/*/**/*.so").size > 0 , '.so file is installed'
+      end
+    end
+  end
+
 end

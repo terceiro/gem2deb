@@ -22,6 +22,7 @@ module Gem2Deb
   class GemInstaller < Installer
 
     INSTALL_WHITELIST = %w[
+      ext
       lib
       app
       assets
@@ -87,24 +88,35 @@ module Gem2Deb
           end
         end
 
-        %w[
+
+        FileUtils::Verbose.cd(File.join(destdir_base, target_dir)) do
+          %w[
           bin
           build_info
           cache
           doc
-        ].each do |dir|
-          final_dir = File.join(destdir_base, target_dir, dir)
-          FileUtils::Verbose.rm_rf(final_dir)
-        end
+          ].each do |dir|
+            FileUtils::Verbose.rm_rf(dir)
+          end
 
-        if !metadata.has_native_extensions?
-          ext_dir = File.join(destdir_base, target_dir, 'extensions')
-          FileUtils::Verbose.rmdir(ext_dir)
-        end
+          if metadata.has_native_extensions?
+            run 'find', 'extensions', '-name', 'gem_make.out', '-delete'
+          else
+            FileUtils::Verbose.rm_rf('extensions')
+          end
 
-        Dir.glob(File.join(destdir_base, target_dir, '**/Makefile')).each do |makefile|
-          Dir.chdir(File.dirname(makefile)) do
-            run('make distclean || make clean')
+          FileUtils::Verbose.cd(File.join('gems', "#{metadata.name}-#{metadata.version}")) do
+            # remove source of compiled extensions
+            gemspec_data.extensions.each do |ext|
+              FileUtils::Verbose.rm_rf(File.dirname(ext))
+            end
+
+            # remove duplicated *.so files from lib; they are already installed
+            # to extensions/ in the top level
+            FileUtils::Verbose.rm_f Dir.glob('lib/**/*.so')
+
+            # remove empty directories inside lib/
+            run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
           end
         end
 

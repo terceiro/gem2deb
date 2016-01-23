@@ -13,7 +13,7 @@ Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: all
 
 Package: ruby-install-as-gem
-Architecture: all
+Architecture: any
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ruby | ruby-interpreter,
          ${misc:Depends},

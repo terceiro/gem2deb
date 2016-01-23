@@ -11,6 +11,7 @@ gem2deb (0.25) UNRELEASED; urgency=medium
     - Only install files that match a whitelist, to avoid having all the
       clutter that usually comes in source packages installed to binary
       packages.
+    - Implement correct installation of native extensions
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 21:00:29 -0200
 

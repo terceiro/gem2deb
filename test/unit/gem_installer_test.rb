@@ -30,6 +30,7 @@ class GemInstallerTest < Gem2DebTestCase
     Rakefile
 
     debian
+    ext
     spec
     test
   ].each do |f|
@@ -38,10 +39,19 @@ class GemInstallerTest < Gem2DebTestCase
     end
   end
 
+  should 'install native extension' do
+    so = Dir.glob(INSTALLDIR + '/usr/lib/**/install_as_gem/install_as_gem_native.so')
+    assert_equal 1, so.size, "#{so.inspect} expected to have size 1"
+  end
+
   private
 
   def installed_path(file)
-    INSTALLDIR + '/usr/share/rubygems-integration/all/gems/install_as_gem-0.0.1/' + file
+    File.join(gem_install_dir, file)
+  end
+
+  def gem_install_dir
+    Dir.glob(INSTALLDIR + '/usr/lib/*/rubygems-integration/*/gems/install_as_gem-0.0.1').first
   end
 
 

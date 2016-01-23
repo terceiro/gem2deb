@@ -57,7 +57,7 @@ module Gem2Deb
       if self.autopkgtest
         nil
       else
-        (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/{all,#{ruby_api_version}}")).join(':')
+        (Gem.path + Dir.glob("debian/*/usr/**/rubygems-integration/{all,#{ruby_api_version}}")).join(':')
       end
     end
 

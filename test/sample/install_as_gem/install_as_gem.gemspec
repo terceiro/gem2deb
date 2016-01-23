@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir['**/*']
   s.executables = Dir['bin/*'].map { |f| File.basename(f) }
+  s.extensions = 'ext/extconf.rb'
 end
