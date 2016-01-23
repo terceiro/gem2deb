@@ -174,7 +174,7 @@ class DhRubyTest < Gem2DebTestCase
     Gem2Deb::Gem2Tgz.convert!(gem, tarball)
     Gem2Deb::DhMakeRuby.new(tarball).build
 
-    build_package(package_path)
+    silently { build_package(package_path) }
   end
 
   def self.build_package(directory)
