@@ -1,4 +1,4 @@
-gem2deb (0.25) experimental; urgency=medium
+gem2deb (0.25) unstable; urgency=medium
 
   * debian/control: switch from git:// to https:// in Vcs-Git:
   * dh-make-ruby: stop creating debian/ruby-test-files.yaml. In my experience
@@ -13,7 +13,7 @@ gem2deb (0.25) experimental; urgency=medium
       packages.
     - Implement correct installation of native extensions
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 23 Jan 2016 16:51:05 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 23 Jan 2016 17:23:22 -0200
 
 gem2deb (0.24) experimental; urgency=medium
 
