@@ -61,7 +61,7 @@ class Gem2DebTestCase
     def setup_cleanup
       unless $__gem2deb_tests_cleanup_installed
         at_exit do
-          if ENV['GEM2DEB_TEST_DEBUG']
+          if ENV['DEBUG']
             puts
             puts "======================================================================="
             puts "Temporary test files left in #{Gem2DebTestCase::TMP_DIR} for inspection!"
@@ -141,7 +141,7 @@ class Gem2DebTestCase
   end
 
   def self.silently
-    if ENV['GEM2DEB_TEST_DEBUG']
+    if ENV['DEBUG']
       yield
     else
       silence_stream STDOUT do
