@@ -2,7 +2,7 @@
 
 mv lib lib.off
 
-rake
+rake DEBUG=yes TESTOPTS=-v
 status=$?
 
 mv lib.off lib
