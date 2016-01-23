@@ -188,6 +188,7 @@ class DhRubyTest < Gem2DebTestCase
         dh_ruby.clean
         dh_ruby.configure
         dh_ruby.build
+        ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
         dh_ruby.install([File.join(directory, 'debian', 'tmp')])
       end
     end
