@@ -390,7 +390,7 @@ module Gem2Deb
     end
 
     def test_suite
-      test_suite_rspec or test_suite_rb
+      test_suite_rspec or test_suite_testunit_or_minitest
     end
 
     def test_suite_rspec
@@ -411,7 +411,7 @@ end
       end
     end
 
-    def test_suite_rb
+    def test_suite_testunit_or_minitest
       if File::directory?("test")
         extra_build_dependencies << 'rake'
         maybe_create("debian/ruby-tests.rake") do |f|
