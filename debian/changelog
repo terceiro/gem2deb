@@ -7,6 +7,10 @@ gem2deb (0.25) UNRELEASED; urgency=medium
       when creating new packaging from scratch anymorel.
   * gem2deb-test-runner: also set GEM_PATH when running tests. This makes
     tests work out of the box when using --gem-install
+  * dh_ruby --gem-install:
+    - Only install files that match a whitelist, to avoid having all the
+      clutter that usually comes in source packages installed to binary
+      packages.
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 21:00:29 -0200
 

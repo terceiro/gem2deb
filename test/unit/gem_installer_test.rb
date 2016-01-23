@@ -20,8 +20,22 @@ class GemInstallerTest < Gem2DebTestCase
     assert_file_exists INSTALLDIR  + '/usr/bin/install_as_gem'
   end
 
-  should 'not install debian/ directory' do
-    assert_no_file_exists installed_path('debian')
+  # unwanted files (first block) and directories (second block)
+  %w[
+    CHANGELOG
+    Gemfile
+    install_as_gem.gemspec
+    LICENSE.TXT
+    MIT-LICENSE
+    Rakefile
+
+    debian
+    spec
+    test
+  ].each do |f|
+    should "not install #{f}" do
+      assert_no_file_exists installed_path(f)
+    end
   end
 
   private

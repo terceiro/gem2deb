@@ -21,6 +21,16 @@ module Gem2Deb
 
   class GemInstaller < Installer
 
+    INSTALL_WHITELIST = %w[
+      lib
+      app
+      assets
+      vendor
+      templates
+      VERSION
+      VERSION.txt
+    ]
+
     def install_files_and_build_extensions
       done = false
 
@@ -32,10 +42,15 @@ module Gem2Deb
         ruby = SUPPORTED_RUBY_VERSIONS[rubyver]
         tmpdir = Dir.mktmpdir
 
-        # generate gemspec at temporary directory
-        gemspec_data = gemspec_data!
-        gemspec = File.join(tmpdir, 'gemspec')
+        gemspec_data = load_gemspec_data!
 
+        # remove unwanted files and directories
+        gemspec_data.files.reject! do |entry|
+          !INSTALL_WHITELIST.include?(entry.split('/').first)
+        end
+
+        # write modified gemspec at temporary directory
+        gemspec = File.join(tmpdir, 'gemspec')
         File.open(gemspec, 'w') do |f|
           f.write(gemspec_data.to_ruby)
         end
@@ -93,17 +108,6 @@ module Gem2Deb
           end
         end
 
-        # remove debian/ directory that could be installed if gemspec specifies
-        # Dir['**/*'] or something equivalent
-        debian_dir = File.join(
-          destdir_base,
-          target_dir,
-          'gems',
-          [metadata.name, metadata.version].join('-'),
-          'debian'
-        )
-        FileUtils.rm_rf(debian_dir)
-
         # remove tmpdir
         FileUtils.rm_f(tmpdir)
 
@@ -137,7 +141,7 @@ module Gem2Deb
       run(ruby, '-S', 'gem', command, '--config-file', '/dev/null', '--verbose', *args)
     end
 
-    def gemspec_data!
+    def load_gemspec_data!
       if metadata.gemspec
         metadata.gemspec
       else
