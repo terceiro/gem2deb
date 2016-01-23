@@ -1,10 +1,10 @@
-gem2deb (0.25) UNRELEASED; urgency=medium
+gem2deb (0.25) experimental; urgency=medium
 
   * debian/control: switch from git:// to https:// in Vcs-Git:
   * dh-make-ruby: stop creating debian/ruby-test-files.yaml. In my experience
     that almost never works out of the box.
     - Note that dh_ruby still supports it, we just won't autogenerate that
-      when creating new packaging from scratch anymorel.
+      when creating new packaging from scratch anymore.
   * gem2deb-test-runner: also set GEM_PATH when running tests. This makes
     tests work out of the box when using --gem-install
   * dh_ruby --gem-install:
@@ -13,7 +13,7 @@ gem2deb (0.25) UNRELEASED; urgency=medium
       packages.
     - Implement correct installation of native extensions
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 21:00:29 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 23 Jan 2016 16:51:05 -0200
 
 gem2deb (0.24) experimental; urgency=medium
 
