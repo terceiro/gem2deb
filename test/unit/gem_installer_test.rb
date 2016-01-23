@@ -13,7 +13,7 @@ class GemInstallerTest < Gem2DebTestCase
   end
 
   should 'install files to rubygems-integration directory' do
-    assert_file_exists INSTALLDIR + '/usr/share/rubygems-integration/all/gems/install_as_gem-0.0.1/lib/install_as_gem.rb'
+    assert_file_exists installed_path('lib/install_as_gem.rb')
   end
 
   should 'install binaries to /usr/bin' do
@@ -21,7 +21,14 @@ class GemInstallerTest < Gem2DebTestCase
   end
 
   should 'not install debian/ directory' do
-    assert_no_file_exists INSTALLDIR + '/usr/share/rubygems-integration/all/gems/install_as_gem-0.0.1/debian'
+    assert_no_file_exists installed_path('debian')
   end
+
+  private
+
+  def installed_path(file)
+    INSTALLDIR + '/usr/share/rubygems-integration/all/gems/install_as_gem-0.0.1/' + file
+  end
+
 
 end
