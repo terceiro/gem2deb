@@ -53,13 +53,11 @@ module Gem2Deb
       dirs
     end
 
-    def env_with_gem_path
+    def gem_path
       if self.autopkgtest
-        { }
+        nil
       else
-        {
-          'GEM_PATH' => (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/{all,#{ruby_api_version}}")).join(':')
-        }
+        (Gem.path + Dir.glob("debian/*/usr/share/rubygems-integration/{all,#{ruby_api_version}}")).join(':')
       end
     end
 
@@ -75,8 +73,8 @@ module Gem2Deb
       metadata = Gem2Deb::Metadata.new('.')
       if metadata.gemspec
         cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
-        puts "GEM_PATH=#{env_with_gem_path['GEM_PATH']} " + cmd.shelljoin
-        system(env_with_gem_path, *cmd)
+        puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
+        system({ 'GEM_PATH' => gem_path }, *cmd)
         exitstatus = $?.exitstatus
         if exitstatus != 0
           system 'gem', 'list'
@@ -111,13 +109,13 @@ module Gem2Deb
       cmd = [program] + args
 
       rlib = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
-      puts "RUBYLIB=#{rubylib} " + cmd.shelljoin
+      puts "RUBYLIB=#{rubylib} GEM_PATH=#{gem_path} " + cmd.shelljoin
 
       if autopkgtest
         move_away 'lib'
         move_away 'ext'
       end
-      system({ 'RUBYLIB' => rlib }, *cmd)
+      system({ 'RUBYLIB' => rlib, 'GEM_PATH' => gem_path }, *cmd)
       exitstatus = $?.exitstatus
       if autopkgtest
         restore 'lib'

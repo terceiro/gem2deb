@@ -5,6 +5,8 @@ gem2deb (0.25) UNRELEASED; urgency=medium
     that almost never works out of the box.
     - Note that dh_ruby still supports it, we just won't autogenerate that
       when creating new packaging from scratch anymorel.
+  * gem2deb-test-runner: also set GEM_PATH when running tests. This makes
+    tests work out of the box when using --gem-install
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jan 2016 21:00:29 -0200
 
