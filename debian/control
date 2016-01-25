@@ -33,6 +33,7 @@ Depends: build-essential,
          devscripts,
          gem2deb-test-runner (= ${source:Version}),
          python3-debian,
+         rake,
          ruby,
          ruby-all-dev (>= 1:2.1.0.3~),
          ruby-setup,
@@ -49,7 +50,8 @@ Description: Debian Ruby packaging suite
 
 Package: gem2deb-test-runner
 Architecture: all
-Depends: ruby | ruby-interpreter,
+Depends: rake,
+         ruby | ruby-interpreter,
          ruby-minitest,
          ruby-test-unit,
          ${misc:Depends},

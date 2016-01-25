@@ -1,3 +1,10 @@
+gem2deb (0.25.1) unstable; urgency=medium
+
+  * gem2deb, gem2deb-test-runner: add dependency on rake since we now call
+    `rake` explicitly (Closes: #812580).
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 25 Jan 2016 08:41:39 -0200
+
 gem2deb (0.25) unstable; urgency=medium
 
   * debian/control: switch from git:// to https:// in Vcs-Git:
