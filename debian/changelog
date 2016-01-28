@@ -1,3 +1,13 @@
+gem2deb (0.25.2) UNRELEASED; urgency=medium
+
+  * gem2deb-test-runner: put directories under debian/ first in GEM_PATH to
+    make sure dependency resolution uses the metadata installed during the
+    build with precedence over metadata already installed in the system. Fixes
+    building packages on non-clean systems where the package you are building
+    may have a version already installed.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 28 Jan 2016 10:17:02 -0200
+
 gem2deb (0.25.1) unstable; urgency=medium
 
   * gem2deb, gem2deb-test-runner: add dependency on rake since we now call
