@@ -1,4 +1,4 @@
-gem2deb (0.25.2) UNRELEASED; urgency=medium
+gem2deb (0.25.2) unstable; urgency=medium
 
   * gem2deb-test-runner: put directories under debian/ first in GEM_PATH to
     make sure dependency resolution uses the metadata installed during the
@@ -9,7 +9,7 @@ gem2deb (0.25.2) UNRELEASED; urgency=medium
     - handle not installing test files when they are explicitly listed in the
       gemspec under `spec.test_files = ...`.
 
- -- Antonio Terceiro <terceiro@debian.org>  Thu, 28 Jan 2016 10:17:02 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 14 Feb 2016 13:42:40 -0200
 
 gem2deb (0.25.1) unstable; urgency=medium
 
