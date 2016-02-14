@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Simple gem to test the gem2deb gem installer}
 
   s.files = Dir['**/*']
+  s.test_files = Dir['test/**/*'] + Dir['spec/**/*']
   s.executables = Dir['bin/*'].map { |f| File.basename(f) }
   s.extensions = 'ext/extconf.rb'
 end

@@ -45,6 +45,9 @@ module Gem2Deb
 
         gemspec_data = load_gemspec_data!
 
+        # don't install any test files
+        gemspec_data.test_files = []
+
         # remove unwanted files and directories
         gemspec_data.files.reject! do |entry|
           !INSTALL_WHITELIST.include?(entry.split('/').first)
