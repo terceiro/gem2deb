@@ -27,7 +27,7 @@ module Gem2Deb
     def install_files_and_build_extensions
 
       Gem2Deb::Banner.print "Install files"
-      install_files(bindir, destdir(:bindir), 755) if File::directory?(bindir)
+      install_files(bindir, destdir(:bindir), 755, metadata.executables) if File::directory?(bindir)
       install_files(libdir, destdir(:libdir), 644) if File::directory?(libdir)
 
       if metadata.has_native_extensions?
@@ -158,9 +158,9 @@ module Gem2Deb
     DO_NOT_INSTALL = (JUNK_FILES + HOOK_FILES).map { |file| /^#{file}$/ } + JUNK_PATTERNS
 
 
-    def install_files(src, dest, mode)
+    def install_files(src, dest, mode, files_to_install = nil)
       run("install", "-d", dest)
-      files_to_install = Dir.chdir(src) do
+      files_to_install ||= Dir.chdir(src) do
         Dir.glob('**/*').reject do |file|
           filename = File.basename(file)
           File.directory?(file) || DO_NOT_INSTALL.any? { |pattern| filename =~ pattern }

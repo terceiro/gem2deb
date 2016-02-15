@@ -31,6 +31,10 @@ class Gem2DebTest < Gem2DebTestCase
     assert_match '/usr/bin/altbindir', `dpkg --contents #{self.class.tmpdir}/ruby-altbindir*.deb`
   end
 
+  should 'not install non-listed executables from altbindir' do
+    assert_no_match %r{/usr/bin/dont-install}, `dpkg --contents #{self.class.tmpdir}/ruby-altbindir*.deb`
+  end
+
   def self.build_tree(directory)
     FileUtils.cp_r(directory, tmpdir)
     dir = File.join(tmpdir, File.basename(directory))

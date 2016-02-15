@@ -82,6 +82,18 @@ module Gem2Deb
       gemspec ? gemspec.bindir : 'bin'
     end
 
+    def executables
+      if gemspec
+        if gemspec.executables.empty?
+          nil
+        else
+          gemspec.executables
+        end
+      else
+        Dir.glob(File.join(root, 'bin', '*')).map { |f| File.basename(f) }
+      end
+    end
+
     protected
 
     def load_gemspec

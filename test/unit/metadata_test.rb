@@ -58,6 +58,10 @@ class MetaDataTest < Gem2DebTestCase
     should 'use bin/ as bindir' do
       assert_equal 'bin', @metadata.bindir
     end
+    should 'use all programs under bin/' do
+      Dir.stubs(:glob).with('test/tmp/bin/*').returns(['test/tmp/bin/foo'])
+      assert_equal ['foo'], @metadata.executables
+    end
   end
 
   context 'with gemspec' do
@@ -105,6 +109,16 @@ class MetaDataTest < Gem2DebTestCase
     should 'use whatever directory gemspec says as bindir' do
       @gemspec.stubs(:bindir).returns('programs')
       assert_equal 'programs', @metadata.bindir
+    end
+
+    should 'use whatever programs the gemspec says' do
+      @gemspec.stubs(:executables).returns(%w(foo bar))
+      assert_equal ['foo', 'bar'], @metadata.executables
+    end
+
+    should 'not use an empty executables list' do
+      @gemspec.stubs(:executables).returns([])
+      assert_equal nil, @metadata.executables
     end
 
   end
