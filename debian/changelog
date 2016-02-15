@@ -1,4 +1,4 @@
-gem2deb (0.26) UNRELEASED; urgency=medium
+gem2deb (0.26) unstable; urgency=medium
 
   * dh_ruby:
     - When installing executables, consider gemspec.bindir for installing
@@ -6,7 +6,7 @@ gem2deb (0.26) UNRELEASED; urgency=medium
     - When installing executables, consider gemspec.executables for the case
       where not all scripts under the bindir should be installed.
 
- -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Feb 2016 15:45:31 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Feb 2016 18:04:52 -0200
 
 gem2deb (0.25.2) unstable; urgency=medium
 
