@@ -55,6 +55,9 @@ class MetaDataTest < Gem2DebTestCase
       assert_equal 'package', @metadata.name
       assert_equal '1.2.3', @metadata.version
     end
+    should 'use bin/ as bindir' do
+      assert_equal 'bin', @metadata.bindir
+    end
   end
 
   context 'with gemspec' do
@@ -97,6 +100,11 @@ class MetaDataTest < Gem2DebTestCase
     should 'obtain test files list from gemspec' do
       @gemspec.stubs(:test_files).returns(['test/class1_test.rb', 'test/class2_test.rb', 'test/not_a_test.txt'])
       assert_equal ['test/class1_test.rb', 'test/class2_test.rb'], @metadata.test_files
+    end
+
+    should 'use whatever directory gemspec says as bindir' do
+      @gemspec.stubs(:bindir).returns('programs')
+      assert_equal 'programs', @metadata.bindir
     end
 
   end

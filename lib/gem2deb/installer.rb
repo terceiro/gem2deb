@@ -116,7 +116,7 @@ module Gem2Deb
     end
 
     def bindir
-      @bindir ||= File.join(self.root, 'bin')
+      @bindir ||= File.join(self.root, metadata.bindir)
     end
 
     def libdir

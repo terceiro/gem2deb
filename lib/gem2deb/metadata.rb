@@ -78,6 +78,10 @@ module Gem2Deb
       gemspec ? gemspec.test_files.select { |filename| filename =~ /\.rb$/ } : []
     end
 
+    def bindir
+      gemspec ? gemspec.bindir : 'bin'
+    end
+
     protected
 
     def load_gemspec

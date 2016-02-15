@@ -27,6 +27,10 @@ class Gem2DebTest < Gem2DebTestCase
     assert_match /E: ruby-simplegem: helper-templates-in-copyright/, `lintian #{changes_file}`
   end
 
+  should 'install executables for altbindir' do
+    assert_match '/usr/bin/altbindir', `dpkg --contents #{self.class.tmpdir}/ruby-altbindir*.deb`
+  end
+
   def self.build_tree(directory)
     FileUtils.cp_r(directory, tmpdir)
     dir = File.join(tmpdir, File.basename(directory))

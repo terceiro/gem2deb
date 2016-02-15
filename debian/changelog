@@ -1,3 +1,9 @@
+gem2deb (0.25.3) UNRELEASED; urgency=medium
+
+  * dh_ruby: consider gemspec.bindir for installing executables.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Feb 2016 15:45:31 -0200
+
 gem2deb (0.25.2) unstable; urgency=medium
 
   * gem2deb-test-runner: put directories under debian/ first in GEM_PATH to
