@@ -1,8 +1,10 @@
-gem2deb (0.25.3) UNRELEASED; urgency=medium
+gem2deb (0.26) UNRELEASED; urgency=medium
 
   * dh_ruby:
-    - consider gemspec.bindir for installing executables.
-    - consider gemspec.executables for installing executables.
+    - When installing executables, consider gemspec.bindir for installing
+      executables, for when they are in a directory different than bin/
+    - When installing executables, consider gemspec.executables for the case
+      where not all scripts under the bindir should be installed.
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Feb 2016 15:45:31 -0200
 
