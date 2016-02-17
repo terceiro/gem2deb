@@ -1,8 +1,8 @@
-gem2deb (0.26.1) UNRELEASED; urgency=medium
+gem2deb (0.26.1) unstable; urgency=medium
 
   * metadata: resist gemspec.bindir not being a String (Closes: #814973)
 
- -- Antonio Terceiro <terceiro@debian.org>  Wed, 17 Feb 2016 07:54:59 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 17 Feb 2016 08:04:36 -0200
 
 gem2deb (0.26) unstable; urgency=medium
 
