@@ -79,7 +79,7 @@ module Gem2Deb
     end
 
     def bindir
-      gemspec ? gemspec.bindir : 'bin'
+      (gemspec && gemspec.bindir.is_a?(String)) ? gemspec.bindir : 'bin'
     end
 
     def executables

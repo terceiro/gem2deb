@@ -111,6 +111,11 @@ class MetaDataTest < Gem2DebTestCase
       assert_equal 'programs', @metadata.bindir
     end
 
+    should 'resist bindir being false' do
+      @gemspec.stubs(:bindir).returns(false)
+      assert_equal 'bin', @metadata.bindir
+    end
+
     should 'use whatever programs the gemspec says' do
       @gemspec.stubs(:executables).returns(%w(foo bar))
       assert_equal ['foo', 'bar'], @metadata.executables
