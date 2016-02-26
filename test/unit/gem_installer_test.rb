@@ -41,7 +41,7 @@ class GemInstallerTest < Gem2DebTestCase
 
   should 'install native extension' do
     so = Dir.glob(INSTALLDIR + '/usr/lib/**/install_as_gem/install_as_gem_native.so')
-    assert_equal 1, so.size, "#{so.inspect} expected to have size 1"
+    assert_equal Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.size, so.size, "#{so.inspect} expected to have size 1"
   end
 
   private
