@@ -2,6 +2,7 @@ gem2deb (0.26.2) unstable; urgency=medium
 
   * dh-make-ruby: bump Standards-Version in generated debian/control files to
     3.9.7
+  * debian/control: bump Standards-Version to 3.9.7; no changed needed.
   * gem_installer_test: fix assertion to check the right value when multiple
     Ruby versions are enabled.
 
