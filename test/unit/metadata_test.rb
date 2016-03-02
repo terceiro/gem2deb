@@ -149,5 +149,15 @@ class MetaDataTest < Gem2DebTestCase
 
   end
 
+  context 'timestamps' do
+    should 'use date from changelog if available' do
+      Dir.chdir('test/sample/install_as_gem') do
+        @metadata = Gem2Deb::Metadata.new('.')
+      end
+      # the gemspec only stores the date and zeroes the hour
+      assert_equal Time.parse('2015-11-20 00:00:00 UTC'), @metadata.gemspec.date
+    end
+  end
+
 end
 

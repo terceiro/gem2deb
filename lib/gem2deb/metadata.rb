@@ -15,6 +15,7 @@
 
 require 'rubygems'
 require 'rubygems/specification'
+require 'time'
 require 'yaml'
 
 module Gem2Deb
@@ -30,6 +31,7 @@ module Gem2Deb
       Dir.chdir(source_dir) do
         load_gemspec
       end
+      set_gemspec_date
     end
 
     def has_native_extensions?
@@ -110,6 +112,12 @@ module Gem2Deb
             raise "More than one .gemspec file in this directory: #{gemspec_files.join(', ')}"
           end
         end
+      end
+    end
+
+    def set_gemspec_date
+      if @gemspec && File.exist?('debian/changelog')
+        @gemspec.date = Time.parse(`dpkg-parsechangelog -SDate`.strip)
       end
     end
 

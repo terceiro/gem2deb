@@ -4,6 +4,9 @@ gem2deb (0.26.3) UNRELEASED; urgency=medium
     - with -w/--overwrite, never overwrite debian/copyright, since it will be
       always replace a human-reviewed debian/copyright with a completely dumb
       boilerplate.
+  * dh_ruby:
+    - force generated gemspecs to use the date from debian/changelog to help
+      with build reproducibility
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 02 Mar 2016 16:26:58 -0300
 
