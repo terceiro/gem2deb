@@ -175,6 +175,44 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  context 'dh-make-ruby --overwrite' do
+    setup do
+      @pwd = Dir.pwd
+      @tmpdir = Dir.mktmpdir
+      Dir.chdir @tmpdir
+      Dir.mkdir('debian')
+      @dmr = Gem2Deb::DhMakeRuby.new('.')
+    end
+    teardown do
+      Dir.chdir @pwd
+      FileUtils.rm_rf @tmpdir
+    end
+    should 'create file' do
+      @dmr.overwrite = false
+      @dmr.maybe_create('debian/rules') { |f| f.puts('hello') }
+      assert_file_exists 'debian/rules'
+    end
+    should 'overwrite if overwrite is true' do
+      @dmr.overwrite = true
+      @dmr.maybe_create('debian/rules') { |f| f.puts('hello 1') }
+      @dmr.maybe_create('debian/rules') { |f| f.puts('hello 2') }
+      assert_equal 'hello 2', File.read('debian/rules').strip
+    end
+    should 'not overwrite if overwrite is false' do
+      @dmr.overwrite = false
+      @dmr.maybe_create('debian/rules') { |f| f.puts('hello 1') }
+      @dmr.maybe_create('debian/rules') { |f| f.puts('hello 2') }
+      assert_equal 'hello 1', File.read('debian/rules').strip
+    end
+    should 'never overwrite debian/copyright' do
+      @dmr.overwrite = true
+      @dmr.maybe_create('debian/copyright') { |f| f.puts('hello 1') }
+      @dmr.maybe_create('debian/copyright') { |f| f.puts('hello 2') }
+      assert_equal 'hello 1', File.read('debian/copyright').strip
+    end
+
+  end
+
   protected
 
   def packages

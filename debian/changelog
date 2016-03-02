@@ -1,3 +1,12 @@
+gem2deb (0.26.3) UNRELEASED; urgency=medium
+
+  * dh-make-ruby:
+    - with -w/--overwrite, never overwrite debian/copyright, since it will be
+      always replace a human-reviewed debian/copyright with a completely dumb
+      boilerplate.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 02 Mar 2016 16:26:58 -0300
+
 gem2deb (0.26.2) unstable; urgency=medium
 
   * dh-make-ruby: bump Standards-Version in generated debian/control files to

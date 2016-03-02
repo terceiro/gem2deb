@@ -298,8 +298,12 @@ module Gem2Deb
       end
     end
 
+    NEVER_OVERWRITE = %w[
+      debian/copyright
+    ]
+
     def maybe_create(filename)
-      if File.exist?(filename) && !overwrite
+      if File.exist?(filename) && (!overwrite || NEVER_OVERWRITE.include?(filename))
         return
       end
       File.open(filename, 'w') { |f| yield f }

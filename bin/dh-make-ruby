@@ -97,7 +97,7 @@ this option an explicit package u.
 =item B<-w>, B<--overwrite>
 
 Overwrites packaging files that already exists but would be created by
-dh-make-ruby if they didn't.
+dh-make-ruby if they didn't. Exception: I<debian/copyright> is never touched.
 
 =item B<--ruby-versions VERSIONS>
 
