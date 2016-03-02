@@ -1,3 +1,3 @@
 module Gem2Deb
-  VERSION = '0.26.2'
+  VERSION = '0.27'
 end

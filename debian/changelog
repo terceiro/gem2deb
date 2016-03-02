@@ -1,4 +1,4 @@
-gem2deb (0.26.3) UNRELEASED; urgency=medium
+gem2deb (0.27) unstable; urgency=medium
 
   * dh-make-ruby:
     - with -w/--overwrite, never overwrite debian/copyright, since it will be
@@ -8,7 +8,7 @@ gem2deb (0.26.3) UNRELEASED; urgency=medium
     - force generated gemspecs to use the date from debian/changelog to help
       with build reproducibility
 
- -- Antonio Terceiro <terceiro@debian.org>  Wed, 02 Mar 2016 16:26:58 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 02 Mar 2016 17:15:19 -0300
 
 gem2deb (0.26.2) unstable; urgency=medium
 
