@@ -1,8 +1,8 @@
 gem2deb (0.27) unstable; urgency=medium
 
   * dh-make-ruby:
-    - with -w/--overwrite, never overwrite debian/copyright, since it will be
-      always replace a human-reviewed debian/copyright with a completely dumb
+    - with -w/--overwrite, never overwrite debian/copyright. It's not useful
+      to replace an human-reviewed debian/copyright with a completely dumb
       boilerplate.
   * dh_ruby:
     - force generated gemspecs to use the date from debian/changelog to help
