@@ -32,6 +32,7 @@ module Gem2Deb
         load_gemspec
       end
       set_gemspec_date
+      sort_filenames
     end
 
     def has_native_extensions?
@@ -118,6 +119,19 @@ module Gem2Deb
     def set_gemspec_date
       if @gemspec && File.exist?('debian/changelog')
         @gemspec.date = Time.parse(`dpkg-parsechangelog -SDate`.strip)
+      end
+    end
+
+    def sort_filenames
+      # sort all filename lists in case they are generated in an unsorted way,
+      # usually by `find` or some other unstable-sorting command.
+      if @gemspec
+        @gemspec.executables.sort!
+        @gemspec.extensions.sort!
+        @gemspec.extra_rdoc_files.sort!
+        @gemspec.files.sort!
+        @gemspec.require_paths.sort!
+        @gemspec.test_files.sort!
       end
     end
 

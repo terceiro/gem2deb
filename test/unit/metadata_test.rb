@@ -159,5 +159,14 @@ class MetaDataTest < Gem2DebTestCase
     end
   end
 
+  context 'filelists' do
+    should 'should always be sorted' do
+      @metadata = Gem2Deb::Metadata.new('test/sample/unsorted_names')
+      correctly_sorted = ['lib/file1.rb', 'lib/file2.rb']
+      assert_equal correctly_sorted, @metadata.gemspec.test_files.select { |f| f.include? 'lib/file' }
+      assert_equal correctly_sorted, @metadata.gemspec.files.select { |f| f.include? 'lib/file' }
+    end
+  end
+
 end
 
