@@ -45,21 +45,24 @@ class Gem2TgzTest < Gem2DebTestCase
     should 'not leave temporary directory after creating tarball' do
       assert_no_file_exists instance.target_dir
     end
-    should 'create metadata.yml' do
+    should 'not leave metadata.yml in the tarball' do
+      assert_not_contained_in_tarball SIMPLE_GEM_TARBALL, 'simplegem-0.0.1/metadata.yml'
+    end
+    should 'create gemspec' do
       unpack(SIMPLE_GEM_TARBALL) do
-        assert_file_exists 'simplegem-0.0.1/metadata.yml'
+        assert_file_exists 'simplegem-0.0.1/simplegem.gemspec'
       end
     end
     should 'not include checksums.yaml.gz' do
       assert_not_contained_in_tarball SIMPLE_GEM_TARBALL, 'simplegem-0.0.1/checksums.yaml.gz'
     end
-    context 'looking inside metadata.yml' do
+    context 'looking inside generated gemspec' do
       setup do
         @gemspec = unpack(SIMPLE_GEM_TARBALL) do
-          YAML.load_file('simplegem-0.0.1/metadata.yml')
+          Gem::Specification.load('simplegem-0.0.1/simplegem.gemspec')
         end
       end
-      should 'be valid gemspec' do
+      should 'be a valid gemspec' do
         assert_kind_of Gem::Specification, @gemspec
       end
       should "be simplegem's spec" do

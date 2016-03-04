@@ -1,3 +1,11 @@
+gem2deb (0.29) UNRELEASED; urgency=medium
+
+  * gem2tgz:
+    - Stop generating metadata.yml, and generate a .gemspec if there is no
+      gemspec yet.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 04 Mar 2016 17:29:16 -0300
+
 gem2deb (0.28) unstable; urgency=medium
 
   * dh_ruby:
