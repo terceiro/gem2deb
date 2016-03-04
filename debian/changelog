@@ -1,10 +1,10 @@
-gem2deb (0.27.1) UNRELEASED; urgency=medium
+gem2deb (0.28) unstable; urgency=medium
 
   * dh_ruby:
-    - force generated gemspecs to have their containes file lists sorted
+    - force generated gemspecs to have their contains file lists sorted
       to help with build reproducibility
 
- -- Christian Hofstaedtler <zeha@debian.org>  Fri, 04 Mar 2016 13:51:23 +0100
+ -- Christian Hofstaedtler <zeha@debian.org>  Fri, 04 Mar 2016 16:00:17 +0100
 
 gem2deb (0.27) unstable; urgency=medium
 
