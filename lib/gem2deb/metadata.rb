@@ -15,6 +15,7 @@
 
 require 'rubygems'
 require 'rubygems/specification'
+require 'tempfile'
 require 'time'
 require 'yaml'
 
@@ -108,12 +109,36 @@ module Gem2Deb
         gemspec_files = Dir.glob('*.gemspec')
         if gemspec_files.size == 1
           @gemspec = Gem::Specification.load(gemspec_files.first)
+          if @gemspec.nil?
+            @gemspec = load_modified_gemspec(gemspec_files.first)
+          end
         else
           unless gemspec_files.empty?
             raise "More than one .gemspec file in this directory: #{gemspec_files.join(', ')}"
           end
         end
       end
+    end
+
+    GIT_USAGE_MODIFIERS = {
+      /\.files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.files = (Dir["**/*"] - Dir["debian/**/*"]).select { |f| !File.directory?(f) }',
+      /\.test_files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.test_files = []',
+      /(\w+)\.executables\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '\1.executables = Dir[\1.bindir + "/*"]',
+    }
+
+    def load_modified_gemspec(original_gemspec_path)
+      gemspec_text = File.read(original_gemspec_path)
+
+      modified_gemspec = Tempfile.new('gemspec')
+      GIT_USAGE_MODIFIERS.each do |find,replacement|
+        gemspec_text.gsub!(find, replacement)
+      end
+
+      File.open(modified_gemspec.path, 'w') do |f|
+        f.puts(gemspec_text)
+      end
+
+      Gem::Specification.load(modified_gemspec.path)
     end
 
     def set_gemspec_date

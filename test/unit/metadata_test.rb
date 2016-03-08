@@ -168,5 +168,49 @@ class MetaDataTest < Gem2DebTestCase
     end
   end
 
+  context 'when upstream abuses git in gemspecs' do
+
+    should 'workaround git usage' do
+      # create
+      dir = File.join(tmpdir, 'gitabuser')
+      FileUtils.mkdir_p(dir)
+      Dir.chdir dir do
+        run_command 'git init'
+        File.open('gitabuser.gemspec', 'w') do |f|
+          f.puts($GIT_ABUSER_GEMSPEC)
+        end
+        FileUtils.mkdir 'lib'
+        File.open('lib/gitabuser.rb', 'w') do |f|
+          f.puts 'module GitAbuser; end'
+        end
+        run_command 'git add .'
+        run_command 'git commit -m "there you go"'
+      end
+
+      @metadata = self.class.silently { Gem2Deb::Metadata.new(dir) }
+      assert_not_nil @metadata.gemspec
+      assert_equal ['gitabuser.gemspec', 'lib/gitabuser.rb'], @metadata.gemspec.files
+    end
+
+  end
+
 end
 
+$GIT_ABUSER_GEMSPEC = <<EOF
+Gem::Specification.new do |s|
+  s.name        = "gitabuser"
+  s.version     = "1"
+  s.platform    = Gem::Platform::RUBY
+  s.authors     = ["Antonio Terceiro"]
+  s.email       = ["terceiro@debian.org"]
+  s.homepage    = ""
+  s.summary     = %q{Sample gem that }
+  s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
+
+  s.rubyforge_project = "simplegit"
+  s.files             = `/unexisting/git ls-files`.split
+  s.executables       = `/unexisting/git ls-files`.split.select { |f| File.executable?(f) }
+  s.test_files        = `/unexisting/git ls-files`.split.select { |f| f                     = ~ /^(test|spec|features)/ }
+  s.require_paths     = ["lib"]
+end
+EOF
