@@ -121,7 +121,7 @@ module Gem2Deb
     end
 
     GIT_USAGE_MODIFIERS = {
-      /\.files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.files = (Dir["**/*"] - Dir["debian/**/*"]).select { |f| !File.directory?(f) }',
+      /\.files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.files = (Dir["**/*"] - Dir["debian/**/*"] - Dir["*.gemspec.gem2deb"]).select { |f| !File.directory?(f) }',
       /\.test_files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.test_files = []',
       /(\w+)\.executables\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '\1.executables = Dir[\1.bindir + "/*"]',
     }
@@ -129,16 +129,20 @@ module Gem2Deb
     def load_modified_gemspec(original_gemspec_path)
       gemspec_text = File.read(original_gemspec_path)
 
-      modified_gemspec = Tempfile.new('gemspec')
+      modified_gemspec = original_gemspec_path + '.gem2deb'
       GIT_USAGE_MODIFIERS.each do |find,replacement|
         gemspec_text.gsub!(find, replacement)
       end
 
-      File.open(modified_gemspec.path, 'w') do |f|
+      File.open(modified_gemspec, 'w') do |f|
         f.puts(gemspec_text)
       end
 
-      Gem::Specification.load(modified_gemspec.path)
+      spec = Gem::Specification.load(modified_gemspec)
+
+      FileUtils.rm_f(modified_gemspec)
+
+      spec
     end
 
     def set_gemspec_date
