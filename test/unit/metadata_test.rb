@@ -210,7 +210,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "simplegit"
   s.files             = `/unexisting/git ls-files`.split
   s.executables       = `/unexisting/git ls-files`.split.select { |f| File.executable?(f) }
-  s.test_files        = `/unexisting/git ls-files`.split.select { |f| f                     = ~ /^(test|spec|features)/ }
+  s.test_files        = `/unexisting/git ls-files`.split.select { |f| f =~ /^(test|spec|features)/ }
   s.require_paths     = ["lib"]
 end
 EOF
