@@ -80,6 +80,8 @@ module Gem2Deb
           system 'gem', 'list'
           exit(exitstatus)
         end
+      else
+        fail "E: dependency resolution check requested but no working gemspec available"
       end
     end
 

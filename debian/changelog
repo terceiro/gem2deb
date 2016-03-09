@@ -5,6 +5,8 @@ gem2deb (0.30) UNRELEASED; urgency=medium
     upstream gemspec to drop usage of `git ls-files` in several packages. This
     change makes gem2deb try to override that with sane defaults for a Debian
     package.
+  * gem2deb-test-runner: when dependency resolution is requested, fail if
+    there is no working source gemspec to read the package name from.
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 08 Mar 2016 10:24:48 +0700
 
