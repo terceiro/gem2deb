@@ -4,7 +4,7 @@ gem2deb (0.30) UNRELEASED; urgency=medium
     source packages are *not* git repositories makes it necessary to patch
     upstream gemspec to drop usage of `git ls-files` in several packages. This
     change makes gem2deb try to override that with sane defaults for a Debian
-    package.
+    package. (Closes: #800933)
   * gem2deb-test-runner: when dependency resolution is requested, fail if
     there is no working source gemspec to read the package name from.
 
