@@ -175,7 +175,6 @@ class MetaDataTest < Gem2DebTestCase
       dir = File.join(tmpdir, 'gitabuser')
       FileUtils.mkdir_p(dir)
       Dir.chdir dir do
-        run_command 'git init'
         File.open('gitabuser.gemspec', 'w') do |f|
           f.puts($GIT_ABUSER_GEMSPEC)
         end
@@ -183,8 +182,6 @@ class MetaDataTest < Gem2DebTestCase
         File.open('lib/gitabuser.rb', 'w') do |f|
           f.puts 'module GitAbuser; end'
         end
-        run_command 'git add .'
-        run_command 'git commit -m "there you go"'
       end
 
       @metadata = self.class.silently { Gem2Deb::Metadata.new(dir) }
