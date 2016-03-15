@@ -1,4 +1,4 @@
-gem2deb (0.30) UNRELEASED; urgency=medium
+gem2deb (0.30) unstable; urgency=medium
 
   * Gem2Deb::Metadata:
     - workaround git usage in gemspecs. The fact that Debian source packages
@@ -11,7 +11,7 @@ gem2deb (0.30) UNRELEASED; urgency=medium
   * gem2deb-test-runner: when dependency resolution is requested, fail if
     there is no working source gemspec to read the package name from.
 
- -- Antonio Terceiro <terceiro@debian.org>  Tue, 08 Mar 2016 10:24:48 +0700
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 15 Mar 2016 13:04:26 -0300
 
 gem2deb (0.29) unstable; urgency=medium
 
