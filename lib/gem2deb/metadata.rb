@@ -112,6 +112,9 @@ module Gem2Deb
           if @gemspec.nil?
             @gemspec = load_modified_gemspec(gemspec_files.first)
           end
+          if @gemspec.nil?
+            raise "E: cannot load gemspec #{gemspec_files.first}"
+          end
         else
           unless gemspec_files.empty?
             raise "More than one .gemspec file in this directory: #{gemspec_files.join(', ')}"
