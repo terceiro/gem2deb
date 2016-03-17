@@ -124,9 +124,9 @@ module Gem2Deb
     end
 
     GIT_USAGE_MODIFIERS = {
-      /\.files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.files = (Dir["**/*"] - Dir["debian/**/*"] - Dir["*.gemspec.gem2deb"]).select { |f| !File.directory?(f) }',
-      /\.test_files\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '.test_files = []',
-      /(\w+)\.executables\s*=\s*`[^`]*git\s+ls-files[^`]*`.*/ => '\1.executables = Dir[\1.bindir + "/*"]',
+      /\.files\s*=\s*`[^`]*git\s+ls-files[^`]*`\.split(\([^)]*\))?/ => '.files = ((Dir["**/*"] - Dir["debian/**/*"] - Dir["*.gemspec.gem2deb"]).select { |f| !File.directory?(f) })',
+      /\.test_files\s*=\s*`[^`]*git\s+ls-files[^`]*`\.split(\([^)]*\))?/ => '.test_files = []',
+      /(\w+)\.executables\s*=\s*`[^`]*git\s+ls-files[^`]*`\.split(\([^)]*\))?/ => '\1.executables = Dir[\1.bindir + "/*"]',
     }
 
     def load_modified_gemspec(original_gemspec_path)
