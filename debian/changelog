@@ -2,6 +2,8 @@ gem2deb (0.30.1) UNRELEASED; urgency=medium
 
   * Gem2Deb::Metadata:
     - make the workaround attempt for gemspecs using git more robust.
+  * Gem2Deb::Banner:
+    - flush stdout immediately to improve output under autopkgtest
 
  -- Antonio Terceiro <terceiro@debian.org>  Thu, 17 Mar 2016 10:23:58 -0300
 
