@@ -152,12 +152,12 @@ module Gem2Deb
           else
             puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names'
             puts 'E: to package names but apt-file has an invalid cache. Please run '
-            puts 'E: `apt-file update` and make sure that `apt-file search` works.'
+            puts 'E: `apt update` and make sure that `apt-file search` works.'
             exit 1
           end
         else
           puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names to package names'
-          puts 'E: make sure that apt-file has an updated cache (run `apt-file update`)'
+          puts 'E: make sure that apt-file has an updated cache (run `apt update`)'
           exit $?.exitstatus
         end
       end
