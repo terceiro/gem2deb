@@ -59,7 +59,7 @@ gem2deb-test-runner - runs test suite contained in Debian Ruby packages
 
 =head1 SYNOPSIS
 
-B<gem2deb-test-runner> [B<--autopkgtest>]
+B<gem2deb-test-runner> [B<OPTIONS>]
 
 =head1 DESCRIPTION
 
