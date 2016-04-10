@@ -8,7 +8,7 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Gunnar Wolf <gwolf@debian.org>,
            Cédric Boutillier <boutil@debian.org>,
            Christian Hofstaedtler <zeha@debian.org>,
-           Pirate Praveen <praveen@debian.com>
+           Pirate Praveen <praveen@debian.org>
 Build-Depends: dctrl-tools <!nocheck>,
                debhelper (>= 9.20141010),
                devscripts <!nocheck>,
