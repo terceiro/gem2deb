@@ -28,7 +28,7 @@ Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/gem2deb.git
 Testsuite: autopkgtest
 
 Package: gem2deb
-Architecture: all
+Architecture: any
 Depends: debhelper (>= 9~),
          devscripts,
          gem2deb-test-runner (= ${source:Version}),
@@ -50,7 +50,7 @@ Description: Debian Ruby packaging suite
  a proper Debian package. Both pure-ruby and native packages are supported.
 
 Package: gem2deb-test-runner
-Architecture: all
+Architecture: any
 Depends: rake,
          ruby | ruby-interpreter,
          ruby-minitest,
