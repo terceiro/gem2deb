@@ -32,7 +32,6 @@ Architecture: all
 Depends: debhelper (>= 9~),
          devscripts,
          gem2deb-test-runner (= ${source:Version}),
-         python3-debian,
          rake,
          ruby,
          ruby-all-dev (>= 1:2.1.0.3~),
@@ -41,7 +40,8 @@ Depends: debhelper (>= 9~),
          ${perl:Depends},
          ${shlibs:Depends}
 Recommends: apt-file,
-            build-essential
+            build-essential,
+            python3-debian
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
