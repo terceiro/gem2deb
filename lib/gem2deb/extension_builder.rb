@@ -61,6 +61,10 @@ module Gem2Deb
         ENV['make'] ||= 'make'
         ENV['make'] += " V=1"
 
+        # make sure RakeBuilder uses the correct path to rake
+        env_rake_old = ENV['rake']
+        ENV['rake'] = '/usr/bin/rake'
+
         target = File.expand_path(File.join(destdir, RbConfig::CONFIG['vendorarchdir']))
         FileUtils.mkdir_p(target)
         Dir.chdir(directory) do
@@ -93,6 +97,7 @@ module Gem2Deb
         raise e
       ensure
         ENV['make']=env_make_old
+        ENV['rake']=env_rake_old
       end
     end
 
