@@ -31,7 +31,7 @@ Package: gem2deb
 Architecture: any
 Depends: debhelper (>= 9~),
          devscripts,
-         gem2deb-test-runner (= ${source:Version}),
+         gem2deb-test-runner (= ${binary:Version}),
          rake,
          ruby,
          ruby-all-dev (>= 1:2.1.0.3~),
