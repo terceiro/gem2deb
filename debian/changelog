@@ -1,4 +1,4 @@
-gem2deb (0.30.2) UNRELEASED; urgency=medium
+gem2deb (0.30.2) unstable; urgency=medium
 
   [ Antonio Terceiro ]
   * dh-make-ruby:
@@ -16,7 +16,7 @@ gem2deb (0.30.2) UNRELEASED; urgency=medium
   * Make packages Architecture: any to satisfy arch-correct Build-Depends
     for cross-builds.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 25 Mar 2016 10:46:45 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 05 Jun 2016 11:11:17 -0300
 
 gem2deb (0.30.1) unstable; urgency=medium
 
