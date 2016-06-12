@@ -4,6 +4,7 @@ gem2deb (0.30.3) UNRELEASED; urgency=medium
     packages from source packages generated in the tests to not be influenced
     by the dpkg-buildpackage invocation used to build gem2deb
     (Closes: #826674)
+  * Bump Standards-Version to 3.9.8, no changes needed
 
  -- Antonio Terceiro <terceiro@debian.org>  Sun, 12 Jun 2016 14:23:34 -0300
 
