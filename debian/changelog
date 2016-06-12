@@ -1,4 +1,4 @@
-gem2deb (0.30.3) UNRELEASED; urgency=medium
+gem2deb (0.30.3) unstable; urgency=medium
 
   * test/unit/dh_ruby_test.rb: fix method that gets the list of binary
     packages from source packages generated in the tests to not be influenced
@@ -6,7 +6,7 @@ gem2deb (0.30.3) UNRELEASED; urgency=medium
     (Closes: #826674)
   * Bump Standards-Version to 3.9.8, no changes needed
 
- -- Antonio Terceiro <terceiro@debian.org>  Sun, 12 Jun 2016 14:23:34 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 12 Jun 2016 14:42:42 -0300
 
 gem2deb (0.30.2) unstable; urgency=medium
 
