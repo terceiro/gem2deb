@@ -216,7 +216,7 @@ class DhMakeRubyTest < Gem2DebTestCase
   protected
 
   def packages
-    `dh_listpackages`.split
+    `grep-dctrl -n -s Package -F Package '' debian/control`.split
   end
 
 end
