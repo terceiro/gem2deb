@@ -1,3 +1,10 @@
+gem2deb (0.30.4) UNRELEASED; urgency=medium
+
+  * dh-make-ruby:
+    - Bump Standards-Version in debian/control template to 3.9.8
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 24 Jun 2016 14:27:38 -0300
+
 gem2deb (0.30.3) unstable; urgency=medium
 
   * test/unit/dh_ruby_test.rb: fix method that gets the list of binary
