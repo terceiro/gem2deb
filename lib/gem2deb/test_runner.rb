@@ -27,6 +27,7 @@ module Gem2Deb
 
     attr_accessor :autopkgtest
     attr_accessor :check_dependencies
+    attr_accessor :check_dependencies_only
 
     def load_path
       if self.autopkgtest
@@ -64,6 +65,9 @@ module Gem2Deb
     def run_tests
       if check_dependencies
         do_check_dependencies
+        if check_dependencies_only
+          exit
+        end
       end
       do_run_tests
     end

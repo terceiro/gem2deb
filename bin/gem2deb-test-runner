@@ -42,6 +42,14 @@ optparse =  OptionParser.new do |opts|
     options[:check_dependencies] = true
   end
 
+  opts.on(
+    '-d', '--check-dependencies-only',
+    "Check dependencies, and don't run tests"
+  ) do
+    options[:check_dependencies] = true
+    options[:check_dependencies_only] = true
+  end
+
 end
 
 optparse.parse!
@@ -96,6 +104,11 @@ non-zero status code (i.e. fails) if they aren't.
 
 If you want to check dependencies during the build, you can add something like
 this to debian/rules:
+
+=item B<-d>, B<--check-dependencies-only>
+
+Exit after checking dependencies, i.e. only check dependencies, and don't run
+any tests. Implies B<--check-dependencies>.
 
 =over
 

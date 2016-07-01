@@ -1,9 +1,12 @@
-gem2deb (0.30.4) UNRELEASED; urgency=medium
+gem2deb (0.31) unstable; urgency=medium
 
   * dh-make-ruby:
     - Bump Standards-Version in debian/control template to 3.9.8
+  * gem2deb-test-runner:
+    - Add -d/--check-dependencies-only option that only checks dependencies,
+      and does not run any tests.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 24 Jun 2016 14:27:38 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 01 Jul 2016 17:22:02 -0300
 
 gem2deb (0.30.3) unstable; urgency=medium
 
