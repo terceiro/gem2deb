@@ -236,6 +236,11 @@ the files, instead of the homegrown installer. Native packages will be
 installed to I</usr/lib/$ARCH/rubygems-integration/$RUBY_VERSION>, while pure
 Ruby packages will be installed to I</usr/share/rubygems-integration/all>.
 
+There is an internal whitelist of directories from the source package that need
+to be installed, but we can't possibly know all possibilities: if a package
+needs to install a directory that is not automatically installed, use
+I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>.
+
 =item B<--setuprb>
 
 This option indicates that the build should use I<setup.rb> rather
@@ -289,6 +294,11 @@ provide custom metadata for the Debian package.
 
 In the case there are more than one .gemspec in the source package root, you
 will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
+
+=item I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>.
+
+When using --gem-install, this variable adds files and directories to the list
+of files that need to be installed.
 
 =back
 

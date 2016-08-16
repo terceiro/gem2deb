@@ -30,7 +30,7 @@ module Gem2Deb
       templates
       VERSION
       VERSION.txt
-    ]
+    ] + ENV.fetch('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND', '').split
 
     def install_files_and_build_extensions
       done = false
