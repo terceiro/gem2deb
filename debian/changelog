@@ -1,3 +1,9 @@
+gem2deb (0.32~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 27 Aug 2016 12:00:20 -0300
+
 gem2deb (0.32) unstable; urgency=medium
 
   * --gem-install: append new directories to the whitelist from the
