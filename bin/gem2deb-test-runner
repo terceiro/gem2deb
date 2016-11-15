@@ -110,12 +110,6 @@ this to debian/rules:
 Exit after checking dependencies, i.e. only check dependencies, and don't run
 any tests. Implies B<--check-dependencies>.
 
-=over
-
-export GEM2DEB_TEST_RUNNER = --check-dependencies
-
-=back
-
 =back
 
 =head1 ENVIRONMENT
@@ -124,7 +118,15 @@ export GEM2DEB_TEST_RUNNER = --check-dependencies
 
 =item GEM2DEB_TEST_RUNNER
 
-Used to pass options to gem2deb-test-runner via the environment.
+Used to pass options to gem2deb-test-runner via the environment. For example,
+to make gem2deb-test-runner check dependencies during package build, you can
+add the following to I<debian/rules>:
+
+=over
+
+export GEM2DEB_TEST_RUNNER = --check-dependencies
+
+=back
 
 =back
 
