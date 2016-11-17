@@ -1,9 +1,14 @@
 gem2deb (0.33) UNRELEASED; urgency=medium
 
+  [ Antonio Terceiro ]
   * Gem2Deb::Metadata. Parse timestamp as Date insted of Time. Fixes test
     suite on jessie (Closes: #835588)
   * gem2deb-test-runner:
     - fix documentation of $GEM2DEB_TEST_RUNNER in manpage
+
+  [ Stefano Rivera ]
+  * gem2deb-test-runner: Add Build-Dep on dpkg-dev. Autopkgtests may use this,
+    and don't necessarily have build-essential.
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 27 Aug 2016 12:37:40 -0300
 
