@@ -119,7 +119,9 @@ module Gem2Deb
             FileUtils::Verbose.rm_f Dir.glob('lib/**/*.so')
 
             # remove empty directories inside lib/
-            run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
+            if File.directory?('lib')
+              run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
+            end
           end
         end
 
