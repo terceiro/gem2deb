@@ -9,6 +9,9 @@ class GemInstallerTest < Gem2DebTestCase
   one_time_setup do
     gem_installer = Gem2Deb::GemInstaller.new('ruby-install-as-gem', PKGDIR)
     gem_installer.destdir_base = INSTALLDIR
+
+    orig_whitelist = gem_installer.whitelist
+    gem_installer.stubs(:whitelist).returns(orig_whitelist + ['whitelisted.md'])
     silently { gem_installer.install_files_and_build_extensions }
   end
 
@@ -28,15 +31,27 @@ class GemInstallerTest < Gem2DebTestCase
     LICENSE.TXT
     MIT-LICENSE
     Rakefile
+    README.md
+    bin/setup
+    bin/console
 
     debian
     ext
     spec
     test
+    tests
   ].each do |f|
     should "not install #{f}" do
       assert_no_file_exists installed_path(f)
     end
+  end
+
+  should 'install VERSION' do
+    assert_file_exists installed_path("VERSION")
+  end
+
+  should 'install whitelisted file' do
+    assert_file_exists installed_path("whitelisted.md")
   end
 
   should 'install native extension' do
