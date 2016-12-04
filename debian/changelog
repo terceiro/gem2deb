@@ -7,6 +7,7 @@ gem2deb (0.33) UNRELEASED; urgency=medium
     - fix documentation of $GEM2DEB_TEST_RUNNER in manpage
   * Gem2Deb::GemInstaller
     - don't try to remove empty directories from lib/ if there is no lib/
+  * Gem2Deb::Rake::TestTask: allow using a different task name than :default
 
   [ Stefano Rivera ]
   * gem2deb-test-runner: Add Build-Dep on dpkg-dev. Autopkgtests may use this,
