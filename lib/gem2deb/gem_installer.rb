@@ -61,6 +61,9 @@ module Gem2Deb
         gemspec_data.test_files = []
 
         # remove unwanted files and directories
+        if gemspec_data.files.empty?
+          gemspec_data.files = Dir['**/*']
+        end
         gemspec_data.files.reject! do |entry|
           if whitelist.any? { |incl| File.fnmatch(incl, entry) }
             false # whitelisted, don't reject
