@@ -239,7 +239,8 @@ Ruby packages will be installed to I</usr/share/rubygems-integration/all>.
 There is an internal whitelist of directories from the source package that need
 to be installed, but we can't possibly know all possibilities: if a package
 needs to install a directory that is not automatically installed, use
-I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>.
+I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>. If you want to exclude a directory
+from  being installed, use I<DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND>.
 
 =item B<--setuprb>
 
@@ -297,8 +298,25 @@ will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
 
 =item I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>.
 
-When using --gem-install, this variable adds files and directories to the list
-of files that need to be installed.
+When using --gem-install, this variable adds B<files> to the list of files that
+need to be installed. Entries must be separated by spaces, and can be either
+exact filenames, of glob expressions (e.g. I<*.txt>, I<foo/*>).
+
+Directories cannot be added directly, only files. If you want to include an
+entire directory, say I<foo>, use a glob expression like I<foo/*>.
+
+Note that by default all top-level files are automatically blacklisted, except
+I<VERSION*> which is used by some packages. If you need a top-level file to be
+installed, you need to whitelist it.
+
+=item I<DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND>.
+
+When using --gem-install, this variable adds files to the list of files that
+SHOULD NOT be installed. Entries must be separated by spaces, and must be
+either specific filenames, or glob expressions (e.g. I<*.txt>).
+
+Directories cannot be blacklisted directly. To blacklist an entire directory,
+use a glob expression such as I<foo/*>.
 
 =back
 
