@@ -36,7 +36,7 @@ task :install do
 end
 
 desc "Builds a git snapshot package"
-task 'snapshot:build' do
+task 'snapshot:build', :install do |task,args|
   if !system('git diff-index --quiet HEAD')
     fail "Can't build package; you have uncommitted changes"
   end
@@ -50,14 +50,17 @@ task 'snapshot:build' do
   sh 'git commit -a -m snapshot-' + date
   begin
     sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
+    if args[:install]
+      sh 'debi'
+    end
   ensure
     sh 'git checkout ' + branch
   end
 end
 
 desc "Installs a git snapshot package"
-task 'snapshot:install' => 'snapshot:build' do
-  sh 'debi'
+task 'snapshot:install' do
+  Rake::Task['snapshot:build'].invoke(true)
 end
 
 
