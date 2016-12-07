@@ -40,6 +40,7 @@ class GemInstallerTest < Gem2DebTestCase
     spec
     test
     tests
+    examples
   ].each do |f|
     should "not install #{f}" do
       assert_no_file_exists installed_path(f)

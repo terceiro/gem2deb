@@ -25,6 +25,7 @@ module Gem2Deb
       bin/console
       bin/setup
       debian/*
+      examples/*
       features/*
       gemfiles/*
       spec/*

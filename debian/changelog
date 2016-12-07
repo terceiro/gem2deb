@@ -2,6 +2,7 @@ gem2deb (0.33.1) UNRELEASED; urgency=medium
 
   * Gem2Deb::GemInstaller:
     - don't install extra_rdoc_files
+    - don't install examples/*
 
  -- Antonio Terceiro <terceiro@debian.org>  Wed, 07 Dec 2016 14:41:06 -0200
 
