@@ -81,6 +81,8 @@ module Gem2Deb
           ['console', 'setup'].include?(prog)
         end
 
+        gemspec_data.extra_rdoc_files = []
+
         # write modified gemspec at temporary directory
         gemspec = File.join(tmpdir, 'gemspec')
         File.open(gemspec, 'w') do |f|

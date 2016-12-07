@@ -15,4 +15,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*'] + Dir['spec/**/*']
   s.executables = Dir['bin/*'].map { |f| File.basename(f) }
   s.extensions = 'ext/extconf.rb'
+  s.extra_rdoc_files = ['extra_rdoc.md']
 end

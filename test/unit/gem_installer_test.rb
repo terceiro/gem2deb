@@ -54,6 +54,10 @@ class GemInstallerTest < Gem2DebTestCase
     assert_file_exists installed_path("whitelisted.md")
   end
 
+  should 'not install extra_rdoc_files' do
+    assert_no_file_exists installed_path('extra_rdoc.md')
+  end
+
   should 'install native extension' do
     so = Dir.glob(INSTALLDIR + '/usr/lib/**/install_as_gem/install_as_gem_native.so')
     assert_equal Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.size, so.size, "#{so.inspect} expected to have size 1"
