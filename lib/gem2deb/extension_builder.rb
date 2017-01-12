@@ -91,7 +91,7 @@ module Gem2Deb
         mkmf_log = File.join(target, 'mkmf.log')
         if File.exist?(mkmf_log)
           puts '~~~~~~~~~~~~~~~~~~~~~ ↓ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'
-          system('cat', 'mkmf.log')
+          system('cat', mkmf_log)
           puts '~~~~~~~~~~~~~~~~~~~~~ ↑ mkmf.log ~~~~~~~~~~~~~~~~~~~~~'
         end
         raise e
