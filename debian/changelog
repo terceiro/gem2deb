@@ -1,3 +1,11 @@
+gem2deb (0.33.2) UNRELEASED; urgency=medium
+
+  [ Dominic Cleal ]
+  * dh-make-ruby: support concurrent dh-make-ruby processes without one of
+    them botching "gem to package" mapping cache (Closes: #862409)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 19 May 2017 10:28:28 -0300
+
 gem2deb (0.33.1) unstable; urgency=medium
 
   * Gem2Deb::GemInstaller:
