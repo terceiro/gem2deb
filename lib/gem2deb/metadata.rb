@@ -27,6 +27,7 @@ module Gem2Deb
     attr_reader :root
 
     def initialize(root)
+      @gemspec = nil
       @source_dir = File.expand_path(root)
       @root = root
       Dir.chdir(source_dir) do

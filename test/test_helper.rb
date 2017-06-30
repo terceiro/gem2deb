@@ -14,8 +14,10 @@ require 'gem2deb'
 Gem2Deb.verbose = false
 Gem2Deb.testing = true
 
-Gem2DebTestCase = Test::Unit::TestCase
-class Gem2DebTestCase
+$__gem2deb_tests_cleanup_installed = false
+$environment_setup = false
+
+class Gem2DebTestCase < Test::Unit::TestCase
 
   SUPPORTED_VERSION_NUMBERS = Gem2Deb::RUBY_CONFIG_VERSION.values.sort
   SUPPORTED_API_NUMBERS = Gem2Deb::RUBY_API_VERSION.values.sort
@@ -49,7 +51,7 @@ class Gem2DebTestCase
       one_time_setup_blocks << block
     end
     def one_time_setup?
-      @one_time_setup
+      @one_time_setup ||= nil
     end
     def one_time_setup!
       unless one_time_setup?
@@ -157,7 +159,7 @@ class Gem2DebTestCase
   # make sure that everything that comes from gem2deb has precedence over
   # system-wide installed versions.
   def self.run_command(cmd)
-    if !@environment_setup && !ENV['ADTTMP']
+    if !$environment_setup && !ENV['ADTTMP']
       # setup Perl lib for debhelper7
       perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper7')
 
@@ -166,7 +168,7 @@ class Gem2DebTestCase
       ENV['PATH'] = [File.join(GEM2DEB_ROOT_SOURCE_DIR, 'bin'), File.join(GEM2DEB_ROOT_SOURCE_DIR, 'test', 'bin'), ENV['PATH']].join(':')
       ENV['RUBYLIB'] = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'lib')
 
-      @environment_setup = true
+      $environment_setup = true
     end
 
     @run_command_id ||= -1

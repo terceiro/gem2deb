@@ -23,7 +23,7 @@ class SetupRbInstallerTest < Gem2DebTestCase
       end
       should "link #{target_so} against libruby#{version_number} for #{package}" do
         installed_so = installed_file_path(dirname, package, target_so)
-        assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
+        assert_match %r/libruby-?#{version_number}/, `ldd #{installed_so}`
       end
     end
   end

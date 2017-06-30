@@ -39,7 +39,7 @@ class DhRubyTest < Gem2DebTestCase
       end
       should "link #{target_so} against libruby#{version_number}" do
         installed_so = installed_file_path(SIMPLE_EXTENSION_DIRNAME, "ruby-simpleextension", target_so)
-        assert_match /libruby-?#{version_number}/, `ldd #{installed_so}`
+        assert_match %r/libruby-?#{version_number}/, `ldd #{installed_so}`
       end
     end
   end
@@ -150,7 +150,7 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby = Gem2Deb::DhRuby.new
     end
     should 'be debian/${binary_package} by default' do
-      assert_match /debian\/ruby-foo$/, @dh_ruby.send(:destdir_for, 'ruby-foo', 'debian/tmp')
+      assert_match %r/debian\/ruby-foo$/, @dh_ruby.send(:destdir_for, 'ruby-foo', 'debian/tmp')
     end
     should 'install to debian/tmp when DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR is set' do
       saved_env = ENV['DH_RUBY_USE_DH_AUTO_INSTALL_DESTDIR']

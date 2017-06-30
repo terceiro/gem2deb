@@ -93,7 +93,7 @@ class InstallerTest < Gem2DebTestCase
     should 'add a shebang when there is none' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
       assert_match %r{/usr/bin/ruby}, lines[0]
-      assert_match /puts/, lines[1]
+      assert_match %r/puts/, lines[1]
     end
     should 'not rewrite shebangs non-Ruby scripts' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')

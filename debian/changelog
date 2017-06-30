@@ -7,6 +7,10 @@ gem2deb (0.33.2) UNRELEASED; urgency=medium
   [ Balasankar C ]
   * Change template copyright to Expat (Closes: #786521)
 
+  [ Antonio Terceiro ]
+  * Fix most Ruby warning in the code. They were exposed by rake 12.0.0, which
+    runs tests with warnings enabled by default.
+
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 19 May 2017 10:28:28 -0300
 
 gem2deb (0.33.1) unstable; urgency=medium
