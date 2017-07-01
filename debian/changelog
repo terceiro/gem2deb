@@ -1,4 +1,4 @@
-gem2deb (0.33.2) UNRELEASED; urgency=medium
+gem2deb (0.34) unstable; urgency=medium
 
   [ Dominic Cleal ]
   * dh-make-ruby: support concurrent dh-make-ruby processes without one of
@@ -12,8 +12,10 @@ gem2deb (0.33.2) UNRELEASED; urgency=medium
     runs tests with warnings enabled by default.
   * dh-make-ruby:
     - Bump Standards-Version in produced packages to 4.0.0
+  * debian/control:
+    - Bump Standards-Version to 4.0.0; no changes needed
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 19 May 2017 10:28:28 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 01 Jul 2017 11:30:17 -0300
 
 gem2deb (0.33.1) unstable; urgency=medium
 
