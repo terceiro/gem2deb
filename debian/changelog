@@ -1,6 +1,6 @@
 gem2deb (0.35) UNRELEASED; urgency=medium
 
-  * dh-make-ruby: bump debian/compat template to 10
+  * dh-make-ruby: bump debian/compat template to 10 (Closes: #867741)
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 01 Jul 2017 19:46:54 -0300
 
