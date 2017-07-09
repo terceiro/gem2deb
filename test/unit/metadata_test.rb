@@ -205,6 +205,20 @@ class MetaDataTest < Gem2DebTestCase
 
   end
 
+  context 'with debian/gemspec' do
+    should 'use it' do
+      gemspec = Gem::Specification.new do |spec|
+        spec.name = 'mypkg'
+        spec.version = '1.2.3'
+      end
+      FileUtils.mkdir_p('test/tmp/debian')
+      File.open('test/tmp/debian/gemspec', 'w') { |f| f.write(gemspec.to_ruby) }
+      metadata = Gem2Deb::Metadata.new('test/tmp')
+      assert_equal 'mypkg-1.2.3', [metadata.gemspec.name, metadata.gemspec.version].join('-')
+    end
+
+  end
+
   context 'on multi-binary source packages' do
 
     setup do

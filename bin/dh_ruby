@@ -409,6 +409,17 @@ during the build, in the I<clean>, I<build>, and I<install> steps, like this:
 If you want the upstream Rakefile to be used, just make I<debian/dh_ruby.rake> a
 symlink to I<../Rakefile>.
 
+=item debian/I<gemspec>
+
+If this file exists, it will be used as the package gemspec, regardless of
+I<metadata.yml> and any I<*.gemspec> that exists in the upstream source. Using
+this is only advised on single-binary source packages, and the behavior of this
+feature is undefined for multi-binary source packages (see B<SOURCE PACKAGE
+LAYOUT> above).
+
+Hint: for packages with multiple gemspec, you can have debian/I<gemspec> as a
+symlink pointing to the one you want to use.
+
 =back
 
 =head1 SEE ALSO
