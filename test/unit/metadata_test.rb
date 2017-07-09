@@ -99,7 +99,7 @@ class MetaDataTest < Gem2DebTestCase
   end
 
   def teardown
-    FileUtils.rmdir('test/tmp')
+    FileUtils.rm_rf('test/tmp')
   end
 
   context 'without gemspec' do
