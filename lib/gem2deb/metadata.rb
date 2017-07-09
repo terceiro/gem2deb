@@ -103,7 +103,12 @@ module Gem2Deb
 
     def load_gemspec
       if File.exist?('debian/gemspec')
-        @gemspec = Gem::Specification.load('debian/gemspec')
+        if File.symlink?('debian/gemspec')
+          path = File.expand_path(File.readlink('debian/gemspec'), 'debian')
+          @gemspec = Gem::Specification.load(path)
+        else
+          @gemspec = Gem::Specification.load('debian/gemspec')
+        end
       elsif File.exist?('metadata.yml')
         @gemspec = YAML.load_file('metadata.yml')
       elsif ENV['DH_RUBY_GEMSPEC']

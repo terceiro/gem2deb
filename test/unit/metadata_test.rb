@@ -206,17 +206,27 @@ class MetaDataTest < Gem2DebTestCase
   end
 
   context 'with debian/gemspec' do
-    should 'use it' do
-      gemspec = Gem::Specification.new do |spec|
+    setup do
+      @gemspec = Gem::Specification.new do |spec|
         spec.name = 'mypkg'
         spec.version = '1.2.3'
       end
       FileUtils.mkdir_p('test/tmp/debian')
-      File.open('test/tmp/debian/gemspec', 'w') { |f| f.write(gemspec.to_ruby) }
+      File.open('test/tmp/debian/gemspec', 'w') { |f| f.write(@gemspec.to_ruby) }
+    end
+    should 'use it' do
       metadata = Gem2Deb::Metadata.new('test/tmp')
       assert_equal 'mypkg-1.2.3', [metadata.gemspec.name, metadata.gemspec.version].join('-')
     end
-
+    should 'resolve symlinks' do
+      FileUtils.mv('test/tmp/debian/gemspec', 'test/tmp/mypkg.gemspec')
+      FileUtils.cp('test/tmp/mypkg.gemspec', 'test/tmp/other.gemspec')
+      Dir.chdir('test/tmp/debian') { FileUtils.ln_s('../mypkg.gemspec', 'gemspec') }
+      path = File.expand_path('test/tmp/mypkg.gemspec')
+      Gem::Specification.expects(:load).with(path).returns(@gemspec)
+      metadata = Gem2Deb::Metadata.new('test/tmp')
+      assert_equal 'mypkg', metadata.gemspec.name
+    end
   end
 
   context 'on multi-binary source packages' do

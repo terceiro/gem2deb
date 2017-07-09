@@ -417,6 +417,9 @@ this is only advised on single-binary source packages, and the behavior of this
 feature is undefined for multi-binary source packages (see B<SOURCE PACKAGE
 LAYOUT> above).
 
+If debian/I<gemspec> is a symlink, it will first be expanded, and then the
+symlink target will be used as a gemspec.
+
 Hint: for packages with multiple gemspec, you can have debian/I<gemspec> as a
 symlink pointing to the one you want to use.
 
