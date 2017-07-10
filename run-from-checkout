@@ -2,7 +2,7 @@
 
 set -e
 
-basedir=$(dirname $0)
+basedir="$(readlink -f "$(dirname $0)")"
 this_script=$(basename $0)
 
 if [ $# -eq 0 ]; then
