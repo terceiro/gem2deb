@@ -70,6 +70,10 @@ optparse = OptionParser.new do |opts|
     dh_make_ruby_options[:do_wnpp_check] = false
   end
 
+  opts.on('-o', '--offline', 'Do not access the internet for anything') do
+    dh_make_ruby_options[:do_wnpp_check] = false
+  end
+
 end
 optparse.parse!
 
@@ -189,6 +193,10 @@ Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
 Prevents B<dh-make-ruby> to check wnpp reports to get the number of a possible
 ITP (intend to package) bug report. By default, B<dh-make-ruby> does check these
 reports, which requires an Internet access.
+
+=item B<-o>, B<--offline>
+
+Prevents B<dh-make-ruby> from accessing the internet at all.
 
 =item B<-h>, B<--help>
 
