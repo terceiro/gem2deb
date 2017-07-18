@@ -1,4 +1,4 @@
-gem2deb (0.35) UNRELEASED; urgency=medium
+gem2deb (0.35) unstable; urgency=medium
 
   * dh-make-ruby: bump debian/compat template to 10 (Closes: #867741)
   * Gem2Deb::Metadata:
@@ -6,7 +6,7 @@ gem2deb (0.35) UNRELEASED; urgency=medium
   * gem2deb, dh-make-ruby: add -o/--offline option to prevent any access to
     the internet (including but not limited to checking wnpp)
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 01 Jul 2017 19:46:54 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 18 Jul 2017 10:03:37 -0300
 
 gem2deb (0.34) unstable; urgency=medium
 
