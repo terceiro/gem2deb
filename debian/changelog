@@ -2,6 +2,8 @@ gem2deb (0.36) UNRELEASED; urgency=medium
 
   * dh-make-ruby: use `FIXME` in Section: when package name is not `ruby-*`,
     to avoid tools being in section `ruby`.
+  * gem2deb-test-runner: drop dependency on dpkg-dev. autopkgtest tests should
+    be for installed packages, and pulling development tools is Wrong™.
 
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 15 Sep 2017 20:31:46 -0300
 
