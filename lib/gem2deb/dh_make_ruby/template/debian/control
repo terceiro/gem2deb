@@ -1,5 +1,5 @@
 Source: <%= source_package_name %>
-Section: ruby
+Section: <%= source_package_name =~ /^ruby-/ && 'ruby' || 'FIXME' %>
 Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
