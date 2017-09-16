@@ -1,7 +1,9 @@
 gem2deb (0.36) UNRELEASED; urgency=medium
 
-  * dh-make-ruby: use `FIXME` in Section: when package name is not `ruby-*`,
-    to avoid tools being in section `ruby`.
+  * dh-make-ruby:
+    - use `FIXME` in Section: when package name is not `ruby-*`, to avoid
+      tools being in section `ruby`.
+    - avoid calling wnpp-check twice
   * gem2deb-test-runner: drop dependency on dpkg-dev. autopkgtest tests should
     be for installed packages, and pulling development tools is Wrong™.
   * Apply patch by James Clarke to fix crash when handling build failures in C

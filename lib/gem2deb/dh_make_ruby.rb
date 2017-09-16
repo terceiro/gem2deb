@@ -291,11 +291,13 @@ module Gem2Deb
     end
 
     def itp_bug
-      if do_wnpp_check && wnpp_check.length > 0
-        wnpp_check.split(" ")[2].chomp(")")
-      else
-        "#nnnn"
+      if do_wnpp_check
+        wnpp = wnpp_check()
+        if wnpp.length > 0
+          return wnpp.split(" ")[2].chomp(")")
+        end
       end
+      "#nnnn"
     end
 
     NEVER_OVERWRITE = %w[
