@@ -1,4 +1,4 @@
-gem2deb (0.36) UNRELEASED; urgency=medium
+gem2deb (0.36) unstable; urgency=medium
 
   * dh-make-ruby:
     - use `FIXME` in Section: when package name is not `ruby-*`, to avoid
@@ -9,7 +9,7 @@ gem2deb (0.36) UNRELEASED; urgency=medium
   * Apply patch by James Clarke to fix crash when handling build failures in C
     extensions (Closes: #851172)
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 15 Sep 2017 20:31:46 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 15 Sep 2017 21:35:41 -0300
 
 gem2deb (0.35) unstable; urgency=medium
 
