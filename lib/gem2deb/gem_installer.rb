@@ -21,16 +21,29 @@ module Gem2Deb
 
   class GemInstaller < Installer
 
+    INSTALL_BLACKLIST = %w[
+      bin/console
+      bin/setup
+      debian/*
+      examples/*
+      features/*
+      gemfiles/*
+      spec/*
+      test/*
+      tests/*
+    ] + ENV.fetch('DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND', '').split
+
     INSTALL_WHITELIST = %w[
-      ext
-      lib
-      app
-      assets
-      vendor
-      templates
-      VERSION
-      VERSION.txt
+      VERSION*
     ] + ENV.fetch('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND', '').split
+
+    def whitelist
+      INSTALL_WHITELIST
+    end
+
+    def blacklist
+      INSTALL_BLACKLIST
+    end
 
     def install_files_and_build_extensions
       done = false
@@ -49,9 +62,27 @@ module Gem2Deb
         gemspec_data.test_files = []
 
         # remove unwanted files and directories
-        gemspec_data.files.reject! do |entry|
-          !INSTALL_WHITELIST.include?(entry.split('/').first)
+        if gemspec_data.files.empty?
+          gemspec_data.files = Dir['**/*']
         end
+        gemspec_data.files.reject! do |entry|
+          if whitelist.any? { |incl| File.fnmatch(incl, entry) }
+            false # whitelisted, don't reject
+          else
+            if !entry.index('/')
+              true # exclude all top-level files by default
+            else
+              # reject if blacklisted
+              blacklist.any? { |exclude| File.fnmatch(exclude, entry) }
+            end
+          end
+        end
+
+        gemspec_data.executables.reject! do |prog|
+          ['console', 'setup'].include?(prog)
+        end
+
+        gemspec_data.extra_rdoc_files = []
 
         # write modified gemspec at temporary directory
         gemspec = File.join(tmpdir, 'gemspec')
@@ -119,7 +150,9 @@ module Gem2Deb
             FileUtils::Verbose.rm_f Dir.glob('lib/**/*.so')
 
             # remove empty directories inside lib/
-            run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
+            if File.directory?('lib')
+              run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
+            end
           end
         end
 

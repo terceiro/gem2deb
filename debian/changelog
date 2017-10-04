@@ -1,8 +1,38 @@
-gem2deb (0.32~bpo8+1) jessie-backports; urgency=medium
+gem2deb (0.33.1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
 
- -- Antonio Terceiro <terceiro@debian.org>  Sat, 27 Aug 2016 12:00:20 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 04 Oct 2017 10:05:12 -0300
+
+gem2deb (0.33.1) unstable; urgency=medium
+
+  * Gem2Deb::GemInstaller:
+    - don't install extra_rdoc_files
+    - don't install examples/*
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 07 Dec 2016 14:47:07 -0200
+
+gem2deb (0.33) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Gem2Deb::Metadata. Parse timestamp as Date insted of Time. Fixes test
+    suite on jessie (Closes: #835588)
+  * gem2deb-test-runner:
+    - fix documentation of $GEM2DEB_TEST_RUNNER in manpage
+  * Gem2Deb::GemInstaller
+    - don't try to remove empty directories from lib/ if there is no lib/
+    - invert the logic for file inclusion. Everything shipped by upstream
+      gem authors is installed, except most top-level files and a well-known
+      blacklist of directories that should not be installed (test
+      infrastructure, etc). Maintainers can still whitelist files, and they
+      can also blacklist files.
+  * Gem2Deb::Rake::TestTask: allow using a different task name than :default
+
+  [ Stefano Rivera ]
+  * gem2deb-test-runner: Add Build-Dep on dpkg-dev. Autopkgtests may use this,
+    and don't necessarily have build-essential.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 06 Dec 2016 11:21:05 -0200
 
 gem2deb (0.32) unstable; urgency=medium
 

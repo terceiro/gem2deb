@@ -35,8 +35,8 @@ task :install do
   sh "sudo debi"
 end
 
-desc "Builds and installs a git snapshot package"
-task 'snapshot:install' do
+desc "Builds a git snapshot package"
+task 'snapshot:build', :install do |task,args|
   if !system('git diff-index --quiet HEAD')
     fail "Can't build package; you have uncommitted changes"
   end
@@ -50,11 +50,19 @@ task 'snapshot:install' do
   sh 'git commit -a -m snapshot-' + date
   begin
     sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
-    sh 'debi'
+    if args[:install]
+      sh 'debi'
+    end
   ensure
     sh 'git checkout ' + branch
   end
 end
+
+desc "Installs a git snapshot package"
+task 'snapshot:install' do
+  Rake::Task['snapshot:build'].invoke(true)
+end
+
 
 desc "Checks for inconsistencies between version numbers in the code and in debian/changelog"
 task :version_check do

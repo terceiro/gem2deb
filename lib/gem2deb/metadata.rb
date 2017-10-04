@@ -150,7 +150,7 @@ module Gem2Deb
 
     def set_gemspec_date
       if @gemspec && File.exist?('debian/changelog')
-        @gemspec.date = Time.parse(`dpkg-parsechangelog -SDate`.strip)
+        @gemspec.date = Date.parse(`dpkg-parsechangelog -SDate`.strip)
       end
     end
 
