@@ -1,2 +1,2 @@
-version=3
+version=4
 http://pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch/<%= gem_name %> .*/<%= gem_name %>-(.*).tar.gz
