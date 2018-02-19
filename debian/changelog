@@ -4,6 +4,7 @@ gem2deb (0.37) unstable; urgency=medium
   * dh-make-ruby:
     - Bump Standards-Version to 4.1.3.
     - Bump debhelper compat level to 11.
+    - Use salsa.d.o in Vcs-{Browser,Git} fields.
 
  -- Georg Faerber <georg@riseup.net>  Mon, 19 Feb 2018 23:25:58 +0100
 
