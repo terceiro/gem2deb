@@ -10,7 +10,7 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Christian Hofstaedtler <zeha@debian.org>,
            Georg Faerber <georg@riseup.net>
 Build-Depends: dctrl-tools <!nocheck>,
-               debhelper (>= 9.20141010),
+               debhelper (>= 11~),
                devscripts <!nocheck>,
                dpkg-dev (>= 1.17.14),
                lintian <!nocheck>,
@@ -30,7 +30,7 @@ Testsuite: autopkgtest
 
 Package: gem2deb
 Architecture: any
-Depends: debhelper (>= 9~),
+Depends: debhelper (>= 11~),
          devscripts,
          gem2deb-test-runner (= ${binary:Version}),
          rake,
