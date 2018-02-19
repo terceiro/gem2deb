@@ -7,7 +7,8 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Vincent Fourmond <fourmond@debian.org>,
            Gunnar Wolf <gwolf@debian.org>,
            Cédric Boutillier <boutil@debian.org>,
-           Christian Hofstaedtler <zeha@debian.org>
+           Christian Hofstaedtler <zeha@debian.org>,
+           Georg Faerber <georg@riseup.net>
 Build-Depends: dctrl-tools <!nocheck>,
                debhelper (>= 9.20141010),
                devscripts <!nocheck>,
