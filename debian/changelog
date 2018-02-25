@@ -22,7 +22,7 @@ gem2deb (0.37) unstable; urgency=medium
   * dh-make-ruby:
     - Use HTTPS in debian/watch template.
 
- -- Georg Faerber <georg@riseup.net>  Tue, 20 Feb 2018 00:07:17 +0100
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 25 Feb 2018 14:46:15 -0300
 
 gem2deb (0.36) unstable; urgency=medium
 
