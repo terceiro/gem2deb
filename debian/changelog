@@ -1,3 +1,10 @@
+gem2deb (0.38) UNRELEASED; urgency=medium
+
+  * dh_ruby_fixdepends: include upper bound on ruby versions provided by
+    ruby-all-dev (Closes: #889470)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 25 Feb 2018 21:07:16 -0300
+
 gem2deb (0.37) unstable; urgency=medium
 
   [ Georg Faerber ]
