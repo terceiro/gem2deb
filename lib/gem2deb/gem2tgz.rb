@@ -125,13 +125,23 @@ module Gem2Deb
 
     def verify_and_strip_checksums
       checksums = read_checksums
-      [Digest::SHA1, Digest::SHA512].each do |digest|
+      digests=[Digest::SHA256, Digest::SHA512]
+      unverified_checksums = []
+      digests.each do |digest|
         hash_name = digest.name.sub(/^Digest::/,'')
-        ["data.tar.gz", "metadata.gz"].each do |f|
-          unless correct_checksum?(digest, f, checksums[hash_name][f])
-            puts "E: (#{gem}) the #{hash_name} checksum for #{f} is inconsistent with the one recorded in checksums.yaml.gz"
-            exit(1)
+        if checksums.has_key? hash_name
+          ["data.tar.gz", "metadata.gz"].each do |f|
+            unless correct_checksum?(digest, f, checksums[hash_name][f])
+              puts "E: (#{gem}) the #{hash_name} checksum for #{f} is inconsistent with the one recorded in checksums.yaml.gz"
+              exit(1)
+            end
           end
+        else
+          unverified_checksums << hash_name
+        end
+        if unverified_checksums.size == digests.size
+          puts "E: (#{gem}) missing checksums for #{unverified_checksums.join(", ")}. Only #{checksums.keys.join(", ")} recorded in checksums.yaml.gz"
+          exit(1)
         end
       end
       FileUtils.rm_f('checksums.yaml.gz')
