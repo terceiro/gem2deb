@@ -54,7 +54,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('--print-supported', 'prints supported Ruby versions') do
-    Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.sort.each do |v|
+    Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.each do |v|
       puts v
     end
     exit

@@ -3,6 +3,7 @@ gem2deb (0.38) unstable; urgency=medium
   [ Antonio Terceiro ]
   * dh_ruby_fixdepends: include upper bound on ruby versions provided by
     ruby-all-dev (Closes: #889470)
+  * dh_ruby --print-supported: respect order provided by ruby-all-dev
 
   [ Cédric Boutillier ]
   * gem2tgz:
