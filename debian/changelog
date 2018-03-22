@@ -1,3 +1,10 @@
+gem2deb (0.38.1) unstable; urgency=medium
+
+  * dh_ruby_fixdepends: don't touch dependencies of packages that do not
+    already depend on ruby (Closes: #892131)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 22 Mar 2018 14:33:24 +0800
+
 gem2deb (0.38) unstable; urgency=medium
 
   [ Antonio Terceiro ]

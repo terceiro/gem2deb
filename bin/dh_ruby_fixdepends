@@ -40,9 +40,13 @@ include Gem2Deb
           std_deps << dep
         end
       end
-      upper_bound = RubyDebianDev.ruby_upper_bound
-      newdeps = (std_deps + [libruby_deps.join(' | ')] + [ruby_deps.join(' | ')] + [upper_bound]).join(', ')
-      fd.puts "shlibs:Depends=#{newdeps}"
+      if ruby_deps.empty? && libruby_deps.empty?
+        fd.puts l
+      else
+        upper_bound = RubyDebianDev.ruby_upper_bound
+        newdeps = (std_deps + [libruby_deps.join(' | ')] + [ruby_deps.join(' | ')] + [upper_bound]).join(', ')
+        fd.puts "shlibs:Depends=#{newdeps}"
+      end
     else
       fd.puts l
     end
