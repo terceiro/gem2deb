@@ -130,7 +130,7 @@ class DhMakeRubyTest < Gem2DebTestCase
       assert_equal 'Fancy_Package', $__fancy_package_dh_make_ruby.gem_name
     end
     should 'use actual upstream name in debian/watch' do
-      assert_match %r/gemwatch\/Fancy_Package/, File.read(File.join(tmpdir, 'ruby-fancy-package-0.0.1/debian/watch'))
+      assert_match %r/gemwatch\.debian\.net\/Fancy_Package/, File.read(File.join(tmpdir, 'ruby-fancy-package-0.0.1/debian/watch'))
     end
     should 'use actual upstream name in debian/copyright' do
       assert_match %r/Upstream-Name: Fancy_Package/, File.read(File.join(tmpdir, 'ruby-fancy-package-0.0.1/debian/copyright'))
