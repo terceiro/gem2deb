@@ -1,3 +1,9 @@
+gem2deb (0.37~bpo9+1) stretch-backports; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Pirate Praveen <praveen@debian.org>  Sat, 28 Apr 2018 10:09:16 +0530
+
 gem2deb (0.37) unstable; urgency=medium
 
   [ Georg Faerber ]
