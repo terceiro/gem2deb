@@ -4,7 +4,6 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Antonio Terceiro <terceiro@debian.org>,
-           Vincent Fourmond <fourmond@debian.org>,
            Gunnar Wolf <gwolf@debian.org>,
            Cédric Boutillier <boutil@debian.org>,
            Christian Hofstaedtler <zeha@debian.org>,
