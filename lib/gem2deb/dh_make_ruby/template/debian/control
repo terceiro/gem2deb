@@ -11,6 +11,7 @@ Vcs-Browser: https://salsa.debian.org/ruby-team/<%= source_package_name %>
 Homepage: <%= homepage ? homepage : 'FIXME'%>
 Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: <%= ruby_versions %>
+Rules-Requires-Root: no
 
 Package: <%= binary_package.name %>
 Architecture: <%= binary_package.architecture %>

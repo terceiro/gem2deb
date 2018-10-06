@@ -1,6 +1,8 @@
 gem2deb (0.40) UNRELEASED; urgency=medium
 
   * Remove Vincent Fourmond from Uploaders: by his request (Closes: #897289)
+  * dh-make-ruby:
+    - debian/control: add `Rules-Requires-Root: no`
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 01 May 2018 15:39:07 -0300
 
