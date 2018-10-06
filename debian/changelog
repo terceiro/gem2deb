@@ -1,11 +1,11 @@
-gem2deb (0.40) UNRELEASED; urgency=medium
+gem2deb (0.40) unstable; urgency=medium
 
   * Remove Vincent Fourmond from Uploaders: by his request (Closes: #897289)
   * dh-make-ruby:
     - debian/control: add `Rules-Requires-Root: no`
     - debian/control: bump Standards-Version to 4.2.1
 
- -- Antonio Terceiro <terceiro@debian.org>  Tue, 01 May 2018 15:39:07 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 06 Oct 2018 12:29:14 -0300
 
 gem2deb (0.39) unstable; urgency=medium
 
