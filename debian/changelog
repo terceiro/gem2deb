@@ -4,6 +4,7 @@ gem2deb (0.40) unstable; urgency=medium
   * dh-make-ruby:
     - debian/control: add `Rules-Requires-Root: no`
     - debian/control: bump Standards-Version to 4.2.1
+  * Bump Standards-Version to 4.2.1; no changes needed otherwise
 
  -- Antonio Terceiro <terceiro@debian.org>  Sat, 06 Oct 2018 12:29:14 -0300
 
