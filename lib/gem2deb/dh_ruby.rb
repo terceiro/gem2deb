@@ -92,11 +92,6 @@ module Gem2Deb
 
       run_tests
 
-      # FIXME remove this message after stretch
-      if File.exists?('debian/require-rubygems.overrides')
-        puts "W: debian/require-rubygems.overrides is obsolete, and is now ignored"
-      end
-
       Gem2Deb::Banner.print 'dh_ruby --install finished'
     end
 
