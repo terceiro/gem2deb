@@ -1,3 +1,13 @@
+gem2deb (0.41) unstable; urgency=medium
+
+  * dh-make-ruby: bump Standards-Version to 4.3.0 in template
+  * debian/control: bump Standards-Version to 4.3.0; no changes needed
+    otherwise
+  * Remove mentions to the require-rubygems check. It was already deprecated
+    and ignored in strecth.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 03 Feb 2019 11:27:59 -0200
+
 gem2deb (0.40) unstable; urgency=medium
 
   * Remove Vincent Fourmond from Uploaders: by his request (Closes: #897289)
