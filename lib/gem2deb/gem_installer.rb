@@ -157,7 +157,7 @@ module Gem2Deb
         end
 
         # remove tmpdir
-        FileUtils.rm_f(tmpdir)
+        FileUtils.rm_rf(tmpdir)
 
         done = true
       end
