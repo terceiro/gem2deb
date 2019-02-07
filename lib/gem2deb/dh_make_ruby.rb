@@ -145,7 +145,7 @@ module Gem2Deb
 
       if update
         new_cache = cache + ".new.#{$$}"
-        if system('apt-file search /usr/share/rubygems-integration/ > ' + new_cache)
+        if system('apt-file search /usr/share/rubygems-integration/ | grep \'.gemspec$\' > ' + new_cache)
           if File.stat(new_cache).size > 0
             system('sed', '-i', '-e', 's#/.*/##; s/-[0-9.]\+.gemspec//', new_cache)
             FileUtils.mv(new_cache, cache)
