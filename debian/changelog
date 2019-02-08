@@ -1,3 +1,10 @@
+gem2deb (0.42) unstable; urgency=medium
+
+  * GemInstaller: fix removal of temporary directory
+  * dh-make-ruby: restrict search for gemspecs to *.gemspec (Closes: #921703)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 08 Feb 2019 11:16:27 -0200
+
 gem2deb (0.41) unstable; urgency=medium
 
   * dh-make-ruby: bump Standards-Version to 4.3.0 in template
