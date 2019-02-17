@@ -113,7 +113,7 @@ this to debian/rules:
 
 =item B<-b>, B<--check-bundler>
 
-Check that the package can be correclly loaded by bundler. This tests that the
+Check that the package can be correctly loaded by bundler. This tests that the
 package can be loaded properly by bundler with the following two types of
 Gemfiles. One lists the package as a top-level dependency:
 
