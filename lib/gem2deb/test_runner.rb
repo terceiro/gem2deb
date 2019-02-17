@@ -16,6 +16,7 @@
 require 'rbconfig'
 require 'fileutils'
 require 'shellwords'
+require 'tmpdir'
 
 require 'gem2deb/banner'
 require 'gem2deb/metadata'
@@ -27,6 +28,7 @@ module Gem2Deb
 
     attr_accessor :autopkgtest
     attr_accessor :check_dependencies
+    attr_accessor :check_bundler
 
     def load_path
       if self.autopkgtest
@@ -65,6 +67,9 @@ module Gem2Deb
       if check_dependencies
         do_check_dependencies
       end
+      if check_bundler
+        do_check_bundler
+      end
       do_run_tests
     end
 
@@ -82,6 +87,57 @@ module Gem2Deb
         end
       else
         fail "E: dependency resolution check requested but no working gemspec available"
+      end
+    end
+
+    def do_check_bundler
+      if call(rubyver, '-rbundler', '-e', 'true') != 0
+        puts("I: bundler not installed, skipping bundler checks")
+      end
+
+      rc = 0
+
+      rc += check_bundler_impl(
+        'Checking loading under bundler on %s' % rubyver,
+        'gem "%s"',
+        [rubyver, '-rbundler/setup']
+      )
+
+      rc += check_bundler_impl(
+        'Checking loading under a bundler group on %s' % rubyver,
+        [
+          'group :test do',
+          '  gem "%s"',
+          'end'
+        ].join("\n"),
+        [rubyver, '-rbundler', '-e', 'Bundler.require(:test)']
+
+      )
+
+      if rc != 0
+        fail "E: failed to load under bundler"
+      end
+    end
+
+    def check_bundler_impl(title, gemfile, command)
+      metadata = Gem2Deb::Metadata.new('.')
+      print_banner(title)
+      Dir.mktmpdir do |tmpdir|
+        Dir.chdir(tmpdir) do
+          File.open('Gemfile', 'w') do |f|
+            f.puts(gemfile % metadata.name)
+          end
+          puts("Gemfile:")
+          puts('----------------8<----------------8<----------------8<-----------------')
+          puts(gemfile % metadata.name)
+          puts('----------------8<----------------8<----------------8<-----------------')
+          puts()
+          call(*command).tap do |rc|
+            if rc != 0
+              puts "E: Command failed (exit status: #{rc})"
+            end
+          end
+        end
       end
     end
 
@@ -107,6 +163,11 @@ module Gem2Deb
     end
 
     def run(program, *args)
+      exitstatus = call(program, *args)
+      exit(exitstatus)
+    end
+
+    def call(program, *args)
       rubylib = load_path.join(':')
       cmd = [program] + args
 
@@ -123,7 +184,7 @@ module Gem2Deb
         restore 'lib'
         restore 'ext'
       end
-      exit(exitstatus)
+      exitstatus
     end
 
     def move_away(dir)

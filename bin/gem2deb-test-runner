@@ -49,6 +49,13 @@ optparse =  OptionParser.new do |opts|
     puts('I: the -d/--check-dependencies-only option is deprecated and will be ignored.')
   end
 
+  opts.on(
+    '-b', '--check-bundler',
+    "Check loading the package under bundler"
+  ) do
+    options[:check_bundler] = true
+  end
+
 end
 
 optparse.parse!
@@ -103,6 +110,24 @@ non-zero status code (i.e. fails) if they aren't.
 
 If you want to check dependencies during the build, you can add something like
 this to debian/rules:
+
+=item B<-b>, B<--check-bundler>
+
+Check that the package can be correclly loaded by bundler. This tests that the
+package can be loaded properly by bundler with the following two types of
+Gemfiles. One lists the package as a top-level dependency:
+
+  gem "foo"
+
+This will be tested by calling `B<ruby -rbundler/setup>`.
+
+The other type includes the package in a group:
+
+  group :test do
+    gem "foo"
+  end
+
+That will be tested by calling `B<ruby -rbundler -e 'Bundler.require(:test)'>`.
 
 =back
 
