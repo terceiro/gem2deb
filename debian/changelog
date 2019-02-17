@@ -1,3 +1,11 @@
+gem2deb (0.43) unstable; urgency=medium
+
+  * gem2deb-test-runner: deprecate --check-dependencies-only
+  * gem2deb-test-runner: add --check-bundler option
+    - This should not be used by packages targetting buster.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 17 Feb 2019 10:27:01 -0300
+
 gem2deb (0.42) unstable; urgency=medium
 
   * GemInstaller: fix removal of temporary directory
