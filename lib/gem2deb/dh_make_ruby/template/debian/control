@@ -5,7 +5,7 @@ Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.al
 Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
 Build-Depends: debhelper-compat (= 12),
                gem2deb, <%= (extra_build_dependencies + binary_package.dependencies).map { |d| ", #{d}" }.join %>
-Standards-Version: 4.3.0
+Standards-Version: 4.4.0
 Vcs-Git: https://salsa.debian.org/ruby-team/<%= source_package_name %>.git
 Vcs-Browser: https://salsa.debian.org/ruby-team/<%= source_package_name %>
 Homepage: <%= homepage ? homepage : 'FIXME'%>
