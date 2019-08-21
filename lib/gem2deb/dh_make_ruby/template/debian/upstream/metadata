@@ -1,0 +1,9 @@
+---
+Archive: GitHub (FIXME)
+Bug-Database: <%= homepage ? homepage : 'FIXME'%>/issues
+Bug-Submit: <%= homepage ? homepage : 'FIXME'%>/issues
+Changelog: <%= homepage ? homepage : 'FIXME'%>/tags
+Contact: <%= homepage ? homepage : 'FIXME'%>/issues
+Name: <%= source_package_name %>
+Repository: <%= homepage ? homepage : 'FIXME'%>.git
+Repository-Browse: <%= homepage ? homepage : 'FIXME'%>
