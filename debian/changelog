@@ -1,10 +1,7 @@
-gem2deb (0.44) UNRELEASED; urgency=medium
+gem2deb (0.44) unstable; urgency=medium
 
   [ Georg Faerber ]
   * bin/gem2deb-test-runner: fix typo
-
-  [ Utkarsh Gupta ]
-  * Add salsa-ci.yml
 
   [ Cédric Boutillier ]
   * Update templates for new packages
@@ -12,7 +9,11 @@ gem2deb (0.44) UNRELEASED; urgency=medium
     - Add salsa-ci config file
     - Set Standards-Version to 4.4.0 in template
 
- -- Cédric Boutillier <boutil@debian.org>  Wed, 14 Aug 2019 16:59:42 +0200
+  [ Utkarsh Gupta ]
+  * Add salsa-ci.yml
+  * Add d/upstream/metadata in template
+
+ -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Wed, 21 Aug 2019 20:30:40 +0530
 
 gem2deb (0.43) unstable; urgency=medium
 
