@@ -61,7 +61,6 @@ class DhMakeRubyTest < Gem2DebTestCase
       debian/rules
       debian/copyright
       debian/changelog
-      debian/compat
       debian/watch
       debian/source/format
     ].each do |file|
