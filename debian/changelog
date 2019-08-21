@@ -1,5 +1,7 @@
 gem2deb (0.44) unstable; urgency=medium
 
+  * Team upload
+
   [ Georg Faerber ]
   * bin/gem2deb-test-runner: fix typo
 
@@ -12,6 +14,9 @@ gem2deb (0.44) unstable; urgency=medium
   [ Utkarsh Gupta ]
   * Add salsa-ci.yml
   * Add d/upstream/metadata in template
+  * Bump lib/gem2deb/version.rb
+  * Bump Standards-Version to 4.4.0 & debhelper-compat to 12
+  * Remove compat from test
 
  -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Wed, 21 Aug 2019 20:30:40 +0530
 
