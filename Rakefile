@@ -51,7 +51,7 @@ task 'snapshot:build', :install do |task,args|
   begin
     sh 'DEB_BUILD_OPTIONS=nocheck gbp buildpackage --git-ignore-branch -us -uc'
     if args[:install]
-      sh 'debi'
+      sh 'sudo debi'
     end
   ensure
     sh 'git checkout ' + branch
