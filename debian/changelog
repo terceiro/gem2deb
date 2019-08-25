@@ -1,7 +1,5 @@
 gem2deb (0.44) unstable; urgency=medium
 
-  * Team upload
-
   [ Georg Faerber ]
   * bin/gem2deb-test-runner: fix typo
 
@@ -21,7 +19,7 @@ gem2deb (0.44) unstable; urgency=medium
   [ Antonio Terceiro ]
   * dh-make-ruby: add `DH_RUBY = --gem-install` by default to debian/rules
 
- -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Wed, 21 Aug 2019 20:30:40 +0530
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 25 Aug 2019 10:19:43 -0300
 
 gem2deb (0.43) unstable; urgency=medium
 
