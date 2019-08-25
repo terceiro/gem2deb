@@ -3,6 +3,9 @@
 <% if (@gem_name != 'simplegem') %>
 export GEM2DEB_TEST_RUNNER = --check-dependencies
 <% end %>
+<% if (@gem_name != 'simpleextension-with-name-clash') %>
+export DH_RUBY = --gem-install
+<% end %>
 
 %:
 	dh $@ --buildsystem=ruby --with ruby

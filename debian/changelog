@@ -18,6 +18,9 @@ gem2deb (0.44) unstable; urgency=medium
   * Bump Standards-Version to 4.4.0 & debhelper-compat to 12
   * Remove compat from test
 
+  [ Antonio Terceiro ]
+  * dh-make-ruby: add `DH_RUBY = --gem-install` by default to debian/rules
+
  -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Wed, 21 Aug 2019 20:30:40 +0530
 
 gem2deb (0.43) unstable; urgency=medium
