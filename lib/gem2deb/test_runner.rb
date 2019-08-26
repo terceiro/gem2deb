@@ -177,12 +177,14 @@ module Gem2Deb
       if autopkgtest
         move_away 'lib'
         move_away 'ext'
+        move_away 'Gemfile.lock'
       end
       system({ 'RUBYLIB' => rlib, 'GEM_PATH' => gem_path }, *cmd)
       exitstatus = $?.exitstatus
       if autopkgtest
         restore 'lib'
         restore 'ext'
+        restore 'Gemfile.lock'
       end
       exitstatus
     end
