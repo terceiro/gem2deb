@@ -109,7 +109,7 @@ module Gem2Deb
 
     def extract_tgz_contents
       Dir.chdir(@target_dir) do
-        run('tar', 'xfm', gem_full_path, '--strip', '1')
+        run('tar', 'xfm', gem_full_path, '--strip', '1', '--no-same-owner')
       end
     end
 
