@@ -73,7 +73,13 @@ module Gem2Deb
           # real time
           Gem.configuration.verbose = 'YES'
 
-          rubygems_builder.build(extension, '.', target, results)
+          # Gem::Ext::*Builder.build() changed in Ruby 2.6.0.preview2.
+          if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.6.0')
+            rubygems_builder.build(extension, '.', target, results)
+          else
+            rubygems_builder.build(extension, target, results)
+          end
+
           puts results
 
           Gem.configuration.verbose = verbose
