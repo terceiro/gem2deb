@@ -154,7 +154,7 @@ module Gem2Deb
     def skip_checks?
       if @skip_checks.nil?
         if ENV['DEB_BUILD_OPTIONS'] && ENV['DEB_BUILD_OPTIONS'].split(' ').include?('nocheck')
-          puts "DEB_BUILD_OPTIONS includes nocheck, skipping all checks (test suite, rubygems usage etc)." if @verbose
+          puts "DEB_BUILD_OPTIONS includes nocheck, skipping all checks (test suite etc)." if @verbose
           @skip_checks = true
         else
           @skip_checks = false
