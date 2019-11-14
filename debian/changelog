@@ -1,4 +1,4 @@
-gem2deb (0.45) UNRELEASED; urgency=medium
+gem2deb (0.45) unstable; urgency=medium
 
   [ Frank Schaefer ]
   * tweak Gem::Ext::*Builder usage for ruby 2.6
@@ -8,6 +8,11 @@ gem2deb (0.45) UNRELEASED; urgency=medium
   * dh_ruby: drop remaining mention of rubygems usage check
   * dh_ruby: drop remaining mention of rubygems usage check
   * gem2deb-test-runner manpage: remove truncated sentence
+  * Gem2Deb::MetaData: rename method
+  * Gem2Deb::MetaData: unset gemspec.rubyforge_project
+  * tests: drop references to deprecated field rubyforge_project
+  * Bump Standards-Version; no changes needed otherwise
+  * Set Rules-Requires-Root: no
 
   [ Joseph Herlant ]
   * Move away the Gemfile.lock during tests to avoid bundler issues.
@@ -16,7 +21,7 @@ gem2deb (0.45) UNRELEASED; urgency=medium
   * Update version=3 to 4 in d/watch
   * Use gem_name instead of source_package_name in d/upstream/metadata
 
- -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Mon, 23 Sep 2019 01:17:19 +0530
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 13 Nov 2019 23:16:19 -0300
 
 gem2deb (0.44) unstable; urgency=medium
 
