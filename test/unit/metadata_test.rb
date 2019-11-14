@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Sample gem that }
   s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
 
-  s.rubyforge_project = "simplegit"
   s.files             = `/unexisting/git ls-files`.split
   s.executables       = `/unexisting/git ls-files`.split.select { |f| File.executable?(f) }
   s.test_files        = `/unexisting/git ls-files`.split.select { |f| f =~ /^(test|spec|features)/ }
@@ -32,7 +31,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Sample gem that }
   s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
 
-  s.rubyforge_project = "simplegit"
   s.files             = `/unexisting/git ls-files`.split("\n")
   s.executables       = `/unexisting/git ls-files`.split("\n").select { |f| File.executable?(f) }
   s.test_files        = `/unexisting/git ls-files`.split("\n").select { |f| f =~ /^(test|spec|features)/ }
@@ -51,7 +49,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Sample gem that }
   s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
 
-  s.rubyforge_project = "simplegit"
   s.files             = `/unexisting/git ls-files`.split($/)
   s.executables       = `/unexisting/git ls-files`.split($/).select { |f| File.executable?(f) }
   s.test_files        = `/unexisting/git ls-files`.split($/).select { |f| f =~ /^(test|spec|features)/ }
@@ -70,7 +67,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Sample gem that }
   s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
 
-  s.rubyforge_project = "simplegit"
   s.files             = `/unexisting/git ls-files`.split($/).
     select { |f| File.basename(f) != '.foobar' }
   s.executables       = `/unexisting/git ls-files`.split($/).select { |f| File.executable?(f) }

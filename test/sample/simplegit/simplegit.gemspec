@@ -12,8 +12,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Simple gem faking code from git}
   s.description = %q{This gem is used to test the case where dh-make-ruby is called on a directory}
 
-  s.rubyforge_project = "simplegit"
-
   s.files = %w[
     lib
     lib/simplegit.rb
