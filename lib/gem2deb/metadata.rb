@@ -157,8 +157,13 @@ module Gem2Deb
     end
 
     def populate_gemspec_fields
-      if @gemspec && File.exist?('debian/changelog')
+      return unless @gemspec
+      if File.exist?('debian/changelog')
         @gemspec.date = Date.parse(`dpkg-parsechangelog -SDate`.strip)
+      end
+      if @gemspec.respond_to?(:rubyforge_project) # ruby2.5 and earlier
+        # This field is deprecated in ruby2.7, and ignored by it.
+        @gemspec.rubyforge_project = nil
       end
     end
 
