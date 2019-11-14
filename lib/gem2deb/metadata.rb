@@ -33,7 +33,7 @@ module Gem2Deb
       Dir.chdir(source_dir) do
         load_gemspec
       end
-      set_gemspec_date
+      populate_gemspec_fields
       sort_filenames
     end
 
@@ -156,7 +156,7 @@ module Gem2Deb
       spec
     end
 
-    def set_gemspec_date
+    def populate_gemspec_fields
       if @gemspec && File.exist?('debian/changelog')
         @gemspec.date = Date.parse(`dpkg-parsechangelog -SDate`.strip)
       end
