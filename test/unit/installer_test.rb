@@ -90,11 +90,6 @@ class InstallerTest < Gem2DebTestCase
     should 'rewrite shebangs in subdirs of bin/' do
       assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end
-    should 'add a shebang when there is none' do
-      lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang')
-      assert_match %r{/usr/bin/ruby}, lines[0]
-      assert_match %r/puts/, lines[1]
-    end
     should 'not rewrite shebangs non-Ruby scripts' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')
       assert_match %r{/bin/sh}, lines[0]
