@@ -325,6 +325,7 @@ module Gem2Deb
         end
       end
       FileUtils.chmod 0755, 'debian/rules'
+      FileUtils.rm_f 'debian/compat'
     end
 
     def templates
