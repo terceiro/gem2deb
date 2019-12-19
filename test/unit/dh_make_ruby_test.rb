@@ -74,6 +74,11 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
+  should 'produce debian/copyright with FIXMEs in it' do
+    copyright = File.read(File.join(DEBIANIZED_SIMPLE_GEM, 'debian/copyright'))
+    assert copyright =~ /FIXME/
+  end
+
   DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, 'ruby-' + SIMPLE_EXTENSION_DIRNAME)
   SIMPLE_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_EXTENSION + '.tar.gz'
   one_time_setup do

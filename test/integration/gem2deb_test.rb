@@ -22,11 +22,6 @@ class Gem2DebTest < Gem2DebTestCase
     end
   end
 
-  should 'generate a non-lintian-clean copyright file' do
-    changes_file = File.join(self.class.tmpdir, "ruby-simplegem_*.changes")
-    assert_match %r/E: ruby-simplegem: helper-templates-in-copyright/, `lintian #{changes_file}`
-  end
-
   should 'install executables for altbindir' do
     assert_match '/usr/bin/altbindir', `dpkg --contents #{self.class.tmpdir}/ruby-altbindir*.deb`
   end
