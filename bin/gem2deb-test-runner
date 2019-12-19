@@ -146,6 +146,25 @@ export GEM2DEB_TEST_RUNNER = --check-dependencies
 
 =back
 
+=head1 EXIT STATUS
+
+=over
+
+=item
+
+0 if tests pass.
+
+=item
+
+1 if tests fail.
+
+=item
+
+77 if B<--autopkgtest> was passed and B<gem2deb-test-runner> cannot determine
+how to run the test suite.
+
+=back
+
 =head1 SEE ALSO
 
 L<B<dh_ruby>>(1), L<B<gem2deb>>(1)

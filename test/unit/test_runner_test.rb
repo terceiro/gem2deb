@@ -52,4 +52,13 @@ class TestRunnerTest < Gem2DebTestCase
   should_fail_tests 'test/sample/test_runner/rb/fail'
   should_detect_test_runner 'test/sample/test_runner/no_tests'
 
+  should 'exit 77 if --autopkgtest was passed and there ir no test suite' do
+    Dir.chdir('test/sample/test_runner/no_tests') do
+      runner = Gem2Deb::TestRunner.detect!
+      runner.autopkgtest = true
+      runner.expects(:exit).with(77)
+      runner.run_tests
+    end
+  end
+
 end

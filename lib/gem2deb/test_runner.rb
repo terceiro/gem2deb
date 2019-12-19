@@ -83,7 +83,7 @@ module Gem2Deb
         exitstatus = $?.exitstatus
         if exitstatus != 0
           system 'gem', 'list'
-          exit(exitstatus)
+          exit(1)
         end
       else
         fail "E: dependency resolution check requested but no working gemspec available"
@@ -164,6 +164,7 @@ module Gem2Deb
 
     def run(program, *args)
       exitstatus = call(program, *args)
+      exitstatus = 1 if exitstatus != 0
       exit(exitstatus)
     end
 
@@ -276,6 +277,7 @@ module Gem2Deb
       end
       def do_run_tests
         print_banner "Run tests for #{rubyver}: no test suite!"
+        exit(77) if autopkgtest
       end
     end
 
