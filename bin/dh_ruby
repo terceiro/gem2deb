@@ -343,9 +343,8 @@ ruby-mime-types:
   - test/test_mime_type.rb
   - test/test_mime_types.rb
 
-debian/I<ruby-tests.rake> can be used to run the tests with rake(1). If you use
-this file, your package must Build-Depend on the I<rake> package. You can use
-anything you would use in a regular Rakefile, but you must define a default
+debian/I<ruby-tests.rake> can be used to run the tests with rake(1). You can
+use anything you would use in a regular Rakefile, but you must define a default
 task. gem2deb includes a utility test task that makes it easier for you by
 creating a default task automatically. Example:
 
