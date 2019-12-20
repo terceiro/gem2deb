@@ -55,6 +55,16 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal @dh_make_ruby.itp_bug, '#42'
   end
 
+  should 'not make libraries depend on ruby' do
+    dh_make_ruby = Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_SOURCE)
+    assert_not_include dh_make_ruby.binary_package.dependencies, 'ruby | ruby-interpreter'
+  end
+
+  should 'make programs depend on ruby' do
+    dh_make_ruby = Gem2Deb::DhMakeRuby.new(SIMPLE_PROGRAM_SOURCE)
+    assert_include dh_make_ruby.binary_package.dependencies, 'ruby | ruby-interpreter'
+  end
+
   context 'simple gem' do
     %w[
       debian/control

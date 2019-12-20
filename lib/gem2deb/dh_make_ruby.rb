@@ -228,15 +228,18 @@ module Gem2Deb
 
     def read_upstream_source_info
       read_metadata('.')
-      initialize_binary_package
     end
 
     def read_metadata(directory)
       @metadata ||= Gem2Deb::Metadata.new(directory)
+      initialize_binary_package
     end
 
     def initialize_binary_package
       self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
+      if metadata.executables && metadata.executables.size > 0
+        binary_package.dependencies << 'ruby | ruby-interpreter'
+      end
       with_each_runtime_dependency do |dependency|
         binary_package.dependencies << dependency
       end
