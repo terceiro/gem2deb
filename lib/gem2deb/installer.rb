@@ -66,8 +66,10 @@ module Gem2Deb
         else
           ruby_versions
         end
+      dependencies = metadata.get_debian_dependencies(false)
       File.open("debian/#{binary_package}.substvars", "a") do |fd|
         fd.puts "ruby:Versions=#{versions.join(' ')}"
+        fd.puts "ruby:Depends=#{dependencies.join(', ')}"
       end
     end
 

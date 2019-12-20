@@ -250,6 +250,22 @@ first !
 
 =back
 
+=head1 SUBSTITUTION VARIABLES
+
+=over
+
+=item I<${ruby:Depends}>
+
+${ruby:Depends} will expand to the runtime dependencies of the package. This is
+determined by taking the runtime dependencies from the Rubygems metadata, and
+then mapping them to Debian package names.
+
+The relevant packages must be installed during the package build for the
+mapping to be successful (normally they should be hardcoded in the
+Build-Depends: field).
+
+=back
+
 =head1 ENVIRONMENT VARIABLES
 
 =over
