@@ -1,3 +1,9 @@
+gem2deb (1.0) UNRELEASED; urgency=medium
+
+  * 
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Dec 2019 18:10:52 -0300
+
 gem2deb (0.45) unstable; urgency=medium
 
   [ Frank Schaefer ]
