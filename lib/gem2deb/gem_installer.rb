@@ -105,8 +105,7 @@ module Gem2Deb
           'install',
           '--local',
           '--verbose',
-          '--no-rdoc',
-          '--no-ri',
+          '--no-document',
           '--ignore-dependencies',
           '--install-dir', File.join(destdir_base, target_dir),
           gempkg
