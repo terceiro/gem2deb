@@ -24,10 +24,10 @@ module Gem2Deb
 
     def init_builders
       @builders = []
-      if File.exists?('debian/dh_ruby.mk')
+      if File.exist?('debian/dh_ruby.mk')
         @builders << ['make', '-f', 'debian/dh_ruby.mk']
       end
-      if File.exists?('debian/dh_ruby.rake')
+      if File.exist?('debian/dh_ruby.rake')
         @builders << ['rake', '-f', 'debian/dh_ruby.rake']
       end
     end
