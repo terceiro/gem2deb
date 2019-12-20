@@ -19,6 +19,8 @@ require 'tempfile'
 require 'time'
 require 'yaml'
 
+require 'gem2deb/package_name_mapping'
+
 module Gem2Deb
   class Metadata
 
@@ -77,6 +79,10 @@ module Gem2Deb
 
     def dependencies
       gemspec ? gemspec.dependencies : []
+    end
+
+    def debian_dependencies
+      @debian_dependencies ||= calculate_debian_dependencies!
     end
 
     def test_files
@@ -200,6 +206,29 @@ module Gem2Deb
       else
         nil
       end
+    end
+
+    def calculate_debian_dependencies!
+      gem_to_package = Gem2Deb::PackageNameMapping.new
+      result = []
+      if executables && executables.size > 0
+        result << 'ruby | ruby-interpreter'
+      end
+      dependencies.select do |dep|
+        dep.type == :runtime
+      end.each do |dep|
+        dependency = gem_to_package[dep.name]
+        version = dep.requirement.to_s
+        if version == '>= 0'
+          result << dependency
+        else
+          dep.requirements_list.each do |v|
+            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1').gsub(/^=(\s+)/, '>=\1')
+            result << ('%s (%s)' % [dependency, spec])
+          end
+        end
+      end
+      result
     end
 
   end

@@ -176,36 +176,9 @@ module Gem2Deb
     end
 
     def read_metadata(directory)
-      @metadata ||= Gem2Deb::Metadata.new(directory)
-      initialize_binary_package
-    end
-
-    def initialize_binary_package
+      self.metadata ||= Gem2Deb::Metadata.new(directory)
       self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
-      if metadata.executables && metadata.executables.size > 0
-        binary_package.dependencies << 'ruby | ruby-interpreter'
-      end
-      with_each_runtime_dependency do |dependency|
-        binary_package.dependencies << dependency
-      end
-      binary_package
-    end
-
-    def with_each_runtime_dependency
-      (metadata.dependencies).select do |dep|
-        dep.type == :runtime
-      end.each do |dep|
-        dependency = gem_to_package[dep.name]
-        version = dep.requirement.to_s
-        if version == '>= 0'
-          yield(dependency)
-        else
-          dep.requirements_list.each do |v|
-            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1').gsub(/^=(\s+)/, '>=\1')
-            yield('%s (%s)' % [dependency, spec])
-          end
-        end
-      end
+      self.binary_package.dependencies = metadata.debian_dependencies
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
@@ -335,12 +308,11 @@ module Gem2Deb
     class Package
       attr_accessor :name
       attr_accessor :architecture
+      attr_accessor :dependencies
       def initialize(name, architecture = 'all')
         self.name = name
         self.architecture = architecture
-      end
-      def dependencies
-        @dependencies ||= []
+        self.dependencies = []
       end
     end
 
