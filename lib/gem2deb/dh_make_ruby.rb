@@ -17,12 +17,12 @@
 
 require 'gem2deb'
 require 'yaml'
+require 'gem2deb/compat'
 require 'gem2deb/metadata'
 require 'gem2deb/test_runner'
 require 'gem2deb/package_name_mapping'
 require 'rubygems'
 require 'fileutils'
-require 'erb'
 require 'date'
 
 module Gem2Deb
@@ -242,7 +242,8 @@ module Gem2Deb
       templates.each do |template|
         FileUtils.mkdir_p(template.directory)
         maybe_create(template.filename) do |f|
-          f.puts ERB.new(template.data, nil, '<>').result(binding)
+          erb = Gem2Deb::Compat::ERB.new(template.data)
+          f.puts erb.result(binding)
         end
       end
       FileUtils.chmod 0755, 'debian/rules'
