@@ -175,20 +175,6 @@ class DhMakeRubyTest < Gem2DebTestCase
     end
   end
 
-  context 'converting gem name to package name without a cache' do
-    {
-      'foo' => 'ruby-foo',
-      'foo-bar_baz' => 'ruby-foo-bar-baz',
-    }.each do |input,output|
-      setup do
-        @dh_make_ruby = Gem2Deb::DhMakeRuby.new('.')
-      end
-      should "convert #{input} to #{output}" do
-        assert_equal output, @dh_make_ruby.gem_name_to_source_package_name(input)
-      end
-    end
-  end
-
   context 'dh-make-ruby --overwrite' do
     setup do
       @pwd = Dir.pwd

@@ -19,6 +19,7 @@ require 'gem2deb'
 require 'yaml'
 require 'gem2deb/metadata'
 require 'gem2deb/test_runner'
+require 'gem2deb/package_name_mapping'
 require 'rubygems'
 require 'fileutils'
 require 'erb'
@@ -37,6 +38,8 @@ module Gem2Deb
     attr_accessor :gem_version
 
     attr_accessor :metadata
+
+    attr_accessor :gem_to_package
 
     attr_reader :source_package_name
 
@@ -63,7 +66,7 @@ module Gem2Deb
     attr_accessor :overwrite
 
     def initialize(input, options = {})
-      generate_or_update_gem_to_package_data
+      @gem_to_package = Gem2Deb::PackageNameMapping.new
 
       initialize_from_options(options)
       if File.directory?(input)
@@ -94,7 +97,7 @@ module Gem2Deb
       if File.exist?(changelog)
         `dpkg-parsechangelog -l#{changelog} -SSource`.strip
       else
-        gem_name_to_source_package_name(gem_name)
+        gem_to_package[gem_name]
       end
     end
 
@@ -110,70 +113,12 @@ module Gem2Deb
       elsif source_tarball_name =~ /^(.*)-(.*).tar.gz$/
         self.gem_name = $1
         self.gem_version = $2
-        self.source_package_name ||= gem_name_to_source_package_name(gem_name)
+        self.source_package_name ||= gem_to_package[gem_name]
         self.orig_tarball_name = "#{source_package_name}_#{gem_version}.orig.tar.gz"
       else
         raise "Could not determine gem name and version from tarball #{source_tarball_name}"
       end
     end
-
-    def gem_name_to_source_package_name(gem_name)
-      @gem_to_package[gem_name] || 'ruby-' + gem_name.downcase.gsub(/^ruby[-_]|[-_]ruby$/, '').gsub('_', '-')
-    end
-
-    def generate_or_update_gem_to_package_data
-      if Gem2Deb.testing
-        @gem_to_package = { 'rake' => 'rake', 'rails' => 'rails' }
-        return
-      end
-
-      if !File.exists?('/usr/bin/apt-file')
-        puts "E: apt-file not found. Please install the package apt-file"
-        exit 1
-      end
-
-      cache_dir = File.join(ENV['HOME'], '.cache', 'gem2deb')
-      FileUtils.mkdir_p(cache_dir)
-      cache = File.join(cache_dir, 'gem_to_packages.yaml')
-
-      if File.exists?(cache)
-        stat = File.stat(cache)
-        update = (Time.now.to_i - stat.mtime.to_i) > (60*60*24) # keep cache for 24h
-      else
-        update = true
-      end
-
-      if update
-        new_cache = cache + ".new.#{$$}"
-        if system('apt-file search /usr/share/rubygems-integration/ | grep \'.gemspec$\' > ' + new_cache)
-          if File.stat(new_cache).size > 0
-            system('sed', '-i', '-e', 's#/.*/##; s/-[0-9.]\+.gemspec//', new_cache)
-            FileUtils.mv(new_cache, cache)
-          else
-            puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names'
-            puts 'E: to package names but apt-file has an invalid cache. Please run '
-            puts 'E: `apt update` and make sure that `apt-file search` works.'
-            exit 1
-          end
-        else
-          puts 'E: dh-make-ruby needs an up-to-date apt-file cache in order to map gem names to package names'
-          puts 'E: make sure that apt-file has an updated cache (run `apt update`)'
-          exit $?.exitstatus
-        end
-      end
-
-      data = YAML.load_file(cache)
-      unless data.respond_to?(:invert)
-        File.unlink(cache)
-        puts 'E: Failed to load "gem name to package name" cache from'
-        puts '   ' +  cache
-        puts 'I: The existing cache was removed and will be rebuilt next time.'
-        puts 'I: please try again.'
-        exit 1
-      end
-      @gem_to_package = data.invert
-    end
-
 
     def gem_dirname
       [gem_name, gem_version].join('-')
@@ -250,7 +195,7 @@ module Gem2Deb
       (metadata.dependencies).select do |dep|
         dep.type == :runtime
       end.each do |dep|
-        dependency = gem_name_to_source_package_name(dep.name)
+        dependency = gem_to_package[dep.name]
         version = dep.requirement.to_s
         if version == '>= 0'
           yield(dependency)
