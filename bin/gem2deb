@@ -110,6 +110,10 @@ if not File::exists?(gemfile) and gemfile !~ /.gem$/
   end
 end
 
+gemfiledir = File.dirname(gemfile)
+gemfile = File.basename(gemfile)
+Dir.chdir(gemfiledir)
+
 puts "-- Creating source tarball from #{gemfile} ..."
 tarball = Gem2Deb::Gem2Tgz.convert!(gemfile)
 puts "-- Successfully created #{tarball}"
