@@ -1,15 +1,21 @@
 module Gem2Deb
   class PackageNameMapping
-    def initialize
+    attr_reader :data
+
+    def initialize(global = true)
       @data = {}
-      update!
+      if global
+        get_data_from_archive!
+      else
+        get_data_from_installed_packages!
+      end
     end
 
     def [](gem_name)
       @data[gem_name] || 'ruby-' + gem_name.downcase.gsub(/^ruby[-_]|[-_]ruby$/, '').gsub('_', '-')
     end
 
-    def update!
+    def get_data_from_archive!
       if Gem2Deb.testing
         @data = { 'rake' => 'rake', 'rails' => 'rails' }
         return
@@ -59,6 +65,15 @@ module Gem2Deb
         exit 1
       end
       @data = data.invert
+    end
+
+    def get_data_from_installed_packages!
+      @data = `dpkg -S /usr/share/rubygems-integration/*/specifications/*`.lines.inject({}) do |memo, line|
+        pkg, gemspec = line.split
+        _gem = File.basename(gemspec).sub(/-[0-9.]+\.gemspec$/, '')
+        memo[_gem] = pkg
+        memo
+      end
     end
   end
 end

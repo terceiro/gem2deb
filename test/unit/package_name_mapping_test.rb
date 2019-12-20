@@ -18,4 +18,13 @@ class PackageNameMappingTest < Gem2DebTestCase
     end
   end
 
+  context 'using data from installed packages' do
+    setup do
+      @mapping = Gem2Deb::PackageNameMapping.new(false)
+    end
+    should 'have data for mocha' do
+      assert_include @mapping.data.keys, "mocha"
+    end
+  end
+
 end

@@ -81,10 +81,6 @@ module Gem2Deb
       gemspec ? gemspec.dependencies : []
     end
 
-    def debian_dependencies
-      @debian_dependencies ||= calculate_debian_dependencies!
-    end
-
     def test_files
       gemspec ? gemspec.test_files.select { |filename| filename =~ /\.rb$/ } : []
     end
@@ -103,6 +99,10 @@ module Gem2Deb
       else
         Dir.glob(File.join(root, 'bin', '*')).map { |f| File.basename(f) }
       end
+    end
+
+    def get_debian_dependencies(global = true)
+      calculate_debian_dependencies!
     end
 
     protected
@@ -208,8 +208,8 @@ module Gem2Deb
       end
     end
 
-    def calculate_debian_dependencies!
-      gem_to_package = Gem2Deb::PackageNameMapping.new
+    def calculate_debian_dependencies!(global = true)
+      gem_to_package = Gem2Deb::PackageNameMapping.new(global)
       result = []
       if executables && executables.size > 0
         result << 'ruby | ruby-interpreter'

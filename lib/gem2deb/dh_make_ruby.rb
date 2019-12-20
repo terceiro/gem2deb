@@ -178,7 +178,7 @@ module Gem2Deb
     def read_metadata(directory)
       self.metadata ||= Gem2Deb::Metadata.new(directory)
       self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
-      self.binary_package.dependencies = metadata.debian_dependencies
+      self.binary_package.dependencies = metadata.get_debian_dependencies(true)
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
