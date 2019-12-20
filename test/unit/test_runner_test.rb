@@ -56,6 +56,7 @@ class TestRunnerTest < Gem2DebTestCase
     Dir.chdir('test/sample/test_runner/no_tests') do
       runner = Gem2Deb::TestRunner.detect!
       runner.autopkgtest = true
+      runner.stubs(:print_banner)
       runner.expects(:exit).with(77)
       runner.run_tests
     end
