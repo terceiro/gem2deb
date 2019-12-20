@@ -92,7 +92,7 @@ module Gem2Deb
 
         # build .gem
         Dir.chdir(root) do
-          gem(ruby, 'build', gemspec)
+          run_gem(ruby, 'build', gemspec)
           FileUtils.mv(Dir.glob('*.gem').first, tmpdir)
         end
 
@@ -100,7 +100,7 @@ module Gem2Deb
         ENV['make'] = 'make V=1'
         gempkg = Dir.glob(File.join(tmpdir, '*.gem')).first
         target_dir = rubygems_integration_target(rubyver)
-        gem(
+        run_gem(
           ruby,
           'install',
           '--local',
@@ -185,7 +185,7 @@ module Gem2Deb
       end
     end
 
-    def gem(ruby, command, *args)
+    def run_gem(ruby, command, *args)
       run(ruby, '-S', 'gem', command, '--config-file', '/dev/null', '--verbose', *args)
     end
 
