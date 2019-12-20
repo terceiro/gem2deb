@@ -296,4 +296,27 @@ class MetaDataTest < Gem2DebTestCase
 
   end
 
+  context 'calculating Debian dependencies' do
+    setup do
+      @metadata = Gem2Deb::Metadata.new(SIMPLE_GEM_SOURCE)
+      @dependencies = @metadata.get_debian_dependencies(false)
+    end
+    should 'get simple dependency' do
+      assert_include @dependencies, 'ruby-dep'
+    end
+    should 'not use dependencies with exact versions' do
+      assert_include @dependencies, 'ruby-depwithversion (>= 1.0)'
+    end
+    should 'get version with spermy' do
+      assert_include @dependencies, 'ruby-depwithspermy (>= 1.0)'
+    end
+    should 'get version with >' do
+      assert_include @dependencies, 'ruby-depwithgt (>> 1.0)'
+    end
+    should 'get version with two requirements' do
+      assert_include @dependencies, 'ruby-depwith2versions (>= 1.0)'
+      assert_include @dependencies, 'ruby-depwith2versions (<< 2.0)'
+    end
+  end
+
 end
