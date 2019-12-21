@@ -17,6 +17,13 @@ Rake::TestTask.new('test:unit') do |t|
   t.verbose = true
 end
 
+Rake::TestTask.new('test:coverage') do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/*/*_test.rb']
+  t.ruby_opts = ['-rsimplecov']
+  t.verbose = true
+end
+
 Rake::TestTask.new('test:integration') do |t|
   t.libs << 'test'
   t.test_files = FileList['test/integration/*_test.rb']

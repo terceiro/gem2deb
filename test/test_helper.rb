@@ -2,6 +2,11 @@ unless ENV['ADTTMP']
   $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 end
 
+if Kernel.const_defined?('SimpleCov')
+  SimpleCov.start do
+    minimum_coverage 90
+  end
+end
 
 require 'test/unit'
 require 'shoulda-context'
