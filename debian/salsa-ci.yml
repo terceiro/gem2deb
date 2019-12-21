@@ -2,3 +2,12 @@
 include:
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
+
+coverage:
+  image: 'debian:unstable'
+  before_script:
+    - apt-get update
+    - apt-get -q -y -o Debug::pkgProblemResolver=yes build-dep .
+    - apt-get -q -y -o Debug::pkgProblemResolver=yes install ruby-simplecov
+  script:
+    - rake test:coverage
