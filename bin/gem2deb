@@ -26,6 +26,8 @@ $only_source_dir = false
 $only_debian_source = false
 $check_build_deps = true
 $git = nil
+$purge = false
+$generated = []
 dh_make_ruby_options = {}
 
 optparse = OptionParser.new do |opts|
@@ -64,6 +66,10 @@ optparse = OptionParser.new do |opts|
 
   opts.on('-g', '--git', 'Import resulting package to a git repository under the current directory') do |dir|
     $git = File.expand_path('.')
+  end
+
+  opts.on('--purge', 'Purge all non-preexisting files produced') do
+    $purge = true
   end
 
   opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
@@ -113,6 +119,7 @@ if not File::exists?(gemfile) and gemfile !~ /.gem$/
   ensure
     FileUtils.rm_rf(tmpdir)
   end
+  $generated << gemfile
 end
 
 gemfiledir = File.dirname(gemfile)
@@ -121,6 +128,7 @@ Dir.chdir(gemfiledir)
 
 puts "-- Creating source tarball from #{gemfile} ..."
 tarball = Gem2Deb::Gem2Tgz.convert!(gemfile)
+$generated << tarball
 puts "-- Successfully created #{tarball}"
 
 exit(0) if $only_tarball
@@ -140,18 +148,34 @@ ENV['DEB_BUILD_OPTIONS'] =
 dmr.buildpackage($only_debian_source, $check_build_deps)
 puts "-- Debian package successfully built!"
 
+pkg = Dir.chdir(source) { `dpkg-parsechangelog -SSource`.strip }
+version = Dir.chdir(source) { `dpkg-parsechangelog -SVersion`.strip }
+
 if $git
   Dir.chdir(source) do
-    v = `dpkg-parsechangelog -SVersion`.strip
-    s = `dpkg-parsechangelog -SSource`.strip
-    dsc = "../#{s}_#{v}.dsc"
-    cmd = ['gbp', 'import-dsc', dsc, File.join($git, s)]
+    dsc = "../#{pkg}_#{version}.dsc"
+    cmd = ['gbp', 'import-dsc', dsc, File.join($git, pkg)]
     if system(*cmd)
       puts "-- Package imported to git repository!"
     else
       exit(1)
     end
   end
+end
+
+if $purge
+  Dir.chdir(source) do
+    changes = Dir["../#{pkg}_#{version}_*.changes"]
+    `dcmd ls -1 #{changes.join(" ")}`.split.each do |f|
+      $generated << File.join(source, f)
+    end
+  end
+  $generated << source
+  $generated.map! do |f|
+    File.expand_path(f)
+  end
+  run('rm', '-rf', *$generated)
+  puts('-- Intermediate files removed')
 end
 
 __END__
@@ -222,6 +246,13 @@ they make B<gem2deb> stop early.
 
 The import uses B<gbp import-dsc> (see B<gbp-import-dsc(1)>), and thus
 I<git-buildpackage> needs to be installed for this to work.
+
+=item B<--purge>
+
+After bulding the package, remove all files files that were produced by
+gem2deb. This includes source tarballs, Debian package artifacts (.dsc, .deb,
+.changes etc), and even the source directory. This is useful for example when
+used in conjunction with B<--git>.
 
 =item B<--ruby-versions VERSIONS>
 
