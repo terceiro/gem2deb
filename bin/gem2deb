@@ -54,7 +54,7 @@ optparse = OptionParser.new do |opts|
     $only_debian_source = true
   end
 
-  opts.on('-d', '--dont-check-builddeps', 'do not check build dependencies; used for testing') do
+  opts.on('-d', '--no-check-builddeps', 'do not check build dependencies') do
     $check_build_deps = false
   end
 
@@ -200,6 +200,11 @@ build the package).
 =item B<-S>, B<--only-debian-source>
 
 Only build a Debian source package (do not build binary packages).
+
+=item B<-d>, B<--no-check-builddeps>
+
+Do not check build dependencies when building the package. Equivalent to the
+options with the same in B<dpkg-buildpackage(1)>.
 
 =item B<-p PACKAGE>, B<--package PACKAGE>
 
