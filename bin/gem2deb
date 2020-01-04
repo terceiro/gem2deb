@@ -25,6 +25,7 @@ $only_tarball = false
 $only_source_dir = false
 $only_debian_source = false
 $check_build_deps = true
+$git = nil
 dh_make_ruby_options = {}
 
 optparse = OptionParser.new do |opts|
@@ -59,6 +60,10 @@ optparse = OptionParser.new do |opts|
 
   opts.on('-p', '--package PACKAGE', 'specify package name (default: ruby-*)') do |package_name|
     dh_make_ruby_options[:source_package_name] = package_name
+  end
+
+  opts.on('-g', '--git', 'Import resulting package to a git repository under the current directory') do |dir|
+    $git = File.expand_path('.')
   end
 
   opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
@@ -123,7 +128,7 @@ exit(0) if $only_tarball
 puts
 puts "-- Creating Debian source package from #{tarball} ..."
 dmr = Gem2Deb::DhMakeRuby::new(tarball, dh_make_ruby_options)
-dmr.build
+source = dmr.build
 puts "-- Generated Debian source tree in #{dmr.source_dirname}"
 
 exit(0) if  $only_source_dir
@@ -134,6 +139,20 @@ ENV['DEB_BUILD_OPTIONS'] =
   [ENV['DEB_BUILD_OPTIONS'], 'dh_ruby_interactive'].compact.join(' ')
 dmr.buildpackage($only_debian_source, $check_build_deps)
 puts "-- Debian package successfully built!"
+
+if $git
+  Dir.chdir(source) do
+    v = `dpkg-parsechangelog -SVersion`.strip
+    s = `dpkg-parsechangelog -SSource`.strip
+    dsc = "../#{s}_#{v}.dsc"
+    cmd = ['gbp', 'import-dsc', dsc, File.join($git, s)]
+    if system(*cmd)
+      puts "-- Package imported to git repository!"
+    else
+      exit(1)
+    end
+  end
+end
 
 __END__
 =head1 NAME
@@ -186,6 +205,18 @@ Only build a Debian source package (do not build binary packages).
 
 Specify package name (default: ruby-*).
 Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
+
+=item B<-g>, B<--git>
+
+Import the resulting source package, if any, to a git repository under the
+current directory. The git repository will be named after the source package
+(i.e. it is influenced by B<--package>).
+
+Note that B<--only-tarball> or B<--only-source-dir> will prevent this, since
+they make B<gem2deb> stop early.
+
+The import uses B<gbp import-dsc> (see B<gbp-import-dsc(1)>), and thus
+I<git-buildpackage> needs to be installed for this to work.
 
 =item B<--ruby-versions VERSIONS>
 

@@ -41,6 +41,7 @@ Depends: debhelper-compat (= 12),
 Recommends: apt-file,
             build-essential,
             python3-debian
+Suggests: git-buildpackage
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,

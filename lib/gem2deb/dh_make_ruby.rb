@@ -143,12 +143,14 @@ module Gem2Deb
     def build
       if input_directory
         build_in_directory(input_directory)
+        File.expand_path(input_directory)
       else
         Dir.chdir(orig_tarball_dir) do
           create_orig_tarball
           extract
           initialize_from_directory(source_dirname)
           build_in_directory(source_dirname)
+          File.expand_path(source_dirname)
         end
       end
     end
