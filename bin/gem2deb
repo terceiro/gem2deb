@@ -250,7 +250,7 @@ to work.
 
 =item B<--purge>
 
-After bulding the package, remove all files files that were produced by
+After building the package, remove all files files that were produced by
 gem2deb. This includes source tarballs, Debian package artifacts (.dsc, .deb,
 .changes etc), and even the source directory. This is useful for example when
 used in conjunction with B<--git>.
