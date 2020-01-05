@@ -1,11 +1,36 @@
-gem2deb (1.0) UNRELEASED; urgency=medium
-
-  * 
+gem2deb (1.0) unstable; urgency=medium
 
   [ Daniel Leidert ]
   * dh-make-ruby: Add .gitattributes template.
 
- -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Dec 2019 18:10:52 -0300
+  [ Antonio Terceiro ]
+  * Gem2Deb::Installer; only rewrite shebangs of files that have one
+    (Closes: #790331)
+  * dh-make-ruby: delete debian/compat
+  * Drop build-dependency on lintian
+  * gem2deb-test-runner: exit 77 under autopkgtest if test suite is missing
+  * dh_ruby(1): drop advice to Build-Depend on ruby when using
+    debian/ruby-tests.rake gem2deb-test-runner itself already depends on rake,
+    and nowadays even ruby itself does.
+  * dh-make-ruby: don't add interpreter dependencies to libraries
+  * dh_ruby: add support for a ${ruby:Depends} substvar
+  * dh-make-ruby: use ${ruby:Depends} for new packages.
+    Also make these new packages build depend on gem2deb >= 1
+  * Gem2Deb::GemInstaller: call gem with --no-document instead of --no-rdoc
+    --no-rdoc was deprecated and has been removed in ruby 2.7
+  * gem2deb: fix use with .gem files not in the current directory
+  * test/sample/name_clash_multiple: drop unused sample package
+  * test/sample/simpleextension_with_name_clash: drop use case
+  * Gem2Deb::DhMakeRuby: fix warning under ruby2.7
+  * salsa-ci.yml: run test coverage
+  * gem2deb: add -g/--git option.
+    Passing -g/--git will make gem2deb import the resulting source package
+    into a git repository under the current directory.
+  * gem2deb: document -d/--no-check-builddeps
+  * gem2deb: --purge: remove all generated files
+  * gem2deb: --git: use pristine-tar
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 05 Jan 2020 18:23:18 -0300
 
 gem2deb (0.45) unstable; urgency=medium
 
