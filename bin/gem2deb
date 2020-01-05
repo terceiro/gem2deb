@@ -154,7 +154,7 @@ version = Dir.chdir(source) { `dpkg-parsechangelog -SVersion`.strip }
 if $git
   Dir.chdir(source) do
     dsc = "../#{pkg}_#{version}.dsc"
-    cmd = ['gbp', 'import-dsc', dsc, File.join($git, pkg)]
+    cmd = ['gbp', 'import-dsc', '--pristine-tar', dsc, File.join($git, pkg)]
     if system(*cmd)
       puts "-- Package imported to git repository!"
     else
@@ -244,8 +244,9 @@ current directory. The git repository will be named after the source package
 Note that B<--only-tarball> or B<--only-source-dir> will prevent this, since
 they make B<gem2deb> stop early.
 
-The import uses B<gbp import-dsc> (see B<gbp-import-dsc(1)>), and thus
-I<git-buildpackage> needs to be installed for this to work.
+The import uses B<gbp import-dsc --pristine-tar> (see B<gbp-import-dsc(1)>),
+and thus I<git-buildpackage> and B<pristine-tar> need to be installed for this
+to work.
 
 =item B<--purge>
 
