@@ -102,7 +102,7 @@ module Gem2Deb
     end
 
     def get_debian_dependencies(global = true)
-      calculate_debian_dependencies!
+      calculate_debian_dependencies!(global)
     end
 
     protected
