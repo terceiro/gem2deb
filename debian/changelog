@@ -1,3 +1,11 @@
+gem2deb (1.0.1) unstable; urgency=medium
+
+  * Gem2Deb::Metadata: pass global parameter forward.
+    This fixes just building packages without apt-file being instaled.
+  * Gem2Deb::PackageNameMapping: fix getting data from installed packages
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 06 Jan 2020 15:28:03 -0300
+
 gem2deb (1.0) unstable; urgency=medium
 
   [ Daniel Leidert ]
