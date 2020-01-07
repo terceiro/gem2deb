@@ -11,7 +11,7 @@ override_dh_auto_build: $(ruby_versions)
 	mv man/gem2deb/gem2deb-test-runner.1 man/gem2deb-test-runner
 
 override_dh_install:
-	dh_install -pgem2deb $(shell awk '{print("-X" gensub(".*/", "", "g", $$1))}' debian/gem2deb-test-runner.install)
+	dh_install -pgem2deb $(shell mawk '{gsub(".*/", "", $$1); print("-X" $$1)}' debian/gem2deb-test-runner.install)
 	dh_install -pgem2deb-test-runner
 
 .PHONY: $(ruby_versions)
