@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o pipefail
+set -eu
+
+autopkgtest --no-built-binaries test/sample/ruby-autopkgtest-example/ -- null \
+  2>&1 | sed -e 's/^/    /'

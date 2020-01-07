@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -eu
+
+TMPDIR=${AUTOPKGTEST_TMP:-}
+if [ -z "${TMPDIR}" ]; then
+  TMPDIR=$(mktemp -d)
+  trap "rm -rf ${TMPDIR}" INT TERM EXIT
+fi
+
+rc=0
+
+build() {
+  local dir
+  dir="$1"
+  name="$(basename ${dir})"
+  cp -r "${dir}" "${TMPDIR}/${name}"
+  if chronic sh -c "cd ${TMPDIR}/${name} && dpkg-buildpackage -b -us -uc"; then
+    echo "PASS ${name}"
+  else
+    echo "FAIL ${name}"
+    rc=1
+  fi
+}
+
+for deb in test/sample/*/debian; do
+  src=$(dirname $deb)
+  build "$src"
+done
+
+exit "${rc}"

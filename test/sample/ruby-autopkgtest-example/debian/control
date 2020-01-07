@@ -1,0 +1,23 @@
+Source: ruby-autopkgtest-example
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper-compat (= 12),
+               gem2deb (>= 1)
+Standards-Version: 4.4.0
+Vcs-Git: https://salsa.debian.org/ruby-team/ruby-autopkgtest-example.git
+Vcs-Browser: https://salsa.debian.org/ruby-team/ruby-autopkgtest-example
+Homepage: FIXME
+Testsuite: autopkgtest
+XS-Ruby-Versions: all
+Rules-Requires-Root: no
+
+Package: ruby-autopkgtest-example
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${misc:Depends},
+         ${ruby:Depends},
+         ${shlibs:Depends}
+Description: FIXME
+ <insert long description, indented with spaces>

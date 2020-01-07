@@ -1,0 +1,5 @@
+ruby-autopkgtest-example (0.1.0~FIXME-1) UNRELEASED; urgency=medium
+
+  * Initial release (Closes: #nnnn)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 07 Jan 2020 11:12:24 -0300

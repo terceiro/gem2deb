@@ -1,0 +1,3 @@
+Test-Command: gem2deb-test-runner --autopkgtest
+Depends: coreutils
+Restrictions: allow-stderr

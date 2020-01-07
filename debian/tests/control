@@ -1,3 +1,11 @@
 Tests: testsuite
 Depends: @, @builddeps@, build-essential, fakeroot
 Restrictions: rw-build-tree allow-stderr
+
+Tests: gem2deb
+Depends: gem2deb, build-essential, moreutils
+Restrictions: allow-stderr
+
+Tests: gem2deb-test-runner-autopkgtest
+Depends: gem2deb-test-runner, autopkgtest
+Restrictions: allow-stderr
