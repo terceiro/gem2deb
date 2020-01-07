@@ -58,8 +58,8 @@ Depends: rake,
          ruby-test-unit,
          ${misc:Depends},
          ${shlibs:Depends}
-Breaks: gem2deb (<< 0.17~)
-Replaces: gem2deb (<< 0.17~)
+Breaks: gem2deb (<< 1.0.2~)
+Replaces: gem2deb (<< 1.0.2~)
 Description: Debian Ruby packaging suite - tool to run tests
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems.
