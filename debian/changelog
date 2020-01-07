@@ -1,3 +1,13 @@
+gem2deb (1.0.3) unstable; urgency=medium
+
+  * debian/rules: don't duplicate list of files owned by gem2deb-test-runner
+  * gem2deb-test-runner: add Breaks:/Replaces: against gem2deb 1.0.1.
+    This fixes upgrades from 1.0.1 where a file that was supposed to be
+    provided by gem2deb-test-runner was actually included in gem2deb.
+  * debian/rules: fix for use with mawk
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 07 Jan 2020 14:27:19 -0300
+
 gem2deb (1.0.2) unstable; urgency=medium
 
   * autopkgtest: add tests for gem2deb and gem2deb-test-runner
