@@ -212,7 +212,7 @@ module Gem2Deb
       gem_to_package = Gem2Deb::PackageNameMapping.new(global)
       result = []
       if executables && executables.size > 0
-        result << 'ruby | ruby-interpreter'
+        result << 'ruby'
       end
       dependencies.select do |dep|
         dep.type == :runtime
