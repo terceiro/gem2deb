@@ -28,7 +28,7 @@ class DhRubyFixDocsTest < Gem2DebTestCase
         control.puts
         control.puts("Package: #{package}")
         control.puts('Architecture: any')
-        control.puts('Depends: ${shlibs:Depends}, ruby | ruby-interpreter')
+        control.puts('Depends: ${shlibs:Depends}, ruby')
         control.puts('Description: example package')
         control.puts(' Just for testing')
       end

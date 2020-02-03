@@ -57,12 +57,12 @@ class DhMakeRubyTest < Gem2DebTestCase
 
   should 'not make libraries depend on ruby' do
     dh_make_ruby = Gem2Deb::DhMakeRuby.new(SIMPLE_GEM_SOURCE)
-    assert_not_include dh_make_ruby.binary_package.dependencies, 'ruby | ruby-interpreter'
+    assert_not_include dh_make_ruby.binary_package.dependencies, 'ruby'
   end
 
   should 'make programs depend on ruby' do
     dh_make_ruby = Gem2Deb::DhMakeRuby.new(SIMPLE_PROGRAM_SOURCE)
-    assert_include dh_make_ruby.binary_package.dependencies, 'ruby | ruby-interpreter'
+    assert_include dh_make_ruby.binary_package.dependencies, 'ruby'
   end
 
   context 'simple gem' do
