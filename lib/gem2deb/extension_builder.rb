@@ -24,10 +24,12 @@ module Gem2Deb
 
     include Gem2Deb
 
+    attr_reader :root
     attr_reader :extension
     attr_reader :directory
 
-    def initialize(extension)
+    def initialize(root, extension)
+      @root = root
       @extension = extension
       @directory = File.dirname(extension)
     end
@@ -58,8 +60,7 @@ module Gem2Deb
       begin
         # override make environment variable to set V variable to 1 for verbose builds
         env_make_old = ENV['make']
-        ENV['make'] ||= 'make'
-        ENV['make'] += " V=1"
+        ENV['make'] ||= make_cmd
 
         # make sure RakeBuilder uses the correct path to rake
         env_rake_old = ENV['rake']
@@ -109,7 +110,7 @@ module Gem2Deb
 
     def self.build_all_extensions(root, destdir)
       all_extensions(root).each do |extension|
-        ext = new(extension)
+        ext = new(root, extension)
         ext.clean
         ext.build_and_install(destdir)
       end

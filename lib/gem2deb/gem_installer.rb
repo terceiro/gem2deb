@@ -97,7 +97,7 @@ module Gem2Deb
         end
 
         # install .gem
-        ENV['make'] = 'make V=1'
+        ENV['make'] = make_cmd
         gempkg = Dir.glob(File.join(tmpdir, '*.gem')).first
         target_dir = rubygems_integration_target(rubyver)
         run_gem(

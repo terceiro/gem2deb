@@ -67,6 +67,13 @@ module Gem2Deb
     run(*cmd)
   end
 
+  def make_cmd
+    flags = "-fdebug-prefix-map=#{root}=."
+    cc = [ENV.fetch('CC', 'gcc'), flags].join(' ')
+    cxx = [ENV.fetch('CXX', 'g++'), flags].join(' ')
+    "make V=1 CC='#{cc}' CXX='#{cxx}'"
+  end
+
   private
 
   def _format_cmdline(argv)

@@ -24,3 +24,12 @@ Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = false
   pkg.need_tar = false
 end
+
+desc 'build gemspec'
+task :spec => 'simpleextension.gemspec'
+
+file 'simpleextension.gemspec' do
+  File.open('simpleextension.gemspec', 'w') do |f|
+    f.write(spec.to_ruby)
+  end
+end

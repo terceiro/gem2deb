@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -eu
+
+ruby=$(dpkg-parsechangelog -S Source)
+tmpdir=${AUTOPKGTEST_TMP:-/tmp}
+
+cp -r test/sample/simpleextension/ ${tmpdir}
+cd ${tmpdir}/simpleextension/
+rake spec
+dh-make-ruby --offline .
+if [ "$(basename $0)" = "reproducible-extensions-vendor" ]; then
+  sed -i -e '/gem-install/d' debian/rules
+fi
+DEB_BUILD_OPTIONS=nocheck reprotest .
