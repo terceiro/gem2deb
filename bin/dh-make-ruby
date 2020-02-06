@@ -52,6 +52,11 @@ optparse = OptionParser.new do |opts|
     options[:do_wnpp_check] = false
   end
 
+  options[:dependencies] = true
+  opts.on('', '--no-dependencies', 'skip collecting dependencies from the archive') do
+    options[:dependencies] = false
+  end
+
   opts.on('-o', '--offline', 'Do not access the internet for anything') do
     options[:do_wnpp_check] = false
   end
@@ -124,6 +129,11 @@ Displays version information and exits.
 Prevents B<dh-make-ruby> to check wnpp reports to get the number of a possible
 ITP (intend to package) bug report. By default, B<dh-make-ruby> does check these
 reports, which requires an Internet access.
+
+=item B<--no-dependencies>
+
+Skips the dependency detection based on Rubygems and APT metadata. You should
+usually not do this, unless you know what you are doing.
 
 =item B<-o>, B<--offline>
 

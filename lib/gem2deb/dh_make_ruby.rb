@@ -61,14 +61,15 @@ module Gem2Deb
 
     attr_accessor :do_wnpp_check
 
+    attr_accessor :dependencies
+
     attr_accessor :extra_build_dependencies
 
     attr_accessor :overwrite
 
     def initialize(input, options = {})
-      @gem_to_package = Gem2Deb::PackageNameMapping.new
-
       initialize_from_options(options)
+      @gem_to_package = Gem2Deb::PackageNameMapping.new(dependencies)
       if File.directory?(input)
         initialize_from_directory(input)
       else
@@ -180,7 +181,7 @@ module Gem2Deb
     def read_metadata(directory)
       self.metadata ||= Gem2Deb::Metadata.new(directory)
       self.binary_package = Package.new(source_package_name, metadata.has_native_extensions? ? 'any' : 'all')
-      self.binary_package.dependencies = metadata.get_debian_dependencies(true)
+      self.binary_package.dependencies = metadata.get_debian_dependencies(dependencies)
     end
 
     def buildpackage(source_only = false, check_build_deps = true)
