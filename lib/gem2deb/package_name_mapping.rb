@@ -20,7 +20,7 @@ module Gem2Deb
         @data = { 'rake' => 'rake', 'rails' => 'rails' }
         return
       end
-      if !File.exist?('/usr/bin/apt-file')
+      if !system('which apt-file >/dev/null')
         puts "E: apt-file not found. Please install the package apt-file"
         exit 1
       end
