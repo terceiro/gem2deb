@@ -59,7 +59,11 @@ module Gem2Deb
       if self.autopkgtest
         nil
       else
-        (Dir.glob("debian/*/usr/**/rubygems-integration/{all,#{ruby_api_version}}") + Gem.path).join(':')
+        pattern = "debian/*/usr/**/rubygems-integration/{all,#{ruby_api_version}}"
+        local_dirs = Dir.glob(pattern).map do |f|
+          File.expand_path(f)
+        end
+        (local_dirs + Gem.path).join(':')
       end
     end
 
