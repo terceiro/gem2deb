@@ -12,4 +12,4 @@ dh-make-ruby --offline --no-dependencies .
 if [ "$(basename $0)" = "reproducible-extensions-vendor" ]; then
   sed -i -e '/gem-install/d' debian/rules
 fi
-DEB_BUILD_OPTIONS=nocheck reprotest .
+DEB_BUILD_OPTIONS=nocheck reprotest --vary=-fileordering .
