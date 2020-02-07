@@ -10,7 +10,7 @@ License: GPL-2+ (FIXME)
 Files: debian/*
 Copyright: 2013 Antonio Terceiro <terceiro@debian.org>
 License: GPL-2+ (FIXME)
-Comment: the Debian packaging is licensed under the same terms as the original package.
+Comment: The Debian packaging is licensed under the same terms as the source.
 
 License: GPL-2+ (FIXME)
  This program is free software; you can redistribute it
