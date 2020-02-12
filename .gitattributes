@@ -1,0 +1,4 @@
+.gitattributes export-ignore
+
+lib/gem2deb/dh_make_ruby/template/debian/* -export-ignore
+lib/gem2deb/dh_make_ruby/template/debian/.gitattributes -export-ignore
