@@ -12,6 +12,7 @@ gem2deb (1.0.5) unstable; urgency=medium
   * gem2deb-test-runner: add Breaks: against packages with missing test
     suites, affected by "gem2deb-test-runner: exit 77 under autopkgtest if
     test suite is missing" from 1.0
+  * Bump Standards-Version to 4.5.0; no changes needed otherwise
 
   [ Sebastien Badia ]
   * Set Standards-Version to 4.5.0 in template
