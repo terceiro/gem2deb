@@ -249,6 +249,15 @@ module Gem2Deb
           f.puts erb.result(binding)
         end
       end
+      maybe_create("debian/.gitattributes") do |gitattributes|
+        %w[
+          .gitattributes
+          gbp.conf
+          salsa-ci.yml
+        ].each do |f|
+          gitattributes.puts("#{f} export-ignore")
+        end
+      end
       FileUtils.chmod 0755, 'debian/rules'
       FileUtils.rm_f 'debian/compat'
     end
