@@ -8,7 +8,7 @@ gem2deb (1.0.5) unstable; urgency=medium
     - disable container-unfriendly variations
     - skip dependency detection in dh-make-ruby (fixes autopkgtest regression)
   * Revert "dh-make-ruby: Add .gitattributes template."
-  * dh-make-ruby: write debian/.gitattributes programatically (Closes: #951430)
+  * dh-make-ruby: write debian/.gitattributes programmatically (Closes: #951430)
   * gem2deb-test-runner: add Breaks: against packages with missing test
     suites, affected by "gem2deb-test-runner: exit 77 under autopkgtest if
     test suite is missing" from 1.0
