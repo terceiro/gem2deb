@@ -1,3 +1,26 @@
+gem2deb (1.0.5) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * gem2deb-test-runner: pass absolute directory names in GEM_PATH
+  * Gem2Deb::PackageNameMapping: don't hardcode the location of apt-file
+  * dh-make-ruby: add option to skip dependency detection
+  * tests/reproducible-extensions:
+    - disable container-unfriendly variations
+    - skip dependency detection in dh-make-ruby (fixes autopkgtest regression)
+  * Revert "dh-make-ruby: Add .gitattributes template."
+  * dh-make-ruby: write debian/.gitattributes programatically (Closes: #951430)
+  * gem2deb-test-runner: add Breaks: against packages with missing test
+    suites, affected by "gem2deb-test-runner: exit 77 under autopkgtest if
+    test suite is missing" from 1.0
+
+  [ Sebastien Badia ]
+  * Set Standards-Version to 4.5.0 in template
+
+  [ Daniel Leidert ]
+  * Minor wording update for copyright files
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 17 Feb 2020 20:39:55 -0300
+
 gem2deb (1.0.4) unstable; urgency=medium
 
   * Gem2Deb::Metadata: drop alternative dependency on ruby-interpreter
