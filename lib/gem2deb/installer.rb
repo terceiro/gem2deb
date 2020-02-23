@@ -258,10 +258,6 @@ module Gem2Deb
       end
     end
 
-    def installed_ruby_files
-      Dir["debian/#{binary_package}/usr/lib/ruby/vendor_ruby/**/*.rb"]
-    end
-
   end
 
 end
