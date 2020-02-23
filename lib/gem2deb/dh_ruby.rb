@@ -83,9 +83,6 @@ module Gem2Deb
         installer.destdir_base = destdir_for(installer.binary_package, dh_auto_install_destdir)
         installer.install_files_and_build_extensions
         installer.update_shebangs
-      end
-
-      installers.each do |installer|
         installer.install_substvars
         installer.install_gemspec
         installer.install_changelog
