@@ -37,6 +37,14 @@ module Gem2Deb
       VERSION*
     ] + ENV.fetch('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND', '').split
 
+    class NoGemspec < Exception
+      def initialize(root)
+        super("No gemspec found at #{root}")
+      end
+    end
+
+    protected
+
     def whitelist
       INSTALL_WHITELIST
     end
@@ -165,14 +173,6 @@ module Gem2Deb
     def install_gemspec
       # noop; regular installation already installs a gemspec
     end
-
-    class NoGemspec < Exception
-      def initialize(root)
-        super("No gemspec found at #{root}")
-      end
-    end
-
-    protected
 
     def rubygems_integration_target(rubyver)
       if metadata.has_native_extensions?

@@ -24,6 +24,23 @@ module Gem2Deb
       @metadata = Gem2Deb::Metadata.new(@root)
     end
 
+    def install
+      install_files_and_build_extensions
+      update_shebangs
+      install_substvars
+      install_gemspec
+      install_changelog
+    end
+
+    def clean
+      run_make_clean_on_extensions
+    end
+
+    # The public API ends here
+    # ----------------8<----------------8<----------------8<-----------------
+
+    protected
+
     def install_files_and_build_extensions
 
       Gem2Deb::Banner.print "Install files"
@@ -111,8 +128,6 @@ module Gem2Deb
         run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
       end
     end
-
-    protected
 
     def all_ruby_versions_supported?
       ruby_versions == supported_ruby_versions

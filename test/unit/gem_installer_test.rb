@@ -10,9 +10,9 @@ class GemInstallerTest < Gem2DebTestCase
     gem_installer = Gem2Deb::GemInstaller.new('ruby-install-as-gem', PKGDIR)
     gem_installer.destdir_base = INSTALLDIR
 
-    orig_whitelist = gem_installer.whitelist
+    orig_whitelist = gem_installer.send(:whitelist)
     gem_installer.stubs(:whitelist).returns(orig_whitelist + ['whitelisted.md'])
-    silently { gem_installer.install_files_and_build_extensions }
+    silently { gem_installer.send(:install_files_and_build_extensions) }
   end
 
   should 'install files to rubygems-integration directory' do

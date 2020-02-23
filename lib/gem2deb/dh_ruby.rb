@@ -41,7 +41,7 @@ module Gem2Deb
       make.clean
 
       installers.each do |installer|
-        installer.run_make_clean_on_extensions
+        installer.clean
       end
     end
 
@@ -81,11 +81,7 @@ module Gem2Deb
 
       installers.each do |installer|
         installer.destdir_base = destdir_for(installer.binary_package, dh_auto_install_destdir)
-        installer.install_files_and_build_extensions
-        installer.update_shebangs
-        installer.install_substvars
-        installer.install_gemspec
-        installer.install_changelog
+        installer.install
       end
 
       run_tests
