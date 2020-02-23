@@ -64,6 +64,11 @@ class GemInstallerTest < Gem2DebTestCase
     assert_equal Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.size, so.size, "#{so.inspect} expected to have size 1"
   end
 
+  should 'drop executable bit from non-script Ruby files' do
+    lib = installed_path('lib/install_as_gem.rb')
+    assert_equal '100644', File.stat(lib).mode.to_s(8)
+  end
+
   private
 
   def installed_path(file)

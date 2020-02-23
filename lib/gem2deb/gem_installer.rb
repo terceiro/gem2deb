@@ -156,6 +156,10 @@ module Gem2Deb
             # to extensions/ in the top level
             FileUtils::Verbose.rm_f Dir.glob('lib/**/*.so')
 
+            # Fix permissions of lib/**/*.rb
+            # sometime upstream trees have .rb files with the executable bit set
+            FileUtils::Verbose.chmod(0644, Dir['lib/**/*.rb'])
+
             # remove empty directories inside lib/
             if File.directory?('lib')
               run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
