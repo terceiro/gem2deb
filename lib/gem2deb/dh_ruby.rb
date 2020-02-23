@@ -88,6 +88,7 @@ module Gem2Deb
       installers.each do |installer|
         installer.install_substvars
         installer.install_gemspec
+        installer.install_changelog
       end
 
       run_tests

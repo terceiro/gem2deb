@@ -45,8 +45,6 @@ module Gem2Deb
           end
         end
       end
-
-      install_changelog
     end
 
     def update_shebangs
@@ -104,6 +102,13 @@ module Gem2Deb
             end
           end
         end
+      end
+    end
+
+    def install_changelog
+      changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
+      if changelog
+        run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
       end
     end
 
@@ -240,13 +245,6 @@ module Gem2Deb
 
     def installed_ruby_files
       Dir["debian/#{binary_package}/usr/lib/ruby/vendor_ruby/**/*.rb"]
-    end
-
-    def install_changelog
-      changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
-      if changelog
-        run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
-      end
     end
 
   end
