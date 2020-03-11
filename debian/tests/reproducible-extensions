@@ -14,5 +14,5 @@ if [ "$(basename $0)" = "reproducible-extensions-vendor" ]; then
 fi
 DEB_BUILD_OPTIONS=nocheck \
   reprotest \
-    --variations=+all,-fileordering,-user_group,-domain_host \
+    --variations=+all,-kernel,-fileordering,-user_group,-domain_host \
     .
