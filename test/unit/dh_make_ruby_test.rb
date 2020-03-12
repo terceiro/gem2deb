@@ -5,7 +5,7 @@ require 'gem2deb/dh_make_ruby'
 class DhMakeRubyTest < Gem2DebTestCase
 
   DEBIANIZED_SIMPLE_GEM       = File.join(tmpdir, 'ruby-' + SIMPLE_GEM_DIRNAME)
-  SIMPLE_GEM_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_GEM + '.tar.gz'
+  SIMPLE_GEM_UPSTREAM_TARBALL = File.join(tmpdir, SIMPLE_GEM_DIRNAME + '.tar.gz')
   one_time_setup do
     # generate tarball
     Gem2Deb::Gem2Tgz.convert!(SIMPLE_GEM, SIMPLE_GEM_UPSTREAM_TARBALL)
@@ -30,9 +30,9 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert_equal 'ruby-foo-bar', Gem2Deb::DhMakeRuby.new('foo_bar-0.0.1.tar.gz').source_package_name
   end
 
-  should 'not duplicate "ruby" in the name of a package' do
-    assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz').source_package_name
-    assert_equal 'ruby-foo', Gem2Deb::DhMakeRuby.new('foo_ruby-1.2.3.tar.gz').source_package_name
+  should 'duplicate "ruby" in the name of a package' do
+    assert_equal 'ruby-ruby-foo', Gem2Deb::DhMakeRuby.new('ruby_foo-1.2.3.tar.gz').source_package_name
+    assert_equal 'ruby-foo-ruby', Gem2Deb::DhMakeRuby.new('foo_ruby-1.2.3.tar.gz').source_package_name
   end
 
   should 'properly convert CFPropertyList to debian package name' do
@@ -89,7 +89,7 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert copyright =~ /FIXME/
   end
 
-  DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, 'ruby-' + SIMPLE_EXTENSION_DIRNAME)
+  DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, SIMPLE_EXTENSION_DIRNAME)
   SIMPLE_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_EXTENSION + '.tar.gz'
   one_time_setup do
    Gem2Deb::Gem2Tgz.convert!(SIMPLE_EXTENSION, SIMPLE_EXTENSION_UPSTREAM_TARBALL)

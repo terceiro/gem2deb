@@ -12,7 +12,7 @@ module Gem2Deb
     end
 
     def [](gem_name)
-      @data[gem_name] || 'ruby-' + gem_name.downcase.gsub(/^ruby[-_]|[-_]ruby$/, '').gsub('_', '-')
+      @data[gem_name] || 'ruby-' + gem_name.downcase.gsub('_', '-')
     end
 
     def get_data_from_archive!
