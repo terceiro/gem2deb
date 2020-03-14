@@ -1,7 +1,7 @@
 Source: ruby-autopkgtest-example
 Section: ruby
 Priority: optional
-Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Maintainer: Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: Antonio Terceiro <terceiro@debian.org>
 Build-Depends: debhelper-compat (= 12),
                gem2deb (>= 1)

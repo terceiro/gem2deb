@@ -7,7 +7,7 @@ spec = Gem::Specification.new do |s|
   s.version = '1.2.3'
   s.requirements << 'none'
   s.require_path = 'ext'
-  s.author = 'Debian Ruby Extras Maintainers'
+  s.author = 'Debian Ruby Team'
   s.email = 'pkg-ruby-extras-maintainers@lists.alioth.debian.org'
   s.homepage = 'https://wiki.debian.org/Teams/Ruby'
   s.license = 'GPL-3+'
