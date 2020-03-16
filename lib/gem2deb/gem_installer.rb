@@ -24,10 +24,12 @@ module Gem2Deb
     INSTALL_BLACKLIST = %w[
       bin/console
       bin/setup
+      coverage/*
       debian/*
       examples/*
       features/*
       gemfiles/*
+      man/*
       spec/*
       test/*
       tests/*
