@@ -19,7 +19,7 @@ XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${ruby:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: <%= short_description ? short_description : 'FIXME' %>
 <% if long_description %>
-<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
+<%= long_description.lines.map { |l| line = l.strip; ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
 <% else %>
 <%= " <insert long description, indented with spaces>\n" %>
 <% end %>

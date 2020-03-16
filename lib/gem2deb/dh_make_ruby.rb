@@ -138,7 +138,14 @@ module Gem2Deb
     end
 
     def long_description
-      metadata.long_description
+      @long_description ||=
+        begin
+          IO.popen(['fold', '-s', '-w', "79"], mode="r+") do |io|
+            io.write(metadata.long_description)
+            io.close_write
+            io.read
+          end
+        end
     end
 
     def build
