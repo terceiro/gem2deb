@@ -87,6 +87,9 @@ class InstallerTest < Gem2DebTestCase
     should 'rewrite shebangs of programs directly under bin/' do
       assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
     end
+    should 'rewrite shebangs with whitespace around/' do
+      assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/with-spaces')
+    end
     should 'rewrite shebangs in subdirs of bin/' do
       assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end

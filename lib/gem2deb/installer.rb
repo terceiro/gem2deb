@@ -220,7 +220,7 @@ module Gem2Deb
         next if File.directory?(path)
         atomic_rewrite(path) do |input, output|
           old = input.gets
-          if old =~ /^#!\/.*ruby/
+          if old =~ /^#!\s*\/.*ruby/
             puts "Rewriting shebang line of #{path}" if @verbose
             output.puts "#!#{ruby_binary}"
             unless old =~ /#!/
