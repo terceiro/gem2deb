@@ -17,6 +17,7 @@ require 'gem2deb'
 require 'gem2deb/banner'
 require 'gem2deb/installer'
 require 'gem2deb/make'
+require 'gem2deb/source'
 require 'find'
 require 'fileutils'
 
@@ -33,6 +34,7 @@ module Gem2Deb
       @verbose = true
       @skip_checks = nil
       @installer_class = Gem2Deb::Installer
+      @source = Gem2Deb::Source.new
     end
 
     def clean
@@ -70,7 +72,7 @@ module Gem2Deb
 
       dh_auto_install_destdir = argv.first
 
-      make.install(destdir_for(packages.first[:binary_package], dh_auto_install_destdir))
+      make.install(destdir_for(@source.packages.first[:binary_package], dh_auto_install_destdir))
 
       ruby_versions.each do |version|
         if !SUPPORTED_RUBY_VERSIONS.include?(version)
@@ -157,37 +159,10 @@ module Gem2Deb
       @skip_checks
     end
 
-    def packages
-      @packages ||=
-        begin
-          packages = []
-          multibinary = false
-          File.readlines('debian/control').select do |line|
-            if line =~ /^Package:\s*(\S*)\s*$/
-              package = $1
-              packages.push({ :binary_package => package })
-            elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
-              root = $1
-              if packages.last
-                packages.last[:root] = root
-              end
-              multibinary = true
-            end
-          end
-          if multibinary
-            packages.select { |p| p[:root] }
-          else
-            package = packages.first
-            package[:root] = '.'
-            [package]
-          end
-        end
-    end
-
     def installers
       @installers ||=
         begin
-          packages.map do |package|
+          @source.packages.map do |package|
             installer_class.new(
               package[:binary_package],
               package[:root],

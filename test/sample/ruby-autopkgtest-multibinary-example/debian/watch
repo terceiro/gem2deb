@@ -1,0 +1,2 @@
+version=4
+https://gemwatch.debian.net/ruby-autopkgtest-multibinary-example .*/ruby-autopkgtest-multibinary-example-(.*).tar.gz

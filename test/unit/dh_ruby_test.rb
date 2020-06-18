@@ -119,31 +119,6 @@ class DhRubyTest < Gem2DebTestCase
     end
   end
 
-  context "selecting package layout" do
-
-    setup do
-      @dh_ruby = Gem2Deb::DhRuby.new
-      @dh_ruby.verbose = false
-    end
-
-    should 'default to single-binary' do
-      debian_control << 'Package: ruby-foo'
-      debian_control << 'Package: ruby-bar'
-      ruby_foo = { :binary_package => 'ruby-foo', :root => '.' }
-      assert_equal [ruby_foo], @dh_ruby.send(:packages)
-    end
-
-    should 'ignore packages without X-DhRuby-Root when one of them has it' do
-      debian_control << 'Package: ruby-foo'
-      debian_control << 'Package: ruby-bar'
-      debian_control << 'X-DhRuby-Root: bar'
-
-      ruby_bar = { :binary_package => 'ruby-bar', :root => 'bar' }
-      assert_equal [ruby_bar], @dh_ruby.send(:packages)
-    end
-
-  end
-
   context 'DESTDIR' do
     setup do
       @dh_ruby = Gem2Deb::DhRuby.new
