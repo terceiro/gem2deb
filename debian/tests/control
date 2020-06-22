@@ -10,6 +10,10 @@ Tests: gem2deb-test-runner-autopkgtest
 Depends: gem2deb-test-runner, autopkgtest
 Restrictions: allow-stderr
 
+Tests: gem2deb-test-runner-autopkgtest-multibinary
+Depends: gem2deb-test-runner, autopkgtest
+Restrictions: allow-stderr
+
 Tests: reproducible-extensions, reproducible-extensions-vendor
 Depends: gem2deb, build-essential, reprotest, faketime, locales-all
 Restrictions: allow-stderr

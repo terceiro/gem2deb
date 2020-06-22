@@ -20,6 +20,7 @@ require 'tmpdir'
 
 require 'gem2deb/banner'
 require 'gem2deb/metadata'
+require 'gem2deb/source'
 
 module Gem2Deb
   class TestRunner
@@ -29,6 +30,10 @@ module Gem2Deb
     attr_accessor :autopkgtest
     attr_accessor :check_dependencies
     attr_accessor :check_bundler
+
+    def initialize
+      @source = Gem2Deb::Source.new
+    end
 
     def load_path
       if self.autopkgtest
@@ -79,18 +84,20 @@ module Gem2Deb
 
     def do_check_dependencies
       print_banner "Checking Rubygems dependency resolution on #{rubyver}"
-      metadata = Gem2Deb::Metadata.new('.')
-      if metadata.gemspec
-        cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
-        puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
-        system({ 'GEM_PATH' => gem_path }, *cmd)
-        exitstatus = $?.exitstatus
-        if exitstatus != 0
-          system 'gem', 'list'
-          exit(1)
+      @source.packages.each do |pkg|
+        metadata = Gem2Deb::Metadata.new(pkg[:root])
+        if metadata.gemspec
+          cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
+          puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
+          system({ 'GEM_PATH' => gem_path }, *cmd)
+          exitstatus = $?.exitstatus
+          if exitstatus != 0
+            system 'gem', 'list'
+            exit(1)
+          end
+        else
+          fail "E: dependency resolution check requested but no working gemspec available for binary package #{pkg[:binary_package]}"
         end
-      else
-        fail "E: dependency resolution check requested but no working gemspec available"
       end
     end
 
