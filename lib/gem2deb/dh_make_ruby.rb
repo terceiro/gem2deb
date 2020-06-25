@@ -345,6 +345,8 @@ module Gem2Deb
         extra_build_dependencies << 'ruby-rspec' << 'rake'
         maybe_create("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
+# frozen_string_literal: true
+
 require 'gem2deb/rake/spectask'
 
 Gem2Deb::Rake::RSpecTask.new do |spec|
@@ -363,6 +365,8 @@ end
         extra_build_dependencies << 'rake'
         maybe_create("debian/ruby-tests.rake") do |f|
           f.puts <<-EOF
+# frozen_string_literal: true
+
 require 'gem2deb/rake/testtask'
 
 Gem2Deb::Rake::TestTask.new do |t|
