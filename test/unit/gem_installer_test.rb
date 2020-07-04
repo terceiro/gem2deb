@@ -10,9 +10,9 @@ class GemInstallerTest < Gem2DebTestCase
     gem_installer = Gem2Deb::GemInstaller.new('ruby-install-as-gem', PKGDIR)
     gem_installer.destdir_base = INSTALLDIR
 
-    orig_whitelist = gem_installer.whitelist
+    orig_whitelist = gem_installer.send(:whitelist)
     gem_installer.stubs(:whitelist).returns(orig_whitelist + ['whitelisted.md'])
-    silently { gem_installer.install_files_and_build_extensions }
+    silently { gem_installer.send(:install_files_and_build_extensions) }
   end
 
   should 'install files to rubygems-integration directory' do
@@ -62,6 +62,11 @@ class GemInstallerTest < Gem2DebTestCase
   should 'install native extension' do
     so = Dir.glob(INSTALLDIR + '/usr/lib/**/install_as_gem/install_as_gem_native.so')
     assert_equal Gem2Deb::SUPPORTED_RUBY_VERSIONS.keys.size, so.size, "#{so.inspect} expected to have size 1"
+  end
+
+  should 'drop executable bit from non-script Ruby files' do
+    lib = installed_path('lib/install_as_gem.rb')
+    assert_equal '100644', File.stat(lib).mode.to_s(8)
   end
 
   private

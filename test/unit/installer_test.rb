@@ -85,14 +85,17 @@ class InstallerTest < Gem2DebTestCase
     end
 
     should 'rewrite shebangs of programs directly under bin/' do
-      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+      assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/prog')
+    end
+    should 'rewrite shebangs with whitespace around/' do
+      assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/with-spaces')
     end
     should 'rewrite shebangs in subdirs of bin/' do
-      assert_match %r{/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
+      assert_match %r{^#!/usr/bin/ruby}, File.read(self.class.tmpdir + '/rewrite_shebangs/usr/bin/subdir/prog')
     end
     should 'not rewrite shebangs non-Ruby scripts' do
       lines = File.readlines(self.class.tmpdir + '/rewrite_shebangs/usr/bin/shell-script')
-      assert_match %r{/bin/sh}, lines[0]
+      assert_match %r{#!/bin/sh}, lines[0]
     end
     should 'leave programs with correct permissions after rewriting shebangs' do
       assert_equal '100755', '%o' % File.stat(self.class.tmpdir + '/rewrite_shebangs/usr/bin/no-shebang').mode

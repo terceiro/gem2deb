@@ -122,9 +122,9 @@ module Gem2Deb
       else
         gemspec_files = Dir.glob('*.gemspec')
         if gemspec_files.size == 1
-          @gemspec = Gem::Specification.load(gemspec_files.first)
+          @gemspec = load_modified_gemspec(gemspec_files.first)
           if @gemspec.nil?
-            @gemspec = load_modified_gemspec(gemspec_files.first)
+            @gemspec = Gem::Specification.load(gemspec_files.first)
           end
           if @gemspec.nil?
             raise "E: cannot load gemspec #{gemspec_files.first}"

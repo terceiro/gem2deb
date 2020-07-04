@@ -1,7 +1,7 @@
 Source: <%= source_package_name %>
 Section: <%= source_package_name =~ /^ruby-/ && 'ruby' || 'FIXME' %>
 Priority: optional
-Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Maintainer: Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: <%= maintainer['DEBFULLNAME'] %> <<%= maintainer['DEBEMAIL'] %>>
 Build-Depends: debhelper-compat (= 12),
                gem2deb (>= 1), <%= (extra_build_dependencies + binary_package.dependencies).map { |d| ", #{d}" }.join %>
@@ -19,7 +19,7 @@ XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${ruby:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Description: <%= short_description ? short_description : 'FIXME' %>
 <% if long_description %>
-<%= long_description.lines.map { |line| ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
+<%= long_description.lines.map { |l| line = l.strip; ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
 <% else %>
 <%= " <insert long description, indented with spaces>\n" %>
 <% end %>

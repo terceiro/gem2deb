@@ -1,3 +1,24 @@
+gem2deb (1.1) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * dh-make-ruby: don't produce Name and Contact fields in
+    debian/upstream/metadata (Closes: #951022)
+  * Gem2Deb::GemInstaller: remove executable bit from .rb files
+  * dh-make-ruby: drop exception for "ruby" in gem names
+  * Replace "Debian Ruby Extras Maintainers" with "Debian Ruby Team"
+  * Gem2Deb::GemInstaller: don't install coverage/* and man/*
+  * dh-make-ruby: word wrap long description
+  * Gem2Deb::Installer: handle shebangs with whitespace
+  * Gem2Deb::Metadata: try modified gemspec first.
+    If the gemspec does not use git, this should have no effect. For
+    gemspecs that do use git, this should fix the issue when builds done on
+    system where git is present produce mostly-empty packages.
+
+  [ Lucas Kanashiro ]
+  * d/t/reproducible-extensions: add -kernel option to reprotest call
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Apr 2020 10:35:17 -0300
+
 gem2deb (1.0.5~bpo10+1) buster-backports; urgency=medium
 
   * Rebuild for buster-backports.

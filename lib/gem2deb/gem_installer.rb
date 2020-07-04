@@ -24,10 +24,12 @@ module Gem2Deb
     INSTALL_BLACKLIST = %w[
       bin/console
       bin/setup
+      coverage/*
       debian/*
       examples/*
       features/*
       gemfiles/*
+      man/*
       spec/*
       test/*
       tests/*
@@ -36,6 +38,14 @@ module Gem2Deb
     INSTALL_WHITELIST = %w[
       VERSION*
     ] + ENV.fetch('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND', '').split
+
+    class NoGemspec < Exception
+      def initialize(root)
+        super("No gemspec found at #{root}")
+      end
+    end
+
+    protected
 
     def whitelist
       INSTALL_WHITELIST
@@ -148,6 +158,10 @@ module Gem2Deb
             # to extensions/ in the top level
             FileUtils::Verbose.rm_f Dir.glob('lib/**/*.so')
 
+            # Fix permissions of lib/**/*.rb
+            # sometime upstream trees have .rb files with the executable bit set
+            FileUtils::Verbose.chmod(0644, Dir['lib/**/*.rb'])
+
             # remove empty directories inside lib/
             if File.directory?('lib')
               run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
@@ -165,14 +179,6 @@ module Gem2Deb
     def install_gemspec
       # noop; regular installation already installs a gemspec
     end
-
-    class NoGemspec < Exception
-      def initialize(root)
-        super("No gemspec found at #{root}")
-      end
-    end
-
-    protected
 
     def rubygems_integration_target(rubyver)
       if metadata.has_native_extensions?

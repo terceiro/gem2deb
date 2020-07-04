@@ -24,6 +24,23 @@ module Gem2Deb
       @metadata = Gem2Deb::Metadata.new(@root)
     end
 
+    def install
+      install_files_and_build_extensions
+      update_shebangs
+      install_substvars
+      install_gemspec
+      install_changelog
+    end
+
+    def clean
+      run_make_clean_on_extensions
+    end
+
+    # The public API ends here
+    # ----------------8<----------------8<----------------8<-----------------
+
+    protected
+
     def install_files_and_build_extensions
 
       Gem2Deb::Banner.print "Install files"
@@ -45,8 +62,6 @@ module Gem2Deb
           end
         end
       end
-
-      install_changelog
     end
 
     def update_shebangs
@@ -107,7 +122,12 @@ module Gem2Deb
       end
     end
 
-    protected
+    def install_changelog
+      changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
+      if changelog
+        run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
+      end
+    end
 
     def all_ruby_versions_supported?
       ruby_versions == supported_ruby_versions
@@ -200,7 +220,7 @@ module Gem2Deb
         next if File.directory?(path)
         atomic_rewrite(path) do |input, output|
           old = input.gets
-          if old =~ /^#!\/.*ruby/
+          if old =~ /^#!\s*\/.*ruby/
             puts "Rewriting shebang line of #{path}" if @verbose
             output.puts "#!#{ruby_binary}"
             unless old =~ /#!/
@@ -235,17 +255,6 @@ module Gem2Deb
         File.readlines(filename).select { |l| l.valid_encoding? }
       else
         File.readlines(filename)
-      end
-    end
-
-    def installed_ruby_files
-      Dir["debian/#{binary_package}/usr/lib/ruby/vendor_ruby/**/*.rb"]
-    end
-
-    def install_changelog
-      changelog = Dir.glob(File.join(root, 'CHANGELOG*')).first
-      if changelog
-        run("dh_installchangelogs", "-p#{binary_package}", changelog, "upstream")
       end
     end
 
