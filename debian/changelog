@@ -6,7 +6,10 @@ gem2deb (1.2) unstable; urgency=medium
   [ Utkarsh Gupta ]
   * Bump debhelper-compat to 13
 
- -- Antonio Terceiro <terceiro@debian.org>  Mon, 06 Jul 2020 16:52:33 -0300
+  [ Chris Lamb ]
+  * Gem2Deb::GemInstaller: delete mkmf.log from extension dir (Closes: #964772)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 11 Jul 2020 15:58:11 -0300
 
 gem2deb (1.1) unstable; urgency=medium
 
