@@ -143,6 +143,7 @@ module Gem2Deb
           end
 
           if metadata.has_native_extensions?
+            run 'find', 'extensions', '-name', 'mkmf.log', '-delete'
             run 'find', 'extensions', '-name', 'gem_make.out', '-delete'
           else
             FileUtils::Verbose.rm_rf('extensions')
