@@ -18,6 +18,7 @@ require 'fileutils'
 require 'shellwords'
 require 'tmpdir'
 
+require 'gem2deb'
 require 'gem2deb/banner'
 require 'gem2deb/metadata'
 require 'gem2deb/source'
