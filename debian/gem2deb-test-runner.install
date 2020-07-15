@@ -1,5 +1,4 @@
 bin/gem2deb-test-runner                    /usr/bin/
-lib/gem2deb.rb                             /usr/lib/ruby/vendor_ruby
 lib/gem2deb/banner.rb                      /usr/lib/ruby/vendor_ruby/gem2deb
 lib/gem2deb/metadata.rb                    /usr/lib/ruby/vendor_ruby/gem2deb
 lib/gem2deb/package_name_mapping.rb        /usr/lib/ruby/vendor_ruby/gem2deb
