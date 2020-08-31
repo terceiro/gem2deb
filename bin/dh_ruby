@@ -17,7 +17,6 @@
 
 require 'gem2deb'
 require 'gem2deb/dh_ruby'
-require 'gem2deb/setup_rb_installer'
 require 'gem2deb/gem_installer'
 require 'optparse'
 require 'shellwords'
@@ -38,10 +37,6 @@ optparse = OptionParser.new do |opts|
   opts.on('-h', '--help', 'show help') do
     puts opts
     exit
-  end
-
-  opts.on('--setuprb', 'use setup.rb for installation') do
-    engine.installer_class = Gem2Deb::SetupRbInstaller
   end
 
   opts.on('--gem-install', 'install files as a gem') do
@@ -241,12 +236,6 @@ to be installed, but we can't possibly know all possibilities: if a package
 needs to install a directory that is not automatically installed, use
 I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>. If you want to exclude a directory
 from  being installed, use I<DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND>.
-
-=item B<--setuprb>
-
-This option indicates that the build should use I<setup.rb> rather
-than the usual gem-based build. To take effect, this option must come
-first !
 
 =back
 

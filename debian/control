@@ -18,7 +18,6 @@ Build-Depends: dctrl-tools <!nocheck>,
                ruby-all-dev (>= 1:2.5),
                ruby-mocha (>= 0.14.0) <!nocheck>,
                ruby-rspec <!nocheck>,
-               ruby-setup <!nocheck>,
                ruby-shoulda-context <!nocheck>,
                ruby-test-unit <!nocheck>
 Rules-Requires-Root: no
@@ -34,7 +33,6 @@ Depends: debhelper-compat (= 12),
          rake,
          ruby,
          ruby-all-dev (>= 1:2.5),
-         ruby-setup,
          ${misc:Depends},
          ${perl:Depends},
          ${shlibs:Depends}

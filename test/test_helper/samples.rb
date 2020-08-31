@@ -31,9 +31,6 @@ class Gem2DebTestCase
 
     SIMPLE_GIT            = File.join(SAMPLE_DIR, 'simplegit')
 
-    SIMPLE_SETUPRB_NAME    = "simplesetuprb"
-    SIMPLE_SETUPRB_DIRNAME = SIMPLE_SETUPRB_NAME + "-0.0.1"
-
     FANCY_PACKAGE_NAME      = 'Fancy_Package'
     FANCY_PACKAGE           = File.join(SAMPLE_DIR, "#{FANCY_PACKAGE_NAME}/pkg/#{FANCY_PACKAGE_NAME}-0.0.1.gem")
 
