@@ -1,3 +1,18 @@
+gem2deb (1.3) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * Remove rubysetuprb buildsystem (Closes: #969327)
+
+  [ Cédric Boutillier ]
+  * Add .gitattributes to keep unwanted files out of the source package
+
+  [ Antonio Terceiro ]
+  * rake test:coverage: run unit tests only
+  * test_helper: review code coverage requirements
+  * README: update
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 14 Sep 2020 10:41:39 -0300
+
 gem2deb (1.2.1) unstable; urgency=medium
 
   [ Marc Dequènes (Duck) ]
