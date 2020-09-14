@@ -22,10 +22,9 @@ The workflow looks like:
 Alternatively, you can use the gem2deb command, that tries to do
 everything automatically.
 
-The generated Debian source package uses Debhelper 7 with a specific
-build system called "ruby". That buildsystem uses the dh_ruby tool for
-the various steps (clean, build, test, install).
-
+The generated Debian source package uses Debhelper with a specific build system
+called "ruby". That buildsystem uses the dh_ruby tool for the various steps
+(clean, build, test, install).
 
 Building from source and testing this package:
 ==============================================
@@ -40,10 +39,6 @@ sudo debi
 
 Developers:
 Lucas Nussbaum <lucas@debian.org>
-Antonio Terceiro <terceiro@softwarelivre.org>
+Antonio Terceiro <terceiro@debian.org>
 
 License: GPLv3 or later
-
-Current status:
-gem2tgz and dh-make-ruby work.
-dh_ruby is not yet feature-comparable with setup.rb, and needs some work.
