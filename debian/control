@@ -31,7 +31,7 @@ Depends: debhelper-compat (= 12),
          devscripts,
          gem2deb-test-runner (= ${binary:Version}),
          rake,
-         ruby,
+         ruby:any,
          ruby-all-dev (>= 1:2.5),
          ${misc:Depends},
          ${perl:Depends},
@@ -51,7 +51,7 @@ Description: Debian Ruby packaging suite
 Package: gem2deb-test-runner
 Architecture: any
 Depends: rake,
-         ruby | ruby-interpreter,
+         ruby:any | ruby-interpreter,
          ruby-minitest,
          ruby-test-unit,
          ${misc:Depends},
