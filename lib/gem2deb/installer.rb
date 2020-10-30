@@ -101,8 +101,12 @@ module Gem2Deb
           target = File.join(destdir(:root), "/usr/share/rubygems-integration/#{version}/specifications/#{metadata.name}-#{metadata.version}.gemspec")
           puts "generating gemspec at #{target}"
           FileUtils.mkdir_p(File.dirname(target))
+          gemspec = metadata.gemspec.dup
+          # Do not include extensions in the gemspec to avoid bundler not being able to
+          # indentify if the extensions were correctly built. For more info check Bug #972702.
+          gemspec.extensions = []
           File.open(target, 'w') do |file|
-            file.write(metadata.gemspec.to_ruby)
+            file.write(gemspec.to_ruby)
           end
         end
       end
