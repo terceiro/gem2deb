@@ -1,4 +1,4 @@
-gem2deb (1.4) UNRELEASED; urgency=medium
+gem2deb (1.4) unstable; urgency=medium
 
   [ Helmut Grohne ]
   * Annotate ruby interpreter dependencies with :any. (Closes: #970470)
