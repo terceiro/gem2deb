@@ -7,7 +7,8 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Gunnar Wolf <gwolf@debian.org>,
            Cédric Boutillier <boutil@debian.org>,
            Christian Hofstaedtler <zeha@debian.org>,
-           Georg Faerber <georg@debian.org>
+           Georg Faerber <georg@debian.org>,
+           Lucas Kanashiro <kanashiro@debian.org>
 Build-Depends: dctrl-tools <!nocheck>,
                debhelper-compat (= 12),
                devscripts <!nocheck>,
