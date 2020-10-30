@@ -4,8 +4,8 @@ end
 
 if Kernel.const_defined?('SimpleCov')
   SimpleCov.start do
-    track_files 'lib/**/*.rb'
-    minimum_coverage 88
+    add_filter %r{/test/}
+    minimum_coverage 83
   end
 end
 
