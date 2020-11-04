@@ -1,7 +1,7 @@
 ---
 Archive: GitHub (FIXME)
 Bug-Database: <%= homepage ? homepage : 'FIXME'%>/issues
-Bug-Submit: <%= homepage ? homepage : 'FIXME'%>/issues
-Changelog: <%= homepage ? homepage : 'FIXME'%>/tags
+Bug-Submit: <%= homepage ? homepage : 'FIXME'%>/issues/new
+Changelog: <%= homepage ? homepage : 'FIXME'%>/releases
 Repository: <%= homepage ? homepage : 'FIXME'%>.git
 Repository-Browse: <%= homepage ? homepage : 'FIXME'%>

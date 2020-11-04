@@ -6,6 +6,9 @@ gem2deb (1.5) UNRELEASED; urgency=medium
   [ Daniel Leidert ]
   * lib/gem2deb/dh_make_ruby/template/debian/watch: Add regex for matching the
     sources on github.
+  * lib/gem2deb/dh_make_ruby/template/debian/upstream/metadata: Change fields.
+    (Bug-Submit): Point to the URL opening a new issue.
+    (Chaneglog): Use the releases page which contains the changelog.
 
  -- Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>  Wed, 04 Nov 2020 13:00:38 +0100
 
