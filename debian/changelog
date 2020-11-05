@@ -4,6 +4,10 @@ gem2deb (1.5) UNRELEASED; urgency=medium
   * 
 
   [ Daniel Leidert ]
+  * lib/gem2deb/dh_make_ruby.rb, lib/gem2deb/metadata.rb,
+    lib/gem2deb/dh_make_ruby/template/debian/copyright: Determine the
+    Upstream-Contact field in d/copyright using the email field in the gemspec
+    or a github URL.
   * lib/gem2deb/dh_make_ruby/template/debian/watch: Add regex for matching the
     sources on github.
   * lib/gem2deb/dh_make_ruby/template/debian/upstream/metadata: Change fields.

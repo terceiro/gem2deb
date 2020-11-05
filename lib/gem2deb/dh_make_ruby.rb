@@ -133,6 +133,14 @@ module Gem2Deb
       metadata.homepage
     end
 
+    def contact
+      if metadata.email
+        metadata.email
+      elsif metadata.homepage
+        metadata.homepage + '/issues'
+      end
+    end
+
     def short_description
       metadata.short_description
     end

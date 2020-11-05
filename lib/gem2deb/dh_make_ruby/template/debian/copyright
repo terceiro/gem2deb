@@ -1,5 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: <%= gem_name %>
+Upstream-Contact: <%= contact ? contact : 'FIXME'%>/issues
 Source: <%= homepage ? homepage : 'FIXME'%>
 
 Files: *

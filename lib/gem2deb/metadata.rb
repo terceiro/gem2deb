@@ -69,6 +69,10 @@ module Gem2Deb
       gemspec && gemspec.homepage
     end
 
+    def email
+      gemspec && gemspec.email
+    end
+
     def short_description
       gemspec && gemspec.summary
     end
