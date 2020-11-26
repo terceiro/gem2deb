@@ -1,7 +1,7 @@
 gem2deb (1.5) UNRELEASED; urgency=medium
 
   [ Debian Ruby Team ]
-  * 
+  *
 
   [ Daniel Leidert ]
   * lib/gem2deb/dh_make_ruby.rb, lib/gem2deb/metadata.rb,
