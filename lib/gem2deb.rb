@@ -88,10 +88,20 @@ module Gem2Deb
     @host_arch ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
   end
 
+  def default_compiler(name)
+    @default_compiler ||= {}
+    @default_compiler[name] ||=
+      if build_arch != host_arch
+        "#{host_arch}-#{name}"
+      else
+        name
+      end
+  end
+
   def make_cmd
     flags = "-fdebug-prefix-map=#{root}=."
-    cc = [ENV.fetch('CC', 'gcc'), flags].join(' ')
-    cxx = [ENV.fetch('CXX', 'g++'), flags].join(' ')
+    cc = [ENV.fetch('CC', default_compiler("gcc")), flags].join(' ')
+    cxx = [ENV.fetch('CXX', default_compiler("g++")), flags].join(' ')
     "make V=1 CC='#{cc}' CXX='#{cxx}'"
   end
 
