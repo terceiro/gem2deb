@@ -47,9 +47,9 @@ module Gem2Deb
 
   LIBDIR = File.expand_path(File.dirname(__FILE__))
 
-  def run(*argv)
+  def run(*argv, env={})
     puts(_format_cmdline(argv)) if Gem2Deb.verbose
-    system(*argv)
+    system(*argv, env)
     if $?.exitstatus != 0
       raise Gem2Deb::CommandFailed, _format_cmdline(argv)
     end
@@ -62,7 +62,30 @@ module Gem2Deb
       cmd.unshift("-I", LIBDIR)
     end
     cmd.unshift(ruby)
-    run(*cmd)
+    run(*cmd, crossbuild_options(ruby))
+  end
+
+  def crossbuild_options(ruby)
+    @crossbuild_options ||= {}
+    @crossbuild_options[ruby] ||=
+      begin
+        if build_arch != host_arch
+          version = IO.popen([ruby, "-e", "puts RbConfig::CONFIG['ruby_version']"]).read.strip
+          {
+            "RUBYLIB": "/usr/lib/#{host_arch}/ruby-crossbuild/#{version}",
+          }
+        else
+          {}
+        end
+      end
+  end
+
+  def build_arch
+    @build_arch ||= `dpkg-architecture -qDEB_BUILD_MULTIARCH`.strip
+  end
+
+  def host_arch
+    @host_arch ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
   end
 
   def make_cmd
