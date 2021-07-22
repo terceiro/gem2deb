@@ -47,7 +47,7 @@ Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
  then dh-make-ruby creates a Debian source package from that archive. That
- Debian package uses the included Debhelper7 helper, dh_ruby, to generate
+ Debian package uses the included Debhelper helper, dh_ruby, to generate
  a proper Debian package. Both pure-ruby and native packages are supported.
 
 Package: gem2deb-test-runner

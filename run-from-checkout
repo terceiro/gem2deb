@@ -16,6 +16,6 @@ fi
 
 export PATH=${basedir}/bin:$PATH
 export RUBYLIB=${basedir}/lib
-export PERL5LIB=${basedir}/debhelper7
+export PERL5LIB=${basedir}/debhelper
 
 "$@"

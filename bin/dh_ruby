@@ -94,7 +94,7 @@ end
 __END__
 =head1 NAME
 
-dh_ruby - debhelper7 build system for Ruby software
+dh_ruby - debhelper build system for Ruby software
 
 =head1 SYNOPSIS
 
@@ -103,7 +103,7 @@ B<dh_ruby> [I<OPTIONS>]
 
 =head1 DESCRIPTION
 
-B<dh_ruby> is a Debhelper 7 build system for Ruby software. It will
+B<dh_ruby> is a Debhelper build system for Ruby software. It will
 automatically build and install files contained in Ruby packages, trying to
 work as close to Rubygems as possible but respecting Debian standards for Ruby
 packages.

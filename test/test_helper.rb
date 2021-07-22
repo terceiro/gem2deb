@@ -166,8 +166,8 @@ class Gem2DebTestCase < Test::Unit::TestCase
   # system-wide installed versions.
   def self.run_command(cmd)
     if !$environment_setup && !ENV['ADTTMP']
-      # setup Perl lib for debhelper7
-      perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper7')
+      # setup Perl lib for debhelper
+      perl5lib = File.join(GEM2DEB_ROOT_SOURCE_DIR, 'debhelper')
 
       # setup the environment
       ENV['PERL5LIB'] = perl5lib
