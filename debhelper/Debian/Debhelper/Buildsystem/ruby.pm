@@ -15,7 +15,9 @@ sub DESCRIPTION {
 
 sub check_auto_buildable {
     my $this = shift;
-    return ( -e $this->get_sourcepath("metadata.yml") ) ? 1 : 0;
+    my $metadata_yaml = -e $this->get_sourcepath("metadata.yml");
+    my $gemspec = scalar(glob("*.gemspec"));
+    return ( $metadata_yaml || $gemspec ) ? 1 : 0;
 }
 
 sub new {
