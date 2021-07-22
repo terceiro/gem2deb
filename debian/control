@@ -42,6 +42,7 @@ Recommends: apt-file,
             python3-debian
 Suggests: git-buildpackage,
           pristine-tar
+Provides: dh-sequence-ruby
 Description: Debian Ruby packaging suite
  gem2deb is a set of tools to create Debian package from ruby software
  distributed with Rubygems. gem2tgz converts the .gem file to a tar archive,
