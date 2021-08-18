@@ -14,6 +14,10 @@ gem2deb (1.5) UNRELEASED; urgency=medium
     (Bug-Submit): Point to the URL opening a new issue.
     (Chaneglog): Use the releases page which contains the changelog.
 
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on ruby-mocha.
+
  -- Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>  Wed, 04 Nov 2020 13:00:38 +0100
 
 gem2deb (1.4) unstable; urgency=medium
