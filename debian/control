@@ -10,7 +10,7 @@ Uploaders: Lucas Nussbaum <lucas@debian.org>,
            Georg Faerber <georg@debian.org>,
            Lucas Kanashiro <kanashiro@debian.org>
 Build-Depends: dctrl-tools <!nocheck>,
-               debhelper-compat (= 12),
+               debhelper-compat (= 13),
                devscripts <!nocheck>,
                dpkg-dev (>= 1.17.14),
                python3-debian <!nocheck>,

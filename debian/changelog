@@ -17,6 +17,7 @@ gem2deb (1.5) UNRELEASED; urgency=medium
   [ Debian Janitor ]
   * Remove constraints unnecessary since buster:
     + Build-Depends: Drop versioned constraint on ruby-mocha.
+  * Bump debhelper from old 12 to 13.
 
  -- Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>  Wed, 04 Nov 2020 13:00:38 +0100
 
