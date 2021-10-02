@@ -212,6 +212,23 @@ module Gem2Deb
       end
     end
 
+    EPOCH = {
+      # rails
+      "ruby-actioncable"   => "2",
+      "ruby-actionmailbox" => "2",
+      "ruby-actionmailer"  => "2",
+      "ruby-actionpack"    => "2",
+      "ruby-actiontext"    => "2",
+      "ruby-actionview"    => "2",
+      "ruby-activejob"     => "2",
+      "ruby-activemodel"   => "2",
+      "ruby-activerecord"  => "2",
+      "ruby-activestorage" => "2",
+      "ruby-activesupport" => "2",
+      "ruby-rails"         => "2",
+      "ruby-railties"      => "2",
+    }
+
     def calculate_debian_dependencies!(global = true)
       gem_to_package = Gem2Deb::PackageNameMapping.new(global)
       result = []
@@ -226,9 +243,18 @@ module Gem2Deb
         if version == '>= 0'
           result << dependency
         else
-          dep.requirements_list.each do |v|
-            spec = v.gsub('~>', '>=').gsub(/>(\s+)/, '>>\1').gsub(/<(\s+)/, '<<\1').gsub(/^=(\s+)/, '>=\1')
-            result << ('%s (%s)' % [dependency, spec])
+          dep.requirements_list.each do |spec|
+            op, v = spec.split
+            if EPOCH.has_key?(dependency)
+              v = EPOCH[dependency] + ":" + v
+            end
+            newop = {
+              "~>" => ">=",
+              ">" => ">>",
+              "<" => "<<",
+              "=" => ">=",
+            }[op] || op
+            result << ('%s (%s %s)' % [dependency, newop, v])
           end
         end
       end

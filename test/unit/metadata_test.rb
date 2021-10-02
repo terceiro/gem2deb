@@ -317,6 +317,10 @@ class MetaDataTest < Gem2DebTestCase
       assert_include @dependencies, 'ruby-depwith2versions (>= 1.0)'
       assert_include @dependencies, 'ruby-depwith2versions (<< 2.0)'
     end
+    should 'treat rails versions as a special case' do
+      assert_include @dependencies, 'ruby-railties (>= 2:6.0)'
+      assert_include @dependencies, 'ruby-railties (<< 2:7.0)'
+    end
   end
 
 end
