@@ -1,7 +1,4 @@
-gem2deb (1.5) UNRELEASED; urgency=medium
-
-  [ Debian Ruby Team ]
-  *
+gem2deb (1.5) unstable; urgency=medium
 
   [ Daniel Leidert ]
   * lib/gem2deb/dh_make_ruby.rb, lib/gem2deb/metadata.rb,
@@ -20,7 +17,13 @@ gem2deb (1.5) UNRELEASED; urgency=medium
   * Bump debhelper from old 12 to 13.
   * Update standards version to 4.5.1, no changes needed.
 
- -- Debian Ruby Team <pkg-ruby-extras-maintainers@lists.alioth.debian.org>  Wed, 04 Nov 2020 13:00:38 +0100
+  [ Antonio Terceiro ]
+  * metadata: handle epoch in the versions of rails packages (Closes: #792489)
+  * gem installer: remove empty plugins/ directory
+  * gem2deb-test-runner: drop alternative dependency on ruby-interpreter
+  * Bump Standards-Version; no changes needed
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 15 Oct 2021 08:24:40 -0300
 
 gem2deb (1.4) unstable; urgency=medium
 
