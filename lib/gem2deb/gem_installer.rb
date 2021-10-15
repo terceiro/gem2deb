@@ -149,6 +149,11 @@ module Gem2Deb
             FileUtils::Verbose.rm_rf('extensions')
           end
 
+          # remove empty plugins/ directory
+          if Dir.exists?('plugins') && Dir.empty?('plugins')
+              FileUtils::Verbose.rmdir('plugins')
+          end
+
           FileUtils::Verbose.cd(File.join('gems', "#{metadata.name}-#{metadata.version}")) do
             # remove source of compiled extensions
             gemspec_data.extensions.each do |ext|
