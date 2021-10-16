@@ -21,7 +21,14 @@ module Gem2Deb
 
   class GemInstaller < Installer
 
-    INSTALL_BLACKLIST = %w[
+    def self.get_list(name, obsolete_msg = nil)
+      if ENV.has_key?(name) && obsolete_msg
+        $stderr.puts("W: #{obsolete_msg}")
+      end
+      ENV.fetch(name, '').split
+    end
+
+    INSTALL_EXCLUDE_LIST = %w[
       bin/console
       bin/setup
       coverage/*
@@ -33,11 +40,11 @@ module Gem2Deb
       spec/*
       test/*
       tests/*
-    ] + ENV.fetch('DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND', '').split
+    ] + get_list('DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND') + get_list('DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND', 'DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND instead')
 
-    INSTALL_WHITELIST = %w[
+    INSTALL_INCLUDE_LIST = %w[
       VERSION*
-    ] + ENV.fetch('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND', '').split
+    ] + get_list('DH_RUBY_GEM_INSTALL_INCLUDE_APPEND') + get_list('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_INCLUDE_APPEND instead')
 
     class NoGemspec < Exception
       def initialize(root)
@@ -47,12 +54,12 @@ module Gem2Deb
 
     protected
 
-    def whitelist
-      INSTALL_WHITELIST
+    def include_list
+      INSTALL_INCLUDE_LIST
     end
 
-    def blacklist
-      INSTALL_BLACKLIST
+    def exclude_list
+      INSTALL_EXCLUDE_LIST
     end
 
     def install_files_and_build_extensions
@@ -76,14 +83,14 @@ module Gem2Deb
           gemspec_data.files = Dir['**/*']
         end
         gemspec_data.files.reject! do |entry|
-          if whitelist.any? { |incl| File.fnmatch(incl, entry) }
-            false # whitelisted, don't reject
+          if include_list.any? { |incl| File.fnmatch(incl, entry) }
+            false # included, don't reject
           else
             if !entry.index('/')
               true # exclude all top-level files by default
             else
-              # reject if blacklisted
-              blacklist.any? { |exclude| File.fnmatch(exclude, entry) }
+              # reject if excluded
+              exclude_list.any? { |exclude| File.fnmatch(exclude, entry) }
             end
           end
         end

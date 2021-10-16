@@ -400,7 +400,7 @@ gem2deb (0.33) unstable; urgency=medium
 gem2deb (0.32) unstable; urgency=medium
 
   * --gem-install: append new directories to the whitelist from the
-    $DH_RUBY_GEM_INSTALL_WHITELIST_APPEND environment variable
+    $DH_RUBY_GEM_INSTALL_INCLUDELIST_APPEND environment variable
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 23 Aug 2016 11:26:19 -0300
 
