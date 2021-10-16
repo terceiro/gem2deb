@@ -10,8 +10,8 @@ class GemInstallerTest < Gem2DebTestCase
     gem_installer = Gem2Deb::GemInstaller.new('ruby-install-as-gem', PKGDIR)
     gem_installer.destdir_base = INSTALLDIR
 
-    orig_whitelist = gem_installer.send(:whitelist)
-    gem_installer.stubs(:whitelist).returns(orig_whitelist + ['whitelisted.md'])
+    orig_include_list = gem_installer.send(:include_list)
+    gem_installer.stubs(:include_list).returns(orig_include_list + ['included.md'])
     silently { gem_installer.send(:install_files_and_build_extensions) }
   end
 
@@ -51,8 +51,8 @@ class GemInstallerTest < Gem2DebTestCase
     assert_file_exists installed_path("VERSION")
   end
 
-  should 'install whitelisted file' do
-    assert_file_exists installed_path("whitelisted.md")
+  should 'install file in include_list' do
+    assert_file_exists installed_path("included.md")
   end
 
   should 'not install extra_rdoc_files' do

@@ -231,11 +231,11 @@ the files, instead of the homegrown installer. Native packages will be
 installed to I</usr/lib/$ARCH/rubygems-integration/$RUBY_VERSION>, while pure
 Ruby packages will be installed to I</usr/share/rubygems-integration/all>.
 
-There is an internal whitelist of directories from the source package that need
+There is an internal include list of directories from the source package that need
 to be installed, but we can't possibly know all possibilities: if a package
 needs to install a directory that is not automatically installed, use
-I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>. If you want to exclude a directory
-from  being installed, use I<DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND>.
+I<DH_RUBY_GEM_INSTALL_INCLUDE_APPEND>. If you want to exclude a directory
+from  being installed, use I<DH_RUBY_GEM_INSTALL_EXCLUDELIST_APPEND>.
 
 =back
 
@@ -301,7 +301,7 @@ provide custom metadata for the Debian package.
 In the case there are more than one .gemspec in the source package root, you
 will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
 
-=item I<DH_RUBY_GEM_INSTALL_WHITELIST_APPEND>.
+=item I<DH_RUBY_GEM_INSTALL_INCLUDE_APPEND>.
 
 When using --gem-install, this variable adds B<files> to the list of files that
 need to be installed. Entries must be separated by spaces, and can be either
@@ -310,17 +310,17 @@ exact filenames, of glob expressions (e.g. I<*.txt>, I<foo/*>).
 Directories cannot be added directly, only files. If you want to include an
 entire directory, say I<foo>, use a glob expression like I<foo/*>.
 
-Note that by default all top-level files are automatically blacklisted, except
+Note that by default all top-level files are automatically excluded, except
 I<VERSION*> which is used by some packages. If you need a top-level file to be
-installed, you need to whitelist it.
+installed, you need to explicit list it as included.
 
-=item I<DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND>.
+=item I<DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND>.
 
 When using --gem-install, this variable adds files to the list of files that
 SHOULD NOT be installed. Entries must be separated by spaces, and must be
 either specific filenames, or glob expressions (e.g. I<*.txt>).
 
-Directories cannot be blacklisted directly. To blacklist an entire directory,
+Directories cannot be excluded directly. To exclude an entire directory,
 use a glob expression such as I<foo/*>.
 
 =back
