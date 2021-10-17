@@ -179,6 +179,11 @@ module Gem2Deb
             if File.directory?('lib')
               run 'find', 'lib/', '-type', 'd', '-empty', '-delete'
             end
+
+            # remove empty directories inside ext/
+            if File.directory?('ext')
+              run 'find', 'ext/', '-type', 'd', '-empty', '-delete'
+            end
           end
         end
 
