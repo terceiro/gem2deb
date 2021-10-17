@@ -1,3 +1,12 @@
+gem2deb (1.6) unstable; urgency=medium
+
+  * debian/.gitattributes: add newline at the end
+  * dh-make: bump Standards-Version in template to 4.6.0
+  * Gem2Deb::GemInstaller: replace whitelist/blacklist with include/exclude
+  * Gem2Deb::GemInstaller: remove empty directories inside ext/ as well
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 17 Oct 2021 10:11:35 -0300
+
 gem2deb (1.5) unstable; urgency=medium
 
   [ Daniel Leidert ]
