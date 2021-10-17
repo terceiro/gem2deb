@@ -32,6 +32,9 @@ gem2deb (1.5) unstable; urgency=medium
   * gem2deb-test-runner: drop alternative dependency on ruby-interpreter
   * Bump Standards-Version; no changes needed
 
+  [ Helmut Grohne ]
+  * Provide dh-sequence-ruby from gem2deb (Closes: #991099)
+
  -- Antonio Terceiro <terceiro@debian.org>  Fri, 15 Oct 2021 08:24:40 -0300
 
 gem2deb (1.4) unstable; urgency=medium
