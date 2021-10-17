@@ -40,11 +40,11 @@ module Gem2Deb
       spec/*
       test/*
       tests/*
-    ] + get_list('DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND') + get_list('DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND', 'DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND instead')
+    ] + get_list('DH_RUBY_GEM_INSTALL_EXCLUDE') + get_list('DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND', 'DH_RUBY_GEM_INSTALL_BLACKLIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_EXCLUDE instead')
 
     INSTALL_INCLUDE_LIST = %w[
       VERSION*
-    ] + get_list('DH_RUBY_GEM_INSTALL_INCLUDE_APPEND') + get_list('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_INCLUDE_APPEND instead')
+    ] + get_list('DH_RUBY_GEM_INSTALL_INCLUDE') + get_list('DH_RUBY_GEM_INSTALL_WHITELIST_APPEND is deprecated, please use DH_RUBY_GEM_INSTALL_INCLUDE instead')
 
     class NoGemspec < Exception
       def initialize(root)

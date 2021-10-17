@@ -234,7 +234,7 @@ Ruby packages will be installed to I</usr/share/rubygems-integration/all>.
 There is an internal include list of directories from the source package that need
 to be installed, but we can't possibly know all possibilities: if a package
 needs to install a directory that is not automatically installed, use
-I<DH_RUBY_GEM_INSTALL_INCLUDE_APPEND>. If you want to exclude a directory
+I<DH_RUBY_GEM_INSTALL_INCLUDE>. If you want to exclude a directory
 from  being installed, use I<DH_RUBY_GEM_INSTALL_EXCLUDELIST_APPEND>.
 
 =back
@@ -301,7 +301,7 @@ provide custom metadata for the Debian package.
 In the case there are more than one .gemspec in the source package root, you
 will I<need> to use DH_RUBY_GEMSPEC to instruct dh_ruby about which one to use.
 
-=item I<DH_RUBY_GEM_INSTALL_INCLUDE_APPEND>.
+=item I<DH_RUBY_GEM_INSTALL_INCLUDE>.
 
 When using --gem-install, this variable adds B<files> to the list of files that
 need to be installed. Entries must be separated by spaces, and can be either
@@ -314,7 +314,7 @@ Note that by default all top-level files are automatically excluded, except
 I<VERSION*> which is used by some packages. If you need a top-level file to be
 installed, you need to explicit list it as included.
 
-=item I<DH_RUBY_GEM_INSTALL_EXCLUDE_APPEND>.
+=item I<DH_RUBY_GEM_INSTALL_EXCLUDE>.
 
 When using --gem-install, this variable adds files to the list of files that
 SHOULD NOT be installed. Entries must be separated by spaces, and must be
