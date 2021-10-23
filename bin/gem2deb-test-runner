@@ -43,13 +43,6 @@ optparse =  OptionParser.new do |opts|
   end
 
   opts.on(
-    '-d', '--check-dependencies-only',
-    "Check dependencies, and don't run tests"
-  ) do
-    puts('I: the -d/--check-dependencies-only option is deprecated and will be ignored.')
-  end
-
-  opts.on(
     '-b', '--check-bundler',
     "Check loading the package under bundler"
   ) do
