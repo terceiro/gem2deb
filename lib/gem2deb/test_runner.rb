@@ -182,10 +182,9 @@ module Gem2Deb
     end
 
     def call(program, *args)
-      rubylib = load_path.join(':')
       cmd = [program] + args
 
-      rlib = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + rubylib
+      rubylib = (ENV['RUBYLIB'] ? ENV['RUBYLIB'] + ':' : '') + load_path.join(':')
       puts "RUBYLIB=#{rubylib} GEM_PATH=#{gem_path} " + cmd.shelljoin
 
       if autopkgtest
@@ -193,7 +192,7 @@ module Gem2Deb
         move_away 'ext'
         move_away 'Gemfile.lock'
       end
-      system({ 'RUBYLIB' => rlib, 'GEM_PATH' => gem_path }, *cmd)
+      system({ 'RUBYLIB' => rubylib, 'GEM_PATH' => gem_path }, *cmd)
       exitstatus = $?.exitstatus
       if autopkgtest
         restore 'lib'
