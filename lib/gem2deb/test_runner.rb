@@ -188,30 +188,31 @@ module Gem2Deb
       puts "RUBYLIB=#{rubylib} GEM_PATH=#{gem_path} " + cmd.shelljoin
 
       if autopkgtest
-        move_away 'lib'
-        move_away 'ext'
-        move_away 'Gemfile.lock'
+        move_away_list ['lib', 'ext', 'Gemfile.lock']
+      else
+        move_away_list = []
       end
-      system({ 'RUBYLIB' => rubylib, 'GEM_PATH' => gem_path }, *cmd)
-      exitstatus = $?.exitstatus
-      if autopkgtest
-        restore 'lib'
-        restore 'ext'
-        restore 'Gemfile.lock'
-      end
-      exitstatus
-    end
 
-    def move_away(dir)
-      if File.exist?(dir)
-        mv dir, '.gem2deb.' + dir
+      move_away(*move_away_list) do
+        system({ 'RUBYLIB' => rubylib, 'GEM_PATH' => gem_path }, *cmd)
+        $?.exitstatus
       end
     end
 
-    def restore(dir)
-      if File.exist?('.gem2deb.' + dir)
-        mv '.gem2deb.' + dir, dir
+    def move_away(*files)
+      moved = {}
+      files.each do |f|
+        next unless File.exist?(f)
+        moved[f] = File.join(File.dirname(f), '.gem2deb.' + File.basename(f))
       end
+      moved.each do |orig,new|
+        mv orig, new
+      end
+      ret = yield
+      moved.each do |orig,new|
+        mv new, orig
+      end
+      ret
     end
 
     def self.inherited(subclass)
