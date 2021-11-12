@@ -192,7 +192,7 @@ module Gem2Deb
       else
         move_away_list = []
       end
-      move_away_list << 'Gemfile.lock'
+      move_away_list << '**/Gemfile.lock'
 
       move_away(*move_away_list) do
         system({ 'RUBYLIB' => rubylib, 'GEM_PATH' => gem_path }, *cmd)
@@ -200,11 +200,13 @@ module Gem2Deb
       end
     end
 
-    def move_away(*files)
+    def move_away(*globs)
       moved = {}
-      files.each do |f|
-        next unless File.exist?(f)
-        moved[f] = File.join(File.dirname(f), '.gem2deb.' + File.basename(f))
+      globs.each do |glob|
+        Dir[glob].each do |f|
+          next unless File.exist?(f)
+          moved[f] = File.join(File.dirname(f), '.gem2deb.' + File.basename(f))
+        end
       end
       moved.each do |orig,new|
         mv orig, new
