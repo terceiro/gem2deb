@@ -62,4 +62,15 @@ class TestRunnerTest < Gem2DebTestCase
     end
   end
 
+  should 'work when running autopkgtest' do
+    Dir.chdir('test/sample/ruby-autopkgtest-example') do
+      runner = Gem2Deb::TestRunner.detect!
+      runner.autopkgtest = true
+      runner.stubs(:print_banner)
+      runner.stubs(:puts)
+      runner.expects(:exit).with(0)
+      runner.run_tests
+    end
+  end
+
 end
