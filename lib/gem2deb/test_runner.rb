@@ -188,7 +188,7 @@ module Gem2Deb
       puts "RUBYLIB=#{rubylib} GEM_PATH=#{gem_path} " + cmd.shelljoin
 
       if autopkgtest
-        move_away_list ['lib', 'ext']
+        move_away_list = ['lib', 'ext']
       else
         move_away_list = []
       end
