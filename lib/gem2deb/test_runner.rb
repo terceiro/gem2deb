@@ -204,7 +204,6 @@ module Gem2Deb
       moved = {}
       globs.each do |glob|
         Dir[glob].each do |f|
-          next unless File.exist?(f)
           moved[f] = File.join(File.dirname(f), '.gem2deb.' + File.basename(f))
         end
       end
