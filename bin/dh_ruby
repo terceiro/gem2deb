@@ -235,7 +235,8 @@ There is an internal include list of directories from the source package that ne
 to be installed, but we can't possibly know all possibilities: if a package
 needs to install a directory that is not automatically installed, use
 I<DH_RUBY_GEM_INSTALL_INCLUDE>. If you want to exclude a directory
-from  being installed, use I<DH_RUBY_GEM_INSTALL_EXCLUDE>.
+from  being installed, use I<DH_RUBY_GEM_INSTALL_EXCLUDE>. Note that for using
+those variables, you need to build depend on gem2deb (>= 1.6~).
 
 =back
 
