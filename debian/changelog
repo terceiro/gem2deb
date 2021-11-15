@@ -1,3 +1,26 @@
+gem2deb (1.7) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * debian/changelog: add missing entry to the 1.5 release
+  * gem2deb-test-runner: remove --check-dependencies-only option
+  * Gem2Deb::TestRunner: fix printing of RUBYLIB
+  * dh_ruby(1): fix mention of DH_RUBY_GEM_INSTALL_EXCLUDE
+  * gem2deb-test-runner: modularize moving files away
+  * gem2deb-test-runner: move Gemfile.lock away during the build.
+    This used to done only under autopkgtest, but it turns out that having
+    Gemfile.lock around when 2 interpreters are supported will usually
+    create bogus test failures on the interpreter that runs second, because
+    Gemfile.lock will freeze on versions of stuff only available to the
+    first interpreter (e.g. the default gems, provided by the interpreter
+    packages). (Closes: #998497)
+  * gem2deb-test-runner: move away Gemfile.lock in any directories
+  * Document version requirement for DH_RUBY_GEM_INSTALL_(INCLUDE|EXCLUDE)
+
+  [ Daniel Leidert ]
+  * Fix assignment
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 15 Nov 2021 17:23:21 -0300
+
 gem2deb (1.6) unstable; urgency=medium
 
   * debian/.gitattributes: add newline at the end
