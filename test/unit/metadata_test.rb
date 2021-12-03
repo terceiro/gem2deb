@@ -321,6 +321,9 @@ class MetaDataTest < Gem2DebTestCase
       assert_include @dependencies, 'ruby-railties (>= 2:6.0)'
       assert_include @dependencies, 'ruby-railties (<< 2:7.0)'
     end
+    should 'handle add a high Debian revision when handling <=' do
+      assert_include @dependencies, 'ruby-depwithlte (<= 2.1-9999)'
+    end
   end
 
 end

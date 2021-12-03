@@ -254,6 +254,7 @@ module Gem2Deb
               "<" => "<<",
               "=" => ">=",
             }[op] || op
+            v += "-9999" if newop == "<="
             result << ('%s (%s %s)' % [dependency, newop, v])
           end
         end

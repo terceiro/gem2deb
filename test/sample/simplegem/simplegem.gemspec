@@ -21,4 +21,5 @@ EOF
   s.add_runtime_dependency 'depwithgt', '> 1.0'
   s.add_runtime_dependency 'depwith2versions', '>= 1.0', '< 2.0'
   s.add_runtime_dependency 'railties', '>= 6.0', '< 7.0'
+  s.add_runtime_dependency 'depwithlte', '>= 1.0', '<= 2.1'
 end
