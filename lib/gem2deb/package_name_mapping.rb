@@ -71,6 +71,7 @@ module Gem2Deb
       io = IO.popen("dpkg -S /usr/share/rubygems-integration/*/specifications/*", "r")
       @data = io.readlines.inject({}) do |memo, line|
         pkg, gemspec = line.strip.split(/:\s+/)
+        pkg.gsub!(/:.*/, '')
         _gem = File.basename(gemspec).sub(/-[0-9.]+\.gemspec$/, '')
         memo[_gem] = pkg
         memo
