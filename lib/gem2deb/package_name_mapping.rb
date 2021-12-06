@@ -68,7 +68,8 @@ module Gem2Deb
     end
 
     def get_data_from_installed_packages!
-      @data = `dpkg -S /usr/share/rubygems-integration/*/specifications/*`.lines.inject({}) do |memo, line|
+      io = IO.popen("dpkg -S /usr/share/rubygems-integration/*/specifications/*", "r")
+      @data = io.readlines.inject({}) do |memo, line|
         pkg, gemspec = line.strip.split(/:\s+/)
         _gem = File.basename(gemspec).sub(/-[0-9.]+\.gemspec$/, '')
         memo[_gem] = pkg
