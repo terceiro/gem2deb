@@ -29,7 +29,14 @@ class PackageNameMappingTest < Gem2DebTestCase
   end
 
   should 'strip architecture qualifier off package names' do
-    IO.stubs(:popen).returns(StringIO.new("ruby-foo:amd64: /usr/share/rubygems-integration/2.7.0/specifications/foo-1.0.0.gemspec\nruby-bar: /usr/share/rubygems-integration/2.7.0/specifications/bar-2.0.0.gemspec\n"))
+    ver = RubyDebianDev::RUBY_API_VERSION.values.first
+    dpkg_S_output = {
+      "ruby-foo:amd64": "foo",
+      "ruby-bar": "bar",
+    }.map do |pkgname,gemname|
+      "#{pkgname}: /usr/share/rubygems-integration/#{ver}/specifications/#{gemname}-1.0.0.gemspec"
+    end.join("\n")
+    IO.stubs(:popen).returns(StringIO.new(dpkg_S_output))
     mapping = Gem2Deb::PackageNameMapping.new(false)
     assert_equal "ruby-foo", mapping.data["foo"]
     assert_equal "ruby-bar", mapping.data["bar"]
