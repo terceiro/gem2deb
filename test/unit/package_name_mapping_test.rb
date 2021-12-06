@@ -9,7 +9,7 @@ class PackageNameMappingTest < Gem2DebTestCase
       'foo-bar_baz' => 'ruby-foo-bar-baz',
     }.each do |input,output|
       setup do
-        Gem2Deb::PackageNameMapping.any_instance.stubs(:update!)
+        Gem2Deb::PackageNameMapping.any_instance.stubs(:get_data_from_archive!)
         @mapping = Gem2Deb::PackageNameMapping.new
       end
       should "convert #{input} to #{output}" do
