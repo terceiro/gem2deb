@@ -1,3 +1,15 @@
+gem2deb (1.8) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Gem2Deb::Metadata: handle <= version constraints (Closes: #1000333)
+  * Gem2Deb::PackageNameMapping: strip architecture qualifier off package names
+    (Closes: #1001215)
+
+  [ Daniel Leidert ]
+  * Fix d/copyright template to not repeat '/issues'
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 06 Dec 2021 12:08:12 -0300
+
 gem2deb (1.7) unstable; urgency=medium
 
   [ Antonio Terceiro ]
