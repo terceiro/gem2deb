@@ -38,8 +38,6 @@ module Gem2Deb
     end
 
     def clean
-      puts "   dh_ruby --clean" if @verbose
-
       make.clean
 
       installers.each do |installer|
@@ -48,17 +46,13 @@ module Gem2Deb
     end
 
     def configure
-      # puts "   dh_ruby --configure" if @verbose
     end
 
     def build
-      puts "   dh_ruby --build" if @verbose
-
       make.build
     end
 
     def test
-      # puts "   dh_ruby --test" if @verbose
     end
 
     if File.exist? File.expand_path(File.join(File.dirname(__FILE__),'../../bin','gem2deb-test-runner'))
@@ -68,8 +62,6 @@ module Gem2Deb
     end
 
     def install(argv)
-      puts "   dh_ruby --install" if @verbose
-
       dh_auto_install_destdir = argv.first
 
       make.install(destdir_for(@source.packages.first[:binary_package], dh_auto_install_destdir))
