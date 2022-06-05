@@ -50,5 +50,33 @@ class SourceTest < Gem2DebTestCase
 
   end
 
+  context "determining debhelper compat level" do
+    should 'detect from DH_COMPAT' do
+      ENV.expects(:[]).with("DH_COMPAT").returns("14").at_least_once
+      assert_equal 14, source.debhelper_compat
+    end
+
+    should 'detect from debian/compat' do
+      File.write(File.join(t_tmpdir, "debian", "compat"), "12\n")
+      assert_equal 12, source.debhelper_compat
+    end
+
+    should 'detect from Build-Depends' do
+      debian_control << 'Source: ruby-foobar'
+      debian_control << 'Build-Depends: gem2deb, debhelper-compat (= 11), ruby-baz'
+      assert_equal 11, source.debhelper_compat
+    end
+
+    should 'detect from Build-Depends with multiple lines' do
+      debian_control << 'Source: ruby-foobar'
+      debian_control << "Build-Depends: gem2deb,\n debhelper-compat (= 11),\n ruby-baz"
+      assert_equal 11, source.debhelper_compat
+    end
+
+    should 'always be a number' do
+      assert_kind_of Integer, source.debhelper_compat
+    end
+  end
+
 end
 

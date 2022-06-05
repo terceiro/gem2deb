@@ -18,13 +18,23 @@ module Gem2Deb
   class Source
 
     attr :packages
+    attr :debhelper_compat
+    attr :build_depends
 
     def initialize
       packages = []
       multibinary = false
       lines =
         begin
-          File.readlines('debian/control')
+          # unwrap rfc822 continuation lines
+          File.readlines('debian/control').inject([]) do |memo, line|
+            if line =~ /^\s/
+              memo.last << line.strip
+            else
+              memo << line.strip
+            end
+            memo
+          end
         rescue Errno::ENOENT
           []
         end
@@ -39,6 +49,8 @@ module Gem2Deb
             packages.last[:root] = root
           end
           multibinary = true
+        elsif line =~ /^Build-Depends:\s*(.*)\s*$/
+          @build_depends = $1.split(/\s*,\s*/)
         end
       end
 
@@ -52,6 +64,23 @@ module Gem2Deb
         else
           @packages = []
         end
+      end
+
+      @debhelper_compat = get_debhelper_compat
+    end
+
+    private
+
+    def get_debhelper_compat
+      if ENV["DH_COMPAT"]
+        ENV["DH_COMPAT"].to_i
+      elsif File.exist?("debian/compat")
+        File.read('debian/compat').strip.to_i
+      else
+        @build_depends&.find do |d|
+          d =~ /debhelper-compat\s*\(\s*=\s*(\d+)\s*\)/
+        end
+        $1.to_i
       end
     end
 

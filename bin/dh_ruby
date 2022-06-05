@@ -240,6 +240,28 @@ those variables, you need to build depend on gem2deb (>= 1.6~).
 
 =back
 
+=head1 COMPATIBILITY LEVELS
+
+dh_ruby reuses the L<B<debhelper>>(7) compatibility levels for introducing
+behavior changes that might be backwards-incompatible.
+
+=over
+
+=item v13
+
+This is the recommended mode of operation.
+
+This was the current compatibility level at the point where this mechanism was
+introduced. So even packages with compatibility levels lower than 13 use this
+mode.
+
+In this this compatibility level, dh_ruby exhibits its classic behavior. In
+particular, packages are built, installed and tested during the
+B<dh_auto_install> phase of the build process, i.e. when dpkg-buildpackage is
+invoking the B<install> target of I<debian/rules>.
+
+=back
+
 =head1 SUBSTITUTION VARIABLES
 
 =over
