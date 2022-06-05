@@ -247,6 +247,20 @@ behavior changes that might be backwards-incompatible.
 
 =over
 
+=item v14
+
+This level is still open for development; use with caution.
+
+Changes from v13 are:
+
+Packages are built and tested when executing the B<build> target of
+I<debian/rules>. The build is done as part of B<dh_auto_build>, and the tests
+are run as part of B<dh_auto_test>. The installation into debian/ is performed
+during the B<install> target, i.e.  during B<dh_auto_install>. This means that
+you can intercept the build between these steps using targets such
+B<execute_after_dh_auto_build>, B<override_dh_auto_build>,
+B<override_dh_auto_test>, B<execute_before_dh_auto_install> etc.
+
 =item v13
 
 This is the recommended mode of operation.

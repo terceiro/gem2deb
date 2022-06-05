@@ -24,11 +24,14 @@ module Gem2Deb
       @metadata = Gem2Deb::Metadata.new(@root)
     end
 
-    def install
+    def build
       install_files_and_build_extensions
       update_shebangs
-      install_substvars
       install_gemspec
+    end
+
+    def install
+      install_substvars
       install_changelog
     end
 

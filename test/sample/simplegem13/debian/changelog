@@ -1,0 +1,5 @@
+ruby-simplegem13 (0.0.1-1) UNRELEASED; urgency=medium
+
+  * Initial release (Closes: #nnnn)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 19 Jul 2022 17:23:40 +0200

@@ -53,7 +53,7 @@ module Gem2Deb
 
       dirs = []
       $LOAD_PATH.grep(/vendor/).each do |dir|
-        dirs += Dir.glob('debian/*/' + dir).map { |d| File.expand_path(d) }
+        dirs += Dir.glob(@source.build_dir + '/*/' + dir).map { |d| File.expand_path(d) }
       end
 
       # And we add the current directory:
@@ -66,7 +66,7 @@ module Gem2Deb
       if self.autopkgtest
         nil
       else
-        pattern = "debian/*/usr/**/rubygems-integration/{all,#{ruby_api_version}}"
+        pattern = @source.build_dir + "/*/usr/**/rubygems-integration/{all,#{ruby_api_version}}"
         local_dirs = Dir.glob(pattern).map do |f|
           File.expand_path(f)
         end

@@ -99,4 +99,18 @@ class Gem2DebTest < Gem2DebTestCase
     end
   end
 
+  %w[
+    13
+    14
+  ].each do |level|
+    self.build_tree("test/sample/simplegem#{level}") do |dir|
+      context "compatiblity level #{level}" do
+        should 'work' do
+          assert Dir.glob("#{dir}/debian/*/**/*.rb").size > 0
+        end
+      end
+    end
+  end
+
+
 end

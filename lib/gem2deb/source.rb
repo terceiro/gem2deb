@@ -69,6 +69,18 @@ module Gem2Deb
       @debhelper_compat = get_debhelper_compat
     end
 
+    def separate_build_test_install
+      debhelper_compat && debhelper_compat >= 14
+    end
+
+    def build_dir
+      if separate_build_test_install
+        ".gem2deb"
+      else
+        "debian"
+      end
+    end
+
     private
 
     def get_debhelper_compat
