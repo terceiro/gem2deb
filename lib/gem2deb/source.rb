@@ -17,31 +17,42 @@ module Gem2Deb
 
   class Source
 
-    def packages
-      @packages ||=
+    attr :packages
+
+    def initialize
+      packages = []
+      multibinary = false
+      lines =
         begin
-          packages = []
-          multibinary = false
-          File.readlines('debian/control').select do |line|
-            if line =~ /^Package:\s*(\S*)\s*$/
-              package = $1
-              packages.push({ :binary_package => package })
-            elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
-              root = $1
-              if packages.last
-                packages.last[:root] = root
-              end
-              multibinary = true
-            end
-          end
-          if multibinary
-            packages.select { |p| p[:root] }
-          else
-            package = packages.first
-            package[:root] = '.'
-            [package]
-          end
+          File.readlines('debian/control')
+        rescue Errno::ENOENT
+          []
         end
+
+      lines.each do |line|
+        if line =~ /^Package:\s*(\S*)\s*$/
+          package = $1
+          packages.push({ :binary_package => package })
+        elsif line =~ /^X-DhRuby-Root:\s*(\S*)\s*$/
+          root = $1
+          if packages.last
+            packages.last[:root] = root
+          end
+          multibinary = true
+        end
+      end
+
+      if multibinary
+        @packages = packages.select { |p| p[:root] }
+      else
+        package = packages.first
+        if package
+          package[:root] = '.'
+          @packages = [package]
+        else
+          @packages = []
+        end
+      end
     end
 
   end
