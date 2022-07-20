@@ -68,10 +68,6 @@ module Gem2Deb
       end
 
       def run_tests
-        if cross_building?
-          Gem2Deb::Banner.print 'Skipping tests; this is a crossbuild'
-          return
-        end
         dh_ruby.send(:run_tests)
       end
     end
