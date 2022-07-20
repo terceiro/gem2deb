@@ -14,8 +14,6 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-export PATH=${basedir}/bin:$PATH
-export RUBYLIB=${basedir}/lib
-export PERL5LIB=${basedir}/debhelper
+. "${basedir}"/activate.bash
 
 "$@"
