@@ -62,13 +62,64 @@ module Gem2Deb
       cmd.unshift("-I", LIBDIR)
     end
     cmd.unshift(ruby)
-    run(*cmd)
+    maybe_crossbuild(ruby) do
+      run(*cmd)
+    end
+  end
+
+  def maybe_crossbuild(ruby)
+    @crossbuild_options ||= {}
+    @crossbuild_options[ruby] ||=
+      begin
+        if cross_building?
+          version = IO.popen([ruby, "-e", "puts RbConfig::CONFIG['ruby_version']"]).read.strip
+          {
+            "RUBYLIB" => "/usr/lib/#{host_arch}/ruby-crossbuild/#{version}",
+          }
+        else
+          {}
+        end
+      end
+    saveenv = {}
+    begin
+      @crossbuild_options[ruby].each do |k, v|
+        saveenv[k] = ENV[k]
+        ENV[k] = v
+      end
+      yield
+    ensure
+      saveenv.each do |k,v|
+        ENV[k] = v
+      end
+    end
+  end
+
+  def build_arch
+    @build_arch ||= `dpkg-architecture -qDEB_BUILD_MULTIARCH`.strip
+  end
+
+  def host_arch
+    @host_arch ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
+  end
+
+  def cross_building?
+    build_arch != host_arch
+  end
+
+  def default_compiler(name)
+    @default_compiler ||= {}
+    @default_compiler[name] ||=
+      if cross_building?
+        "#{host_arch}-#{name}"
+      else
+        name
+      end
   end
 
   def make_cmd
     flags = "-fdebug-prefix-map=#{root}=."
-    cc = [ENV.fetch('CC', 'gcc'), flags].join(' ')
-    cxx = [ENV.fetch('CXX', 'g++'), flags].join(' ')
+    cc = [ENV.fetch('CC', default_compiler("gcc")), flags].join(' ')
+    cxx = [ENV.fetch('CXX', default_compiler("g++")), flags].join(' ')
     "make V=1 CC='#{cc}' CXX='#{cxx}'"
   end
 
