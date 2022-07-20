@@ -4,3 +4,4 @@
 gem2deb_root=$(dirname "$BASH_SOURCE")
 export PATH="${gem2deb_root}/bin:${PATH}"
 export RUBYLIB="${gem2deb_root}/lib"
+export PERL5LIB=${gem2deb_root}/debhelper
