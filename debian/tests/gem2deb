@@ -15,7 +15,7 @@ build() {
   dir="$1"
   name="$(basename ${dir})"
   cp -r "${dir}" "${TMPDIR}/${name}"
-  if chronic sh -c "cd ${TMPDIR}/${name} && dpkg-buildpackage -b -us -uc"; then
+  if chronic sh -c "cd ${TMPDIR}/${name} && dpkg-buildpackage -d -b -us -uc"; then
     echo "PASS ${name}"
   else
     echo "FAIL ${name}"
