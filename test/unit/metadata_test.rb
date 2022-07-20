@@ -1,5 +1,6 @@
 require_relative '../test_helper'
 require 'gem2deb/metadata'
+require 'pathname'
 require 'yaml'
 
 $GIT_ABUSER_GEMSPEC_1 = <<EOF
@@ -73,6 +74,56 @@ Gem::Specification.new do |s|
   s.test_files        = `/unexisting/git ls-files`.split($/).select { |f| f =~ /^(test|spec|features)/ }
   s.require_paths     = ["lib"]
 end
+EOF
+
+METADATA_YML = <<EOF
+--- !ruby/object:Gem::Specification
+name: oldmetadata
+version: !ruby/object:Gem::Version
+  version: 0.7.3
+  prerelease:
+platform: ruby
+authors:
+- Some developer
+autorequire:
+bindir: bin
+cert_chain: []
+date: 2014-10-30 00:00:00.000000000 Z
+dependencies: []
+description: Test package
+email: foo@example.com
+executables: []
+extensions:
+- bindings/ruby/extconf.rb
+extra_rdoc_files: []
+files:
+- Rakefile
+- lib/oldmetadata.rb
+homepage: http://example.com/
+licenses: []
+post_install_message:
+rdoc_options: []
+require_paths:
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement
+  none: false
+  requirements:
+  - - ! '>='
+    - !ruby/object:Gem::Version
+      version: '0'
+required_rubygems_version: !ruby/object:Gem::Requirement
+  none: false
+  requirements:
+  - - ! '>='
+    - !ruby/object:Gem::Version
+      version: '0'
+requirements: []
+rubyforge_project:
+rubygems_version: 1.8.23
+signing_key:
+specification_version: 3
+summary: Test package
+test_files: []
 EOF
 
 class MetaDataTest < Gem2DebTestCase
@@ -323,6 +374,18 @@ class MetaDataTest < Gem2DebTestCase
     end
     should 'handle add a high Debian revision when handling <=' do
       assert_include @dependencies, 'ruby-depwithlte (<= 2.1-9999)'
+    end
+  end
+
+  context 'loading metadata.yml' do
+    should 'work' do
+      File.join(tmpdir, "oldmetadata").tap do |dir|
+        FileUtils.mkdir_p(dir)
+        file = Pathname.new(dir) / "metadata.yml"
+        file.write(METADATA_YML)
+        metadata = Gem2Deb::Metadata.new(dir)
+        assert_equal 'oldmetadata', metadata.name
+      end
     end
   end
 

@@ -20,6 +20,7 @@ require 'yaml'
 require 'zlib'
 
 require 'gem2deb'
+require 'gem2deb/yaml'
 include Gem2Deb
 
 module Gem2Deb
@@ -87,7 +88,7 @@ module Gem2Deb
         FileUtils.rm_f('data.tar.gz')
         if Dir['*.gemspec'].empty?
           run "zcat metadata.gz > metadata.yml"
-          gemspec = YAML.load_file('metadata.yml')
+          gemspec = Gem2Deb::YAML.load_gemspec('metadata.yml')
           gemspec.executables.sort!
           gemspec.extensions.sort!
           gemspec.extra_rdoc_files.sort!
@@ -149,7 +150,7 @@ module Gem2Deb
 
     def read_checksums
       Zlib::GzipReader.open('checksums.yaml.gz') do |checksums_file|
-        YAML.load(checksums_file.read)
+        ::YAML.load(checksums_file.read)
       end
     end
 
