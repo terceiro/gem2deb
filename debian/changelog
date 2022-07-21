@@ -1,3 +1,21 @@
+gem2deb (2.0) unstable; urgency=medium
+
+  [ Daniel Leidert ]
+  * Use github tags instead of releases in watch file template
+
+  [ Antonio Terceiro ]
+  * dh_ruby: stop printing "dh_ruby --opt"
+  * source_test: replace mocking with temporary directory
+  * Gem2Deb::Source: improve reading of debian/control
+  * Gem2Deb::Source: detect debhelper compatibility level
+  * dh_ruby: build, test and install separately for debhelper compat 14+
+  * Add support for cross compilation of Ruby extensinons (Closes: #982887)
+  * activate.bash: also set PERL5LIB
+  * debian/tests/gem2deb: don't check build dependencies
+  * Gem2Deb::Metadata: fix loading medadata.yml with ruby3.1 (Closes: #1015311)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 21 Jul 2022 21:17:01 +0200
+
 gem2deb (1.8) unstable; urgency=medium
 
   [ Antonio Terceiro ]
