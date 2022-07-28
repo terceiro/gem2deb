@@ -36,6 +36,7 @@ module Gem2Deb
       examples/*
       features/*
       gemfiles/*
+      doc/*
       man/*
       spec/*
       test/*
