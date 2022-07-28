@@ -6,6 +6,10 @@ Tests: gem2deb
 Depends: gem2deb, build-essential, moreutils
 Restrictions: allow-stderr
 
+Tests: dh-make-ruby
+Depends: gem2deb, moreutils, apt-file, python3-debian
+Restrictions: allow-stderr, superficial, needs-internet, needs-root
+
 Tests: gem2deb-test-runner-autopkgtest
 Depends: gem2deb-test-runner, autopkgtest
 Restrictions: allow-stderr

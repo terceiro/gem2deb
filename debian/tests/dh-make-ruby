@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -exu
+
+tmpdir=${AUTOPKGTEST_TMP:-/tmp}
+
+rm -rf "${tmpdir}/simplegem"
+cp -r test/sample/simplegem "${tmpdir}"
+cd "${tmpdir}/simplegem"
+apt-file update
+dh-make-ruby --offline --overwrite
+find debian/ -type f -exec tail --verbose -n 1000 '{}' ';'

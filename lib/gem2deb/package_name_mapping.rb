@@ -55,7 +55,7 @@ module Gem2Deb
         end
       end
 
-      data = YAML.load_file(cache)
+      data = ::YAML.load_file(cache)
       unless data.respond_to?(:invert)
         File.unlink(cache)
         puts 'E: Failed to load "gem name to package name" cache from'
