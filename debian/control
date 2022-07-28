@@ -22,7 +22,7 @@ Build-Depends: dctrl-tools <!nocheck>,
                ruby-shoulda-context <!nocheck>,
                ruby-test-unit <!nocheck>
 Rules-Requires-Root: no
-Standards-Version: 4.6.0
+Standards-Version: 4.6.1
 Vcs-Git: https://salsa.debian.org/ruby-team/gem2deb.git
 Vcs-Browser: https://salsa.debian.org/ruby-team/gem2deb
 
