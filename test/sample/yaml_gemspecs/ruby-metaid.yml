@@ -1,0 +1,39 @@
+--- !ruby/object:Gem::Specification 
+rubygems_version: 0.8.11
+specification_version: 1
+name: metaid
+version: !ruby/object:Gem::Version 
+  version: "1.0"
+date: 2006-01-17 00:00:00 -07:00
+summary: slight metaprogramming helpers
+require_paths: 
+  - "."
+email: why@ruby-lang.org
+homepage: http://whytheluckystiff.net/metaid/
+rubyforge_project: hobix
+description: 
+autorequire: metaid
+default_executable: 
+bindir: bin
+has_rdoc: false
+required_ruby_version: !ruby/object:Gem::Version::Requirement 
+  requirements: 
+    - 
+      - ">"
+      - !ruby/object:Gem::Version 
+        version: 0.0.0
+  version: 
+platform: ruby
+signing_key: 
+cert_chain: 
+authors: 
+  - why the lucky stiff
+files: 
+  - metaid.rb
+test_files: []
+rdoc_options: []
+extra_rdoc_files: []
+executables: []
+extensions: []
+requirements: []
+dependencies: []

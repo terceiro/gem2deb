@@ -1,0 +1,66 @@
+--- !ruby/object:Gem::Specification 
+rubygems_version: 0.8.10
+specification_version: 1
+name: text-format
+version: !ruby/object:Gem::Version 
+  version: 1.0.0
+date: 2005-06-24
+summary: Text::Format formats fixed-width text nicely.
+require_paths: 
+  - lib
+email: austin@rubyforge.org
+homepage: http://rubyforge.org/projects/text-format
+rubyforge_project: text-format
+description: "Text::Format is provides the ability to nicely format fixed-width text with
+  knowledge of the writeable space (number of columns), margins, and indentation
+  settings. Text::Format can work with either TeX::Hyphen or Text::Hyphen to
+  hyphenate words when formatting."
+autorequire: text/format
+default_executable: 
+bindir: bin
+has_rdoc: true
+required_ruby_version: !ruby/object:Gem::Version::Requirement 
+  requirements: 
+    - 
+      - ">"
+      - !ruby/object:Gem::Version 
+        version: 0.0.0
+  version: 
+platform: ruby
+authors: 
+  - Austin Ziegler
+files: 
+  - Changelog
+  - Install
+  - lib
+  - metaconfig
+  - pre-setup.rb
+  - Rakefile
+  - README
+  - setup.rb
+  - tests
+  - ToDo
+  - lib/text
+  - lib/text/format
+  - lib/text/format.rb
+  - lib/text/format/alpha.rb
+  - lib/text/format/number.rb
+  - lib/text/format/roman.rb
+  - tests/tc_text_format.rb
+  - tests/testall.rb
+test_files: 
+  - tests/tc_text_format.rb
+rdoc_options: 
+  - "--title"
+  - Text::Format
+  - "--main"
+  - README
+  - "--line-numbers"
+extra_rdoc_files: 
+  - README
+  - Changelog
+  - Install
+executables: []
+extensions: []
+requirements: []
+dependencies: []

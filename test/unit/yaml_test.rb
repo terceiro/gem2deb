@@ -15,4 +15,12 @@ class Gem2DebYamlTest < Gem2DebTestCase
     Gem2Deb::YAML.load_gemspec(sample('ruby-bert.yml'))
   end
 
+  should 'load gemspec using Gem::Version::Requirement' do
+    Gem2Deb::YAML.load_gemspec(sample('ruby-metaid.yml'))
+  end
+
+  should 'load gemspec using Date' do
+    Gem2Deb::YAML.load_gemspec(sample('ruby-text-format.yml'))
+  end
+
 end
