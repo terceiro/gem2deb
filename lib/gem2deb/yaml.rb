@@ -5,6 +5,7 @@ module Gem2Deb
     def self.load_gemspec(file)
       ::YAML.safe_load_file(
         file,
+        aliases: true,
         permitted_classes: [
           Gem::Dependency,
           Gem::Requirement,

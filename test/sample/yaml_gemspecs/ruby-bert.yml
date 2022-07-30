@@ -1,0 +1,110 @@
+--- !ruby/object:Gem::Specification 
+name: bert
+version: !ruby/object:Gem::Version 
+  hash: 31
+  prerelease: 
+  segments: 
+  - 1
+  - 1
+  - 6
+  version: 1.1.6
+platform: ruby
+authors: 
+- Tom Preston-Werner
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-02-08 00:00:00 -08:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: thoughtbot-shoulda
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id001
+description: BERT Serializiation for Ruby
+email: tom@mojombo.com
+executables: []
+
+extensions: 
+- ext/bert/c/extconf.rb
+- ext/bert/c/extconf.rb
+extra_rdoc_files: 
+- LICENSE
+- README.md
+files: 
+- .document
+- .gitignore
+- History.txt
+- LICENSE
+- README.md
+- Rakefile
+- VERSION
+- bench/bench.rb
+- bench/decode_bench.rb
+- bench/encode_bench.rb
+- bench/results.txt
+- bert.gemspec
+- ext/bert/c/decode.c
+- ext/bert/c/extconf.rb
+- lib/bert.rb
+- lib/bert/bert.rb
+- lib/bert/decode.rb
+- lib/bert/decoder.rb
+- lib/bert/encode.rb
+- lib/bert/encoder.rb
+- lib/bert/types.rb
+- test/bert_test.rb
+- test/decoder_test.rb
+- test/encoder_test.rb
+- test/test_helper.rb
+has_rdoc: true
+homepage: http://github.com/mojombo/bert
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --charset=UTF-8
+require_paths: 
+- lib
+- ext
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: BERT Serializiation for Ruby
+test_files: 
+- test/bert_test.rb
+- test/decoder_test.rb
+- test/encoder_test.rb
+- test/test_helper.rb

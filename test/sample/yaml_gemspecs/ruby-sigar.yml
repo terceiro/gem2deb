@@ -1,0 +1,92 @@
+--- !ruby/object:Gem::Specification
+name: sigar
+version: !ruby/object:Gem::Version
+  version: 0.7.3
+  prerelease: 
+platform: ruby
+authors:
+- Doug MacEachern
+autorequire: 
+bindir: bin
+cert_chain: []
+date: 2014-10-30 00:00:00.000000000 Z
+dependencies: []
+description: System Information Gatherer And Reporter
+email: sigar-users@hyperic.org
+executables: []
+extensions:
+- bindings/ruby/extconf.rb
+extra_rdoc_files: []
+files:
+- LICENSE
+- NOTICE
+- README
+- Rakefile
+- version.properties
+- bindings/SigarWrapper.pm
+- bindings/SigarBuild.pm
+- bindings/ruby/extconf.rb
+- bindings/ruby/rbsigar.c
+- include/sigar.h
+- include/sigar_fileinfo.h
+- include/sigar_format.h
+- include/sigar_getline.h
+- include/sigar_log.h
+- include/sigar_private.h
+- include/sigar_ptql.h
+- include/sigar_util.h
+- src/os/aix/aix_sigar.c
+- src/os/aix/sigar_os.h
+- src/os/darwin/darwin_sigar.c
+- src/os/darwin/sigar_os.h
+- src/os/hpux/hpux_sigar.c
+- src/os/hpux/sigar_os.h
+- src/os/linux/linux_sigar.c
+- src/os/linux/sigar_os.h
+- src/os/solaris/get_mib2.c
+- src/os/solaris/get_mib2.h
+- src/os/solaris/kstats.c
+- src/os/solaris/procfs.c
+- src/os/solaris/sigar_os.h
+- src/os/solaris/solaris_sigar.c
+- src/os/win32/peb.c
+- src/os/win32/sigar_os.h
+- src/os/win32/sigar_pdh.h
+- src/os/win32/win32_sigar.c
+- src/sigar.c
+- src/sigar_cache.c
+- src/sigar_fileinfo.c
+- src/sigar_format.c
+- src/sigar_getline.c
+- src/sigar_ptql.c
+- src/sigar_signal.c
+- src/sigar_util.c
+- src/os/darwin/Info.plist.in
+- src/os/win32/sigar.rc.in
+- src/sigar_version.c.in
+- src/sigar_version_autoconf.c.in
+homepage: http://sigar.hyperic.com/
+licenses: []
+post_install_message: 
+rdoc_options: []
+require_paths:
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement
+  none: false
+  requirements:
+  - - ! '>='
+    - !ruby/object:Gem::Version
+      version: '0'
+required_rubygems_version: !ruby/object:Gem::Requirement
+  none: false
+  requirements:
+  - - ! '>='
+    - !ruby/object:Gem::Version
+      version: '0'
+requirements: []
+rubyforge_project: 
+rubygems_version: 1.8.23
+signing_key: 
+specification_version: 3
+summary: System Information Gatherer And Reporter
+test_files: []
