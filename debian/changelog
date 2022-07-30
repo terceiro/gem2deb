@@ -1,3 +1,12 @@
+gem2deb (2.0.2) unstable; urgency=medium
+
+  * gem installer: exclude doc/* by default
+  * run-from-checkout: fix running from other directories
+  * Gem2Deb::YAML: don't ignore the filename passed
+  * Gem2Deb::YAML: fix loading of gemspecs with aliases
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 30 Jul 2022 10:32:28 -0300
+
 gem2deb (2.0.1) unstable; urgency=medium
 
   * dh-make-ruby: fix loading package names map
