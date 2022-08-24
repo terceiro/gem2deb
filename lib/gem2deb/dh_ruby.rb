@@ -247,22 +247,7 @@ module Gem2Deb
     end
 
     def ruby_versions
-      @ruby_versions ||=
-        begin
-          # find ruby versions to build the package for.
-          lines = File.readlines('debian/control').grep(/^XS-Ruby-Versions: /)
-          if lines.empty?
-            puts "No XS-Ruby-Versions: field found in source!" if @verbose
-            exit(1)
-          else
-            list = lines.first.split[1..-1]
-            if list.include?('all')
-              SUPPORTED_RUBY_VERSIONS.keys
-            else
-              list
-            end
-          end
-        end
+      @ruby_versions ||= SUPPORTED_RUBY_VERSIONS.keys
     end
 
     def make

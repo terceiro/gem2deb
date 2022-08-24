@@ -97,13 +97,7 @@ class DhRubyTest < Gem2DebTestCase
       @dh_ruby = Gem2Deb::DhRuby.new
       @dh_ruby.verbose = false
     end
-    should 'bail out if XS-Ruby-Versions is not found' do
-      File.expects(:readlines).with('debian/control').returns([])
-      @dh_ruby.expects(:exit).with(1)
-      @dh_ruby.send(:ruby_versions)
-    end
-    should 'read supported versions from debian/control' do
-      File.expects(:readlines).with('debian/control').returns(["XS-Ruby-Versions: all\n"])
+    should 'build and test for all supported Ruby versions' do
       assert_equal SUPPORTED_RUBY_VERSIONS.keys, @dh_ruby.send(:ruby_versions)
     end
   end
