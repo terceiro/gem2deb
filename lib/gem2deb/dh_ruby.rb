@@ -114,6 +114,8 @@ module Gem2Deb
     end
 
     def clean
+      check_source_package
+
       make.clean
 
       installers.each do |installer|
@@ -244,6 +246,12 @@ module Gem2Deb
             end
           end
         end
+    end
+
+    def check_source_package
+      if !File.readlines('debian/control').grep(/^XS-Ruby-Versions: /).empty?
+        puts "W: XS-Ruby-Versions is deprecated, and will be ignored"
+      end
     end
 
     def ruby_versions
