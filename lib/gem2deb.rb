@@ -102,6 +102,10 @@ module Gem2Deb
     @host_arch ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
   end
 
+  def host_arch_gnu
+    @host_arch_gnu ||= `dpkg-architecture -qDEB_HOST_GNU_TYPE`.strip
+  end
+
   def cross_building?
     build_arch != host_arch
   end
@@ -110,7 +114,7 @@ module Gem2Deb
     @default_compiler ||= {}
     @default_compiler[name] ||=
       if cross_building?
-        "#{host_arch}-#{name}"
+        "#{host_arch_gnu}-#{name}"
       else
         name
       end

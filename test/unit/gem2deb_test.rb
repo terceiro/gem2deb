@@ -26,6 +26,7 @@ class Gem2DebTest < Gem2DebTestCase
 
   def test_default_compiler
     gem2deb.instance_variable_set(:@host_arch, "aarch64-linux-gnu")
+    gem2deb.instance_variable_set(:@host_arch_gnu, "aarch64-linux-gnu")
     gem2deb.instance_variable_set(:@build_arch, "x86_64-linux-gnu")
     assert_equal "aarch64-linux-gnu-gcc", gem2deb.default_compiler("gcc")
   end
