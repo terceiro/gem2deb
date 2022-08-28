@@ -375,6 +375,9 @@ class MetaDataTest < Gem2DebTestCase
     should 'handle add a high Debian revision when handling <=' do
       assert_include @dependencies, 'ruby-depwithlte (<= 2.1-9999)'
     end
+    should 'ignore dependencies with !=' do
+      assert_include @dependencies, 'ruby-different'
+    end
   end
 
   context 'loading metadata.yml' do
