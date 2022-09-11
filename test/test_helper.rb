@@ -2,6 +2,9 @@ unless ENV['ADTTMP']
   $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 end
 
+ENV['DEBFULLNAME'] = 'Debian Developer'
+ENV['DEBEMAIL'] = 'developer@example.com'
+
 if Kernel.const_defined?('SimpleCov')
   SimpleCov.start do
     add_filter %r{/test/}
