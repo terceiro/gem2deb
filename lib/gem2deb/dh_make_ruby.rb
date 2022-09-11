@@ -55,8 +55,6 @@ module Gem2Deb
 
     attr_accessor :orig_tarball_dir
 
-    attr_accessor :ruby_versions
-
     attr_accessor :input_directory
 
     attr_accessor :do_wnpp_check
@@ -79,7 +77,6 @@ module Gem2Deb
     end
 
     def initialize_from_options(options)
-      self.ruby_versions = 'all'
       options.each do |attr,value|
         self.send("#{attr}=", value)
       end

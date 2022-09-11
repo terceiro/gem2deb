@@ -43,10 +43,6 @@ optparse = OptionParser.new do |opts|
     options[:overwrite] = true
   end
 
-  opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
-    options[:ruby_versions] = versions
-  end
-
   options[:do_wnpp_check] = true
   opts.on('', '--no-wnpp-check', 'prevent dh-make-ruby from checking wnpp reports') do
     options[:do_wnpp_check] = false
@@ -107,14 +103,6 @@ this option an explicit package u.
 
 Overwrites packaging files that already exists but would be created by
 dh-make-ruby if they didn't. Exception: I<debian/copyright> is never touched.
-
-=item B<--ruby-versions VERSIONS>
-
-Ruby versions to build the package for. This is used to generate the
-X-Ruby-Versions: field in the source package, that can later be used to tune
-this value.  By default, gem2deb generates a package that works on all known
-Ruby versions, but it might be necessary to only build the package for Ruby
-1.9.1, for example (using B<--ruby-versions "ruby1.9.1">).
 
 =item B<-h>, B<--help>
 

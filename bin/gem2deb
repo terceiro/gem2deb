@@ -72,10 +72,6 @@ optparse = OptionParser.new do |opts|
     $purge = true
   end
 
-  opts.on('', '--ruby-versions VERSIONS', 'ruby versions to use (default: all)') do |versions|
-    dh_make_ruby_options[:ruby_versions] = versions
-  end
-
   dh_make_ruby_options[:do_wnpp_check] = true
   opts.on('', '--no-wnpp-check', 'prevent dh-make-ruby to check for ITP bugs') do
     dh_make_ruby_options[:do_wnpp_check] = false
@@ -254,11 +250,6 @@ After building the package, remove all files files that were produced by
 gem2deb. This includes source tarballs, Debian package artifacts (.dsc, .deb,
 .changes etc), and even the source directory. This is useful for example when
 used in conjunction with B<--git>.
-
-=item B<--ruby-versions VERSIONS>
-
-Ruby versions to build the package for (default: all).
-Passed to dh-make-ruby. See B<dh-make-ruby(1)>.
 
 =item B<--no-wnpp-check>
 
