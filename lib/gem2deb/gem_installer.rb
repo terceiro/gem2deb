@@ -201,16 +201,17 @@ module Gem2Deb
 
     def rubygems_integration_target(rubyver)
       if metadata.has_native_extensions?
-        arch = RbConfig::CONFIG['arch']
         api_version = Gem2Deb::RUBY_API_VERSION[rubyver]
-        "/usr/lib/#{arch}/rubygems-integration/#{api_version}"
+        "/usr/lib/#{host_arch}/rubygems-integration/#{api_version}"
       else
         "/usr/share/rubygems-integration/all"
       end
     end
 
     def run_gem(ruby, command, *args)
-      run(ruby, '-S', 'gem', command, '--config-file', '/dev/null', '--verbose', *args)
+      maybe_crossbuild(ruby) do
+        run(ruby, '-S', 'gem', command, '--config-file', '/dev/null', '--verbose', *args)
+      end
     end
 
     def load_gemspec_data!
