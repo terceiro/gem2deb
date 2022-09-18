@@ -9,7 +9,8 @@ module Gem2Deb
       def define
         self.libs.reject! { |path| ['lib','ext'].include?(path) }
         self.verbose = true
-        self.options = '-v'
+        self.options ||= ''
+        self.options << ' -v'
         super
       end
     end
