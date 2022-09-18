@@ -14,7 +14,9 @@ Rules-Requires-Root: no
 
 Package: <%= binary_package.name %>
 Architecture: <%= binary_package.architecture %>
-Depends: ${ruby:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: ${ruby:Depends},
+         ${shlibs:Depends},
+         ${misc:Depends},
 Description: <%= short_description ? short_description : 'FIXME' %>
 <% if long_description %>
 <%= long_description.lines.map { |l| line = l.strip; ' ' + (line.strip.empty? ? '.' : line.strip) }.join("\n") + "\n" %>
