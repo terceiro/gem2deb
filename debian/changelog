@@ -1,3 +1,28 @@
+gem2deb (2.1) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * dh_ruby: ignore XS-Ruby-Versions
+  * dh_ruby: print a warning if XS-Ruby-Versions is present
+  * metadata: ignore != in dependency specifications
+  * gem2deb: fix check for already downloaded .gem files
+  * dh-make-ruby, gem2deb: drop support for specifying Ruby versions
+    - Command line tools no longer provide a --ruby-versions option
+    - Generated debian/control templates no longer include either
+      XS-Ruby-Versions: or XB-Ruby-Versions:
+  * dh_ruby: drop support for ${ruby:Versions}
+    Packages using ${ruby:Versions} will now produce dpkg warnings during
+    build, since ${ruby:Versions} is no longer defined.
+  * test_helper: set DEBFULLNAME and DEBEMAIL
+  * gem2deb/rake/testtask: don't override task options.
+    This allows downstream users to set t.options.
+  * dh-make-ruby: produce pre-wrapped Depends: field
+
+  [ Helmut Grohne ]
+  * Fix cross building to i386 (Closes: #1018217)
+  * gem_installer: fix cross building (Closes: #1019397)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 01 Dec 2022 16:06:44 -0300
+
 gem2deb (2.0.3) unstable; urgency=medium
 
   * Gem2Deb::YAML: fix loading more metadata.yml files.
