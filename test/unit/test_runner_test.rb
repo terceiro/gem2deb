@@ -68,7 +68,7 @@ class TestRunnerTest < Gem2DebTestCase
       runner.autopkgtest = true
       runner.stubs(:print_banner)
       runner.stubs(:puts)
-      runner.expects(:exit).with(0)
+      runner.expects(:exit).never
       runner.run_tests
     end
   end

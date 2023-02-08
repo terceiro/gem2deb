@@ -32,9 +32,15 @@ module Gem2Deb
     attr_accessor :autopkgtest
     attr_accessor :check_dependencies
     attr_accessor :check_bundler
+    attr_accessor :passed
+    attr_accessor :failed
+    attr_accessor :skipped
 
     def initialize
       @source = Gem2Deb::Source.new
+      @passed = false
+      @failed = false
+      @skipped = false
     end
 
     def load_path
@@ -82,6 +88,9 @@ module Gem2Deb
         do_check_bundler
       end
       do_run_tests
+
+      exit(1) if self.failed
+      exit(77) if self.skipped and !self.passed
     end
 
     def do_check_dependencies
@@ -90,11 +99,12 @@ module Gem2Deb
         metadata = Gem2Deb::Metadata.new(pkg[:root])
         if metadata.gemspec
           cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
-          run(*cmd) do
+          run(*cmd, superficial: true) do
             system 'gem', 'list'
           end
         else
-          fail "E: dependency resolution check requested but no working gemspec available for binary package #{pkg[:binary_package]}"
+          puts "E: dependency resolution check requested but no working gemspec available for binary package #{pkg[:binary_package]}"
+          self.failed = true
         end
       end
     end
@@ -124,7 +134,8 @@ module Gem2Deb
       )
 
       if rc != 0
-        fail "E: failed to load under bundler"
+        puts "E: failed to load under bundler"
+        self.failed = true
       end
     end
 
@@ -141,7 +152,7 @@ module Gem2Deb
           puts(gemfile % metadata.name)
           puts('----------------8<----------------8<----------------8<-----------------')
           puts()
-          call(*command).tap do |rc|
+          run(*command, superficial: true).tap do |rc|
             if rc != 0
               puts "E: Command failed (exit status: #{rc})"
             end
@@ -171,11 +182,13 @@ module Gem2Deb
       run(rubyver, '-S', 'rake', *args)
     end
 
-    def run(program, *args)
+    def run(program, *args, superficial: false)
       exitstatus = call(program, *args)
-      if exitstatus != 0
+      if exitstatus == 0
+        self.passed = true unless superficial
+      else
         yield if block_given?
-        exit(1)
+        self.failed = true
       end
     end
 
@@ -290,7 +303,7 @@ module Gem2Deb
       end
       def do_run_tests
         print_banner "Run tests for #{rubyver}: no test suite!"
-        exit(77) if autopkgtest
+        self.skipped = true if autopkgtest
       end
     end
 
