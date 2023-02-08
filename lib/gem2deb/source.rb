@@ -39,6 +39,7 @@ module Gem2Deb
           []
         end
 
+      @build_depends = []
       lines.each do |line|
         if line =~ /^Package:\s*(\S*)\s*$/
           package = $1
@@ -89,7 +90,7 @@ module Gem2Deb
       elsif File.exist?("debian/compat")
         File.read('debian/compat').strip.to_i
       else
-        @build_depends&.find do |d|
+        @build_depends.find do |d|
           d =~ /debhelper-compat\s*\(\s*=\s*(\d+)\s*\)/
         end
         $1.to_i
