@@ -90,12 +90,8 @@ module Gem2Deb
         metadata = Gem2Deb::Metadata.new(pkg[:root])
         if metadata.gemspec
           cmd = [rubyver, '-e', 'gem "%s"' % metadata.name]
-          puts "GEM_PATH=#{gem_path} " + cmd.shelljoin
-          system({ 'GEM_PATH' => gem_path }, *cmd)
-          exitstatus = $?.exitstatus
-          if exitstatus != 0
+          run(*cmd) do
             system 'gem', 'list'
-            exit(1)
           end
         else
           fail "E: dependency resolution check requested but no working gemspec available for binary package #{pkg[:binary_package]}"
@@ -177,8 +173,10 @@ module Gem2Deb
 
     def run(program, *args)
       exitstatus = call(program, *args)
-      exitstatus = 1 if exitstatus != 0
-      exit(exitstatus)
+      if exitstatus != 0
+        yield if block_given?
+        exit(1)
+      end
     end
 
     def call(program, *args)
