@@ -6,4 +6,5 @@ lib/gem2deb/package_name_mapping.rb              /usr/lib/ruby/vendor_ruby/gem2d
 lib/gem2deb/rake/spectask.rb                     /usr/lib/ruby/vendor_ruby/gem2deb/rake
 lib/gem2deb/rake/testtask.rb                     /usr/lib/ruby/vendor_ruby/gem2deb/rake
 lib/gem2deb/test_runner.rb                       /usr/lib/ruby/vendor_ruby/gem2deb
+lib/gem2deb/test_runner/assets-smoke-test.sh     /usr/lib/ruby/vendor_ruby/gem2deb/test_runner
 lib/gem2deb/source.rb                            /usr/lib/ruby/vendor_ruby/gem2deb

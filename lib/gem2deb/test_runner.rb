@@ -87,6 +87,7 @@ module Gem2Deb
       if check_bundler
         do_check_bundler
       end
+      do_assets_smoke_test
       do_run_tests
 
       exit(1) if self.failed
@@ -306,6 +307,18 @@ module Gem2Deb
         print_banner "Run tests for #{rubyver}: no test suite!"
         self.skipped = true if autopkgtest
       end
+    end
+
+    def do_assets_smoke_test
+      package = @source.packages.first
+      return if !package
+      root = package[:root]
+      return unless File.directory?(File.join(root, "debian/tests/assets"))
+
+      print_banner "Running Rails assets smoke test on #{rubyver}"
+      smoke_test_script = File.join(File.dirname(__FILE__), "test_runner/assets-smoke-test.sh")
+      gem_name = Gem2Deb::Metadata.new(root).name
+      run("sh", smoke_test_script, gem_name, ruby_binary)
     end
 
   end

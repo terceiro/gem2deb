@@ -414,6 +414,26 @@ the tests failed. A simple example:
     end
   end
 
+=item debian/tests/assets (directory)
+
+For Rails assets packages (ruby-rails-assets-*), the presence of this directory
+will cause the Rails assets smoke test to be run. During the test run, this
+directory will be copied into the root of a freshly created rails application,
+and `bundle exec rake assets:precompile` will be called.
+
+B<debian/tests/assets> should contain example usage of the given package, e.g.:
+
+=over
+
+=item B<debian/tests/assets/app/assets/javascripts/application.js>
+
+=item B<debian/tests/assets/app/assets/stylesheets/_application.scss>
+
+=back
+
+B<Note>: any dependencies needed to run this smoke test must be specified
+explicitly as package build dependencies.
+
 =item debian/I<dh_ruby.mk>
 
 If this file is present, dh_ruby will call B<make> passing it as the makefile
