@@ -4,8 +4,8 @@ require 'yaml'
 module Gem2Deb
   module YAML
     def self.load_gemspec(file)
-      ::YAML.safe_load_file(
-        file,
+      ::YAML.safe_load(
+        File.open(file),
         aliases: true,
         permitted_classes: [
           Date,
