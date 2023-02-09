@@ -8,6 +8,11 @@ class Gem2DebTestCase
     SIMPLE_GEM            = File.join(SAMPLE_DIR, "#{SIMPLE_GEM_NAME}/pkg/#{SIMPLE_GEM_DIRNAME}.gem")
     SIMPLE_GEM_SOURCE     = File.join(SAMPLE_DIR, SIMPLE_GEM_NAME)
 
+    SIMPLE_DOCS_NAME       = 'simpledocs'
+    SIMPLE_DOCS_DIRNAME    = SIMPLE_DOCS_NAME + '-0.0.1'
+    SIMPLE_DOCS            = File.join(SAMPLE_DIR, "#{SIMPLE_DOCS_NAME}/pkg/#{SIMPLE_DOCS_DIRNAME}.gem")
+    SIMPLE_DOCS_SOURCE     = File.join(SAMPLE_DIR, SIMPLE_DOCS_NAME)
+
     SIMPLE_PROGRAM_NAME     = 'simpleprogram'
     SIMPLE_PROGRAM_DIRNAME  = SIMPLE_PROGRAM_NAME + '-1.2.3'
     SIMPLE_PROGRAM          = File.join(SAMPLE_DIR, "#{SIMPLE_PROGRAM_NAME}/pkg/#{SIMPLE_PROGRAM_DIRNAME}.gem")
