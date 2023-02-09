@@ -384,20 +384,13 @@ end
 
     def other_files
       # docs
-      docs = ""
-      if File::directory?('doc')
-        docs += <<-EOF
-# FIXME: doc/ dir found in source. Consider installing the docs.
-# Examples:
-# doc/manual.html
-# doc/site/*
-            EOF
-      end
-      readmes = Dir::glob('README*')
-      if !readmes.empty?
+      docs = []
+      docs += Dir['doc/*'] if File::directory?('doc')
+      docs += Dir['{README*,CONTRIBUTORS*}']
+      if not docs.empty?
         maybe_create("debian/#{source_package_name}.docs") do |f|
-          readmes.each do |r|
-            f.puts r
+          docs.each do |doc|
+            f.puts doc
           end
         end
       end

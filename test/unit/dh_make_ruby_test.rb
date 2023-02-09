@@ -89,6 +89,22 @@ class DhMakeRubyTest < Gem2DebTestCase
     assert copyright =~ /FIXME/
   end
 
+  DEBIANIZED_SIMPLE_DOCS       = File.join(tmpdir, 'ruby-' + SIMPLE_DOCS_DIRNAME)
+  SIMPLE_DOCS_UPSTREAM_TARBALL = File.join(tmpdir, SIMPLE_DOCS_DIRNAME + '.tar.gz')
+  one_time_setup do
+    Gem2Deb::Gem2Tgz.convert!(SIMPLE_DOCS, SIMPLE_DOCS_UPSTREAM_TARBALL)
+    Gem2Deb::DhMakeRuby.new(SIMPLE_DOCS_UPSTREAM_TARBALL).build
+  end
+  context 'simple docs' do
+    should 'create the docs file for dh_installdocs' do
+      filename = File.join(DEBIANIZED_SIMPLE_DOCS, "debian/ruby-simpledocs.docs")
+      expected_docs = ['CONTRIBUTORS.md', 'doc/notes2.md', 'doc/notes.md', 'README.md']
+      File.readlines(filename).each do |doc|
+        assert_includes expected_docs, doc.strip
+      end
+    end
+  end
+
   DEBIANIZED_SIMPLE_EXTENSION       = File.join(tmpdir, SIMPLE_EXTENSION_DIRNAME)
   SIMPLE_EXTENSION_UPSTREAM_TARBALL = DEBIANIZED_SIMPLE_EXTENSION + '.tar.gz'
   one_time_setup do
