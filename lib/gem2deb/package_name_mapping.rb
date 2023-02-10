@@ -1,3 +1,6 @@
+require 'gem2deb'
+require 'gem2deb/yaml'
+
 module Gem2Deb
   class PackageNameMapping
     attr_reader :data
