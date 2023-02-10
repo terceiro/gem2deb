@@ -91,6 +91,7 @@ module Gem2Deb
 
       exit(1) if self.failed
       exit(77) if self.skipped and !self.passed
+      exit(0)
     end
 
     def do_check_dependencies
