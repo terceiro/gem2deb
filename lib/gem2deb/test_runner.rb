@@ -180,7 +180,8 @@ module Gem2Deb
     end
 
     def run_rake(*args)
-      run(rubyver, '-S', 'rake', *args)
+      # Do not load rake tasks from rakelib/ which is the default
+      run(rubyver, '-S', 'rake', '--rakelibdir', '/gem2deb-nonexistent', *args)
     end
 
     def run(program, *args, superficial: false)

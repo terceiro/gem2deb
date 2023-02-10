@@ -42,6 +42,7 @@ class TestRunnerTest < Gem2DebTestCase
 
   test_should_return 0, 'test/sample/test_runner/yaml/pass'
   test_should_return 1, 'test/sample/test_runner/yaml/fail'
+  test_should_return 0, 'test/sample/test_runner/rake/with_rakelib'
   test_should_return 0, 'test/sample/test_runner/rake/pass'
   test_should_return 1, 'test/sample/test_runner/rake/fail'
   test_should_return 0, 'test/sample/test_runner/rb/pass'
