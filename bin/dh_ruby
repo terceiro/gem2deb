@@ -418,16 +418,27 @@ the tests failed. A simple example:
 
 For Rails assets packages (ruby-rails-assets-*), the presence of this directory
 will cause the Rails assets smoke test to be run. During the test run, this
-directory will be copied into the root of a freshly created rails application,
-and `bundle exec rake assets:precompile` will be called.
+directory will be copied into under app/ in a freshly created rails
+application, and `bundle exec rake assets:precompile` will be called.
 
 B<debian/tests/assets> should contain example usage of the given package, e.g.:
 
 =over
 
-=item B<debian/tests/assets/app/assets/javascripts/application.js>
+=item B<debian/tests/assets/javascripts/application.js>
 
-=item B<debian/tests/assets/app/assets/stylesheets/_application.scss>
+=item B<debian/tests/assets/stylesheets/application.scss>
+
+=back
+
+In the above example, those files will be copied at the following location in
+the test Rails app:
+
+=over
+
+=item B<app/assets/javascripts/application.js>
+
+=item B<app/assets/stylesheets/application.scss>
 
 =back
 
