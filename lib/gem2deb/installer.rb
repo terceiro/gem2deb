@@ -60,7 +60,7 @@ module Gem2Deb
           # This is a hack to workaround a problem in rubygems
           vendor_dir = destdir(:libdir)
           vendor_arch_dir = destdir(:archdir, rubyver)
-          if File::exists?(vendor_dir) and File::exists?(vendor_arch_dir)
+          if File.exist?(vendor_dir) and File.exist?(vendor_arch_dir)
             remove_duplicate_files(vendor_dir, vendor_arch_dir)
           end
         end

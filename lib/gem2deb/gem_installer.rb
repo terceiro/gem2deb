@@ -158,7 +158,7 @@ module Gem2Deb
           end
 
           # remove empty plugins/ directory
-          if Dir.exists?('plugins') && Dir.empty?('plugins')
+          if Dir.exist?('plugins') && Dir.empty?('plugins')
               FileUtils::Verbose.rmdir('plugins')
           end
 
