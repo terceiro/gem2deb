@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -EUTF-8
 #
 # Copyright © 2015, Christian Hofstaedtler <zeha@debian.org>
 #

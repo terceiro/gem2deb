@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -EUTF-8
 #
 # Copyright © 2011, Lucas Nussbaum <lucas@debian.org>
 # 

@@ -1,6 +1,6 @@
 require 'rake/testtask'
 
-ENV['LANG'] = 'C'
+ENV['LANG'] = 'C.UTF-8'
 
 task :default => :test
 
