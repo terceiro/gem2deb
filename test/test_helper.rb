@@ -14,7 +14,7 @@ end
 
 require 'test/unit'
 require 'shoulda-context'
-require 'mocha/setup'
+require 'mocha/test_unit'
 require 'fileutils'
 require 'tmpdir'
 require 'tempfile'
